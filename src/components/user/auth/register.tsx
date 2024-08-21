@@ -51,8 +51,7 @@ function RegisterUser() {
         firstName:'',
         lastName:'',
         email: '',
-        password: '',
-        confirmPassword:''
+        password: ''
     };
 
 
@@ -60,6 +59,8 @@ function RegisterUser() {
         try{
             console.log('triggered')
             const response = await axios.post(userEndpoint.register, value);
+            console.log(value)
+            console.log(response, 'responsesss')
             console.log('register data send succesfully');
             if(response.data.success){
                 console.log('success')
