@@ -4,11 +4,15 @@ import { userEndpoint } from "../../constraints/userEndpoints";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import Header from "../Layout/Header"
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 
 function RegisterUser() {
-
+    
+    const navigate = useNavigate();
+    const [emailExists,setEmailExists] = useState(false)
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Email is required'),
 
@@ -51,20 +55,22 @@ function RegisterUser() {
         firstName:'',
         lastName:'',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword:''
     };
 
 
     const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
         try{
-            console.log('triggered')
+
             const response = await axios.post(userEndpoint.register, value);
-            console.log(value)
-            console.log(response, 'responsesss')
             console.log('register data send succesfully');
             if(response.data.success){
-                console.log('success')
+                navigate('/otp',{state: response.data});
+                console.log('success' , response.data)
             }else{
+                console.log(response.data)
+                setEmailExists(true)
                 console.log('failed')
             }
         }catch(err){
@@ -92,8 +98,8 @@ function RegisterUser() {
 
 
             <div className="bg-[#FCF6FF] p- shadow-lg w-1/2 justify-center">
-
                 <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Login to your account</h2>
+                { emailExists?  <h2 className="text-center text-[#FF0000]">Email already exists.</h2> : <h1></h1>}
 
 
                 <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
