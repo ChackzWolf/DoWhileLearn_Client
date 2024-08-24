@@ -65,6 +65,7 @@ function RegisterUser() {
 
             const response = await axios.post(userEndpoint.register, value);
             console.log('register data send succesfully');
+            localStorage.removeItem('otpCountDown');
             if(response.data.success){
                 navigate('/otp',{state: response.data});
                 console.log('success' , response.data)

@@ -32,18 +32,18 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
 
       return () => clearTimeout(timerId);
     } else {
-      localStorage.removeItem('otpCountDown');
+      // localStorage.removeItem('otpCountDown');
     }
   }, [otpCountDown]);
 
   // This effect updates localStorage whenever otpCountDown changes
   useEffect(() => {
-    if (otpCountDown > 0) {
+    if (otpCountDown > -1) {
       localStorage.setItem('otpCountDown', otpCountDown.toString());
     }
   }, [otpCountDown]);
 
-  
+   
 
   const handleChange = (value: string, index: number) => {
     if (value.length === 1 && /^\d$/.test(value)) {
@@ -87,7 +87,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
         if(response.data.success){
 
             console.log('success', response.data);
-
+            localStorage.removeItem('otpCountDown');
             // Example of storing the token in localStorage
             localStorage.setItem('token', response.data.token);
 
@@ -97,6 +97,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
                     'Authorization': `Bearer ${response.data.token}`
                 }
             });
+            
             // navigate('/');
         }else{
             console.log('failed response')
@@ -153,7 +154,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       <button
   onClick={handleSubmit}
   className={`w-full py-2 rounded-lg transition-colors duration-300 ${
-    otpCount < 4 && otpCountDown == 0
+    otpCount < 4 && otpCountDown == 0 || otpCount < 4
       ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
       : 'bg-[#7C24F0] text-white hover:bg-[#7434c7]'
   }`}
