@@ -1,7 +1,9 @@
-const API_GATEWAY_BASE_URL = 'http://localhost:5000'
-    
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 export const userEndpoint = {
-    register: `${API_GATEWAY_BASE_URL}/register`,
-    verifyOTP: `${API_GATEWAY_BASE_URL}/verifyOTP`,
-    resendOTP: `${API_GATEWAY_BASE_URL}/resendOTP`
+    register: `${process.env.API_GATEWAY_BASE_URL}/register`,
+    verifyOTP: `${process.env.API_GATEWAY_BASE_URL}/verifyOTP`,
+    resendOTP: `${process.env.API_GATEWAY_BASE_URL}/resendOTP`
 }

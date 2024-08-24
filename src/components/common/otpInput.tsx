@@ -2,7 +2,9 @@ import React, { useState,useEffect } from 'react';
 import { userEndpoint } from '../constraints/userEndpoints';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { setCookie } from '../../utils/cookieManager';
+import {useDispatch} from 'react-redux';
+import { setUserLogin } from '../../redux/userSlice/authSlice';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -11,7 +13,7 @@ interface OTPInputProps{
 
 const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
 
-
+  const dispatch = useDispatch()
     const navigate = useNavigate()
   const [otp, setOtp] = useState(['', '', '', '']);
   const [otpCount, setOtpCount] = useState<number>(0)
@@ -88,15 +90,11 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
 
             console.log('success', response.data);
             localStorage.removeItem('otpCountDown');
-            // Example of storing the token in localStorage
-            localStorage.setItem('token', response.data.token);
+            setCookie(response.data.token);
+            dispatch(setUserLogin());
+            navigate('/')
 
             // Example of setting the token in an Authorization header for API requests
-            fetch('your-api-endpoint', {
-                headers: {
-                    'Authorization': `Bearer ${response.data.token}`
-                }
-            });
             
             // navigate('/');
         }else{

@@ -1,9 +1,13 @@
 import { NavLink } from "react-router-dom";
 import HeaderNav from "../../Nav/UserHeaderNav";
+import { useSelector } from "react-redux";
+import { RootState } from "@reduxjs/toolkit/query";
 
 NavLink
 
 const Header = () =>{
+    const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+
     return (
         
           <div className="items-center w-full mx-auto p-3 px-5 shadow-xl">
@@ -19,6 +23,7 @@ const Header = () =>{
 
                     <div className="justify-end flex">
                         <HeaderNav/>
+
                         <div>
                             <NavLink to='/register'className="">
                                 <button className="mx-5 text-">Signup</button>
