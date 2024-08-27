@@ -90,13 +90,12 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
 
             console.log('success', response.data);
             localStorage.removeItem('otpCountDown');
-            setCookie(response.data.token);
+            // setCookie(response.data.token);
+            setCookie('token', response.data.token, 0.01); // Set a short-lived access token
+            setCookie('refreshToken', response.data.refreshToken, 7);
             dispatch(setUserLogin());
             navigate('/')
 
-            // Example of setting the token in an Authorization header for API requests
-            
-            // navigate('/');
         }else{
             console.log('failed response')
         }

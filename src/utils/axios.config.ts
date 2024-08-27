@@ -1,45 +1,51 @@
-import axios from "axios";
-import { getCookie, removeCookie } from "./cookieManager";
+import axios from 'axios';
+import { getCookie, setCookie, removeCookie } from './cookieManager';
 
 const apiClient = axios.create({
-    baseURL: import.meta.env.API_GATEWAY_BASE_URL, // Replace with your API URL
-    timeout: 10000, // Set a timeout
+    baseURL: import.meta.env.VITE_API_GATEWAY_BASE_URL,
+    timeout: 10000,
 });
-console.log('hello world')
 
-apiClient.interceptors.request.use(// Request interceptor to add JWT token from cookie
-    (config)=>{
-        const token = getCookie();
-        if(token){
+// Request interceptor to add JWT token from cookie
+apiClient.interceptors.request.use(
+    (config) => {
+        const token = getCookie('token');
+        if (token) {
             config.headers.Authorization = `Bearer ${token}`;
-
         }
         return config;
     },
-    (error)=> {
-        Promise.reject(error)
-    }
-)
+    (error) => Promise.reject(error)
+);
 
+// Response interceptor to handle token refresh and errors
 apiClient.interceptors.response.use(
-    (response) =>{
-        return response;
-    },
-    (error)=>{
-        // If token expired or unauthorized, remove the cookie and redirect to login
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
+
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-            removeCookie();
-            window.location.href = '/login'; // Redirect to login page
+            // Try to refresh the token
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL}/refresh-token`, {}, { withCredentials: true });
+                const newToken = response.data.accessToken;
+
+                // Set new access token
+                setCookie('token', newToken, 0.01);
+                // Retry the original request with the new token
+                originalRequest.headers.Authorization = `Bearer ${newToken}`;
+                return axios.request(originalRequest);
+            } catch (refreshError) {
+                // Handle refresh token failure
+                console.error('Token refresh failed:', refreshError);
+                removeCookie('token');
+                removeCookie('refreshToken');
+                window.location.href = '/login'; // Redirect to login page
+            }
         }
+
         return Promise.reject(error);
     }
-)
+);
 
-// apiClient.get('/protected-route')
-//             .then(response => {
-//                 setData(response.data);
-//             })                                             I have seeen this in  useEffect() Who knows why
-//             .catch(error => {
-//                 console.error('Error fetching data:', error);
-//             });
-//     }, []);
+export default apiClient;

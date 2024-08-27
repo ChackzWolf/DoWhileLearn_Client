@@ -11,13 +11,7 @@ function OtpVarification() {
 
     return (
       <div className=' flex items-center justify-center bg-[#7C24F0] w-screen h-screen'>
-       
-
         <OTPInput tempId={tempId} email ={email}/>
-     
-       
-          {/* <h1>{email}</h1>
-          <h1>{tempId}</h1> */}
       </div>
     )
 }

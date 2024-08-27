@@ -33,10 +33,12 @@ function LoginModal() {
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
         try {
             const response = await axios.post(userEndpoint.loginUser, value);
-            const {success, token, status , msg} = response.data;
+            console.log(response.data)
+            const {success, token,refreshToken, status , msg} = response.data;
             console.log(status)
             if(success){
-                setCookie(token);
+                setCookie('token', token, 0.01); // Set a short-lived access token
+                setCookie('refreshToken', refreshToken, 7);
                 dispatch(setUserLogin())
                 navigate('/');
             }else{

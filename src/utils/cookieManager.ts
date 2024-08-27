@@ -1,21 +1,24 @@
-import Cookies from "js-cookie";
+export const setCookie = (name: string, value: string, days: number) => {
+    let expires = '';
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = `expires=${date.toUTCString()}`;
+    }
+    document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Strict; Secure`;
+};
 
-const COOKIE_NAME = 'jwt';
+export const getCookie = (name: string) => {
+    const nameEQ = `${name}=`;
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+};
 
-export function setCookie(token: string) {
-    Cookies.set(COOKIE_NAME, token, {
-        expires: 1, // Cookie expires in 1 day
-        secure: process.env.NODE_ENV === 'production', // Use secure flag in production
-        sameSite: 'strict', // CSRF protection
-    });
-}
-
-// Function to get the cookie
-export function getCookie() {
-    return Cookies.get(COOKIE_NAME);
-}
-
-// Function to remove the cookie
-export function removeCookie() {
-    Cookies.remove(COOKIE_NAME);
-}
+export const removeCookie = (name: string) => {
+    document.cookie = `${name}=; Max-Age=-99999999;`;
+};
