@@ -2,7 +2,9 @@ import {configureStore , combineReducers} from '@reduxjs/toolkit'
 import userAuthReducer from '../userSlice/authSlice'
 import registerData from '../registerData/registerData';
 import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
+import { persistReducer, persistStore } from "redux-persist";
+import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+
 
 const persistConfig = {
     key: "root",
@@ -18,16 +20,26 @@ const rootReducer = combineReducers({
     registerData:registerData
 })
 
-const PersistReducer = persistReducer(persistConfig, rootReducer);
-
-export type RootState = ReturnType<typeof rootReducer>;
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 
-const appStore = configureStore({
-    reducer: PersistReducer,
-  });
+
+// Create the store with middleware for Redux Persist
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
   
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-export default appStore  
+export const persistor = persistStore(store);
+export default store;
 
 

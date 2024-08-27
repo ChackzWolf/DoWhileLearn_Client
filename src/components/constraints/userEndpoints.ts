@@ -1,9 +1,6 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
-
 export const userEndpoint = {
-    register: `${process.env.API_GATEWAY_BASE_URL}/register`,
-    verifyOTP: `${process.env.API_GATEWAY_BASE_URL}/verifyOTP`,
-    resendOTP: `${process.env.API_GATEWAY_BASE_URL}/resendOTP`
+    register: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/register`,
+    verifyOTP: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/verifyOTP`,
+    resendOTP: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/resendOTP`,
+    loginUser: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/login`
 }

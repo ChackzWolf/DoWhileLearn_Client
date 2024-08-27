@@ -1,12 +1,11 @@
 import { NavLink } from "react-router-dom";
 import HeaderNav from "../../Nav/UserHeaderNav";
 import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
-
+import { RootState } from "../../../redux/store/store";
 NavLink
 
 const Header = () =>{
-    const isLogin = useSelector((state: RootState) => state.auth.isLogin);
+    const isLogin = useSelector((state: RootState) => state.userAuth.isLogin);
 
     return (
         
@@ -23,7 +22,12 @@ const Header = () =>{
 
                     <div className="justify-end flex">
                         <HeaderNav/>
+{isLogin ?
 
+<div>
+
+</div>
+:
                         <div>
                             <NavLink to='/register'className="">
                                 <button className="mx-5 text-">Signup</button>
@@ -33,7 +37,7 @@ const Header = () =>{
                                 <button className="">Login</button>
                             </NavLink>
                         </div>
-
+}
                     </div>    
 
                 </div>

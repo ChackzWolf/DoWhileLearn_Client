@@ -1,10 +1,18 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Header from "../Layout/Header"
+import { userEndpoint } from "../../constraints/userEndpoints";
+import axios from "axios";
+import { setCookie } from "../../../utils/cookieManager";
+import { setUserLogin } from "../../../redux/userSlice/authSlice";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 
 function LoginModal() {
-
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [message, setMessage] = useState('')
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Email is required'),
         password: Yup.string()
@@ -16,10 +24,31 @@ function LoginModal() {
         .matches(/[0-9]/, 'Password must contain at least one number')
         .matches(/[@$!%*?&#]/, 'Password must contain at least one special character'),
     });
-    const initialEmail = {
+    const initialValue = {
         email: '',
         password:''
     };
+
+
+    const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
+        try {
+            const response = await axios.post(userEndpoint.loginUser, value);
+            const {success, token, status , msg} = response.data;
+            console.log(status)
+            if(success){
+                setCookie(token);
+                dispatch(setUserLogin())
+                navigate('/');
+            }else{
+                setMessage(mesg => mesg = msg);
+            }
+            
+        } catch (error) {
+            throw new Error(`Something went wrong ! status:${status} ${error}`)
+        }finally{
+            setSubmitting(false)
+        }
+    }
 
     return (
         <>
@@ -37,8 +66,8 @@ function LoginModal() {
 
                     <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Login to your account</h2>
 
-
-                    <Formik initialValues={initialEmail} validationSchema={validationSchema} onSubmit={()=>{}}>
+                    <h1 className="text-red-800 text-center">{message}</h1>
+                    <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
 
                     {({isSubmitting})=>(
 
@@ -80,7 +109,7 @@ function LoginModal() {
                                         disabled={isSubmitting}
                                     >
 
-                                        Login now
+                                        Login
                                         {/* {isSubmitting ? 'Submitting...' : 'Continue'} */}
                                     </button>
 

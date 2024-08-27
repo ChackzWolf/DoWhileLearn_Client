@@ -4,15 +4,15 @@ import App from './App.tsx'
 import './index.css'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import appStore from './redux/store/store.ts'; // Adjust the path to where your store is defined
-import { persistor } from './redux/store/store.ts'; // Import the persistor
+import store, { persistor } from './redux/store/store.ts'; 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-      <Provider store={appStore}>
-    <PersistGate loading={null} persistor={persistor}></PersistGate>
+      <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
     <App />
-    </Provider>
     </PersistGate>
-  </StrictMode>,
+    </Provider>
+
+  </StrictMode>
 )

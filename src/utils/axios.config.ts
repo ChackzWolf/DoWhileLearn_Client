@@ -2,9 +2,10 @@ import axios from "axios";
 import { getCookie, removeCookie } from "./cookieManager";
 
 const apiClient = axios.create({
-    baseURL: process.env.API_GATEWAY_BASE_URL, // Replace with your API URL
+    baseURL: import.meta.env.API_GATEWAY_BASE_URL, // Replace with your API URL
     timeout: 10000, // Set a timeout
 });
+console.log('hello world')
 
 apiClient.interceptors.request.use(// Request interceptor to add JWT token from cookie
     (config)=>{
