@@ -1,6 +1,6 @@
 
 import { useLocation } from 'react-router-dom'
-import OTPInput from '../../tutor/Supporters/otpInput';
+import OTPInput from '../Supporters/otpInput';
 
 function OtpVarification() {
     const location = useLocation();

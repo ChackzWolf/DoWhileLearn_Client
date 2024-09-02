@@ -2,11 +2,13 @@ import cookie from 'js-cookie';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface AuthState{
-    isLogin:boolean
+    isLogin:boolean;
+    isTutorLogin:boolean;
 }
 
 const initialState: AuthState = {
-    isLogin : false
+    isLogin : false,
+    isTutorLogin: false,
 }
 
 const authSlice = createSlice({
@@ -22,9 +24,19 @@ const authSlice = createSlice({
         checkUserAuth: (state) =>{
             const userData = cookie.get('userData')
             if(!userData) state.isLogin = false;
+        },
+        setTutorLogin: (state) => {
+            state.isTutorLogin = true
+        },
+        setTutorLogout: (state)=>{
+            state.isTutorLogin = false
+        },
+        checkTutorAuth:(state) =>{
+            const userData = cookie.get('userData')
+            if(!userData) state.isLogin = false;
         }
     }
 })
 
-export const {setUserLogin, setUserLogout, checkUserAuth} = authSlice.actions;
+export const {setUserLogin, setUserLogout, checkUserAuth, setTutorLogin, setTutorLogout, checkTutorAuth} = authSlice.actions;
 export default authSlice.reducer;

@@ -3,6 +3,7 @@ import UserHome from "../../user/UserHome";
 import UserRegister from "../../user/auth/register";
 import UserLogin from "../../user/auth/Login";
 import OtpVarification from '../../user/auth/OtpVarification';
+import AuthChoice from '../../common/AuthChoice';
 
 
 const UserRoutes = ()=>{
@@ -10,6 +11,7 @@ const UserRoutes = ()=>{
         
         <Routes>
             <Route path ='/' element = {<UserHome/>}/>
+            <Route path ='/AuthChoice' element = {<AuthChoice/>}/>
             <Route path = '/register' element = {<UserRegister/>}/>
             <Route path = '/login' element = {<UserLogin/>}/>
             <Route path = '/otp' element = {<OtpVarification/>}/>

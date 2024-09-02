@@ -1,10 +1,10 @@
 import React, { useState,useEffect } from 'react';
-import { userEndpoint } from '../constraints/userEndpoints';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { setCookie } from '../../utils/cookieManager';
+import { setCookie } from '../../../utils/cookieManager';
 import {useDispatch} from 'react-redux';
-import { setUserLogin } from '../../redux/userSlice/authSlice';
+import { setTutorLogin } from '../../../redux/authSlice/authSlice';
+import { tutorEndpoint } from '../../constraints/tutorEndpoint';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -20,7 +20,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
   const [message, setMessage] = useState<string>('')
 
 
-  const [otpCountDown, setOtpCountDown] = useState<number>(() => {
+    const [otpCountDown, setOtpCountDown] = useState<number>(() => {
     const savedCount = localStorage.getItem('otpCountDown');
     return savedCount ? parseInt(savedCount) : 60; // Default 30 seconds
   });
@@ -85,23 +85,24 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             tempId
         }
 
-        const response =await axios.post(userEndpoint.verifyOTP, data); 
-        if(response.data.success){
+        const response =await axios.post(tutorEndpoint.verifyOTP, data); 
+        const {success, refreshToken, accessToken} = response.data;
 
+        if(success){
+            
             console.log('success', response.data);
             localStorage.removeItem('otpCountDown');
-            // setCookie(response.data.token);
-            setCookie('token', response.data.token, 0.01); // Set a short-lived access token
-            setCookie('refreshToken', response.data.refreshToken, 7);
-            dispatch(setUserLogin());
-            navigate('/')
+            setCookie('token', accessToken, 0.01);
+            setCookie('refreshToken', refreshToken, 7);
+            
+            dispatch(setTutorLogin());
+            navigate('/tutor')
 
         }else{
             console.log('failed response')
         }
 
         console.log('Entered OTP:', otpValue);
-        // Add your OTP verification logic here
     }else{
         console.log('invalid OTP')
     }
@@ -113,11 +114,11 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
           email,
           tempId
       }
-      const response = await axios.post(userEndpoint.resendOTP, data);
-      const {msg,success} = response.data;
-      setMessage((message)=> message = msg);
+      const response = await axios.post(tutorEndpoint.resendOTP, data);
+      const {message, success} = response.data;
+      setMessage(message);
       if(success){
-          setOtpCountDown((n)=> n = 60);
+          setOtpCountDown(60);
       }else{
         console.log(message)
       }
@@ -128,7 +129,13 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">OTP Verification</h2>
       <p className="text-gray-600 text-center mb-1">An OTP has send to {email}</p>
       <p className="text-gray-600 text-center mb-6">Enter the OTP sent to your email</p>
-      <p className="text-[#7C24F0] text-center text-xs">{message}</p>
+      {otpCountDown==0 ?
+      
+      <p className="text-[#7C24F0] text-center text-xs">OTP time out try resend otp again.</p> :
+
+            <p className="text-[#7C24F0] text-center text-xs">{message}</p>
+
+      }
       <div className="flex justify-center space-x-4">
         {otp.map((digit, index) => (
           <input
@@ -151,11 +158,11 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       <button
   onClick={handleSubmit}
   className={`w-full py-2 rounded-lg transition-colors duration-300 ${
-    otpCount < 4 && otpCountDown == 0 || otpCount < 4
+    otpCount < 4 || otpCountDown == 0
       ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
       : 'bg-[#7C24F0] text-white hover:bg-[#7434c7]'
   }`}
-  disabled={otpCount < 4}
+  disabled={otpCount < 4 || otpCountDown <  1}
 >
   Verify OTP
 </button>

@@ -1,12 +1,11 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
-import { userEndpoint } from "../../constraints/userEndpoints";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
-import Header from "../Layout/Header";
+import { tutorEndpoint } from "../../constraints/tutorEndpoint";
 
 
 
@@ -77,11 +76,11 @@ function RegisterUser() {
     const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
         try{
 
-            const response = await axios.post(userEndpoint.register, value);
+            const response = await axios.post(tutorEndpoint.register, value);
             console.log('register data send succesfully');
             localStorage.removeItem('otpCountDown');
             if(response.data.success){
-                navigate('/otp',{state: response.data});
+                navigate('/tutor/otp',{state: response.data});
                 console.log('success' , response.data)
             }else{
                 console.log(response.data)
@@ -102,7 +101,6 @@ function RegisterUser() {
 
     return (
         <>
-            <Header/>
 
         <div className="flex h-screen">
 
@@ -115,7 +113,7 @@ function RegisterUser() {
 
             <div className="bg-[#FCF6FF] p- shadow-lg w-1/2 justify-center">
                 
-                <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Student Signup</h2>
+                <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Tutor Signup</h2>
                 { emailExists?  <h2 className="text-center text-[#FF0000]">Email already exists.</h2> : <h1></h1>}
 
 
@@ -227,7 +225,7 @@ function RegisterUser() {
 
                                 <div className="flex w-full">
                                     <h1>Already have an account?  </h1>
-                                    <NavLink to="/login">
+                                    <NavLink to="/tutor/login">
                                         <h1 className="pl-2 text-sky-700"> Login</h1>
                                     </NavLink>
                                 </div>
@@ -245,6 +243,6 @@ function RegisterUser() {
         </div>
         </>
     )
-}  
+}
 
 export default RegisterUser

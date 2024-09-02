@@ -1,19 +1,18 @@
-import { NavLink } from "react-router-dom";
 import HeaderNav from "../../Nav/UserHeaderNav";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store/store";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setUserLogout, setUserLogin } from "../../../redux/authSlice/authSlice";
+import { setTutorLogout, setTutorLogin } from "../../../redux/authSlice/authSlice";
 import { getCookie } from "../../../utils/cookieManager";
-import HeaderDropdown from "./headerComponents/DropDown";
+import { useNavigate } from "react-router-dom";
+import HeaderDropdown from "../Supporters/HeaderDropDown";
 
 
 
 
 const Header = () =>{
     const dispatch = useDispatch()
-    const isLogin = useSelector((state: RootState) => state.userAuth.isLogin);
+    const navigate = useNavigate()
+    // const isLogin = useSelector((state: RootState) => state.userAuth.isTutorLogin);
 
     useEffect(() => {
         // Function to check authentication status
@@ -24,17 +23,19 @@ const Header = () =>{
                 console.log(token)
                 if (!token || !refreshToken) {
                     console.log('token is null')
-                    dispatch(setUserLogout())
+                    dispatch(setTutorLogout())
+                    navigate('/tutor/login')
                 }else{
-                    dispatch(setUserLogin())
+                    dispatch(setTutorLogin())
                 }
             } catch (error) {
                 console.error('Authentication check failed:', error);
-                dispatch(setUserLogout())
+                dispatch(setTutorLogout())
+                navigate('/tutor/login')
             }
         };
 
-        checkAuth();
+        // checkAuth();
     });
 
 
@@ -43,8 +44,9 @@ const Header = () =>{
         
           <div className="items-center w-full mx-auto p-3 px-5 shadow-xl shadow-[#7C24F0] bg-slate-50 rounded-b-lg">
                 <div className="justify-between flex">
-                    <div className="col-span-1">
+                    <div className="col-span-1 flex">
                         <h1 className="text-2xl font-extrabold text-[#7C24F0]">DoWhile{' { Learn } '}</h1>
+                        <h1 className="text-[#7C24F0] font-bold m-2">Tutor</h1>
                         {/* <img src={logo} className="w-20" alt="GeniusGrid Logo" /> */}
                     </div>
 
@@ -54,7 +56,7 @@ const Header = () =>{
 
                     <div className="justify-end flex">
                         <HeaderNav />
-                        {isLogin ?
+                        
                         <div>
                             <HeaderDropdown/>
                         </div>
@@ -63,17 +65,7 @@ const Header = () =>{
                         : 
 
 
-                        <NavLink to='/AuthChoice'><button className="bg-[#7C24F0] text-white font-semibold rounded-lg p-1 px-3 hover:scale-105 transition-all" > Get started</button></NavLink>
-                                // <div>
-                                //     <NavLink to='/register'className="">
-                                //         <button className="mr-10 text-">Signup</button>
-                                //     </NavLink>
 
-                                //     <NavLink to='/login'className="">
-                                //         <button className="">Login</button>
-                                //     </NavLink>
-                                // </div>
-                        }
                     </div>    
 
                 </div>

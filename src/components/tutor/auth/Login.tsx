@@ -1,14 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from "react-router-dom";
-import { userEndpoint } from "../../constraints/userEndpoints";
 import axios from "axios";
 import { setCookie } from "../../../utils/cookieManager";
-import { setUserLogin } from "../../../redux/authSlice/authSlice";
+import { setTutorLogin } from "../../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
-import Header from "../Layout/Header";
+import { tutorEndpoint } from "../../constraints/tutorEndpoint";
 
 function LoginModal() {
     const dispatch = useDispatch()
@@ -40,17 +39,17 @@ function LoginModal() {
 
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
         try {
-            const response = await axios.post(userEndpoint.loginUser, value);
+            const response = await axios.post(tutorEndpoint.loginTutor, value);
             console.log(response.data)
-            const {success, token,refreshToken, status , msg} = response.data;
+            const {success, accessToken,refreshToken, status , message} = response.data;
             console.log(status)
             if(success){
-                setCookie('token', token, 0.01); // Set a short-lived access token
+                setCookie('accessToken', accessToken, 0.01);
                 setCookie('refreshToken', refreshToken, 7);
-                dispatch(setUserLogin())
-                navigate('/');
+                dispatch(setTutorLogin())
+                navigate('/tutor');
             }else{
-                setMessage(msg);
+                setMessage(message);
             }
             
         } catch (error) {
@@ -62,8 +61,6 @@ function LoginModal() {
 
     return (
         <>
-                    <Header/>
-
             <div className="flex h-screen">
                 
 
@@ -75,7 +72,7 @@ function LoginModal() {
 
                 <div className="bg-[#FCF6FF] p-16 shadow-lg w-1/2 rouder-lg justify-center">
 
-                    <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Student Login</h2>
+                    <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Tutor Login</h2>
 
                     <h1 className="text-red-800 text-center">{message}</h1>
                     <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
