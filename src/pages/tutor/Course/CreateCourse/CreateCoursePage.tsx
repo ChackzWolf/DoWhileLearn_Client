@@ -15,7 +15,7 @@ const CreateCoursePage = () => {
   };
   //DDB3FF
   return (
-    <div className="bg-black w-full h-screen">
+    <div className="w-full h-screen">
       <Header />
       <div className="flex w-full h-full">
         <SideNav prop={"/tutor/createCourse"} />

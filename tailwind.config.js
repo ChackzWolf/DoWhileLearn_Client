@@ -17,5 +17,23 @@ export default {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addBase, theme }) {
+      addBase({
+        '::-webkit-scrollbar': {
+          width: '5px',
+        },
+        '::-webkit-scrollbar-track': {
+          background: theme('colors.purple.200'),
+          borderRadius: '1px',
+        },
+        '::-webkit-scrollbar-thumb': {
+          background: theme('colors.purple.400'),
+          borderRadius: '10px',
+        },
+        '::-webkit-scrollbar-thumb:hover': {
+          background: theme('colors.purple.500'),
+        },
+      });
+    }],
 }
