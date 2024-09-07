@@ -42,7 +42,7 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
 
   const handleVideoUpload = async (videoFile:File) => {
     const formData = new FormData();
-    formData.append("video", videoFile);
+    formData.append("videoBinary", videoFile);
   
     try{
       const response = await axios.post(courseEndpoint.uploadVideo,formData,{
