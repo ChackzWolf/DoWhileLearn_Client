@@ -52,29 +52,36 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
       });
   
       console.log(" video send " , response.data)
+      return response.data.s3Url
     }catch(error){
       console.log(error, 'errorrorororororo')
     }
   }
-  const handleFileChange = (moduleIndex: number, lessonIndex: number, setFieldValue: (field: string, value: unknown) => void) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (moduleIndex: number, lessonIndex: number, setFieldValue: (field: string, value: unknown) => void) => async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     if (file) {
-      handleVideoUpload(file);
-
-      const url = URL.createObjectURL(file);
-      setPreviewUrls((prevUrls) => ({
-        ...prevUrls,
-        [moduleIndex]: {
-          ...(prevUrls[moduleIndex] || {}),
-          [lessonIndex]: url,
-        },
-      }));
-      setFieldValue(`Modules.${moduleIndex}.lessons.${lessonIndex}.video`, file);
+      try {
+        // Upload video and get the URL
+        const videoUrl = await handleVideoUpload(file);
+        setPreviewUrls((prevUrls) => ({
+          ...prevUrls,
+          [moduleIndex]: {
+            ...(prevUrls[moduleIndex] || {}),
+            [lessonIndex]: videoUrl,
+          },
+        }));
+        setFieldValue(`Modules.${moduleIndex}.lessons.${lessonIndex}.video`, file);
+      } catch (error) {
+        console.error("Error handling file change:", error);
+      }
     } else {
       setPreviewUrls((prevUrls) => {
         const newUrls = { ...prevUrls };
         if (newUrls[moduleIndex]) {
-          newUrls[moduleIndex][lessonIndex] = '';
+          delete newUrls[moduleIndex][lessonIndex];
+          if (Object.keys(newUrls[moduleIndex]).length === 0) {
+            delete newUrls[moduleIndex];
+          }
         }
         return newUrls;
       });
@@ -99,6 +106,36 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
     });
   };
 
+  const handleSubmit = async (values: CreateCourseState, { setSubmitting }: FormikHelpers<CreateCourseState>) => {
+    try {
+      // Upload video files and get their URLs
+      const updatedModules = await Promise.all(values.Modules.map(async (module, moduleIndex) => {
+        const updatedLessons = await Promise.all(module.lessons.map(async (lesson, lessonIndex) => {
+          if (lesson.video) {
+            // Upload video and get the URL
+            const videoUrl = await handleVideoUpload(lesson.video);
+            return { ...lesson, video: videoUrl };
+          }
+          return lesson;
+        }));
+        return { ...module, lessons: updatedLessons };
+      }));
+  
+      // Prepare the final form data
+      const finalValues = { ...values, Modules: updatedModules };
+      console.log(finalValues,'kkkkkkkkkkkkkkkkkkkkkkkkk')
+      // Dispatch the data to Redux store
+      dispatch(setAddLesson(finalValues));
+  
+      // Call the `onNext` prop function if provided
+      onNext();
+    } catch (error) {
+      console.error("Error handling form submission:", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center m-5 px-4 min-h-[600px]">
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg px-8 py-6 h-full">
@@ -109,11 +146,7 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
             Modules: [{ name: '', description: '', lessons: [{ title: '', video: null, description: '' }] }],
           }}
           validationSchema={validationSchema}
-          onSubmit={(values, { setSubmitting }: FormikHelpers<CreateCourseState>) => {
-            dispatch(setAddLesson(values));
-            onNext();
-            setSubmitting(false);
-          }}
+          onSubmit={handleSubmit}
         >
           {({ setFieldValue, values }) => (
             <Form>
@@ -227,7 +260,7 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
                 ref={fileInputRef}
                 className="hidden"
                 accept="video/*"
-                onChange={handleFileChange(moduleIndex, lessonIndex, setFieldValue)}
+                onChange={(event) => handleFileChange(moduleIndex, lessonIndex, setFieldValue)(event)}
               />
             </div>
             <ErrorMessage name={`Modules.${moduleIndex}.lessons.${lessonIndex}.video`} component="div" className="text-red-600 text-sm" />

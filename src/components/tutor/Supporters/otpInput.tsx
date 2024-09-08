@@ -94,7 +94,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             localStorage.removeItem('otpCountDown');
             setCookie('token', accessToken, 0.01);
             setCookie('refreshToken', refreshToken, 7);
-            
+            // ithenthua reandennam
             dispatch(setTutorLogin());
             navigate('/tutor')
 
