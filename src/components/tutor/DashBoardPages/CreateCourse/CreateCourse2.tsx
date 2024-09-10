@@ -1,36 +1,36 @@
-import React from 'react';
 import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
-import { setCreateCourse2 } from '../../../../redux/tutorSlice/CourseSlice/createCourseData'; // Adjust the path as needed
+import { setCreateCourse2, toNext, toPrev } from '../../../../redux/tutorSlice/CourseSlice/createCourseData'; // Adjust the path as needed
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store/store';
 
-interface AddCourse2Props {
-    onNext: () => void;
-}
+
 
 const validationSchema = Yup.object({
     prerequisites: Yup.array().of(Yup.string().required('Required')).min(1, 'At least one prerequisite is required'),
     benefits: Yup.array().of(Yup.string().required('Required')).min(1, 'At least one benefit is required'),
 });
 
-const CreateCourse2: React.FC<AddCourse2Props> = ({ onNext }) => {
+const CreateCourse2 = () => {
+    const CreateCourse2 = useSelector((state:RootState)=> state.createCourseData.createCourse2)
     const dispatch = useDispatch();
 
     return (
         <div className="flex items-center justify-center m-5 px-4 h-[600px]">
-            <div className="w-full max-w-4xl bg-[#DDB3FF] shadow-lg rounded-lg px-8 py-6 h-full">
+            <div className="w-full max-w-4xl  shadow-lg rounded-lg px-8 py-6 h-full">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">Add Course Details</h2>
 
                 <Formik
                     initialValues={{
-                        prerequisites: [''],
-                        benefits: [''],
+                        prerequisites: CreateCourse2?.prerequisites || [''],
+                        benefits: CreateCourse2?.benefits || [''],
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
                         dispatch(setCreateCourse2(values));
-                        onNext();
+                        dispatch(toNext())
                     }}
                 >
                     {({ values }) => (
@@ -126,10 +126,12 @@ const CreateCourse2: React.FC<AddCourse2Props> = ({ onNext }) => {
 
 
 
-                                <div className="w-full flex justify-end bottom-1">
+                                <div className="w-full flex justify-between bottom-1">
+                                <button className='py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition' onClick={()=>{dispatch(toPrev())}}> previous</button>
+                
                                     <button
                                         type="submit"
-                                        className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-lg hover:bg-blue-700 transition bottom-1"
+                                        className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-lg hover:bg-[#6211cd] transition bottom-1"
                                     >
                                         Next
                                     </button>

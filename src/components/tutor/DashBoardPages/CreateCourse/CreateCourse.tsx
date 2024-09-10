@@ -1,12 +1,15 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { setCreateCourse } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
-
-interface AddCourseProps {
-  onNext: () => void;
-}
+import {
+  setCreateCourse,
+  toNext,
+} from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store/store";
+import { courseEndpoint } from "../../../constraints/courseEndpoints";
+import axios from "axios";
 
 const validationSchema = Yup.object({
   courseTitle: Yup.string().required("Course name is required"),
@@ -18,11 +21,35 @@ const validationSchema = Yup.object({
   thumbnail: Yup.string().required("Thumbnail is required"),
 });
 
-const AddCourse: React.FC<AddCourseProps> = ({ onNext }) => {
+const AddCourse = () => {
+  const createCourse = useSelector(
+    (state: RootState) => state.createCourseData.createCourse
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  const handleUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await axios.post(courseEndpoint.uploadImage, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("completed", response.data);
+
+      // Use the returned URL to update the state or handle accordingly
+      setPreviewImage(response.data.s3Url);
+
+      console.log(previewImage, "hahaha");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
 
   const handleUploadClick = () => {
     if (fileInputRef.current) {
@@ -39,19 +66,20 @@ const AddCourse: React.FC<AddCourseProps> = ({ onNext }) => {
 
         <Formik
           initialValues={{
-            courseTitle: "",
-            coursePrice: "",
-            discountPrice: "",
-            courseDescription: "",
-            courseCategory: "",
-            courseLevel: "",
-            demoURL: "",
-            thumbnail: "",
+            courseTitle: createCourse?.courseTitle || "",
+            coursePrice: createCourse?.coursePrice || "",
+            discountPrice: createCourse?.discountPrice || "",
+            courseDescription: createCourse?.courseDescription || "",
+            courseCategory: createCourse?.courseCategory || "",
+            courseLevel: createCourse?.courseLevel || "",
+            demoURL: createCourse?.demoURL || "",
+            thumbnail: createCourse?.thumbnail || "",
           }}
           validationSchema={validationSchema}
           onSubmit={(values) => {
+            console.log('clicked', values)
             dispatch(setCreateCourse(values));
-            onNext();
+            dispatch(toNext());
           }}
         >
           {({ setFieldValue }) => (
@@ -179,9 +207,9 @@ const AddCourse: React.FC<AddCourseProps> = ({ onNext }) => {
                     onClick={handleUploadClick}
                   >
                     <div className="relative w-full h-48 md:h-40 lg:h-48 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer flex items-center justify-center">
-                      {previewImage ? (
+                      {previewImage || createCourse?.thumbnail ? (
                         <img
-                          src={previewImage}
+                          src={previewImage || createCourse?.thumbnail}
                           alt="Thumbnail Preview"
                           className="w-full h-full object-cover rounded-md"
                         />
@@ -196,11 +224,11 @@ const AddCourse: React.FC<AddCourseProps> = ({ onNext }) => {
                     ref={fileInputRef}
                     className="hidden"
                     accept="image/*"
-                    onChange={(e) => {
+                    onChange={async(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        setPreviewImage(URL.createObjectURL(file)); // Set the preview image
-                        setFieldValue("thumbnail", file.name);
+                        await handleUpload(file);
+                        setFieldValue("thumbnail", previewImage,);
                       }
                     }}
                   />
@@ -262,7 +290,7 @@ const AddCourse: React.FC<AddCourseProps> = ({ onNext }) => {
                 <div className="w-full flex justify-end mt-6 px-4">
                   <button
                     type="submit"
-                    className="py-2 px-8 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition"
+                    className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"
                   >
                     Next
                   </button>

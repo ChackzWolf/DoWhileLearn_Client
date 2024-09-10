@@ -1,22 +1,24 @@
-import React from "react";
 
 import { FaCircle,FaCircleCheck, FaCircleDot } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store/store";
 
-interface ProgressBarProps {
-  currentStep: number;
-  totalSteps: number;
-}
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ currentStep, totalSteps }) => {
-  const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+const ProgressBar = () => {
+  const totalSteps = 4;
+  const current = useSelector((state: RootState) => state.createCourseData.step);
+
+
+  console.log(current , 'kkkkkkkkkkkkkkkkkkkkkk')
+  const progressPercentage = ((current - 1) / (totalSteps - 1)) * 100;
 
   // Function to render checkpoints
   const renderCheckpoints = () => {
     const checkpoints = [];
     for (let i = 1; i <= totalSteps; i++) {
       const position = ((i - 1) / (totalSteps - 1)) * 100 - 1;
-      const isPassed = i < currentStep;
-      const isCurrent = i === currentStep;
+      const isPassed = i < current;
+      const isCurrent = i === current;
 
       checkpoints.push(
         <div

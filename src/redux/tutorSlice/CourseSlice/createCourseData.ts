@@ -4,21 +4,21 @@ import { CreateCourseState, ICreateCourse1, ICreateCourse2 } from "../../../comp
 
 
 interface InitialStateType {
-    step: 1;
     createCourse: ICreateCourse1 | null;
     createCourse2: ICreateCourse2 | null;
     addLessons: CreateCourseState | null;
+    step: number;
   }
   
   const initialState: InitialStateType = {
-    step: 1,
     createCourse: null,
     createCourse2: null,
     addLessons:null,
+    step: 1,
   };
   
 const createCourseData = createSlice({
-  name: "courseData",
+  name: "createCourseData",
   initialState,
   reducers: {
     toNext: (state) => {
@@ -40,10 +40,11 @@ const createCourseData = createSlice({
         state.createCourse = null; 
         state.createCourse2 = null;
         state.addLessons = null;
+        state.step = 1;
     },
   },
 });
 
-export const {setCreateCourse, setCreateCourse2,setAddLesson, setCreateCourseEmpty} = createCourseData.actions;
+export const {setCreateCourse, setCreateCourse2,setAddLesson, setCreateCourseEmpty, toNext, toPrev} = createCourseData.actions;
 
 export default createCourseData.reducer;

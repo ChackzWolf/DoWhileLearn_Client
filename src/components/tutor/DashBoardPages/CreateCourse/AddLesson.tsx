@@ -2,15 +2,16 @@ import React, { useState, useRef } from 'react';
 import { Formik, Field, Form, FieldArray, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { setAddLesson } from '../../../../redux/tutorSlice/CourseSlice/createCourseData'; // Adjust path as needed
+import { setAddLesson, toNext, toPrev } from '../../../../redux/tutorSlice/CourseSlice/createCourseData'; // Adjust path as needed
 import { CreateCourseState } from '../../../Interfaces/TutorInterfaces/ICreateCourse';
 import { FiPlus, FiX } from 'react-icons/fi'; // Import icons
 import axios from 'axios';
 import { courseEndpoint } from '../../../constraints/courseEndpoints';
+import { useSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../redux/store/store';
 
-interface AddLessonProps {
-  onNext: () => void;
-}
+
 
 const validationSchema = Yup.object().shape({
   Modules: Yup.array().of(
@@ -32,12 +33,14 @@ const validationSchema = Yup.object().shape({
 
 
 
-const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
+const AddLesson= () => {
   const dispatch = useDispatch();
+  const modules = useSelector((state:RootState) => state.createCourseData.addLessons);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrls, setPreviewUrls] = useState<{ [moduleIndex: number]: { [lessonIndex: number]: string } }>({});
   const [expandedModuleIndex, setExpandedModuleIndex] = useState<number | null>(null);
   const [expandedLessonIndex, setExpandedLessonIndex] = useState<{ [moduleIndex: number]: number | null }>({});
+
 
 
   const handleVideoUpload = async (videoFile:File) => {
@@ -61,6 +64,7 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
     const file = event.target.files?.[0] || null;
     if (file) {
       try {
+        console.log('started HandleFileChange')
         // Upload video and get the URL
         const videoUrl = await handleVideoUpload(file);
         setPreviewUrls((prevUrls) => ({
@@ -70,7 +74,9 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
             [lessonIndex]: videoUrl,
           },
         }));
-        setFieldValue(`Modules.${moduleIndex}.lessons.${lessonIndex}.video`, file);
+        console.log('kazhne')
+        // Set the video URL in the form field (instead of the file)
+        setFieldValue(`Modules.${moduleIndex}.lessons.${lessonIndex}.video`, videoUrl);
       } catch (error) {
         console.error("Error handling file change:", error);
       }
@@ -108,29 +114,18 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
 
   const handleSubmit = async (values: CreateCourseState, { setSubmitting }: FormikHelpers<CreateCourseState>) => {
     try {
-      // Upload video files and get their URLs
-      const updatedModules = await Promise.all(values.Modules.map(async (module, moduleIndex) => {
-        const updatedLessons = await Promise.all(module.lessons.map(async (lesson, lessonIndex) => {
-          if (lesson.video) {
-            // Upload video and get the URL
-            const videoUrl = await handleVideoUpload(lesson.video);
-            return { ...lesson, video: videoUrl };
-          }
-          return lesson;
-        }));
-        return { ...module, lessons: updatedLessons };
-      }));
-  
+
       // Prepare the final form data
-      const finalValues = { ...values, Modules: updatedModules };
+      const finalValues = { ...values };
       console.log(finalValues,'kkkkkkkkkkkkkkkkkkkkkkkkk')
       // Dispatch the data to Redux store
       dispatch(setAddLesson(finalValues));
   
       // Call the `onNext` prop function if provided
-      onNext();
+      dispatch(toNext())
     } catch (error) {
       console.error("Error handling form submission:", error);
+    
     } finally {
       setSubmitting(false);
     }
@@ -143,7 +138,7 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
 
         <Formik
           initialValues={{
-            Modules: [{ name: '', description: '', lessons: [{ title: '', video: null, description: '' }] }],
+            Modules: modules?.Modules || [{ name:'', description:'', lessons: [{ title: '', video: null, description: '' }] }],
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
@@ -242,11 +237,11 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
               className="relative w-full h-40 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer"
               onClick={handleUploadClick}
             >
-              {previewUrls[moduleIndex] && previewUrls[moduleIndex][lessonIndex] ? (
+              {previewUrls[moduleIndex]?.[lessonIndex] || (Array.isArray(modules?.Modules) && modules?.Modules[moduleIndex]?.lessons[lessonIndex]) ? (
                 <video
                   className="w-full h-full object-center bg-black rounded-md"
                   controls
-                  src={previewUrls[moduleIndex][lessonIndex]}
+                  src={previewUrls[moduleIndex]?.[lessonIndex] || (modules?.Modules[moduleIndex]?.lessons[lessonIndex]?.video as string)}
                 >
                   Your browser does not support the video tag.
                 </video>
@@ -314,7 +309,8 @@ const AddLesson: React.FC<AddLessonProps> = ({ onNext }) => {
                 )}
               </FieldArray>
 
-              <div className="w-full flex justify-end mt-6">
+              <div className="w-full flex justify-between mt-6">
+                <button className='py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition' onClick={()=>{dispatch(toPrev())}}> previous</button>
                 <button
                   type="submit"
                   className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"

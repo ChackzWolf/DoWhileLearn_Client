@@ -1,7 +1,7 @@
 
 
 export interface ICreateCourse1 {
-    thumbnail: File | null | string;
+    thumbnail: string;
     courseTitle: string;
     courseDescription: string;
     coursePrice: string;
@@ -21,7 +21,7 @@ export interface CreateCourseState {
     description: string;
     lessons: Array<{
       title: string;
-      video: File | null;  
+      video: File | null | string;  
       description: string;
       questions?:quesitons
     }>;
