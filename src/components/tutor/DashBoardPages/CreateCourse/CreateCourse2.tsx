@@ -14,6 +14,7 @@ const validationSchema = Yup.object({
 });
 
 const CreateCourse2 = () => {
+
     const CreateCourse2 = useSelector((state:RootState)=> state.createCourseData.createCourse2)
     const dispatch = useDispatch();
 
@@ -29,6 +30,7 @@ const CreateCourse2 = () => {
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
+
                         dispatch(setCreateCourse2(values));
                         dispatch(toNext())
                     }}

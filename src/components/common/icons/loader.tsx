@@ -1,5 +1,6 @@
 const Loader = () => {
   return (
+    <div className="fixed inset-0 z-50 flex justify-center items-center bg-opacity-50 bg-gray-100">
     <svg
       width="240"
       height="240"
@@ -35,8 +36,12 @@ const Loader = () => {
           ></animateMotion>
         </circle>
       </g>
+      
     </svg>
+    
+  </div>
   );
+ 
 };
 
 export default Loader;

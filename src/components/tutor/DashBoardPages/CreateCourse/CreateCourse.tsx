@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import axios from "axios";
+import Loader from "../../../common/icons/loader";
 
 const validationSchema = Yup.object({
   courseTitle: Yup.string().required("Course name is required"),
@@ -22,6 +23,7 @@ const validationSchema = Yup.object({
 });
 
 const AddCourse = () => {
+  const [isLoading,setIsLoading] = useState(false)
   const createCourse = useSelector(
     (state: RootState) => state.createCourseData.createCourse
   );
@@ -35,6 +37,7 @@ const AddCourse = () => {
     formData.append("image", file);
 
     try {
+      setIsLoading(true)
       const response = await axios.post(courseEndpoint.uploadImage, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -43,10 +46,16 @@ const AddCourse = () => {
       console.log("completed", response.data);
 
       // Use the returned URL to update the state or handle accordingly
-      setPreviewImage(response.data.s3Url);
-
+      await setPreviewImage(response.data.s3Url);
+      if(previewImage !== response.data.s3Url){
+        console.log('what man')
+        setPreviewImage(response.data.s3Url);
+      }
+      setIsLoading(false)
       console.log(previewImage, "hahaha");
+
     } catch (error) {
+      setIsLoading(false)
       console.error("Error uploading image:", error);
     }
   };
@@ -59,6 +68,7 @@ const AddCourse = () => {
 
   return (
     <div className="flex items-center justify-center m-5 px-4">
+      {isLoading? <Loader/>: ""}
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg px-8 py-6">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Add New Course
@@ -228,6 +238,7 @@ const AddCourse = () => {
                       const file = e.target.files?.[0];
                       if (file) {
                         await handleUpload(file);
+                        console.log(previewImage)
                         setFieldValue("thumbnail", previewImage,);
                       }
                     }}

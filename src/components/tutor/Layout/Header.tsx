@@ -35,7 +35,7 @@ const Header = () =>{
             }
         };
 
-        // checkAuth();
+        checkAuth();
     });
 
 
