@@ -5,11 +5,11 @@ import { getRoleFromToken } from '../jwtUtils';
 
 export const AdminPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
     const token = getCookie('accessToken');  // Fetch the JWT from cookies
-    
+    console.log( token,'token')
     if (!token) {
-      console.log('no token')
+      console.log('no admin token ')
       // No token found, redirect to login
-      return <Navigate to="/admin/login" />;
+      return <Navigate to="/login/admin" />;
     }
   
     try {
@@ -33,6 +33,6 @@ export const AdminPrivateRoute = ({ children, roles }: { children: JSX.Element; 
       return children;
     } catch (error) {
       console.error('Error decoding token or token is invalid', error);
-      return <Navigate to="/admin/login" />;  // Invalid token, redirect to login
+      return <Navigate to="/login/admin" />;  // Invalid token, redirect to login
     }
   };

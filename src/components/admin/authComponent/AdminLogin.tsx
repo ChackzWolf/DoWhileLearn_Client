@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { setAdminCookie } from "../../../utils/cookieManager";
+import { getCookie, setAdminCookie, setCookie } from "../../../utils/cookieManager";
 import { useState } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import { adminEndpoint } from "../../../constraints/adminEndpoints";
@@ -45,10 +45,8 @@ function LoginModal() {
                 console.log("setCookie")
                 setAdminCookie('refreshToken', refreshToken, 7);
                 console.log("setRefreshCookie");
-                setAdminCookie('userId',_id, 7)
-
-                
-                // navigate('/admin');
+                setAdminCookie('userId',_id, 7);
+                navigate('/admin');
             }else{
                 setMessage(message);
             }

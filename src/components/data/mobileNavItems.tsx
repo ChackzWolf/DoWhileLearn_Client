@@ -1,6 +1,6 @@
 export const links = [
     {
-        name: 'Home',
+        name: '',
         path: '/'
     },
 ]

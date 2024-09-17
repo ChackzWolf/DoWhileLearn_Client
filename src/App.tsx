@@ -1,7 +1,9 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import UserRoutes from '../src/components/routes/userRouter/UserRouters';
 import TutorRoutes from './components/routes/tutorRouter/tutorRouters';
+import AdminRoutes from './components/routes/adminRouter/AdminRouters';
 import {TutorPrivateRoute, UserPrivateRoute} from './utils/tutor/PrivateRouter';
+import { AdminPrivateRoute } from './utils/admin/PrivateRoute';
 import LoginUser from './components/user/auth/Login';
 import RegisterUser from './components/user/auth/register';
 import LoginTutor from './components/tutor/auth/Login';
@@ -20,7 +22,7 @@ function App() {
         <Router>
           <Routes>
           {/* // page for common */}
-          <Route path='/*' element={<UserRoutes/>}/>
+          <Route path='/' element= {<UserHome/>}/>
           <Route path='/AuthChoice' element= {<AuthChoice/>}/>
 
           {/* User auth */}
@@ -32,7 +34,6 @@ function App() {
           <Route path='/login/tutor' element = {<LoginTutor/>}/>
           <Route path='/register/tutor' element ={<RegisterTutor/>}/>
           
-          <Route path='/home-page' element= {<UserHome/>}/>
           
 
           {/* Admin Auth */}
@@ -56,10 +57,21 @@ function App() {
             path="/user/*"
             element={
               <UserPrivateRoute roles={['USER']}>
-                <UserRoutes/>
+                <UserRoutes />
               </UserPrivateRoute>
             }
           />
+
+
+          <Route
+            path="/admin/*"
+            element={
+              <AdminPrivateRoute roles={['ADMIN']}>
+                <AdminRoutes/>
+              </AdminPrivateRoute>
+            }
+          />
+
 
           </Routes>
         </Router>
