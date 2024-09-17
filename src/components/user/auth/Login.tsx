@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from "react-router-dom";
-import { userEndpoint } from "../../constraints/userEndpoints";
+import { userEndpoint } from "../../../constraints/userEndpoints";
 import axios from "axios";
 import { setCookie } from "../../../utils/cookieManager";
 import { setUserLogin } from "../../../redux/authSlice/authSlice";
@@ -42,10 +42,10 @@ function LoginModal() {
         try {
             const response = await axios.post(userEndpoint.loginUser, value);
             console.log(response.data)
-            const {success, token,refreshToken, status , msg} = response.data;
+            const {success, accessToken,refreshToken, status , msg} = response.data;
             console.log(status)
             if(success){
-                setCookie('token', token, 0.01); // Set a short-lived access token
+                setCookie('token', accessToken, 0.01); // Set a short-lived access token
                 setCookie('refreshToken', refreshToken, 7);
                 dispatch(setUserLogin())
                 navigate('/');
@@ -140,7 +140,7 @@ function LoginModal() {
 
                                     <div className="flex w-full">
                                         <h1>Don't have an account?  </h1>
-                                        <NavLink to="/tutor/register" className="pl-2 text-sky-700">
+                                        <NavLink to="/register/tutor" className="pl-2 text-sky-700">
                                              Signup
                                         </NavLink>
                                     </div>

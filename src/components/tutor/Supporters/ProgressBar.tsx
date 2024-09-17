@@ -40,7 +40,7 @@ const ProgressBar = () => {
           ) : (
             <FaCircle
               size={26}
-              className="text-white "
+              className="bg-gray-300 text-gray-300 rounded-full "
             />
           )}
         </div>
@@ -50,7 +50,7 @@ const ProgressBar = () => {
   };
 
   return (
-    <div className="relative bg-gray-200 rounded-full h-2 mx-32 mt-5">
+    <div className="relative bg-gray-300 rounded-full h-2 mx-32 mt-5">
       <div
         className="bg-[#7C24F0] h-full rounded-full"
         style={{ width: `${progressPercentage}%` }}

@@ -2,15 +2,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getCookie, setCookie, setTutorCookie } from "../../../utils/cookieManager";
-import { setTutorLogin } from "../../../redux/authSlice/authSlice";
-import { useDispatch } from "react-redux";
+import { setAdminCookie } from "../../../utils/cookieManager";
 import { useState } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
-import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
-
+import { adminEndpoint } from "../../../constraints/adminEndpoints";
 function LoginModal() {
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [message, setMessage] = useState('')
     const [showPassword, setShowPassword] = useState(false);
@@ -39,18 +35,20 @@ function LoginModal() {
 
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
         try {
-            const response = await axios.post(tutorEndpoint.loginTutor, value);
+            const response = await axios.post(adminEndpoint.login, value);
             console.log(response.data)
             const {success, accessToken, refreshToken ,status ,message,_id} = response.data;
             console.log(status)
             if(success){
                 
-                setTutorCookie('accessToken', accessToken, 0.01);
+                setAdminCookie('accessToken', accessToken, 0.01);
                 console.log("setCookie")
-                setTutorCookie('refreshToken', refreshToken, 7);
+                setAdminCookie('refreshToken', refreshToken, 7);
                 console.log("setRefreshCookie");
-                setTutorCookie('userId',_id, 7)
-                navigate('/tutor');
+                setAdminCookie('userId',_id, 7)
+
+                
+                // navigate('/admin');
             }else{
                 setMessage(message);
             }
@@ -85,7 +83,7 @@ function LoginModal() {
 
                 <div className="bg-[#FCF6FF] p-16 shadow-lg w-1/2 rouder-lg justify-center">
 
-                    <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Tutor Login</h2>
+                    <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Admin Login</h2>
 
                     <h1 className="text-red-800 text-center">{message}</h1>
                     <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>

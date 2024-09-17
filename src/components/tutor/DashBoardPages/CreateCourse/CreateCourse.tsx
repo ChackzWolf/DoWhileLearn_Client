@@ -8,13 +8,18 @@ import {
 } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
-import { courseEndpoint } from "../../../constraints/courseEndpoints";
+import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import axios from "axios";
 import Loader from "../../../common/icons/loader";
 
 const validationSchema = Yup.object({
   courseTitle: Yup.string().required("Course name is required"),
-  coursePrice: Yup.string().required("*required"),
+  coursePrice: Yup.string()
+    .matches(/^\d+(\.\d{1,2})?$/, "Price must be a valid number")
+    .required("*required"),
+  discountPrice: Yup.string()
+    .matches(/^\d+(\.\d{1,2})?$/, "Discount price must be a valid number")
+    .required("*required"),
   courseDescription: Yup.string().required("Course description is required"),
   courseCategory: Yup.string().required("*required"),
   courseLevel: Yup.string().required("*required"),
@@ -46,12 +51,17 @@ const AddCourse = () => {
       console.log("completed", response.data);
 
       // Use the returned URL to update the state or handle accordingly
-      await setPreviewImage(response.data.s3Url);
-      if(previewImage !== response.data.s3Url){
-        console.log('what man')
-        setPreviewImage(response.data.s3Url);
-      }
+      setPreviewImage(response.data.s3Url);
+   
       setIsLoading(false)
+
+      if (response.data.s3Url) {
+        setPreviewImage(response.data.s3Url);
+        console.log('returning')
+        return response.data.s3Url
+      } else {
+        console.error("s3Url is missing in the response");
+      }
       console.log(previewImage, "hahaha");
 
     } catch (error) {
@@ -66,6 +76,7 @@ const AddCourse = () => {
     }
   };
 
+  
   return (
     <div className="flex items-center justify-center m-5 px-4">
       {isLoading? <Loader/>: ""}
@@ -159,7 +170,7 @@ const AddCourse = () => {
                         </div>
                         <Field
                           name="coursePrice"
-                          type="text"
+                          type="number"
                           className="w-full h-9 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
                           placeholder="Enter Course Price"
                         />
@@ -179,7 +190,7 @@ const AddCourse = () => {
                         </div>
                         <Field
                           name="discountPrice"
-                          type="text"
+                          type="number"
                           className="w-full h-9 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
                           placeholder="Enter Discount Price"
                         />
@@ -206,6 +217,7 @@ const AddCourse = () => {
                           <option value="Beginner">Beginner</option>
                           <option value="Intermediate">Intermediate</option>
                           <option value="Expert">Expert</option>
+                          
                         </Field>
                       </div>
                     </div>
@@ -237,9 +249,9 @@ const AddCourse = () => {
                     onChange={async(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        await handleUpload(file);
-                        console.log(previewImage)
-                        setFieldValue("thumbnail", previewImage,);
+                        const s3Url = await handleUpload(file);
+                        console.log(s3Url)
+                        setFieldValue("thumbnail", s3Url,);
                       }
                     }}
                   />

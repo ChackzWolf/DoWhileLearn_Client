@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CourseBadge from "../CourseBadge";
 
 import axios from "axios";
-import { courseEndpoint } from "../../../constraints/courseEndpoints";
+import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 
 export interface ResponseFetchCourseList {
     courses: Course[];
@@ -51,19 +51,24 @@ const LayerCourseList= () => {
     }, []);
   
     return (
-      <div className="flex w-full px-12">
-        {courses.map((course) => (
-          <CourseBadge
-            key={course.courseTitle} // Use a unique identifier
-            title={course.courseTitle}
-            rating={4}
-            price={course.coursePrice}
-            discountPrice={course.discountPrice}
-            imageSrc={course.thumbnail}
-            color={""}
-          />
-        ))}
-      </div>
+<div className="flex w-full justify-between px-20">
+  {courses
+    .slice() // Copy the array to avoid mutating the original
+    .reverse() // Reverse the array
+    .slice(0, 5) // Take the first 5 items from the reversed array
+    .map((course) => (
+      <CourseBadge
+        key={course.courseTitle + course.coursePrice} // Use a unique key
+        title={course.courseTitle}
+        description = {course.courseDescription}
+        rating={4}
+        price={course.coursePrice}
+        discountPrice={course.discountPrice}
+        imageSrc={course.thumbnail}
+        color={""}
+      />
+    ))}
+</div>
     );
 }
 

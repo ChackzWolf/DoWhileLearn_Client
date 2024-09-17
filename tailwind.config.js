@@ -35,5 +35,18 @@ export default {
           background: theme('colors.purple.500'),
         },
       });
-    }],
+    },
+    function ({ addUtilities }) {
+      addUtilities({
+        '.line-clamp-3': {
+          display: '-webkit-box',
+          '-webkit-box-orient': 'vertical',
+          '-webkit-line-clamp': '3',
+          overflow: 'hidden',
+          'text-overflow': 'ellipsis',
+        },
+      });
+    },
+  
+  ],
 }

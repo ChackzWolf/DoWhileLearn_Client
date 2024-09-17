@@ -1,10 +1,10 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { setCookie } from '../../../utils/cookieManager';
+import { setCookie, setTutorCookie } from '../../../utils/cookieManager';
 import {useDispatch} from 'react-redux';
 import { setTutorLogin } from '../../../redux/authSlice/authSlice';
-import { tutorEndpoint } from '../../constraints/tutorEndpoint';
+import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -22,7 +22,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
 
     const [otpCountDown, setOtpCountDown] = useState<number>(() => {
     const savedCount = localStorage.getItem('otpCountDown');
-    return savedCount ? parseInt(savedCount) : 60; // Default 30 seconds
+    return savedCount ? parseInt(savedCount) : 30; // Default 30 seconds
   });
 
   // This effect handles the countdown
@@ -86,14 +86,15 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
         }
 
         const response =await axios.post(tutorEndpoint.verifyOTP, data); 
-        const {success, refreshToken, accessToken} = response.data;
+        const {success, refreshToken, accessToken,_id} = response.data;
 
         if(success){
             
             console.log('success', response.data);
             localStorage.removeItem('otpCountDown');
-            setCookie('token', accessToken, 0.01);
-            setCookie('refreshToken', refreshToken, 7);
+            setTutorCookie('token', accessToken, 0.01);
+            setTutorCookie('refreshToken', refreshToken, 7);
+            setTutorCookie('userId',_id,7)
             // ithenthua reandennam
             dispatch(setTutorLogin());
             navigate('/tutor')

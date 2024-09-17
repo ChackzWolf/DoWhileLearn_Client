@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "./Layout/Header";
 import LayerOne from "./Layout/HomePageLayer/LayerOne";
 import axios from "axios";
-import { courseEndpoint } from "../constraints/courseEndpoints";
+import { courseEndpoint } from "../../constraints/courseEndpoints";
 import LayerCourseList from "./Layout/HomePageLayer/LayerCourseList";
 
 

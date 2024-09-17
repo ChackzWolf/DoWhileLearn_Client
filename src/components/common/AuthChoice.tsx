@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 function AuthChoice() {
     const navigate = useNavigate();
     const handleTutorLogin = ()=>{
-        navigate('/tutor/login');
+        navigate('/login/tutor');
     }
     const handleUserLogin = ()=>{
-        navigate('/register');
+        navigate('/register/user');
     }
   return (
 

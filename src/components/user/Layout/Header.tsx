@@ -61,9 +61,10 @@ const Header = () =>{
 
 
                         : 
-
-
+                        <>
+                        <NavLink to='/login/user'><button className=" p-1 px-8 hover:scale-105 transition-all" > Login</button></NavLink>
                         <NavLink to='/AuthChoice'><button className="bg-[#7C24F0] text-white font-semibold rounded-lg p-1 px-3 hover:scale-105 transition-all" > Get started</button></NavLink>
+                        </>
                                 // <div>
                                 //     <NavLink to='/register'className="">
                                 //         <button className="mr-10 text-">Signup</button>

@@ -2,7 +2,7 @@ import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import { userEndpoint } from '../../../constraints/userEndpoints';
+import { userEndpoint } from '../../../../constraints/userEndpoints';
 import { setUserLogin } from '../../../../redux/authSlice/authSlice';
 import { setCookie } from '../../../../utils/cookieManager';
 interface OTPInputProps{

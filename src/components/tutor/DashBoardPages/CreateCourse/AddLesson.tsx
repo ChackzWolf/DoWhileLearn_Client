@@ -17,7 +17,7 @@ import {
 import { CreateCourseState } from "../../../Interfaces/TutorInterfaces/ICreateCourse";
 import { FiPlus, FiX } from "react-icons/fi"; // Import icons
 import axios from "axios";
-import { courseEndpoint } from "../../../constraints/courseEndpoints";
+import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import Loader from "../../../common/icons/loader";

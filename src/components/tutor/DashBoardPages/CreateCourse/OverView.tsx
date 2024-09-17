@@ -2,10 +2,10 @@ import { RootState } from "../../../../redux/store/store"
 import { useSelector } from "react-redux"
 import Modules from "./OverView/Modules";
 import { CreateCourseState } from "../../../../components/Interfaces/TutorInterfaces/ICreateCourse";
-import { toPrev } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
+import { setCreateCourseEmpty, toPrev } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { courseEndpoint } from "../../../constraints/courseEndpoints";
+import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // You can skip this if you're not using default styles
 import { useState } from "react";
@@ -48,6 +48,7 @@ const handleSubmit = async() => {
                   progressClassName: 'bg-green-200',
                 });
                 setIsLoading(false)
+                dispatch(setCreateCourseEmpty())
                 navigate('/tutor/courses')
               } else {     
                 console.log('failed')

@@ -1,6 +1,6 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
-import { userEndpoint } from "../../constraints/userEndpoints";
+import { userEndpoint } from "../../../constraints/userEndpoints";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";

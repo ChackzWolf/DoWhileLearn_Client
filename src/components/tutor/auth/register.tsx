@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
-import { tutorEndpoint } from "../../constraints/tutorEndpoint";
+import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 
 
 
@@ -225,8 +225,14 @@ function RegisterUser() {
 
                                 <div className="flex w-full">
                                     <h1>Already have an account?  </h1>
-                                    <NavLink to="/tutor/login">
+                                    <NavLink to="/login/tutor">
                                         <h1 className="pl-2 text-sky-700"> Login</h1>
+                                    </NavLink>
+                                </div>
+                                <div className="flex w-full">
+                                    <h1>Are you a student?  </h1>
+                                    <NavLink to="/register/user">
+                                        <h1 className="pl-2 text-sky-700"> Click here</h1>
                                     </NavLink>
                                 </div>
 
