@@ -27,7 +27,7 @@ function App() {
 
           {/* User auth */}
           <Route path='/login/user' element={<LoginUser/>}/>
-          <Route path='/refister/user' element={<RegisterUser/>}/>
+          <Route path='/register/user' element={<RegisterUser/>}/>
           <Route path='/register/user/otp' element = {<OtpVarification/>}/>
 
            {/* Tutor Auth */}

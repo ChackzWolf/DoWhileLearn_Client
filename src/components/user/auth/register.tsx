@@ -81,7 +81,7 @@ function RegisterUser() {
             console.log('register data send succesfully');
             localStorage.removeItem('otpCountDown');
             if(response.data.success){
-                navigate('/otp',{state: response.data});
+                navigate('/register/user/otp',{state: response.data});
                 console.log('success' , response.data)
             }else{
                 console.log(response.data)

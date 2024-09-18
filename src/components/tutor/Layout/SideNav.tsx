@@ -12,7 +12,7 @@ function SideNav({ prop }: { prop: string }) {
   };
 
   return (
-    <>
+<>
       {/* Hamburger Icon for Mobile */}
       <div className="lg:hidden p-4">
         <FaBars onClick={toggleNav} className="text-2xl cursor-pointer" />
@@ -30,7 +30,7 @@ function SideNav({ prop }: { prop: string }) {
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-white p-6 transition-transform duration-300 z-50 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:relative lg:w-2/12`}
+        } lg:translate-x-0 lg:relative lg:w-2/12 fixed`}
       >
         {/* Close Icon for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
@@ -41,8 +41,8 @@ function SideNav({ prop }: { prop: string }) {
         <div
           className={
             prop === "/tutor"
-              ? "flex bg-[#7C24F0] p-2  text-white text-sm font-semibold w-full rounded-lg"
-              : "flex bg-white p-2  text-sm font-semibold w-full rounded-lg"
+              ? "flex bg-[#7C24F0] p-2  text-white text-sm font-semibold w-full rounded-lg transition-all"
+              : "flex bg-white p-2  text-sm font-semibold w-full rounded-lg transition-all"
           }
         >
           <NavLink key="/tutor" to="/tutor" className="flex items-center">
@@ -89,7 +89,7 @@ function SideNav({ prop }: { prop: string }) {
           ))}
         </div>
       </div>
-    </>
+  </>
   );
 }
 

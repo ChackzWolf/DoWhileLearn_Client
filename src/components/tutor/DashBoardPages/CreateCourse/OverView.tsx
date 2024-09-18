@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'; // You can skip this if you're n
 import { useState } from "react";
 import Loader from "../../../common/icons/loader";
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "../../../../utils/cookieManager";
 
 
 
@@ -27,6 +28,7 @@ const handleSubmit = async() => {
     try{
         setIsLoading(true)
         const data = {
+          tutorId: getCookie('userId'),
           ...courseData,  // Spread the courseData object
           benefits_prerequisites: {
             ...benifits_prerequisites  // Include benefits and prerequisites

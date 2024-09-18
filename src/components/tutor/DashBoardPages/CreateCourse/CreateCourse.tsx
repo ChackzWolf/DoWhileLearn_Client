@@ -48,6 +48,7 @@ const AddCourse = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+
       console.log("completed", response.data);
 
       // Use the returned URL to update the state or handle accordingly
@@ -84,7 +85,6 @@ const AddCourse = () => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Add New Course
         </h2>
-
         <Formik
           initialValues={{
             courseTitle: createCourse?.courseTitle || "",

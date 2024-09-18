@@ -1,6 +1,7 @@
 import {Routes, Route} from 'react-router-dom';
 import AdminDashBoardPage from '../../../pages/admin/DashBoard/AdminDashBoardPage';
 import StudentsPage from '../../../pages/admin/DashBoard/StudentsPage';
+import TutorsPage from '../../../pages/admin/DashBoard/TutorsPage';
 
 
 const AdminRoutes = ()=>{
@@ -9,6 +10,7 @@ const AdminRoutes = ()=>{
         <Routes>
             <Route path ='/' element = {<AdminDashBoardPage/>}/>
             <Route path = '/students' element = {<StudentsPage/>}/>
+            <Route path = '/tutors' element = {<TutorsPage/>}/>
         </Routes>
     )
 }

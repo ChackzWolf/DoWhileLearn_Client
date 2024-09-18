@@ -9,7 +9,7 @@ const PayoutsPage = () => {
         <div className="w-full h-screen">
             <Header/>
             <div className="flex w-full">
-                <SideNav prop={'/tutor/course'}/> 
+                <SideNav prop={'/tutor/courses'}/> 
                 <Course/>
             </div>
 
