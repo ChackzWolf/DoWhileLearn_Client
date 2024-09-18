@@ -17,14 +17,14 @@ apiClient.interceptors.request.use(  /////to add JWT token from cookie
     (error) => Promise.reject(error)
 );
 
-apiClient.interceptors.response.use(// Response interceptor to handle token refreshes and errrrrrorsssssssss
+apiClient.interceptors.response.use(// Response interceptor to handle token refreshes and errorrerer
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
 
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-            try {            // Trying to refresh the token
-
+            try {    // Trying to refresh the token
+               
                 const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL}/refresh-token`, {}, { withCredentials: true });
                 const newToken = response.data.accessToken;
 
@@ -41,7 +41,6 @@ apiClient.interceptors.response.use(// Response interceptor to handle token refr
                // window.location.href = '/login';
             }
         }
-
         return Promise.reject(error);
     }
 );

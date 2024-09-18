@@ -2,10 +2,7 @@ import { NavLink } from "react-router-dom";
 import HeaderNav from "../../Nav/UserHeaderNav";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setUserLogout, setUserLogin } from "../../../redux/authSlice/authSlice";
-import { getCookie } from "../../../utils/cookieManager";
 import HeaderDropdown from "./headerComponents/DropDown";
 
 
@@ -15,27 +12,6 @@ const Header = () =>{
     const dispatch = useDispatch()
     const isLogin = useSelector((state: RootState) => state.userAuth.isLogin);
 
-    useEffect(() => {
-        // Function to check authentication status
-        const checkAuth = async () => {
-            try {
-                const token = getCookie('token');
-                const refreshToken = getCookie('refreshToken')
-                console.log(token)
-                if (!token || !refreshToken) {
-                    console.log('token is null')
-                    dispatch(setUserLogout())
-                }else{
-                    dispatch(setUserLogin())
-                }
-            } catch (error) {
-                console.error('Authentication check failed:', error);
-                dispatch(setUserLogout())
-            }
-        };
-
-        checkAuth();
-    });
 
 
    

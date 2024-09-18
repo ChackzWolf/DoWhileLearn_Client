@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "axios";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
+import { useNavigate } from "react-router-dom";
 
 
 export interface ResponseFetchCourseList {
@@ -37,6 +38,7 @@ export interface Lesson {
 
 
 function Course() {
+  const navigate = useNavigate()
   const [courses, setCourses] = useState<Course[]>([]);
 
 
@@ -57,16 +59,18 @@ function Course() {
       fetchCourses();
     }, []);
 
-    const handleOnClick = async (id:string) => {
-      console.log(id)
-    }
+    const handleOnClick = (id: string) => {
+      navigate(`/tutor/courses/${id}`);
+    };
 
   console.log(courses)
   return (
     <div className="w-full h-screen bg-white p-8">
+      <div className="mx-10">
       <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden m-2">
         <thead>
           <tr>
+            <th className="border border-gray-300 p-2 bg-gray-100 "></th>
             <th className="border border-gray-300 p-2 bg-gray-100 ">Course title</th>
             <th className="border border-gray-300 p-2 bg-gray-100">Course level</th>
             <th className="border border-gray-300 p-2 bg-gray-100">Course price</th>
@@ -77,6 +81,10 @@ function Course() {
         <tbody>
           {courses.map((course, index) => (
             <tr key={index} className="text-center">
+              <div className="flex items-center justify-center rounded-lg">
+              <img src={course.thumbnail} alt="" className="w-10 rounded-md mt-4" />
+              </div>
+              
               <td className="border border-gray-300 p-2">{course?.courseTitle}</td>
             <td className="border border-gray-300 p-2">{course?.courseLevel}</td>
             <td className="border border-gray-300 p-2">{course?.coursePrice}</td>
@@ -86,6 +94,7 @@ function Course() {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   )
 }
