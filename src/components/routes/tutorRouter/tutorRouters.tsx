@@ -5,6 +5,7 @@ import PayoutsPage from '../../../pages/tutor/DashBoard/PayoutPage';
 import CreateCoursePage from '../../../pages/tutor/Course/CreateCourse/CreateCoursePage';
 import CoursesPage from '../../../pages/tutor/DashBoard/CoursesPage'
 import CourseDetailsPage from '../../../pages/tutor/Course/CourseDetailsPage'
+import EditCoursePage from '../../../pages/tutor/Course/EditCourse/EditCoursePage';
 const TutorRoutes = ()=>{
     return(
 
@@ -15,6 +16,7 @@ const TutorRoutes = ()=>{
             <Route path= '/createCourse' element={<CreateCoursePage/>}/>
             <Route path = '/courses' element = {<CoursesPage/>}/>
             <Route path="/courses/:id" element={<CourseDetailsPage />} />
+            <Route path = "/courses/edit-course" element = {<EditCoursePage/>}/>
         </Routes>
     )
 }
