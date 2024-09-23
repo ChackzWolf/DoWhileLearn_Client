@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { CreateCourseState, ICreateCourse1, ICreateCourse2 } from "../../../components/Interfaces/TutorInterfaces/ICreateCourse";
+import { CreateCourseState, ICreateCourse1, ICreateCourse2 } from "../../../components/Interfaces/CourseInterface/ICreateCourse";
 
 
 

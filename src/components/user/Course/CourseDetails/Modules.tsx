@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CreateCourseState } from "../../../../Interfaces/CourseInterface/ICreateCourse";
+import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse"
 
 // // Define the interface for questions if needed
 // interface Questions {

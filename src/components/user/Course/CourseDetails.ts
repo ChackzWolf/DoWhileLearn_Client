@@ -1,24 +1,25 @@
-import Modules from "../CreateCourse/OverView/Modules";
+import Modules from "./CourseDetails/Modules";
 import {
   CreateCourseState,
   ICreateCourse1,
   ICreateCourse2,
-} from "../../../Interfaces/CourseInterface/ICreateCourse";
+} from "../../../components/Interfaces/CourseInterface/ICreateCourse";
 import {
   setCreateCourseEmpty,
   toPrev,
-} from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
+} from "../../../redux/tutorSlice/CourseSlice/createCourseData";
+
+import { courseEndpoint } from "../../../constraints/courseEndpoints";
+
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // You can skip this if you're not using default styles
 import { useEffect, useState } from "react";
-import Loader from "../../../common/icons/loader";
+import Loader from "../../../components/common/icons/loader";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCookie } from "../../../../utils/cookieManager";
+import { getCookie } from "../../../utils/cookieManager";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
-import {setEditCourse, setEditCourse2, setEditLesson} from "../../../../redux/tutorSlice/CourseSlice/editCourseData";
 
 interface Module {
   name: string;

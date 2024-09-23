@@ -14,7 +14,7 @@ import {
   toNext,
   toPrev,
 } from "../../../../redux/tutorSlice/CourseSlice/createCourseData"; // Adjust path as needed
-import { CreateCourseState } from "../../../Interfaces/TutorInterfaces/ICreateCourse";
+import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
 import { FiPlus, FiX } from "react-icons/fi"; // Import icons
 import axios from "axios";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";

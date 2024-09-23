@@ -1,8 +1,8 @@
 import { RootState } from "../../../../redux/store/store"
 import { useSelector } from "react-redux"
 import Modules from "../CreateCourse/OverView/Modules";
-import { CreateCourseState } from "../../../Interfaces/TutorInterfaces/ICreateCourse";
-import { setCreateCourseEmpty, toPrev } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
+import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
+import { setEditCourseEmpty, toPrev } from "../../../../redux/tutorSlice/CourseSlice/editCourseData";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
@@ -18,11 +18,11 @@ import { getCookie } from "../../../../utils/cookieManager";
 function OverView() {
     
 const [isLoading, setIsLoading] = useState(false);
-const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
+const courseData = useSelector((state: RootState) => state.editCourseData.editCourse);
 const dispatch = useDispatch()
 const navigate = useNavigate()
-const benifits_prerequisites = useSelector((state: RootState) => state.createCourseData.createCourse2);
-const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
+const benifits_prerequisites = useSelector((state: RootState) => state.editCourseData.editCourse2);
+const modules :CreateCourseState | null = useSelector((state:RootState) => state.editCourseData.editLessons);
 
 const handleSubmit = async() => {
     try{
@@ -36,8 +36,11 @@ const handleSubmit = async() => {
           // Access the `Modules` array inside the `modules` object and spread it
           Modules: modules && modules.Modules ? [...modules.Modules] : [],  // Safely access and spread the array
         };
+
+console.log(data,'dataaaaaaaaaaaaaaaaa')
+    
         console.log('started')
-        const response = await axios.post(courseEndpoint.submitCourse, data)
+        const response = await axios.post(courseEndpoint.editCourse, data)
         console.log(response.data)
      
             if (response.data.success) {
@@ -50,7 +53,7 @@ const handleSubmit = async() => {
                   progressClassName: 'bg-green-200',
                 });
                 setIsLoading(false)
-                dispatch(setCreateCourseEmpty())
+                dispatch(setEditCourseEmpty())
                 navigate('/tutor/courses')
               } else {     
                 console.log('failed')

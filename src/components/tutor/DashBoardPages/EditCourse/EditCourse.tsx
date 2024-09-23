@@ -87,6 +87,7 @@ const AddCourse = () => {
         </h2>
         <Formik
           initialValues={{
+            courseId : editCourse?.courseId,
             courseTitle: editCourse?.courseTitle || "",
             coursePrice: editCourse?.coursePrice || "",
             discountPrice: editCourse?.discountPrice || "",

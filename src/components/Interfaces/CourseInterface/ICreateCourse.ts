@@ -9,6 +9,7 @@ export interface ICreateCourse1 {
     courseCategory: string;
     courseLevel: string;
     demoURL: string;
+    courseId?:string;
   }
   export interface ICreateCourse2 {
     prerequisites: string [];

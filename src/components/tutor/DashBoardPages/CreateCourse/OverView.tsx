@@ -1,7 +1,7 @@
 import { RootState } from "../../../../redux/store/store"
 import { useSelector } from "react-redux"
 import Modules from "./OverView/Modules";
-import { CreateCourseState } from "../../../../components/Interfaces/TutorInterfaces/ICreateCourse";
+import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
 import { setCreateCourseEmpty, toPrev } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import { useDispatch } from "react-redux";
 import axios from "axios";

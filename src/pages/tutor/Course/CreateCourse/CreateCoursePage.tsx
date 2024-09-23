@@ -7,7 +7,9 @@ import ProgressBar from "../../../../components/tutor/Supporters/ProgressBar";
 import OverView from "../../../../components/tutor/DashBoardPages/CreateCourse/OverView";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
-
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { setCreateCourseEmpty } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 
 
 
@@ -20,8 +22,10 @@ const CreateCoursePage = () => {
   console.log(courseData, '11111111111111111111111111111111111111111');
   console.log(benifits_prerequisites, '2222222222222222222222222222222222222');
   console.log(modules, '33333333333333333333333333333333333333');
-
-
+  const dispatch = useDispatch()
+  // useEffect(()=> {
+  //   dispatch(setCreateCourseEmpty())
+  // })
   //DDB3FF
   return (
     <div className="w-full h-screen">
