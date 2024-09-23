@@ -14,7 +14,7 @@ import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // You can skip this if you're not using default styles
+import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import Loader from "../../../components/common/icons/loader";
 import { useNavigate, useParams } from "react-router-dom";
@@ -116,35 +116,9 @@ function OverView() {
     }
   }, [id, dispatch]);
 
-  console.log(modules, "kkkkkkkkkkkkkkkkkkkkk");
 
 
 
-
-
-
-  const handleSubmit = async () => {
-    try {
-      setIsLoading(true);
-
-      dispatch(setEditCourse(courseData));
-      dispatch(setEditCourse2(benefits_prerequisites));
-      dispatch(setEditLesson(modules))
-      navigate('/tutor/courses/edit-course')
-    } catch (err) {
-      setIsLoading(false);
-      toast.error(
-        "Form submission failed! We are facing some internal error. Try again later",
-        {
-          position: "top-right",
-          autoClose: 7000,
-          className: "bg-red-500 text-white rounded-lg p-4",
-          bodyClassName: "text-sm",
-          progressClassName: "bg-red-200",
-        }
-      );
-    }
-  };
 
   return (
     <div className="w-full mx-24 m-10 gap-4">
@@ -217,7 +191,7 @@ function OverView() {
         </button>
         <button
           className=" right-0 bg-[#7C24F0] px-5 py-2 rounded-lg text-white font-bold hover:bg-[#6211cd]"
-          onClick={handleSubmit}
+       
         >
           Submit
         </button>
