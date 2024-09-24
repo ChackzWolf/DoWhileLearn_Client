@@ -12,6 +12,8 @@ import AuthChoice from './components/common/AuthChoice';
 import OtpVarification from './components/user/auth/OtpVarification';
 import UserHome from './components/user/UserHome';
 import AdminLoginPage from './pages/admin/auth/AdminLoginPage';
+import CourseDetailsPage from './pages/user/Courses/CourseDetailsPage';
+import CoursesListPage from './pages/user/Courses/CoursesListPage';
 
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
           {/* // page for common */}
           <Route path='/' element= {<UserHome/>}/>
           <Route path='/AuthChoice' element= {<AuthChoice/>}/>
+          <Route path ='/courses' element = {<CoursesListPage/>}/>
+          <Route path="/course/:id" element={<CourseDetailsPage/>} />
 
           {/* User auth */}
           <Route path='/login/user' element={<LoginUser/>}/>
@@ -38,8 +42,7 @@ function App() {
 
           {/* Admin Auth */}
           <Route path = '/login/admin' element= {<AdminLoginPage/>}/>
-          
-        
+      
           
           {/* // <Route path="/unauthorized" element={<UnauthorizedPage />} /> */}
 
@@ -62,7 +65,6 @@ function App() {
             }
           />
 
-
           <Route
             path="/admin/*"
             element={
@@ -71,7 +73,6 @@ function App() {
               </AdminPrivateRoute>
             }
           />
-
 
           </Routes>
         </Router>

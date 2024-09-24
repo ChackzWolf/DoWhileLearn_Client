@@ -8,6 +8,7 @@ export interface ResponseFetchCourseList {
     courses: Course[];
   }
   export interface Course {
+    _id: string;
     courseCategory: string;
     courseDescription: string;
     courseLevel: string;
@@ -50,6 +51,7 @@ const LayerCourseList= () => {
       fetchCourses();
     }, []);
   
+    console.log(courses, 'coursess')
     return (
 <div className="flex w-full justify-between px-20">
   {courses
@@ -57,6 +59,7 @@ const LayerCourseList= () => {
     .reverse() // Reverse the array
     .slice(0, 5) // Take the first 5 items from the reversed array
     .map((course) => (
+      
       <CourseBadge
         key={course.courseTitle + course.coursePrice} // Use a unique key
         title={course.courseTitle}
@@ -66,6 +69,8 @@ const LayerCourseList= () => {
         discountPrice={course.discountPrice}
         imageSrc={course.thumbnail}
         color={""}
+        _id = {course._id}
+
       />
     ))}
 </div>

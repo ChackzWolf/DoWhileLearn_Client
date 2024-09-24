@@ -44,16 +44,17 @@ const initialModulesState: CreateCourseState = {
   Modules: [],
 };
 
-function OverView() {
+function CourseDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
   // const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [benefits_prerequisites, setbenefits_prerequisites] = useState<ICreateCourse2 | null>(null);
+  const [benefits_prerequisites, setbenefits_prerequisites] =
+    useState<ICreateCourse2 | null>(null);
   // const benifits_prerequisites = useSelector((state: RootState) => state.createCourseData.createCourse2);
 
-  const [modules, setModules] = useState<CreateCourseState>(initialModulesState);
+  const [modules, setModules] =
+    useState<CreateCourseState>(initialModulesState);
   // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
 
   const { id } = useParams<{ id: string }>();
@@ -79,7 +80,7 @@ function OverView() {
             courseCategory: response.data.courseCategory,
             courseLevel: response.data.courseLevel,
             demoURL: response.data.demoURL,
-            courseId: response.data._id
+            courseId: response.data._id,
           };
 
           setCourseData(theCourseData);
@@ -116,17 +117,11 @@ function OverView() {
     }
   }, [id, dispatch]);
 
-
-
-
-
   return (
-    <div className="w-full mx-24 m-10 gap-4">
+    <div className="w-full  gap-4">
       {isLoading ? <Loader /> : ""}
 
-      <div className="flex h-64">
-        <div className="w-1/2 h-64 px-10">
-          <h1 className=" font-extrabold">{courseData?.courseTitle}</h1>
+      <div className="w-1/3 h-64 px-10 fixed right-28">
           <div className="relative w-full h-full md:h-40 lg:h-full rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer flex items-center justify-center m-2 self-center">
             <img
               src={courseData?.thumbnail}
@@ -134,38 +129,60 @@ function OverView() {
               className="w-full h-full object-cover rounded-md"
             />
           </div>
-        </div>
-        <div className="w-1/2 p-4 pt-9 h-full">
-          <div className="h-5/6 mr-20">
-              <h1>{courseData?.courseDescription}</h1>
-          </div>
-          
-          {courseData?.discountPrice ? (
-            <div className="bottom-0">
-              <h1 className="text-gray-600 px-4 pt-7 py-2 line-through text-sm">
-                Rs. {courseData.coursePrice}
-              </h1>
-              <h1 className=" rounded-lg px-4  font-bold">
-                Rs. {courseData?.discountPrice}
-              </h1>
-            </div>
-          ) : (
-            <div className="bottom-0">
-              <h1 className=" rounded-lg px-4 py-4 pt-9 font-bold ">
-                Rs. {courseData?.coursePrice}
-              </h1>
-            </div>
 
-          )}
+          <div className="h-full px-5">
+            {courseData?.discountPrice ? (
+              <div className="bottom-0 flex gap-2 pb-3">
+                <h1 className=" rounded-lg font-bold">
+                  Rs. {courseData?.discountPrice}
+                </h1>
+                <h1 className="text-gray-600 line-through text-sm">
+                  Rs. {courseData.coursePrice}
+                </h1>
+              </div>
+            ) : (
+              <div className="bottom-0">
+                <h1 className=" rounded-lg font-bold ">
+                  Rs. {courseData?.coursePrice}
+                </h1>
+              </div>
+            )}
+
+<div className=" flex w-full gap-3">
+<button className=" right-0 bg-[#7C24F0] px-4 py-1 rounded-lg text-white font-semibold hover:bg-[#6211cd] transition-all ">
+              Buy
+          </button>
+<button className=" right-0 bg-[#7C24F0] px-4 py-1 rounded-lg text-white font-semibold hover:bg-[#6211cd] transition-all">
+              Add to cart
+</button>
+</div>
+          </div>
+
+
+
         </div>
+      <div className="p-16">
+      
+      <div className="flex justify-between mx-24 m-10">
+        <div className="mr-20"> 
+          <h1 className=" font-extrabold text-3xl">{courseData?.courseTitle}</h1>
+          <h1 className=" text-lg py-3">{courseData?.courseDescription}</h1>
+        </div>
+
       </div>
-      <div className="flex m-10 mt-16">
-        <div className="w-1/2 h-28">
-        <h1 className="flex text-center items-center gap-2 text-sm pb-3"><IoCheckmarkDoneOutline/> {courseData?.courseLevel} level</h1>
-          <h1 className="font-semibold py-2">What will you get from this course?</h1>
+      <div className="flex flex-col px-24 mt-16">
+        <div className="w-1/2 ">
+          <h1 className="flex text-center items-center gap-2 text-sm pb-3">
+            <IoCheckmarkDoneOutline /> {courseData?.courseLevel} level
+          </h1>
+          <h1 className="font-semibold py-2">
+            What will you get from this course?
+          </h1>
           <ul>
             {benefits_prerequisites?.benefits.map((benifits) => (
-              <li className="flex text-center items-center gap-2 text-sm px-2 pb-1"><IoCheckmarkDoneOutline/>     {benifits}</li>
+              <li className="flex text-center items-center gap-2 text-sm px-2 pb-1">
+                <IoCheckmarkDoneOutline /> {benifits}
+              </li>
             ))}
           </ul>
           <h1 className="font-semibold py-2">
@@ -173,32 +190,20 @@ function OverView() {
           </h1>
           <ul>
             {benefits_prerequisites?.prerequisites.map((prerequisites) => (
-              <li className="flex text-center items-center gap-2 text-sm px-2 pb-1"><IoCheckmarkDoneOutline/> {prerequisites}</li>
+              <li className="flex text-center items-center gap-2 text-sm px-2 pb-1">
+                <IoCheckmarkDoneOutline /> {prerequisites}
+              </li>
             ))}
           </ul>
+          
         </div>
         <Modules modules={modules} />
-      </div>
-      <div className="flex justify-between mx-20">
-        <button
-          className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"
-          onClick={() => {
-            dispatch(toPrev());
-          }}
-        >
-          {" "}
-          previous
-        </button>
-        <button
-          className=" right-0 bg-[#7C24F0] px-5 py-2 rounded-lg text-white font-bold hover:bg-[#6211cd]"
-       
-        >
-          Submit
-        </button>
+
       </div>
       <ToastContainer />
+      </div>
     </div>
   );
 }
 
-export default OverView;
+export default CourseDetails;

@@ -6,9 +6,9 @@ import CreateCoursePage from '../../../pages/tutor/Course/CreateCourse/CreateCou
 import CoursesPage from '../../../pages/tutor/DashBoard/CoursesPage'
 import CourseDetailsPage from '../../../pages/tutor/Course/CourseDetailsPage'
 import EditCoursePage from '../../../pages/tutor/Course/EditCourse/EditCoursePage';
+
 const TutorRoutes = ()=>{
     return(
-
         <Routes>
             <Route path= '/' element={<TutorDashBoard/>}/>
             <Route path= '/users' element={<UsersPage/>}/>

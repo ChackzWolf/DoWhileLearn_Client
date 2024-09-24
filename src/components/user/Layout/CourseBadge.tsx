@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CourseBadgeProps {
+  _id:string;
   title: string;
   description: string;
   rating: number;
@@ -11,6 +13,7 @@ interface CourseBadgeProps {
 }
 
 const CourseBadge: React.FC<CourseBadgeProps> = ({
+  _id,
   title,
   description,
   rating,
@@ -19,9 +22,16 @@ const CourseBadge: React.FC<CourseBadgeProps> = ({
   imageSrc,
   color = 'bg-gray-100', // default color
 }) => {
+  const navigate = useNavigate()
+
+  console.log(_id,'hello htis is')
+  const handleCourseSelect = (_id:string) => {
+    navigate(`/course/${_id}`)
+  }
   return (
     <div
       className={`flex flex-col items-start mx-2 p-4 bg-white rounded-lg shadow-md border ${color} w-64 h-80 overflow-hidden`} // Fixed width and height
+      onClick={()=>handleCourseSelect(_id)}
     >
       <div className="flex-shrink-0 w-full h-32 mb-2">
         {imageSrc && (
