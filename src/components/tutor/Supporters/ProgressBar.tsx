@@ -2,12 +2,19 @@
 import { FaCircle,FaCircleCheck, FaCircleDot } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
+import { useDispatch } from "react-redux";
+// import { setCreateCourseEmpty } from "../../../redux/tutorSlice/CourseSlice/createCourseData";
 
 
 const ProgressBar = () => {
+  const dispatch = useDispatch()
   const totalSteps = 4;
-  const current = useSelector((state: RootState) => state.createCourseData.step);
-
+  // const current = useSelector((state: RootState) => state.createCourseData.step) as number
+  const current = useSelector((state: RootState) => {
+    console.log(JSON.stringify(state.createCourseData, null, 2), 'lets see');
+    return state.createCourseData.step;
+  }) as number;
+  // dispatch(setCreateCourseEmpty());
 
   console.log(current , 'kkkkkkkkkkkkkkkkkkkkkk')
   const progressPercentage = ((current - 1) / (totalSteps - 1)) * 100;

@@ -18,7 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCookie } from "../../../utils/cookieManager";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { userEndpoint } from "../../../constraints/userEndpoints";
-import { BsCartCheck,BsCartPlusFill } from "react-icons/bs";
+import { BsFillCartCheckFill,BsCart } from "react-icons/bs";
 import { setIn } from "formik";
 
 interface Module {
@@ -216,7 +216,7 @@ function CourseDetails() {
               Buy
             </button>
             <button className=" right-0  px-4 py-1 rounded-lg text-[#7C24F0] font-extrabold text-2xl hover:shadow-[#6211cd] transition-all" onClick = {()=>handleAddToCart()}>
-              {inCart?<BsCartCheck />:<BsCartPlusFill />}
+              {inCart?<BsFillCartCheckFill />:<BsCart />}
             </button>
           </div>
         </div>

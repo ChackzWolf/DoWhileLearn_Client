@@ -68,28 +68,28 @@ function OverView() {
             params: { id },
           });
           console.log(response.data, "course ");
-
+          const courseData = response.data.courseData
           const theCourseData: ICreateCourse1 = {
-            thumbnail: response.data.thumbnail,
-            courseTitle: response.data.courseTitle,
-            courseDescription: response.data.courseDescription,
-            coursePrice: response.data.coursePrice,
-            discountPrice: response.data.discountPrice,
-            courseCategory: response.data.courseCategory,
-            courseLevel: response.data.courseLevel,
-            demoURL: response.data.demoURL,
-            courseId: response.data._id
+            thumbnail: courseData.thumbnail,
+            courseTitle: courseData.courseTitle,
+            courseDescription: courseData.courseDescription,
+            coursePrice: courseData.coursePrice,
+            discountPrice: courseData.discountPrice,
+            courseCategory: courseData.courseCategory,
+            courseLevel: courseData.courseLevel,
+            demoURL: courseData.demoURL,
+            courseId: courseData._id
           };
 
           setCourseData(theCourseData);
 
           const courseDetails: ICreateCourse2 = {
-            prerequisites: response.data.benefits_prerequisites.prerequisites,
-            benefits: response.data.benefits_prerequisites.benefits,
+            prerequisites: courseData.benefits_prerequisites.prerequisites,
+            benefits: courseData.benefits_prerequisites.benefits,
           };
           setbenefits_prerequisites(courseDetails);
           const createCourseState: CreateCourseState = {
-            Modules: response.data.Modules.map((module: Module) => ({
+            Modules: courseData.Modules.map((module: Module) => ({
               name: module.name,
               description: module.description,
               lessons: module.lessons.map((lesson) => ({
@@ -206,10 +206,8 @@ function OverView() {
       </div>
       <div className="flex justify-between mx-20">
         <button
-          className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"
-          onClick={() => {
-            dispatch(toPrev());
-          }}
+          className="py-2 px-8 bg-white text-white"
+     
         >
           {" "}
           previous
@@ -218,7 +216,7 @@ function OverView() {
           className=" right-0 bg-[#7C24F0] px-5 py-2 rounded-lg text-white font-bold hover:bg-[#6211cd]"
           onClick={handleSubmit}
         >
-          Submit
+          Edit details
         </button>
       </div>
       <ToastContainer />
