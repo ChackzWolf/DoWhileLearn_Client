@@ -11,6 +11,7 @@ const HeaderDropdown: React.FC = () => {
     const handleLogout = () => {
         removeCookie('token');
         removeCookie('refreshToken');
+        removeCookie('userId')
         dispatch(setUserLogout());
     }
 

@@ -42,10 +42,13 @@ function LoginModal() {
         try {
             const response = await axios.post(userEndpoint.loginUser, value);
             console.log(response.data)
-            const {success, accessToken,refreshToken, status , msg} = response.data;
+            const {success, accessToken,refreshToken, userId, status , msg} = response.data;
             console.log(status)
             if(success){
-                setCookie('token', accessToken, 0.01); // Set a short-lived access token
+                console.log(accessToken,refreshToken,userId)
+                
+                setCookie('userId', userId, 0.1)
+                setCookie('token', accessToken, 0.1); // Set a short-lived access token
                 setCookie('refreshToken', refreshToken, 7);
                 dispatch(setUserLogin())
                 navigate('/');
