@@ -20,6 +20,8 @@ import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { userEndpoint } from "../../../constraints/userEndpoints";
 import { BsFillCartCheckFill,BsCart } from "react-icons/bs";
 import { setIn } from "formik";
+import { count } from "console";
+import { Module } from "module";
 
 interface Module {
   name: string;
@@ -48,13 +50,14 @@ function CourseDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
   const [inCart, setInCart] = useState(false)
+  const [tutorId , setTutorId] = useState();
   // const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [benefits_prerequisites, setbenefits_prerequisites] =
     useState<ICreateCourse2 | null>(null);
   // const benifits_prerequisites = useSelector((state: RootState) => state.createCourseData.createCourse2);
-
+  const [totalLessons,setTotalLessons] = useState()
   const [modules, setModules] =
     useState<CreateCourseState>(initialModulesState);
   // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
@@ -71,7 +74,10 @@ function CourseDetails() {
           const response = await axios.get(courseEndpoint.fetchCourseDetails, {
             params: { id,userId },
           });
-          console.log(response.data.fetchedCourseData, "course ");
+          setTutorId(response.data.courseData.tutorId)
+       
+
+          console.log(response.data.courseData, "course ");
           setInCart(response.data.inCart);
           const theCourseData: ICreateCourse1 = {
             thumbnail: response.data.courseData.thumbnail,
@@ -104,9 +110,17 @@ function CourseDetails() {
               })),
             })),
           };
-          setModules(createCourseState);
+          const modulesLength = response.data.courseData.Modules.length;
+          const totalLessonsCount = response.data.courseData.Modules.reduce((acc:any, module:any) => {
+            return acc + module.lessons.length;
+          }, 0); // Initialize accumulator as 0
 
-          console.log(courseData);
+          console.log(modulesLength)
+          console.log(totalLessonsCount)
+
+          setModules(createCourseState);
+          setTotalLessons(totalLessonsCount);
+          console.log(courseData, 'courseData');
 
           setIsLoading(false);
         } catch (error) {
@@ -115,55 +129,58 @@ function CourseDetails() {
         }
       };
 
+      console.log(modules, 'modules')
+      // const totalLessons = response.data.courseData.Modules.reduce((count,Modules) => count + Modules.Lessons.length,0)
+      // const totalLessons = response.data.courseData.sections.reduce((count,section)=>count +section.lessons.length,0);
+
       fetchCourseDetails();
     }
   }, [id, dispatch]);
 
-
-  // const handlePayement=async (courseId:string)=>{
-  //   try {
-  //     const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-      
-  //     const data={
-  //       courseId:courseData._id,
-  //       userId:user.id,
-  //       tutorId:courseData.tutorId,
-  //       category:courseData.category,
-  //       thumbnail:courseData.thumbnail,
-  //       title:courseData.title,
-  //       price:courseData.price,
-  //       level:courseData.level,
-  //       totalLessons:totalLessons,
-  //       discourtPrice:courseData.discountPrice,
+   console.log(tutorId,'tutorid')
+  const handlePayement=async ()=>{
+    try {
+      const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+      const userId = getCookie('userId')
+      if(!userId){
+        navigate('/login/user')
+      }
+      const data={
+        courseId:courseData?.courseId,
+        userId:userId,
+        tutorId:tutorId,
+        category:courseData?.courseCategory,
+        thumbnail:courseData?.thumbnail,
+        title:courseData?.courseTitle,
+        price:courseData?.coursePrice,
+        level:courseData?.courseLevel,
+        totalLessons:totalLessons,
+        discourtPrice:courseData?.discountPrice,
        
 
-      // }
+      } 
+
+      // payement API be completed
+      const response =  await axios.post(userEndpoint.makePayment,data);
+      console.log('hayyyy stripe',response.data);
+
+      const  sessionId = response.data.sessionId;
+
+      if(stripe && sessionId){
+        const result = await stripe.redirectToCheckout({sessionId});
+
+        if(result.error){
+          toast.error(result.error.message)
+        }
+      }else{
+        toast.error("Stripe could not be loaded or session ID is missing.")
+      }
       
 
-  //     console.log("course Idddd",courseId,"userID",user.id);
-
-
-  //     // payement API be completed
-  //     const response =  await userAxios.post(userEndpoints.makepayement,data);
-  //     console.log('hayyyy stripe',response.data);
-
-  //     const  sessionId = response.data.sessionId;
-
-  //     if(stripe && sessionId){
-  //       const result = await stripe.redirectToCheckout({sessionId});
-
-  //       if(result.error){
-  //         toast.error(result.error.message)
-  //       }
-  //     }else{
-  //       toast.error("Stripe could not be loaded or session ID is missing.")
-  //     }
-      
-
-  //   } catch (error) {
-  //     toast.error("Couldnt buy Course")
-  //   }
-  // }
+    } catch (error) {
+      toast.error("Couldnt buy Course")
+    }
+  }
 
 
   const handleAddToCart = async() => {
@@ -259,7 +276,7 @@ function CourseDetails() {
           )}
 
           <div className=" flex w-full gap-3">
-            <button className=" right-0 bg-[#7C24F0] px-4 py-1 rounded-lg text-white font-semibold hover:bg-[#6211cd] transition-all ">
+            <button className=" right-0 bg-[#7C24F0] px-4 py-1 rounded-lg text-white font-semibold hover:bg-[#6211cd] transition-all " onClick={() => handlePayement()}>
               Buy
             </button>
             <button className=" right-0  px-4 py-1 rounded-lg text-[#7C24F0] font-extrabold text-2xl hover:shadow-[#6211cd] transition-all" onClick = {()=>handleAddToCart()}>
