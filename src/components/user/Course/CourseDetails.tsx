@@ -4,7 +4,7 @@ import {
   ICreateCourse1,
   ICreateCourse2,
 } from "../../../components/Interfaces/CourseInterface/ICreateCourse";
-
+import {loadStripe} from '@stripe/stripe-js'
 
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
 
@@ -118,6 +118,53 @@ function CourseDetails() {
       fetchCourseDetails();
     }
   }, [id, dispatch]);
+
+
+  // const handlePayement=async (courseId:string)=>{
+  //   try {
+  //     const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+      
+  //     const data={
+  //       courseId:courseData._id,
+  //       userId:user.id,
+  //       tutorId:courseData.tutorId,
+  //       category:courseData.category,
+  //       thumbnail:courseData.thumbnail,
+  //       title:courseData.title,
+  //       price:courseData.price,
+  //       level:courseData.level,
+  //       totalLessons:totalLessons,
+  //       discourtPrice:courseData.discountPrice,
+       
+
+      // }
+      
+
+  //     console.log("course Idddd",courseId,"userID",user.id);
+
+
+  //     // payement API be completed
+  //     const response =  await userAxios.post(userEndpoints.makepayement,data);
+  //     console.log('hayyyy stripe',response.data);
+
+  //     const  sessionId = response.data.sessionId;
+
+  //     if(stripe && sessionId){
+  //       const result = await stripe.redirectToCheckout({sessionId});
+
+  //       if(result.error){
+  //         toast.error(result.error.message)
+  //       }
+  //     }else{
+  //       toast.error("Stripe could not be loaded or session ID is missing.")
+  //     }
+      
+
+  //   } catch (error) {
+  //     toast.error("Couldnt buy Course")
+  //   }
+  // }
+
 
   const handleAddToCart = async() => {
       const userId = getCookie('userId')
