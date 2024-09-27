@@ -144,6 +144,7 @@ function CourseDetails() {
       const userId = getCookie('userId')
       if(!userId){
         navigate('/login/user')
+        return
       }
       const data={
         courseId:courseData?.courseId,
@@ -164,7 +165,7 @@ function CourseDetails() {
       const response =  await axios.post(userEndpoint.makePayment,data);
       console.log('hayyyy stripe',response.data);
 
-      const  sessionId = response.data.sessionId;
+      const  sessionId = response.data.session_id;
 
       if(stripe && sessionId){
         const result = await stripe.redirectToCheckout({sessionId});

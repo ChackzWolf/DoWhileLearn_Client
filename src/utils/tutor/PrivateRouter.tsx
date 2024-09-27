@@ -9,7 +9,7 @@ export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; r
     
     if (!token) {
       // No token found, redirect to login
-      return <Navigate to="user/login" />;
+      return <Navigate to="/login/user" />;
     }
   
     try {
