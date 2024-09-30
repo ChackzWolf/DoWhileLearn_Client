@@ -4,5 +4,6 @@ export const userEndpoint = {
     resendOTP: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/resendOTP`,
     loginUser: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/login`,
     addToCart: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/addToCart`,
-    makePayment: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/makePayment`
+    makePayment: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/makePayment`,
+    paymentSuccess: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/paymentSuccess`
 } 

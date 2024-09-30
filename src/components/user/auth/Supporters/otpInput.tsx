@@ -94,7 +94,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             console.log('success', response.data);
             localStorage.removeItem('otpCountDown');
             // setCookie(response.data.token);
-            setCookie('token', accessToken, 0.01); // Set a short-lived access token
+            setCookie('accessToken', accessToken, 0.01); // Set a short-lived access token
             setCookie('refreshToken', refreshToken, 7);
             
             dispatch(setUserLogin());

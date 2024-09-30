@@ -2,7 +2,8 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import UserRoutes from '../src/components/routes/userRouter/UserRouters';
 import TutorRoutes from './components/routes/tutorRouter/tutorRouters';
 import AdminRoutes from './components/routes/adminRouter/AdminRouters';
-import {TutorPrivateRoute, UserPrivateRoute} from './utils/tutor/PrivateRouter';
+import {UserPrivateRoute} from './utils/user/PrivateRouter';
+import {TutorPrivateRoute} from './utils/tutor/PrivateRouter';
 import { AdminPrivateRoute } from './utils/admin/PrivateRoute';
 import LoginUser from './components/user/auth/Login';
 import RegisterUser from './components/user/auth/register';

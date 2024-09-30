@@ -17,6 +17,7 @@ const UserRoutes = ()=>{
             <Route path = '/login' element = {<UserLogin/>}/>
             <Route path = '/otp' element = {<OtpVarification/>}/>
             <Route path = '/payment/success' element = {<PaymentSuccessPage/>}/>
+            
         </Routes>
     )
 }

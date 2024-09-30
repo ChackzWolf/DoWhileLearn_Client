@@ -48,7 +48,7 @@ function LoginModal() {
                 console.log(accessToken,refreshToken,userId)
                 
                 setCookie('userId', userId, 0.1)
-                setCookie('token', accessToken, 0.1); // Set a short-lived access token
+                setCookie('accessToken', accessToken, 0.1); // Set a short-lived access token
                 setCookie('refreshToken', refreshToken, 7);
                 dispatch(setUserLogin())
                 navigate('/');
