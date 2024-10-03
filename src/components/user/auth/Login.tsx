@@ -9,11 +9,13 @@ import { useDispatch } from "react-redux";
 import { useState } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import Header from "../Layout/Header";
+import Loader from "../../common/icons/loader";
 
 function LoginModal() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [message, setMessage] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword);
@@ -40,6 +42,7 @@ function LoginModal() {
 
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
         try {
+            setIsLoading(true)
             const response = await axios.post(userEndpoint.loginUser, value);
             console.log(response.data)
             const {success, accessToken,refreshToken, userId, status , msg} = response.data;
@@ -51,20 +54,25 @@ function LoginModal() {
                 setCookie('accessToken', accessToken, 0.1); // Set a short-lived access token
                 setCookie('refreshToken', refreshToken, 7);
                 dispatch(setUserLogin())
+                setIsLoading(false)
                 navigate('/');
             }else{
+                setIsLoading(false)
                 setMessage(msg);
             }
             
         } catch (error) {
+            setIsLoading(false)
             throw new Error(`Something went wrong ! status:${status} ${error}`)
         }finally{
+            setIsLoading(false)
             setSubmitting(false)
         }
     }
 
     return (
         <>
+        {isLoading? <Loader/> : ""}
                     <Header/>
 
             <div className="flex h-screen">

@@ -30,7 +30,7 @@ const CourseBadge: React.FC<CourseBadgeProps> = ({
   }
   return (
     <div
-      className={`flex flex-col items-start mx-2 p-4 bg-white rounded-lg shadow-md border ${color} w-64 h-80 overflow-hidden cursor-pointer`} // Fixed width and height
+      className={`flex flex-col items-start mx-2 p-4 bg-white rounded-lg shadow-md border ${color} w-64 h-80 overflow-hidden cursor-pointer hover:scale-105 transition-all`} // Fixed width and height
       onClick={()=>handleCourseSelect(_id)}
     >
       <div className="flex-shrink-0 w-full h-32 mb-2">

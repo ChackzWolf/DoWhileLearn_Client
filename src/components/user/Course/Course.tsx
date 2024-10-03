@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CourseBadge from "../Layout/CourseBadge";
+import CourseSkeleton from "./Skeletons/CourseSkeleton"; // Adjust path as necessary
 import axios from "axios";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
 
@@ -43,6 +44,7 @@ function CoursesList() {
   const itemsPerPage = 12;
   const [currentPage, setCurrentPage] = useState(1);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // State for loading
 
   // Calculate total pages based on courses length
   const totalPages = Math.ceil(courses.length / itemsPerPage);
@@ -55,6 +57,8 @@ function CoursesList() {
         setCourses(response.data.courses.reverse()); // Reverse once when fetching
       } catch (error) {
         console.error("Error fetching course data:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
@@ -76,53 +80,60 @@ function CoursesList() {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-20 h-auto m-20">
-        {currentCourses.map((course) => (
-          <CourseBadge
-            key={course._id}
-            title={course.courseTitle}
-            description={course.courseDescription}
-            rating={4}
-            price={course.coursePrice}
-            discountPrice={course.discountPrice}
-            imageSrc={course.thumbnail}
-            color={""}
-            _id={course._id}
-          />
-        ))}
-      </div>
+      {/* Display SkeletonLoader while loading */}
+      {loading ? (
+        <CourseSkeleton />
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-20 h-auto m-20">
+            {currentCourses.map((course) => (
+              <CourseBadge
+                key={course._id}
+                title={course.courseTitle}
+                description={course.courseDescription}
+                rating={4}
+                price={course.coursePrice}
+                discountPrice={course.discountPrice}
+                imageSrc={course.thumbnail}
+                color={""}
+                _id={course._id}
+              />
+            ))}
+          </div>
 
-      {/* Pagination Controls */}
-      <div className="flex justify-center space-x-4 mt-6">
-        <button
-          disabled={currentPage === 1}
-          onClick={() => handlePageChange(currentPage - 1)}
-          className="px-4 py-2 bg-gray-200 rounded"
-        >
-          Previous
-        </button>
+          {/* Pagination Controls */}
+          <div className="flex justify-center space-x-4 mt-6">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="px-4 py-2 bg-gray-200 rounded"
+            >
+              Previous
+            </button>
 
-        {/* Display page numbers */}
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-          <button
-            key={pageNumber}
-            onClick={() => handlePageChange(pageNumber)}
-            className={`px-4 py-2 ${
-              currentPage === pageNumber ? "bg-blue-500 text-white" : "bg-gray-200"
-            } rounded`}
-          >
-            {pageNumber}
-          </button>
-        ))}
+            {/* Display page numbers */}
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+              <button
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+                className={`px-4 py-2 ${
+                  currentPage === pageNumber ? "bg-blue-500 text-white" : "bg-gray-200"
+                } rounded`}
+              >
+                {pageNumber}
+              </button>
+            ))}
 
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => handlePageChange(currentPage + 1)}
-          className="px-4 py-2 bg-gray-200 rounded"
-        >
-          Next
-        </button>
-      </div>
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="px-4 py-2 bg-gray-200 rounded"
+            >
+              Next
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
 }

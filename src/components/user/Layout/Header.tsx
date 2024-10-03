@@ -1,10 +1,9 @@
 import { NavLink } from "react-router-dom";
-import HeaderNav from "../../Nav/UserHeaderNav";
+import HeaderNav from "./headerComponents/Nav/UserHeaderNav";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { useDispatch } from "react-redux";
 import HeaderDropdown from "./headerComponents/DropDown";
-
 
 
 
@@ -30,6 +29,10 @@ const Header = () =>{
 
                     <div className="justify-end flex">
                         <HeaderNav />
+                        <div className="flex gap-5 items-center">
+           
+                    </div>
+                
                         {isLogin ?
                         <div>
                             <HeaderDropdown/>

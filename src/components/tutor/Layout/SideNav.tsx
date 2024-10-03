@@ -30,8 +30,12 @@ function SideNav({ prop }: { prop: string }) {
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-white p-6 transition-transform duration-300 z-50 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:relative lg:w-2/12 fixed`}
+        } lg:translate-x-0 lg:sticky lg:w-2/12 fixed`}
       >
+
+        <div className="sticky">
+
+        
         {/* Close Icon for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
           <FaTimes onClick={toggleNav} className="text-2xl cursor-pointer" />
@@ -87,6 +91,7 @@ function SideNav({ prop }: { prop: string }) {
                 </NavLink>
             </div>
           ))}
+        </div>
         </div>
       </div>
   </>
