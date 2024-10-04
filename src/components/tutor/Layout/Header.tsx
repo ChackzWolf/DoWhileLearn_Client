@@ -52,7 +52,7 @@ const Header = () =>{
 
 
                     <div className="justify-end flex">
-                        <HeaderNav />
+                        
                         
                         <div>
                             <HeaderDropdown/>

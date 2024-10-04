@@ -154,9 +154,6 @@ function CourseDetails() {
         return;
       }
 
-      
-
-
       const data = {
         courseId: courseData?.courseId,
         userId: userId,
@@ -291,12 +288,14 @@ function CourseDetails() {
             )}
 
             <div className=" flex w-full gap-3">
-              <button
-                className=" right-0 bg-[#7C24F0] px-4 py-1 rounded-lg text-white font-semibold hover:bg-[#6211cd] transition-all "
-                onClick={() => handlePayement()}
-              >
-                Buy
-              </button>
+            <button
+  type="button"
+  disabled={isLoading}  // Disable button while loading
+  className={`right-0 bg-[#7C24F0] px-4 py-1 rounded-lg text-white font-semibold hover:bg-[#6211cd] transition-all ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+  onClick={handlePayement}
+>
+  {isLoading ? 'Processing...' : 'Buy'}
+</button>
               <button
                 className=" right-0  px-4 py-1 rounded-lg text-[#7C24F0] font-extrabold text-2xl hover:shadow-[#6211cd] transition-all"
                 onClick={() => handleAddToCart()}

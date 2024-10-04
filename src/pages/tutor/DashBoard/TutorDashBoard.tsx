@@ -6,7 +6,7 @@ const TutorHome = () => {
 //DDB3FF
     return (
      
-        <div className="bg-black w-full h-screen">
+        <div className=" w-full h-screen">
             <Header/>
             <div className="flex w-full">
                 <SideNav prop = {'/tutor'}/> 
@@ -14,7 +14,6 @@ const TutorHome = () => {
             </div>
 
              
-            <h1 className="font-bold self-center text-center text-lg mt-20 text-slate-700"> Tutor Landing Page</h1>
 
         </div>
     )

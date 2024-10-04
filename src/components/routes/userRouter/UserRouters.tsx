@@ -5,6 +5,7 @@ import UserLogin from "../../user/auth/Login";
 import OtpVarification from '../../user/auth/OtpVarification';
 import AuthChoice from '../../common/AuthChoice';
 import PaymentSuccessPage from '../../../pages/user/PaymentStatus/PaymentSuccessPage';
+import CartPage from '../../../pages/user/Cart/CartPage';
 
 
 const UserRoutes = ()=>{
@@ -17,6 +18,7 @@ const UserRoutes = ()=>{
             <Route path = '/login' element = {<UserLogin/>}/>
             <Route path = '/otp' element = {<OtpVarification/>}/>
             <Route path = '/payment/success' element = {<PaymentSuccessPage/>}/>
+            <Route path = '/cart' element = {<CartPage/>}/>
             
         </Routes>
     )

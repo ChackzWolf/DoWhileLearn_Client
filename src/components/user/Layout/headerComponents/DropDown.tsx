@@ -3,8 +3,10 @@ import { FaUserCircle } from 'react-icons/fa'; // Import an icon from react-icon
 import { useDispatch } from 'react-redux';
 import { setUserLogout } from '../../../../redux/authSlice/authSlice';
 import { removeCookie } from '../../../../utils/cookieManager';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderDropdown: React.FC = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null); // Reference to dropdown container
@@ -43,6 +45,9 @@ const HeaderDropdown: React.FC = () => {
         };
     }, [isOpen]);
 
+    const toCart =() => {
+        navigate('/user/cart')
+    }
     return (
         <div className="relative" ref={dropdownRef}>
             <button onClick={toggleDropdown} className="focus:outline-none">
@@ -52,7 +57,7 @@ const HeaderDropdown: React.FC = () => {
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50 transition-all duration-1000 transform opacity-100 scale-100">
                     <ul>
-                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer">My cart</li>
+                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer" onClick={toCart}>My cart</li>
                         <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer" onClick={handleLogout}>
                             Logout
                         </li>

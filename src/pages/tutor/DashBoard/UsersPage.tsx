@@ -13,9 +13,6 @@ const UsersPage = () => {
                 <Users/>
             </div>
 
-
-            <h1 className="font-bold self-center text-center text-lg mt-20 text-slate-700"> Tutor Landing Page</h1>
-
         </div>
     )
 }
