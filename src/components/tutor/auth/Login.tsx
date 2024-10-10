@@ -45,7 +45,7 @@ function LoginModal() {
             console.log(status)
             if(success){
                 
-                setCookie('tutroAccessToken', accessToken, 0.01);
+                setCookie('tutorAccessToken', accessToken, 0.01);
                 console.log("setCookie")
                 setCookie('tutorRefreshToken', refreshToken, 7);
                 console.log("setRefreshCookie");

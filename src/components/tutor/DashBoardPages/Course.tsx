@@ -3,6 +3,7 @@ import axios from "axios";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
+import tutorAxios from "../../../utils/axios/tutorAxios.config";
 
 
 export interface ResponseFetchCourseList {
@@ -45,9 +46,11 @@ function Course() {
   useEffect(() => {
       const fetchCourses = async () => {
         try {
-          const tutorId:string | null = await getCookie('userId')
+          console.log('trig')
+          const tutorId:string | null = await getCookie('tutorId')
           if(tutorId){
-            const response = await axios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId } });
+            const response = await tutorAxios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId }, withCredentials:true });
+            console.log(response,'fetched course')
             setCourses(response.data.courses); // Access the 'courses' property from the response
           }
 
@@ -63,7 +66,7 @@ function Course() {
       navigate(`/tutor/courses/${id}`);
     };
 
-  console.log(courses)
+  console.log(courses,'courses form outside')
   return (
     <div className="w-full h-screen bg-white p-8">
       <div className="mx-10">

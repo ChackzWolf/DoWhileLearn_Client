@@ -1,40 +1,62 @@
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { getCookie } from '../cookieManager';  // Your cookie utility
+import { getCookie, removeCookie, setCookie } from '../cookieManager';  // Your cookie utility
 import { getRoleFromToken } from '../jwtUtils';
+import axios from 'axios';
 
+export const TutorPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
+  const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  export const TutorPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
-    const token = getCookie('accessToken');  // Fetch the JWT from cookies
-    console.log(token, 'triggered')
-    if (!token) {
-        console.log('no token')
-      // No token found, redirect to login
-      return <Navigate to="/login/tutor" />;
-    }
-  
-    try {
-      // Decode the token to extract the role and expiry information
-      const userRole = getRoleFromToken()
-      console.log('ROle: ' , userRole)
-      // Check if the token is expired
-      // const currentTime = Date.now() / 1000;  // Convert to seconds
-      // if (decodedToken.exp < currentTime) {
-      //   // Token has expired, redirect to login
-      //   return <Navigate to="/login" />;
-      // }
-  
-      // Check if the user's role is allowed to access the route
-      if (!roles.includes(userRole)) {
-        console.log('roles doesnt match (unautherized)',)
-        // User's role is not authorized, redirect to an unauthorized page
-        return <Navigate to="/unauthorized" />;
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      let token = getCookie('tutorAccessToken'); // Fetch the JWT from cookies
+      if (!token) {
+        // If access token is null, attempt to refresh token
+        try {
+          const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/tutor-refresh-token`, {}, { withCredentials: true });
+          const newToken = response.data.accessToken;
+          const refreshToken = response.data.refreshToken;
+          console.log(response.data, 'response form refreshing')
+          // Set new access token in cookies
+          setCookie('tutorAccessToken', newToken, 0.01);
+          setCookie('tutorRefreshToken', refreshToken, 10);
+          token = newToken; // Set token to the new one
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+          removeCookie('tutorAccessToken');
+          removeCookie('tutorRefreshToken');
+          removeCookie('tutorId');
+          window.location.href = '/login/tutor';
+          return;
+        }
       }
-  
-      // If everything is valid, allow access to the route
-      return children;
-    } catch (error) {
-      console.error('Error decoding token or token is invalid', error);
-      return <Navigate to="tutor/login" />;  // Invalid token, redirect to login
-    }
-  };
 
+      try {
+        const userRole = getRoleFromToken(token);
+        if (roles.includes(userRole)) {
+          setIsAuthenticated(true); // User is authenticated
+        } else {
+          setIsAuthenticated(false); // User is not authorized
+        }
+      } catch (error) {
+        console.error('Error decoding token or token is invalid', error);
+        setIsAuthenticated(false); // Invalid token or error
+      } finally {
+        setLoading(false); // Done checking
+      }
+    };
+
+    checkAuthentication();
+  }, [roles]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Render a loading spinner or message
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/unauthorized" />; // Redirect to unauthorized page if role doesn't match
+  }
+
+  return children; // Render children if authenticated
+};

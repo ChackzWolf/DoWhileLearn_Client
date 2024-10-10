@@ -1,50 +1,62 @@
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { getCookie } from '../cookieManager';  // Your cookie utility
+import { getCookie, removeCookie, setCookie } from '../cookieManager';  // Your cookie utility
 import { getRoleFromToken } from '../jwtUtils';
-
-
+import axios from 'axios';
 
 export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
-    const token = getCookie('userAccessToken');  // Fetch the JWT from cookies
-    
-    if (!token) {
-      console.log('no access token')
-      // No token found, redirect to login
-      // return <Navigate to="/login/user" />;
-    }
-  
-    try {
-      // Decode the token to extract the role and expiry information
-      const userRole = getRoleFromToken(token)
-      console.log('userRole', userRole)
-  
-      // Check if the token is expired
-      // const currentTime = Date.now() / 1000;  // Convert to seconds
-      // if (decodedToken.exp < currentTime) {
-      //   // Token has expired, redirect to login
-      //   return <Navigate to="/login" />;
-      // }
-  
-      // Check if the user's role is allowed to access the route
-      if (!roles.includes(userRole)) {
-        console.log('role deosnt includes.')
-        // User's role is not authorized, redirect to an unauthorized page
-        return <Navigate to="/unauthorized" />;
+  const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      let token = getCookie('userAccessToken'); // Fetch the JWT from cookies
+      if (!token) {
+        // If access token is null, attempt to refresh token
+        try {
+          const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/user-refresh-token`, {}, { withCredentials: true });
+          const newToken = response.data.accessToken;
+          const refreshToken = response.data.refreshToken;
+          console.log(response.data, 'response form refreshing')
+          // Set new access token in cookies
+          setCookie('userAccessToken', newToken, 0.01);
+          setCookie('userRefreshToken', refreshToken, 10);
+          token = newToken; // Set token to the new one
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+          removeCookie('userAccessToken');
+          removeCookie('userRefreshToken');
+          removeCookie('userId');
+          window.location.href = '/login/user';
+          return;
+        }
       }
-  
-      // If everything is valid, allow access to the route
-      return children;
-    } catch (error) {
-      console.error('Error decoding token or token is invalid', error);
-      console.log('error occured')
-      // return <Navigate to="login/user" />;  // Invalid token, redirect to login
-    }
-  };
 
+      try {
+        const userRole = getRoleFromToken(token);
+        if (roles.includes(userRole)) {
+          setIsAuthenticated(true); // User is authenticated
+        } else {
+          setIsAuthenticated(false); // User is not authorized
+        }
+      } catch (error) {
+        console.error('Error decoding token or token is invalid', error);
+        setIsAuthenticated(false); // Invalid token or error
+      } finally {
+        setLoading(false); // Done checking
+      }
+    };
 
+    checkAuthentication();
+  }, [roles]);
 
+  if (loading) {
+    return <div>Loading...</div>; // Render a loading spinner or message
+  }
 
+  if (!isAuthenticated) {
+    return <Navigate to="/unauthorized" />; // Redirect to unauthorized page if role doesn't match
+  }
 
-
-
-
+  return children; // Render children if authenticated
+};

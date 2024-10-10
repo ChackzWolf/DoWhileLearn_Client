@@ -23,6 +23,7 @@ import { Module } from "module";
 import PurchasedCourseDetails from "./PurchasedCourseDetails/PurchasedCourseDetails";
 import CourseDetailSkeleton from "./Skeletons/CourseDetailsSkeleton";
 import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
+import userAxios from "../../../utils/axios/userAxios.config";
 
 interface Module {
   name: string;
@@ -168,7 +169,7 @@ function CourseDetails() {
       };
 
       // payement API be completed
-      const response = await axios.post(userEndpoint.makePayment, data,{withCredentials:true});
+      const response = await userAxios.post(userEndpoint.makePayment, data,{withCredentials:true});
       console.log("hayyyy stripe", response.data);
       if(response.data.message == 'user blocked'){
         window.location.href = '/login/user?message:blocked'
@@ -200,7 +201,7 @@ function CourseDetails() {
     console.log(userId, "addtocart clicked");
 
     if (userId && userId !== "undefined") {
-      const response = await axios.post(userEndpoint.addToCart, {
+      const response = await userAxios.post(userEndpoint.addToCart, {
         courseId: id,
         userId,
       },{withCredentials:true}  );

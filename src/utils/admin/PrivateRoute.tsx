@@ -1,38 +1,62 @@
+import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { getCookie } from '../cookieManager';  // Your cookie utility
+import { getCookie, removeCookie, setCookie } from '../cookieManager';  // Your cookie utility
 import { getRoleFromToken } from '../jwtUtils';
-
+import axios from 'axios';
 
 export const AdminPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
-    const token = getCookie('adminAccessToken');  // Fetch the JWT from cookies
-    console.log( token,'token')
-    if (!token) {
-      console.log('no admin token ')
-      // No token found, redirect to login
-      return <Navigate to="/login/admin" />;
-    }
-  
-    try {
-      // Decode the token to extract the role and expiry information
-      const userRole = getRoleFromToken(token)
-      console.log('ROle: ' , userRole)
-      // Check if the token is expired
-      // const currentTime = Date.now() / 1000;  // Convert to seconds
-      // if (decodedToken.exp < currentTime) {
-      //   // Token has expired, redirect to login
-      //   return <Navigate to="/login" />;
-      // }
-  
-      // Check if the user's role is allowed to access the route
-      if (!roles.includes(userRole)) {
-        // User's role is not authorized, redirect to an unauthorized page
-        return <Navigate to="/unauthorized" />;
+  const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      let token = getCookie('adminAccessToken'); // Fetch the JWT from cookies
+      if (!token) {
+        // If access token is null, attempt to refresh token
+        try {
+          const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/admin-refresh-token`, {}, { withCredentials: true });
+          const newToken = response.data.accessToken;
+          const refreshToken = response.data.refreshToken;
+          console.log(response.data, 'response form refreshing')
+          // Set new access token in cookies
+          setCookie('adminAccessToken', newToken, 0.01);
+          setCookie('adminRefreshToken', refreshToken, 10);
+          token = newToken; // Set token to the new one
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+          removeCookie('adminAccessToken');
+          removeCookie('adminRefreshToken');
+          removeCookie('adminId');
+          window.location.href = '/login/admin';
+          return;
+        }
       }
-  
-      // If everything is valid, allow access to the route
-      return children;
-    } catch (error) {
-      console.error('Error decoding token or token is invalid', error);
-      return <Navigate to="/login/admin" />;  // Invalid token, redirect to login
-    }
-  };
+
+      try {
+        const adminRole = getRoleFromToken(token);
+        if (roles.includes(adminRole)) {
+          setIsAuthenticated(true); // User is authenticated
+        } else {
+          setIsAuthenticated(false); // User is not authorized
+        }
+      } catch (error) {
+        console.error('Error decoding token or token is invalid', error);
+        setIsAuthenticated(false); // Invalid token or error
+      } finally {
+        setLoading(false); // Done checking
+      }
+    };
+
+    checkAuthentication();
+  }, [roles]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Render a loading spinner or message
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/unauthorized" />; // Redirect to unauthorized page if role doesn't match
+  }
+
+  return children; // Render children if authenticated
+};
