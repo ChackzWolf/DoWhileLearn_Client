@@ -5,7 +5,6 @@ import { setUserLogout } from '../../../../redux/authSlice/authSlice';
 import { getCookie, removeCookie } from '../../../../utils/cookieManager';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { userEndpoint } from '../../../../constraints/userEndpoints';
 import { authEndpoint } from '../../../../constraints/authEndpoint';
 
 const HeaderDropdown: React.FC = () => {

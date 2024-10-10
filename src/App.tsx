@@ -15,6 +15,8 @@ import UserHome from './components/user/UserHome';
 import AdminLoginPage from './pages/admin/auth/AdminLoginPage';
 import CourseDetailsPage from './pages/user/Courses/CourseDetailsPage';
 import CoursesListPage from './pages/user/Courses/CoursesListPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -77,6 +79,7 @@ function App() {
 
           </Routes>
         </Router>
+        <ToastContainer />
       </div>
     </>
   )

@@ -43,9 +43,9 @@ function LoginModal() {
                 
                 setCookie("adminAccessToken", accessToken, 0.15)
                 console.log("setCookie")
-                setAdminCookie('adminRefreshToken', refreshToken, 7);
+                setCookie('adminRefreshToken', refreshToken, 7);
                 console.log("setRefreshCookie");
-                setAdminCookie('adminId',_id, 7);
+                setCookie('adminId',_id, 7);
                 navigate('/admin');
             }else{
                 setMessage(message);

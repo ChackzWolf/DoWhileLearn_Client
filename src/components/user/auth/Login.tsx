@@ -6,10 +6,13 @@ import axios from "axios";
 import { setCookie } from "../../../utils/cookieManager";
 import { setUserLogin } from "../../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import Header from "../Layout/Header";
 import Loader from "../../common/icons/loader";
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 
 function LoginModal() {
     const dispatch = useDispatch()
@@ -40,6 +43,19 @@ function LoginModal() {
     };
 
 
+    const location = useLocation();
+
+    useEffect(() => {
+      const queryParams = new URLSearchParams(location.search);
+      const message = queryParams.get('message');
+  
+      if (message === 'blocked') {
+        toast.error('You have been blocked! Please contact admin to resolve');
+      }
+    }, [location]);
+
+
+
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
         try {
             setIsLoading(true)
@@ -64,7 +80,10 @@ function LoginModal() {
             
         } catch (error) {
             setIsLoading(false)
-            throw new Error(`Something went wrong ! status:${status} ${error}`)
+            if(!handleBlockedUser(error)){
+                throw new Error(`Something went wrong ! status:${status} ${error}`)
+            }
+            else handleBlockedUser(error);
         }finally{
             setIsLoading(false)
             setSubmitting(false)

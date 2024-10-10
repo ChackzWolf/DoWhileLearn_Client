@@ -1,5 +1,3 @@
-import { getCookie } from "./cookieManager";
-
 
 
 const base64UrlDecode = (str: string) => {
@@ -16,8 +14,10 @@ const base64UrlDecode = (str: string) => {
     return JSON.parse(payload);
   };
   
-  export const getRoleFromToken = () => {
-    const token = getCookie('accessToken');  // Retrieve token from cookies
+
+  
+  export const getRoleFromToken = (token:string|null) => {
+    // const token = getCookie(tokenName);  // Retrieve token from cookies
     
     if (!token) return null;
   

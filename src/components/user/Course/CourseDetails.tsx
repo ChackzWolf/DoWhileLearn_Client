@@ -22,6 +22,7 @@ import { BsFillCartCheckFill, BsCart } from "react-icons/bs";
 import { Module } from "module";
 import PurchasedCourseDetails from "./PurchasedCourseDetails/PurchasedCourseDetails";
 import CourseDetailSkeleton from "./Skeletons/CourseDetailsSkeleton";
+import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 
 interface Module {
   name: string;
@@ -169,6 +170,9 @@ function CourseDetails() {
       // payement API be completed
       const response = await axios.post(userEndpoint.makePayment, data,{withCredentials:true});
       console.log("hayyyy stripe", response.data);
+      if(response.data.message == 'user blocked'){
+        window.location.href = '/login/user?message:blocked'
+      }
 
       const sessionId = response.data.session_id;
       sessionStorage.removeItem("orderDetails");
@@ -183,12 +187,16 @@ function CourseDetails() {
         toast.error("Stripe could not be loaded or session ID is missing.");
       }
     } catch (error) {
-      toast.error("Couldnt buy Course");
-    }
+      if(!handleBlockedUser(error)){
+        console.log('error in fetching course', error)
+      }else handleBlockedUser(error)
+  }
   };
 
   const handleAddToCart = async () => {
-    const userId = getCookie("userId");
+
+    try{
+      const userId = getCookie("userId");
     console.log(userId, "addtocart clicked");
 
     if (userId && userId !== "undefined") {
@@ -196,6 +204,12 @@ function CourseDetails() {
         courseId: id,
         userId,
       },{withCredentials:true}  );
+
+      console.log(response.status);
+      console.log(response.data)
+      if(response.data.message == 'user blocked'){
+        window.location.href = '/login/user?message:blocked'
+      }
       if (response.data.inCart) {
         setInCart(true);
       } else {
@@ -206,6 +220,13 @@ function CourseDetails() {
       console.log("else");
       navigate("/login/user");
     }
+
+    } catch (error) {
+      if(!handleBlockedUser(error)){
+        console.log('error in fetching course', error)
+      }else handleBlockedUser(error)
+  }
+    
   };
 
   if (!isPurchased)

@@ -4,7 +4,7 @@ import { getRoleFromToken } from '../jwtUtils';
 
 
 export const AdminPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
-    const token = getCookie('accessToken');  // Fetch the JWT from cookies
+    const token = getCookie('adminAccessToken');  // Fetch the JWT from cookies
     console.log( token,'token')
     if (!token) {
       console.log('no admin token ')
@@ -14,7 +14,7 @@ export const AdminPrivateRoute = ({ children, roles }: { children: JSX.Element; 
   
     try {
       // Decode the token to extract the role and expiry information
-      const userRole = getRoleFromToken()
+      const userRole = getRoleFromToken(token)
       console.log('ROle: ' , userRole)
       // Check if the token is expired
       // const currentTime = Date.now() / 1000;  // Convert to seconds

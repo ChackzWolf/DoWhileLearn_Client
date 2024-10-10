@@ -4,6 +4,8 @@ import { userEndpoint } from '../../../constraints/userEndpoints'
 import { getCookie } from '../../../utils/cookieManager'
 import { useNavigate } from 'react-router-dom';
 import { FaOpencart } from "react-icons/fa6";
+import userAxios from '../../../utils/axios/userAxios.config';
+import { handleBlockedUser } from '../../../utils/handleErrors/handleBlocked';
 
 export interface Course {
     _id: string;
@@ -42,10 +44,17 @@ function Cart() {
     const navigate = useNavigate()
     useEffect(()=> {
         const fetchCart = async() => {
+          try{
             const userId = getCookie('userId');
-            const response = await axios.get(userEndpoint.getCartItems, {params: { userId } })
+            const response = await userAxios.get(userEndpoint.getCartItems, {params: { userId }, withCredentials : true })
             console.log(response.data)
             setCourses(response.data.courses);
+          }catch(error){
+            if(!handleBlockedUser(error)){
+              console.log("error fetching course in cart :",error)
+            }else handleBlockedUser(error)
+          }
+
           
 
             
@@ -88,7 +97,7 @@ function Cart() {
     console.log(courses)
   return (
 <div>
-  {courses && (
+  {courses.length > 0 ? (
     <div className='flex flex-col items-center'>
         <h1 className='flex  items-center gap-2 text-4xl font-bold m-8'><FaOpencart  className='text-[#7C24F0] '/> Cart</h1>
         <div className='flex flex-col justify-center items-center w-2/3'>
@@ -145,7 +154,15 @@ function Cart() {
         </div>
         </div>
     </div>
-  )}
+  ):
+    (
+      <div className='flex justify-center items-center h-full m-56'>
+          <h1 className='text-3xl font-bold text-center'>Your cart is empty</h1>
+      </div>
+      
+    )
+    
+    }
 </div>
   )
 }

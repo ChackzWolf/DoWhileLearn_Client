@@ -4,7 +4,6 @@ import LayerOne from "./Layout/HomePageLayer/LayerOne";
 import axios from "axios";
 import { courseEndpoint } from "../../constraints/courseEndpoints";
 import LayerCourseList from "./Layout/HomePageLayer/LayerCourseList";
-import apiClient from "../../utils/axios/userAxios.config";
 
 
 
@@ -14,7 +13,7 @@ const UserHome= () => {
     useEffect(() => {
         const fetchCourses = async () => {
           try {
-            const response = await apiClient.get(courseEndpoint.fetchCourseData);
+            const response = await axios.get(courseEndpoint.fetchCourseData);
             setCourses(response.data.courses); // Access the 'courses' property from the response
           } catch (error) {
             console.error("Error fetching course data:", error);
