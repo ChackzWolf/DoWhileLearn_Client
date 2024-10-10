@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getCookie, setCookie, setTutorCookie } from "../../../utils/cookieManager";
+import { getCookie, setCookie } from "../../../utils/cookieManager";
 import { setTutorLogin } from "../../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -45,11 +45,12 @@ function LoginModal() {
             console.log(status)
             if(success){
                 
-                setTutorCookie('accessToken', accessToken, 0.01);
+                setCookie('tutroAccessToken', accessToken, 0.01);
                 console.log("setCookie")
-                setTutorCookie('refreshToken', refreshToken, 7);
+                setCookie('tutorRefreshToken', refreshToken, 7);
                 console.log("setRefreshCookie");
-                setTutorCookie('userId',_id, 7)
+                setCookie('tutorId',_id, 7)
+                dispatch(setTutorLogin())
                 navigate('/tutor');
             }else{
                 setMessage(message);

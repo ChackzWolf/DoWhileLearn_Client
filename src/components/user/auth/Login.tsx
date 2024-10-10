@@ -45,14 +45,15 @@ function LoginModal() {
             setIsLoading(true)
             const response = await axios.post(userEndpoint.loginUser, value);
             console.log(response.data)
-            const {success, accessToken,refreshToken, userId, status , msg} = response.data;
+            const {success, accessToken, refreshToken, userId, status, msg} = response.data;
             console.log(status)
             if(success){
                 console.log(accessToken,refreshToken,userId)
                 
-                setCookie('userId', userId, 0.1)
-                setCookie('accessToken', accessToken, 0.1); // Set a short-lived access token
-                setCookie('refreshToken', refreshToken, 7);
+                setCookie('userId', userId, 10)
+                setCookie('userAccessToken', accessToken, 0.1); // Set a short-lived access token
+                setCookie('userRefreshToken', refreshToken, 10);
+
                 dispatch(setUserLogin())
                 setIsLoading(false)
                 navigate('/');

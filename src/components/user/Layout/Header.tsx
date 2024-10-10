@@ -2,13 +2,11 @@ import { NavLink } from "react-router-dom";
 import HeaderNav from "./headerComponents/Nav/UserHeaderNav";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
-import { useDispatch } from "react-redux";
 import HeaderDropdown from "./headerComponents/DropDown";
 
 
 
 const Header = () =>{
-    const dispatch = useDispatch()
     const isLogin = useSelector((state: RootState) => state.userAuth.isLogin);
 
 

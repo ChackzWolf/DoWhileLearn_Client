@@ -41,11 +41,11 @@ function LoginModal() {
             console.log(status)
             if(success){
                 
-                setAdminCookie('accessToken', accessToken, 0.01);
+                setCookie("adminAccessToken", accessToken, 0.15)
                 console.log("setCookie")
-                setAdminCookie('refreshToken', refreshToken, 7);
+                setAdminCookie('adminRefreshToken', refreshToken, 7);
                 console.log("setRefreshCookie");
-                setAdminCookie('userId',_id, 7);
+                setAdminCookie('adminId',_id, 7);
                 navigate('/admin');
             }else{
                 setMessage(message);

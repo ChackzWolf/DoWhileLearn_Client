@@ -3,6 +3,8 @@ import CourseBadge from "../Layout/CourseBadge";
 import CourseSkeleton from "./Skeletons/CourseSkeleton"; // Adjust path as necessary
 import axios from "axios";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
+import apiClient from "../../../utils/axios/userAxios.config";
+import userAxios from "../../../utils/axios/userAxios.config";
 
 // Define the interfaces for the fetched course data
 export interface ResponseFetchCourseList {
@@ -53,7 +55,7 @@ function CoursesList() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get<ResponseFetchCourseList>(courseEndpoint.fetchCourseData);
+        const response = await userAxios.get<ResponseFetchCourseList>(courseEndpoint.fetchCourseData);
         setCourses(response.data.courses.reverse()); // Reverse once when fetching
       } catch (error) {
         console.error("Error fetching course data:", error);

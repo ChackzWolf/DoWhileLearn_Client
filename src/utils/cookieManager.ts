@@ -1,3 +1,7 @@
+import axios from "axios";
+
+import { userEndpoint } from "../constraints/userEndpoints";
+
 export const setCookie = (name: string, value: string, days: number) => {
     let expires = '';
     if (days) {
@@ -7,19 +11,6 @@ export const setCookie = (name: string, value: string, days: number) => {
     }
     document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Strict; Secure`;
 };
-// export const getCookie = (name: string) => {
-//     const nameEQ = `${name}=`;
-//     console.log(`Searching for cookie: ${name}`);
-//     const ca = document.cookie.split(';');
-//     console.log(`Found ${ca} ${ca.length} cookies`);
-//     for (let i = 0; i < ca.length; i++) {
-//         let c = ca[i];
-//         while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-//         if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-//     }
-//     console.log('No matching cookie found');
-//     return null;
-// };
 
 
 export const getCookie= (name:string)=> {
@@ -46,6 +37,7 @@ export const getCookie= (name:string)=> {
 export const removeCookie = (name: string) => {
     console.log('removing token');
     document.cookie = `${name}=; Max-Age=-99999999; path=/; SameSite=Strict; Secure`;
+    axios.post(userEndpoint.clearCookie)
 };
 
 

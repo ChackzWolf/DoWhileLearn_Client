@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaUserCircle } from 'react-icons/fa'; // Import an icon from react-icons (or use an image)
 import { useDispatch } from 'react-redux';
 import { setUserLogout } from '../../../../redux/authSlice/authSlice';
-import { removeCookie } from '../../../../utils/cookieManager';
+import { getCookie, removeCookie } from '../../../../utils/cookieManager';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { userEndpoint } from '../../../../constraints/userEndpoints';
+import { authEndpoint } from '../../../../constraints/authEndpoint';
 
 const HeaderDropdown: React.FC = () => {
     const navigate = useNavigate()
@@ -12,18 +15,23 @@ const HeaderDropdown: React.FC = () => {
     const dropdownRef = useRef<HTMLDivElement>(null); // Reference to dropdown container
 
     // Handle logout logic
-    const handleLogout = () => {
-        removeCookie('token');
-        removeCookie('refreshToken');
-        removeCookie('userId');
-        dispatch(setUserLogout());
+    const handleLogout = async () => {
+        const response = await axios.post(authEndpoint.clearUserCookies)
+        if(response.data.success){
+            console.log(response)
+            removeCookie('userAccessToken')
+            removeCookie('userRefreshToken');
+            removeCookie('userId');
+
+            if(!getCookie('userAccessToken') && !getCookie('userRefreshToken') && !getCookie('userId')) dispatch(setUserLogout());
+        }
     };
 
     // Toggle dropdown open/close
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
-
+    
     // Close the dropdown when clicking outside of it
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {

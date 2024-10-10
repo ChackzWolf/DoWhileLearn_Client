@@ -73,7 +73,7 @@ function CourseDetails() {
           const userId = getCookie("userId");
           console.log();
           const response = await axios.get(courseEndpoint.fetchCourseDetails, {
-            params: { id, userId },
+            params: { id, userId }, withCredentials:true
           });
           setTutorId(response.data.courseData.tutorId);
 
@@ -167,7 +167,7 @@ function CourseDetails() {
       };
 
       // payement API be completed
-      const response = await axios.post(userEndpoint.makePayment, data);
+      const response = await axios.post(userEndpoint.makePayment, data,{withCredentials:true});
       console.log("hayyyy stripe", response.data);
 
       const sessionId = response.data.session_id;
@@ -195,7 +195,7 @@ function CourseDetails() {
       const response = await axios.post(userEndpoint.addToCart, {
         courseId: id,
         userId,
-      });
+      },{withCredentials:true}  );
       if (response.data.inCart) {
         setInCart(true);
       } else {

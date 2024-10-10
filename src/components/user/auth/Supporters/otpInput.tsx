@@ -87,15 +87,16 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
         }
 
         const response =await axios.post(userEndpoint.verifyOTP, data); 
-        const {success, refreshToken, accessToken} = response.data;
+        const {success, refreshToken, accessToken, userId} = response.data;
 
         if(success){
             
             console.log('success', response.data);
             localStorage.removeItem('otpCountDown');
             // setCookie(response.data.token);
-            setCookie('accessToken', accessToken, 0.01); // Set a short-lived access token
-            setCookie('refreshToken', refreshToken, 7);
+            setCookie('userId',userId, 10)
+            setCookie('userAccessToken', accessToken, 0.01); 
+            setCookie('userRefreshToken', refreshToken, 10);
             
             dispatch(setUserLogin());
             navigate('/')

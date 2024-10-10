@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { setCookie, setTutorCookie } from '../../../utils/cookieManager';
+import { setCookie } from '../../../utils/cookieManager';
 import {useDispatch} from 'react-redux';
 import { setTutorLogin } from '../../../redux/authSlice/authSlice';
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
@@ -92,9 +92,9 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             
             console.log('success', response.data);
             localStorage.removeItem('otpCountDown');
-            setTutorCookie('token', accessToken, 0.01);
-            setTutorCookie('refreshToken', refreshToken, 7);
-            setTutorCookie('userId',_id,7)
+            setCookie('tutorAccessToken', accessToken, 0.01);
+            setCookie('tutorRefreshToken', refreshToken, 7);
+            setCookie('tutorId',_id,7)
             // ithenthua reandennam
             dispatch(setTutorLogin());
             navigate('/tutor')
