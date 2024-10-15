@@ -13,6 +13,7 @@ import Loader from "../../common/icons/loader";
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
+import { Player } from "@lottiefiles/react-lottie-player";
 
 function LoginModal() {
     const dispatch = useDispatch()
@@ -91,35 +92,31 @@ function LoginModal() {
     }
 
     return (
-        <>
-        {isLoading? <Loader/> : ""}
-                    <Header/>
+<>
+    {isLoading ? <Loader /> : ""}
+    <Header />
 
-            <div className="flex h-screen">
-                
+    <div className="flex flex-col md:flex-row h-screen">
+        <div className="w-full md:w-1/2 bg-[#FCF6FF] flex justify-center items-center"> 
+                    <Player
+                    autoplay
+                    loop
+                    src="https://lottie.host/2c1314ab-f84b-4779-8c97-d9c8ae4be53a/u6H6TpekA6.json"
+                    style={{ height: '70%', width: ' 70%'}}
+                    />
+                    
+        </div>
 
-                <div className="w-1/2  bg-purple-700"> 
-
-                </div>
-
-
-
-                <div className="bg-[#FCF6FF] p-16 shadow-lg w-1/2 rouder-lg justify-center">
-
-                    <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Student Login</h2>
-
-                    <h1 className="text-red-800 text-center">{message}</h1>
-                    <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
-
-                    {({isSubmitting})=>(
-
-
+        <div className="bg-[#FCF6FF] p-6 md:p-16 w-full md:w-1/2 rounded-lg flex justify-center">
+            <div className="w-full max-w-md"> {/* Center the form container */}
+                <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Student Login</h2>
+                <h1 className="text-red-800 text-center">{message}</h1>
+                <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
+                    {({ isSubmitting }) => (
                         <Form>
-                            <div className="justify-center mb-20 px-28">
-
-
+                            <div className="justify-center mb-20 px-4 md:px-28 lg:px-16">
                                 <p className="text-base mb-2 font-normal">Email</p>
-                                <div className="mb-4  fex-col items-center">
+                                <div className="mb-4 flex-col items-center">
                                     <Field
                                         type="email"
                                         name="email"
@@ -134,59 +131,49 @@ function LoginModal() {
                                 </div>
 
                                 <div className="justify-center mb-6 ">
-                                <div className="relative w-full h-10 flex items-center right-1 rounded-lg ">
-                                    <Field
-                                        type={showPassword ? 'name': 'password'}
-                                        name="password"
-                                        className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
-                                        placeholder="Enter your password here."
-                                    />
-                                    <EyeCheckbox  onClick={togglePasswordVisibility} />
+                                    <div className="relative w-full h-10 flex items-center right-1 rounded-lg ">
+                                        <Field
+                                            type={showPassword ? 'text' : 'password'} // Corrected type to 'text'
+                                            name="password"
+                                            className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                            placeholder="Enter your password here."
+                                        />
+                                        <EyeCheckbox onClick={togglePasswordVisibility} />
                                     </div>
                                     <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                 </div>
 
-
                                 <div className="justify-center mb-6 ">
                                     <button
                                         type="submit"
-                                        className="w-full px-4 py-3 mb-4 text-white shadow-lg rounded-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#7C24F0] transition-all ease-in-out delay-50 duration-500         "
+                                        className="w-full px-4 py-3 mb-4 text-white shadow-lg rounded-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#7C24F0] transition-all ease-in-out delay-50 duration-500"
                                         disabled={isSubmitting}
                                     >
-
                                         Login
-                                        {/* {isSubmitting ? 'Submitting...' : 'Continue'} */}
                                     </button>
 
                                     <button
-                                        type="submit"
-                                        className="w-full px-4 py-3 mb-4 rounded-lg shadow-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#DDB3FF] transition-all ease-in-out delay-50 duration-500         "
-                                
+                                        type="button" // Changed type to button for Google login
+                                        className="w-full px-4 py-3 mb-4 rounded-lg shadow-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#DDB3FF] transition-all ease-in-out delay-50 duration-500"
                                     >
-
                                         Login with Google
-                                        {/* {isSubmitting ? 'Submitting...' : 'Continue'} */}
                                     </button>
 
-
                                     <div className="flex w-full">
-                                        <h1>Don't have an account?  </h1>
-                                        <NavLink to="/register/tutor" className="pl-2 text-sky-700">
-                                             Signup
+                                        <h1>Don't have an account? </h1>
+                                        <NavLink to="/register/user" className="pl-2 text-sky-700">
+                                            Signup
                                         </NavLink>
                                     </div>
-
                                 </div>
-
                             </div>
                         </Form>
-
                     )}
-                    </Formik>
-                </div>
-
+                </Formik>
             </div>
-        </>
+        </div>
+    </div>
+</>
     )
 }
 

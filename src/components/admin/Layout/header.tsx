@@ -52,13 +52,12 @@ const Header = () =>{
 
 
                     <div className="justify-end flex">
-                        <HeaderNav />
+                        {/* <HeaderNav /> */}
                         
                         <div>
                             <HeaderDropdown/>
                         </div>
 
-                        : 
 
                     </div>    
 

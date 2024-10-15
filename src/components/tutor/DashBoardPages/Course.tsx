@@ -4,6 +4,7 @@ import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
+import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
 
 
 export interface ResponseFetchCourseList {
@@ -55,7 +56,8 @@ function Course() {
           }
 
         } catch (error) {
-          console.error("Error fetching course data:", error);
+          if(!handleBlockedTutor(error)) console.error("Error fetching course data:", error);
+          else handleBlockedTutor(error)
         }
       };
   

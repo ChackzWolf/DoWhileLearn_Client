@@ -66,35 +66,23 @@ userAxios.interceptors.request.use(
 export default userAxios;
 
 
+userAxios.interceptors.response.use(
+    response => response,
+    async error => {
 
 
+        // Handle 403 Forbidden (user blocked)
+        if (error.response.status === 403) {
+            console.log('User is blocked. Redirecting to login or blocked page.');
+            removeCookie('userAccessToken');
+            removeCookie('userRefreshToken');
+            removeCookie('userId');
+            // Redirect to login or blocked user page
+            window.location.href = '/login/user?message=blocked'; // Change this to your actual login or blocked route
 
-// apiClient.interceptors.response.use(// Response interceptor to handle token refreshes and errorrerer
-//     (response) => response,
-//     async (error) => {
-//         console.log('error it was')
-//         const originalRequest = error.config;
+            return Promise.reject(error);
+        }
 
-//         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-//             try {    // Trying to refresh the token
-               
-//                 const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/refresh-token`, {}, { withCredentials: true });
-//                 const newToken = response.data.accessToken;
-
-//                 // Set new access token
-//                 setCookie('accessToken', newToken, 0.01);
-//                 // Retry the original request with the new token
-//                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
-//                 return axios.request(originalRequest);
-//             } catch (refreshError) {
-//                 // failure
-//                 console.error('Token refresh failed:', refreshError);
-//                 removeCookie('accessToken');
-//                 removeCookie('refreshToken');
-//                // window.location.href = '/login';
-//             }
-//         }
-//         return Promise.reject(error);
-//     }
-// );
-
+        return Promise.reject(error);
+    }
+);

@@ -198,7 +198,7 @@ function CourseDetails() {
 
     try{
       const userId = getCookie("userId");
-    console.log(userId, "addtocart clicked");
+      console.log(userId, "addtocart clicked");
 
     if (userId && userId !== "undefined") {
       const response = await userAxios.post(userEndpoint.addToCart, {
@@ -317,9 +317,9 @@ function CourseDetails() {
   onClick={handlePayement}
 >
   {isLoading ? 'Processing...' : 'Buy'}
-</button>
+              </button>
               <button
-                className=" right-0  px-4 py-1 rounded-lg text-[#7C24F0] font-extrabold text-2xl hover:shadow-[#6211cd] transition-all"
+                className="right-0  px-4 py-1 rounded-lg text-[#7C24F0] font-extrabold text-2xl hover:shadow-[#6211cd] transition-all"
                 onClick={() => handleAddToCart()}
               >
                 {inCart ? <BsFillCartCheckFill /> : <BsCart />}

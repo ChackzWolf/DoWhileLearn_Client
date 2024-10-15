@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { adminEndpoint } from "../../../constraints/adminEndpoints";
 import axios from "axios";
+import { ListShadowLoader } from "./Shadoloader/ListShadowLoader";
 
 
 interface IUser{
@@ -40,29 +41,61 @@ function Students() {
     }
 
   console.log(students)
-  return (
-    <div className="w-full h-screen bg-white p-8">
-      <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden m-2">
-        <thead>
-          <tr>
-            <th className="border border-gray-300 p-2 bg-gray-100 ">Name</th>
-            <th className="border border-gray-300 p-2 bg-gray-100">Email</th>
-            <th className="border border-gray-300 p-2 bg-gray-100">Enrolled courses</th>
-            <th className="border border-gray-300 p-2 bg-gray-100">Action</th>
+  if (students.length == 0) return <ListShadowLoader/>
+  else return (
+    
+<div className="w-full min-h-screen bg-white p-4 md:p-8">
+  <h1 className="m-4 md:m-6 font-bold text-xl md:text-3xl">Students List</h1>
+
+  <div className="overflow-x-auto">
+    <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden">
+      <thead>
+        <tr>
+          <th className="border border-gray-300 p-2 bg-gray-100 text-xs md:text-sm">
+            Name
+          </th>
+          <th className="border border-gray-300 p-2 bg-gray-100 text-xs md:text-sm">
+            Email
+          </th>
+          <th className="border border-gray-300 p-2 bg-gray-100 text-xs md:text-sm">
+            Enrolled Courses
+          </th>
+          <th className="border border-gray-300 p-2 bg-gray-100 text-xs md:text-sm">
+            Action
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {students.map((student, index) => (
+          <tr key={index} className="text-center text-xs md:text-sm">
+            <td className="border border-gray-300 p-2 whitespace-nowrap">
+              {student.firstName} {student.lastName}
+            </td>
+            <td className="border border-gray-300 p-2 whitespace-nowrap">
+              {student.email}
+            </td>
+            <td className="border border-gray-300 p-2">
+              {student.purchasedCourses.length}
+            </td>
+            <td className="border border-gray-300 p-2">
+              <button
+                className={`${
+                  student.isblocked
+                    ? "bg-green-500"
+                    : "bg-red-600"
+                } rounded-lg px-3 md:px-6 m-1 md:m-2 py-1 text-white`}
+                onClick={() => handleToggleBlock(student._id)}
+              >
+                {student.isblocked ? "Unblock" : "Block"}
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {students.map((student, index) => (
-            <tr key={index} className="text-center">
-              <td className="border border-gray-300 p-2">{student.firstName} {student.lastName}</td>
-              <td className="border border-gray-300 p-2">{student.email}</td>
-              <td className="border border-gray-300 p-2">{student.purchasedCourses.length}</td>
-              <button className={student.isblocked? "bg-green-500 rounded-lg px-4 m-2 py-1 text-white":"bg-red-600 rounded-lg px-6 m-2 py-1 text-white"} onClick={()=>handleToggleBlock(student._id)}>{student.isblocked?"Unblock":"Block"}</button>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
   )
 }
 

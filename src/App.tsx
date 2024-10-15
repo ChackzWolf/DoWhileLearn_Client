@@ -5,6 +5,9 @@ import AdminRoutes from './components/routes/adminRouter/AdminRouters';
 import {UserPrivateRoute} from './utils/user/PrivateRouter';
 import {TutorPrivateRoute} from './utils/tutor/PrivateRouter';
 import { AdminPrivateRoute } from './utils/admin/PrivateRoute';
+import {AdminAuthRoute} from './utils/admin/AuthRoute'
+import { TutorAuthRoute } from './utils/tutor/AuthRouter';
+import { UserAuthRoute } from './utils/user/AuthRouter';
 import LoginUser from './components/user/auth/Login';
 import RegisterUser from './components/user/auth/register';
 import LoginTutor from './components/tutor/auth/Login';
@@ -17,6 +20,7 @@ import CourseDetailsPage from './pages/user/Courses/CourseDetailsPage';
 import CoursesListPage from './pages/user/Courses/CoursesListPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UserAuthRoutes from './components/routes/userRouter/AuthRouters';
 
 
 function App() {
@@ -33,9 +37,13 @@ function App() {
           <Route path="/course/:id" element={<CourseDetailsPage/>} />
 
           {/* User auth */}
-          <Route path='/login/user' element={<LoginUser/>}/>
-          <Route path='/register/user' element={<RegisterUser/>}/>
-          <Route path='/register/user/otp' element = {<OtpVarification/>}/>
+          <Route path='/login/user' element = {<LoginUser/>}/>
+          <Route path='/register/user' element ={<RegisterUser/>}/>
+ 
+          {/* <UserAuthRoute>
+              <UserAuthRoutes/>
+          </UserAuthRoute> */}
+
 
            {/* Tutor Auth */}
           <Route path='/login/tutor' element = {<LoginTutor/>}/>

@@ -50,9 +50,9 @@ function Cart() {
             console.log(response.data)
             setCourses(response.data.courses);
           }catch(error){
-            if(!handleBlockedUser(error)){
-              console.log("error fetching course in cart :",error)
-            }else handleBlockedUser(error)
+            // if(!handleBlockedUser(error)){
+            //   console.log("error fetching course in cart :",error)
+            // }else handleBlockedUser(error)
           }
 
           

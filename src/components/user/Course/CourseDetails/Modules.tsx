@@ -38,7 +38,7 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
             onClick={() => toggleModule(moduleIndex)}
             className="w-full flex justify-between items-center text-left text-xl font-bold bg-gray-200 hover:bg-gray-300 p-2 px-6 rounded-md"
           >
-            {module.name}
+            {`Module - ${moduleIndex+1} : `}{ module.name}
             <span
               className={`transform transition-transform duration-300 mx-2 text-2xl ${
                 openModuleIndex === moduleIndex ? "rotate-180" : ""
@@ -57,12 +57,15 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
             <div className="mt-2 px-4">
               <p className="mb-4">{module.description}</p>
               {module.lessons.map((lesson, lessonIndex) => (
+      
                 <LessonAccordion
                   key={lessonIndex}
+                  index = {lessonIndex + 1}
                   lesson={lesson}
                   isOpen={openLessonIndex[moduleIndex] === lessonIndex}
                   onToggle={() => toggleLesson(moduleIndex, lessonIndex)}
                 />
+      
               ))}
             </div>
           </div>
@@ -73,17 +76,19 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
 };
 
 const LessonAccordion: React.FC<{
+  index:any;
   lesson: CreateCourseState["Modules"][number]["lessons"][number];
   isOpen: boolean;
   onToggle: () => void;
-}> = ({ lesson, isOpen, onToggle }) => {
+}> = ({ index ,lesson, isOpen, onToggle }) => {
   return (
     <div className="mb-2">
+      
       <button
         onClick={onToggle}
         className="w-full text-left font-medium bg-gray-200 hover:bg-gray-300 p-2 rounded-md "
       >
-        {`${lesson.title}`}
+      {`Lession-${index} : ${lesson.title}`} 
       </button>
 
       {/* Transition for lesson collapse */}

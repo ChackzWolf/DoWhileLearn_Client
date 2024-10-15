@@ -58,8 +58,6 @@ const Header = () =>{
                             <HeaderDropdown/>
                         </div>
 
-                        : 
-
                     </div>    
 
                 </div>

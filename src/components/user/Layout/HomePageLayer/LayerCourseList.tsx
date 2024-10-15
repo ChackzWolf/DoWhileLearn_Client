@@ -38,12 +38,31 @@ export interface Lesson {
 const LayerCourseList = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(true); // Loading state
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+  useEffect(() => {
+    checkScreenSize(); // Initial check
+    window.addEventListener("resize", checkScreenSize);
 
+
+    return () => {
+      window.removeEventListener("resize", checkScreenSize);
+    };
+  }, [])
+let itemsToShow
+  // if(window.innerWidth <= 1024 && window.innerWidth > 767 ) itemsToShow = 3
+  if(window.innerWidth > 752 && window.innerWidth < 900) itemsToShow = 3
+  else if (isLargeScreen) itemsToShow = 5;
+  else itemsToShow = 4
+  console.log(window.innerWidth)
+    
+  
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const response = await axios.get<ResponseFetchCourseList>(courseEndpoint.fetchCourseData);
         setCourses(response.data.courses);
+
+
       } catch (error) {
         console.error("Error fetching course data:", error);
       } finally {
@@ -54,32 +73,38 @@ const LayerCourseList = () => {
     fetchCourses();
   }, []);
 
+  const checkScreenSize = () => {
+    setIsLargeScreen(window.innerWidth >= 1025); // 1024px is the lg breakpoint in Tailwind
+  };
+
   console.log(courses, "coursess");
   return (
-    <div className="flex w-full justify-between px-20">
-      {isLoading
-        ? // Show skeletons while loading
-          Array.from({ length: 5 }).map((_, index) => (
-            <CourseBadgeSkeleton key={index} />
-          ))
-        : courses
-            .slice() // Copy the array to avoid mutating the original
-            .reverse() // Reverse the array
-            .slice(0, 5) // Take the first 5 items from the reversed array
-            .map((course) => (
-              <CourseBadge
-                key={course.courseTitle + course.coursePrice} // Use a unique key
-                title={course.courseTitle}
-                description={course.courseDescription}
-                rating={4}
-                price={course.coursePrice}
-                discountPrice={course.discountPrice}
-                imageSrc={course.thumbnail}
-                color={""}
-                _id={course._id}
-              />
-            ))}
-    </div>
+<div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${itemsToShow} lg:grid-cols-${itemsToShow} gap-5 px-3 md:px-10 lg:px-max-40 justify-items-center`}>
+  {isLoading
+    ? // Show skeletons while loading
+      Array.from({ length: 4 }).map((_, index) => (
+        <CourseBadgeSkeleton key={index} />
+      ))
+    : courses
+        .slice() // Copy the array to avoid mutating the original
+        .reverse() // Reverse the array
+        .slice(0, itemsToShow) // Take the first 5 items from the reversed array
+        .map((course) => (
+          <CourseBadge
+            key={course.courseTitle + course.coursePrice} // Use a unique key
+            title={course.courseTitle}
+            description={course.courseDescription}
+            rating={4}
+            price={course.coursePrice}
+            discountPrice={course.discountPrice}
+            imageSrc={course.thumbnail}
+            color={""}
+            _id={course._id}    
+          />
+        ))}
+</div>
+
+
   );
 };
 

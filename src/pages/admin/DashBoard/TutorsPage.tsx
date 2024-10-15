@@ -4,10 +4,10 @@ import SideNav from '../../../components/admin/Layout/SideNav';
 
 function TutorsPage() {
   return (
-    <div className="bg-black w-full h-screen">
+    <div className="w-full h-screen">
     <Header/>
     <div className="flex w-full">
-        <SideNav prop = {'/admin'}/> 
+        <SideNav prop = {'/admin/tutors'}/> 
         <Tutors/>
     </div>
 

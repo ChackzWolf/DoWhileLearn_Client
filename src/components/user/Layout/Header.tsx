@@ -14,7 +14,7 @@ const Header = () =>{
    
     return (
         
-          <div className="items-center w-full mx-auto p-3 px-5 shadow-xl shadow-[#7C24F0] bg-slate-50 rounded-b-lg">
+          <div className="sticky top-0 z-50 bg-opacity-30 backdrop-blur-md items-center w-full mx-auto p-3 px-5 shadow-xl shadow-[#7C24F0] rounded-b-lg">
                 <div className="justify-between flex">
                     <div className="col-span-1">
                         <h1 className="text-2xl font-extrabold text-[#7C24F0]">DoWhile{' { Learn } '}</h1>

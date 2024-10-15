@@ -30,7 +30,7 @@ function SideNav({ prop }: { prop: string }) {
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-white p-6 transition-transform duration-300 z-50 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:relative lg:w-2/12`}
+        } lg:translate-x-0 lg:relative lg:w-1/5`} 
       >
         {/* Close Icon for Mobile */}
         <div className="lg:hidden flex justify-end mb-4">
@@ -40,17 +40,18 @@ function SideNav({ prop }: { prop: string }) {
         {/* Main Content */}
         <div
           className={
-            prop === "/tutor"
+            prop === "/admin"
               ? "flex bg-[#7C24F0] p-2  text-white text-sm font-semibold w-full rounded-lg"
               : "flex bg-white p-2  text-sm font-semibold w-full rounded-lg"
           }
         >
-          <NavLink key="/tutor" to="/tutor" className="flex items-center">
-          <RxDashboard className="m-2" />
-            DashBoard
+          <NavLink key="/admin" to="/admin" className="flex items-center">
+            <RxDashboard className="m-2" />
+            Dashboard
           </NavLink>
         </div>
 
+        {/* Data Section */}
         <div className="mt-7">
           <h1 className="text-xs m-3 text-slate-600">Data</h1>
           {data.map((links) => (
@@ -63,13 +64,14 @@ function SideNav({ prop }: { prop: string }) {
               }
             >
               <NavLink to={links.path} className="flex items-center">
-                {<links.icon className="mx-3 my-1 text-xl"/>}
+                {<links.icon className="mx-3 my-1 text-xl" />}
                 {links.name}
-            </NavLink>
+              </NavLink>
             </div>
           ))}
         </div>
 
+        {/* Content Section */}
         <div className="mt-7">
           <h1 className="text-xs m-3 text-slate-600">Content</h1>
           {content.map((links) => (
@@ -82,9 +84,9 @@ function SideNav({ prop }: { prop: string }) {
               }
             >
               <NavLink to={links.path} className="flex items-center">
-                {<links.icon className="mx-3 my-1 text-xl"/>}
+                {<links.icon className="mx-3 my-1 text-xl" />}
                 {links.name}
-                </NavLink>
+              </NavLink>
             </div>
           ))}
         </div>

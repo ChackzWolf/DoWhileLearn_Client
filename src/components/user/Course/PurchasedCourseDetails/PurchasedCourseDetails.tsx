@@ -16,6 +16,8 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCookie } from "../../../../utils/cookieManager";
 import { Module } from "module";
+import userAxios from "../../../../utils/axios/userAxios.config";
+import { userEndpoint } from "../../../../constraints/userEndpoints";
 
 interface Module {
     name: string;
@@ -63,8 +65,8 @@ interface Module {
             setIsLoading(true);
             const userId = getCookie("userId");
             console.log();
-            const response = await axios.get(courseEndpoint.fetchCourseDetails, {
-              params: { id, userId },
+            const response = await userAxios.get(userEndpoint.fetchCourseDetails, {
+              params: { id, userId }, withCredentials:true 
             });
             setTutorId(response.data.courseData.tutorId);
   
@@ -133,26 +135,7 @@ interface Module {
     }, [id, dispatch]);
 
 
-
-
-
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   return (
