@@ -1,12 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { setCookie } from "../../../utils/cookieManager";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import { adminEndpoint } from "../../../constraints/adminEndpoints";
 import Loader from "../../common/icons/loader";
+import { toast } from 'react-toastify';
 function LoginModal() {
     const navigate = useNavigate()
     const [message, setMessage] = useState('')
@@ -33,7 +34,16 @@ function LoginModal() {
         email: '',
         password:''
     };
+    const location = useLocation();
 
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const message = queryParams.get('message');
+  
+        if(message === 'passwordUpdated'){
+            toast.success('Your password has been updated. Please login with your new password.')
+        }
+    }, [location]);
 
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
         try {
@@ -99,7 +109,7 @@ function LoginModal() {
                                 </div>
                                 <div className="flex w-full justify-between">
                                     <p className="text-base mb-2 font-normal">Password</p>
-                                    <p className="text-base mb-2 font-normal justify-end text-sky-700">Forgot?</p>
+                                    <a href="/login/admin/forgot-password" className="text-base mb-2 font-normal justify-end text-sky-700">Forgot?</a>
                                 </div>
     
                                 <div className="justify-center mb-6">
@@ -131,12 +141,6 @@ function LoginModal() {
                                         Login with Google
                                     </button>
     
-                                    <div className="flex w-full">
-                                        <h1>Don't have an account?</h1>
-                                        <NavLink to="/register/tutor" className="pl-2 text-sky-700">
-                                            Signup
-                                        </NavLink>
-                                    </div>
                                     <div className="flex w-full">
                                         <h1>Are you a student?</h1>
                                         <NavLink to="/register/user" className="pl-2 text-sky-700">

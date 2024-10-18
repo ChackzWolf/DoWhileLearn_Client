@@ -39,13 +39,13 @@ function LoginModal() {
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Email is required'),
         password: Yup.string()
-        .required('Password is required')
-        .min(8, 'Password must be at least 8 characters long')
-        .max(20, 'Password cannot be longer than 20 characters')
-        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/[0-9]/, 'Password must contain at least one number')
-        .matches(/[@$!%*?&#]/, 'Password must contain at least one special character'),
+            .required('Password is required')
+            .min(8, 'Password must be at least 8 characters long')
+            .max(20, 'Password cannot be longer than 20 characters')
+            .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+            .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+            .matches(/[0-9]/, 'Password must contain at least one number')
+            .matches(/[@$!%*?&#]/, 'Password must contain at least one special character'),
     });
     const initialValue = {
         email: '',
@@ -57,7 +57,7 @@ function LoginModal() {
         try {
             setIsLoading(true)
             const response = await axios.post(tutorEndpoint.loginTutor, value);
-            console.log(response.data)
+            console.log(response.data,'dkkkkkkkkkddd')
             const {success, accessToken, refreshToken ,status ,message,_id} = response.data;
             console.log(status)
             if(success){
@@ -70,6 +70,7 @@ function LoginModal() {
                 dispatch(setTutorLogin())
                 navigate('/tutor');
             }else{
+                console.log('reached eher')
                 setMessage(message);
             }
         } catch (error:any) {

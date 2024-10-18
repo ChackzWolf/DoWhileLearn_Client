@@ -42,8 +42,9 @@ export interface Lesson {
 function Course() {
   const navigate = useNavigate()
   const [courses, setCourses] = useState<Course[]>([]);
-
-
+  const itemsPerPage = 12;
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(courses.length / itemsPerPage);
   useEffect(() => {
       const fetchCourses = async () => {
         try {
@@ -63,6 +64,21 @@ function Course() {
   
       fetchCourses();
     }, []);
+
+
+      // Get the courses for the current page
+  const currentCourses = courses.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Handle page change
+  const handlePageChange = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
 
     const handleOnClick = (id: string) => {
       navigate(`/tutor/courses/${id}`);
@@ -84,7 +100,7 @@ function Course() {
           </tr>
         </thead>
         <tbody>
-          {courses.map((course, index) => (
+          {currentCourses.map((course, index) => (
             <tr key={index} className="text-center">
               <div className="flex items-center justify-center rounded-lg">
               <img src={course.thumbnail} alt="" className="w-10 rounded-md mt-4" />
@@ -99,6 +115,38 @@ function Course() {
           ))}
         </tbody>
       </table>
+
+                {/* Pagination Controls */}
+                <div className="flex justify-center space-x-4 mt-6">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="px-4 py-2 bg-gray-200 rounded"
+            >
+              Previous
+            </button>
+
+            {/* Display page numbers */}
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+              <button
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+                className={`px-4 py-2 ${
+                  currentPage === pageNumber ? "bg-blue-500 text-white" : "bg-gray-200"
+                } rounded`}
+              >
+                {pageNumber}
+              </button>
+            ))}
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="px-4 py-2 bg-gray-200 rounded"
+            >
+              Next
+            </button>
+          </div>
       </div>
     </div>
   )

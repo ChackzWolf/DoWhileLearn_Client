@@ -61,7 +61,9 @@ function App() {
 
           {/* Admin Auth */}
           <Route path = '/login/admin' element= {<AdminLoginPage/>}/>
-      
+          <Route path = '/login/admin/forgot-password' element= {<VerifyEmail role='ADMIN'/>}/>
+          <Route path = '/login/admin/forgot-password/otp' element={<ResetPasswordOTP role='ADMIN'/>}/>
+          <Route path = '/login/admin/forgot-password/otp/reset-password' element={<ResetPassword role='ADMIN'/>}/>
           
           {/* // <Route path="/unauthorized" element={<UnauthorizedPage />} /> */}
 

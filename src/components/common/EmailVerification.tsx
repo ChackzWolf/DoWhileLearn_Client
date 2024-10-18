@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { handleBlockedUser } from "../../utils/handleErrors/handleBlocked";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { tutorEndpoint } from "../../constraints/tutorEndpoint";
+import { adminEndpoint } from "../../constraints/adminEndpoints";
 
 interface VarifyEmailProp {
     role:string
@@ -68,6 +69,15 @@ function VerifyEmail({role}:VarifyEmailProp) {
                     return;
                 }
                 navigate(`/login/tutor/forgot-password/otp?email=${email}`);
+            }else if(role === 'ADMIN'){
+                const response = await axios.post(adminEndpoint.sendOtpToEmail, value);
+                console.log(response.data)
+                const {message,success,email} = response.data;
+                if(!success){
+                    setMessage(message)
+                    return;
+                }
+                navigate(`/login/admin/forgot-password/otp?email=${email}`);
             }
         } catch (error) {
             setIsLoading(false)

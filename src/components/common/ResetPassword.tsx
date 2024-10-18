@@ -1,13 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
-import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import EyeToggleButton from "./icons/eyeToggleButton/eyeToggleButton";
 import { getCookie, removeCookie } from "../../utils/cookieManager";
 import { userEndpoint } from "../../constraints/userEndpoints";
 import { tutorEndpoint } from "../../constraints/tutorEndpoint";
+import { adminEndpoint } from "../../constraints/adminEndpoints";
 
 
 interface ResetPasswordProps{
@@ -74,6 +74,7 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                 const {message,success} = response.data;
                 if(!success){
                     setMessage(message)
+                    return;
                 }
                 removeCookie('userId');
                 navigate(`/login/user?message=passwordUpdated`)
@@ -88,9 +89,26 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                 const {message,success} = response.data;
                 if(!success){
                     setMessage(message)
+                    return;
                 }
                 removeCookie('tutorId');
                 navigate(`/login/tutor?message=passwordUpdated`)
+            }else if(role === 'ADMIN'){
+                const adminId = getCookie('adminId');
+                const data = {
+                    adminId:adminId,
+                    password:value.password,
+                }
+                console.log(data,'data from handle submit');
+                const response = await axios.post(adminEndpoint.updatePassword, data)
+                const {message,success} = response.data;
+                console.log(response.data,'data')
+                if(!success){
+                    setMessage(message)
+                    return;
+                }
+                removeCookie('adminId');
+                navigate(`/login/admin?message=passwordUpdated`)
             }
 
 
@@ -173,7 +191,7 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                                     className="w-full px-4 py-3 mb-4 text-white rounded-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#7C24F0] transition-all ease-in-out delay-50 duration-500         "
                                     
                                 >
-                                    {isSubmitting? 'Creating...': 'Create account'}
+                                    {isSubmitting? 'Creating...': 'Create password'}
                                 </button>
 
                             </div>
