@@ -21,6 +21,9 @@ import CoursesListPage from './pages/user/Courses/CoursesListPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserAuthRoutes from './components/routes/userRouter/AuthRouters';
+import ResetPasswordOTP from './components/common/ResetPasswordOTP';
+import ResetPassword from './components/common/ResetPassword';
+import VerifyEmail from './components/common/EmailVerification';
 
 
 function App() {
@@ -39,7 +42,9 @@ function App() {
           {/* User auth */}
           <Route path='/login/user' element = {<LoginUser/>}/>
           <Route path='/register/user' element ={<RegisterUser/>}/>
- 
+          <Route path = '/login/user/forgot-password' element= {<VerifyEmail role='USER'/>}/>
+          <Route path = '/login/user/forgot-password/otp' element={<ResetPasswordOTP role='USER'/>}/>
+          <Route path = '/login/user/forgot-password/otp/reset-password' element={<ResetPassword role='USER'/>}/>
           {/* <UserAuthRoute>
               <UserAuthRoutes/>
           </UserAuthRoute> */}
@@ -48,6 +53,9 @@ function App() {
            {/* Tutor Auth */}
           <Route path='/login/tutor' element = {<LoginTutor/>}/>
           <Route path='/register/tutor' element ={<RegisterTutor/>}/>
+          <Route path = '/login/tutor/forgot-password' element= {<VerifyEmail role='TUTOR'/>}/>
+          <Route path = '/login/tutor/forgot-password/otp' element={<ResetPasswordOTP role='USER'/>}/>
+          <Route path = '/login/tutor/forgot-password/otp/reset-password' element={<ResetPassword role='USER'/>}/>
           
           
 

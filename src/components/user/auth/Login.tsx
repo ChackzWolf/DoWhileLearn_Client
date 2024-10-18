@@ -52,6 +52,8 @@ function LoginModal() {
   
       if (message === 'blocked') {
         toast.error('You have been blocked! Please contact admin to resolve');
+      }else if (message === 'passwordUpdated'){
+        toast.success('Password has been updated please login.')
       }
     }, [location]);
 

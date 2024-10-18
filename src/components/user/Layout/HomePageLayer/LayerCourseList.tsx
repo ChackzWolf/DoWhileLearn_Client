@@ -49,7 +49,7 @@ const LayerCourseList = () => {
     };
   }, [])
 let itemsToShow
-  // if(window.innerWidth <= 1024 && window.innerWidth > 767 ) itemsToShow = 3
+  if(window.innerWidth <= 1024 && window.innerWidth > 767 ) itemsToShow = 3
   if(window.innerWidth > 752 && window.innerWidth < 900) itemsToShow = 3
   else if (isLargeScreen) itemsToShow = 5;
   else itemsToShow = 4
@@ -79,7 +79,7 @@ let itemsToShow
 
   console.log(courses, "coursess");
   return (
-<div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${itemsToShow} lg:grid-cols-${itemsToShow} gap-5 px-3 md:px-10 lg:px-max-40 justify-items-center`}>
+<div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${itemsToShow} lg:grid-cols-5 gap-5 px-3 md:px-10 lg:px-max-40 justify-items-center`}>
   {isLoading
     ? // Show skeletons while loading
       Array.from({ length: 4 }).map((_, index) => (
