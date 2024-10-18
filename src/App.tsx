@@ -54,8 +54,8 @@ function App() {
           <Route path='/login/tutor' element = {<LoginTutor/>}/>
           <Route path='/register/tutor' element ={<RegisterTutor/>}/>
           <Route path = '/login/tutor/forgot-password' element= {<VerifyEmail role='TUTOR'/>}/>
-          <Route path = '/login/tutor/forgot-password/otp' element={<ResetPasswordOTP role='USER'/>}/>
-          <Route path = '/login/tutor/forgot-password/otp/reset-password' element={<ResetPassword role='USER'/>}/>
+          <Route path = '/login/tutor/forgot-password/otp' element={<ResetPasswordOTP role='TUTOR'/>}/>
+          <Route path = '/login/tutor/forgot-password/otp/reset-password' element={<ResetPassword role='TUTOR'/>}/>
           
           
 

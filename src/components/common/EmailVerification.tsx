@@ -59,6 +59,7 @@ function VerifyEmail({role}:VarifyEmailProp) {
                 }
                 navigate(`/login/user/forgot-password/otp?email=${email}`);
             }else if (role === 'TUTOR'){
+                console.log('role',role)
                 const response = await axios.post(tutorEndpoint.sendOtpToEmail, value);
                 console.log(response.data)
                 const {message,success,email} = response.data;

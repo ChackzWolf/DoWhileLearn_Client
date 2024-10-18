@@ -7,6 +7,7 @@ import { useState } from "react";
 import EyeToggleButton from "./icons/eyeToggleButton/eyeToggleButton";
 import { getCookie, removeCookie } from "../../utils/cookieManager";
 import { userEndpoint } from "../../constraints/userEndpoints";
+import { tutorEndpoint } from "../../constraints/tutorEndpoint";
 
 
 interface ResetPasswordProps{
@@ -75,7 +76,21 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                     setMessage(message)
                 }
                 removeCookie('userId');
-                navigate(`/login/${role}?message=passwordUpdated`)
+                navigate(`/login/user?message=passwordUpdated`)
+            }else if(role === 'TUTOR'){
+                const tutorId = getCookie('tutorId');
+                const data = {
+                    tutorId:tutorId,
+                    password:value.password,
+                }
+                console.log(data,'data from handle submit');
+                const response = await axios.post(tutorEndpoint.updatePassword, data)
+                const {message,success} = response.data;
+                if(!success){
+                    setMessage(message)
+                }
+                removeCookie('tutorId');
+                navigate(`/login/tutor?message=passwordUpdated`)
             }
 
 

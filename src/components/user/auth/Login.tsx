@@ -129,7 +129,8 @@ function LoginModal() {
                                 </div>
                                 <div className="flex w-full justify-between">
                                     <p className="text-base mb-2 font-normal">Password</p>
-                                    <p className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</p>
+                                    {/* <p className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</p> */}
+                                    <a href="/login/user/forgot-password" className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</a>
                                 </div>
 
                                 <div className="justify-center mb-6 ">

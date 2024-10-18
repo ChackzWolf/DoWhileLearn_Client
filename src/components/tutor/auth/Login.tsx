@@ -30,6 +30,8 @@ function LoginModal() {
   
       if (message === 'blocked') {
         toast.error('You have been blocked! Please contact admin to resolve the issue.');
+      }else if(message === 'passwordUpdated'){
+        toast.success('Your password has been updated. Please login with your new password.')
       }
     }, [location]);
  
@@ -127,7 +129,7 @@ function LoginModal() {
                                 </div>
                                 <div className="flex w-full justify-between">
                                     <p className="text-base mb-2 font-normal">Password</p>
-                                    <p className="text-base mb-2 font-normal justify-end text-sky-700">Forgot?</p>
+                                    <a href="/login/tutor/forgot-password" className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</a>
                                 </div>
     
                                 <div className="justify-center mb-6 ">
