@@ -13,8 +13,10 @@ interface IUser{
   isblocked: boolean;
 }
 function Tutors() {
+  const itemsPerPage = 12;
   const [tutors, setTutors] = useState<IUser[]>([]);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(tutors.length / itemsPerPage);
 
   useEffect(() => {
       const fetchCourses = async () => {
@@ -32,10 +34,27 @@ function Tutors() {
     const handleToggleBlock = async (tutorId:string) => {
         const response = await axios.post(adminEndpoint.toggleBlockTutor, {tutorId})
         if(response.status = 202){
-          const tutors = await axios.get(adminEndpoint.fetchTutorData);
-          setTutors(tutors.data.tutors); // Access the 'courses' property from the response
+
+          setTutors((prevTutors) =>
+          prevTutors.map((tutor) =>
+          tutor._id === tutorId
+              ? { ...tutor, isblocked: !tutor.isblocked } // Toggle the isblocked value
+              : tutor
+          )
+        );
         }
     }
+
+  // Get the courses for the current page
+  const currentTutors = tutors.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+  const handlePageChange = (pageNumber: number) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+    }
+  };
 
   console.log(tutors)
   if(tutors.length == 0) return <ListShadowLoader/>
@@ -60,7 +79,7 @@ function Tutors() {
       </thead>
 
       <tbody>
-        {tutors?.map((tutor, index) => (
+        {currentTutors?.map((tutor, index) => (
           <tr key={index} className="text-center text-xs md:text-sm">
             <td className="border border-gray-300 p-2 whitespace-nowrap">
               {tutor.firstName} {tutor.lastName}
@@ -85,6 +104,37 @@ function Tutors() {
       </tbody>
     </table>
   </div>
+            {/* Pagination Controls */}
+            <div className="flex justify-center space-x-4 mt-6">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className="px-4 py-2 bg-[#DDB3FF] rounded"
+            >
+              Previous
+            </button>
+
+            {/* Display page numbers */}
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+              <button
+                key={pageNumber}
+                onClick={() => handlePageChange(pageNumber)}
+                className={`px-4 py-2 ${
+                  currentPage === pageNumber ? "bg-[#7C24F0] text-white" : "bg-gray-200"
+                } rounded`}
+              >
+                {pageNumber}
+              </button>
+            ))}
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className="px-4 py-2 bg-[#DDB3FF] rounded"
+            >
+              Next
+            </button>
+          </div>
 </div>
 
   )

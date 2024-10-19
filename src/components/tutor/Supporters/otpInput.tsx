@@ -97,7 +97,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             setCookie('tutorId',_id,7)
             // ithenthua reandennam
             dispatch(setTutorLogin());
-            navigate('/tutor')
+            navigate('/tutor/complete-regestration')
 
         }else{
             console.log('failed response')

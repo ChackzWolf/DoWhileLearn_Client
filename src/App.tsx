@@ -24,6 +24,7 @@ import UserAuthRoutes from './components/routes/userRouter/AuthRouters';
 import ResetPasswordOTP from './components/common/ResetPasswordOTP';
 import ResetPassword from './components/common/ResetPassword';
 import VerifyEmail from './components/common/EmailVerification';
+import RegistrationPage from './pages/tutor/Registration/RegistrationFirstPage';
 
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
           <Route path = '/login/tutor/forgot-password' element= {<VerifyEmail role='TUTOR'/>}/>
           <Route path = '/login/tutor/forgot-password/otp' element={<ResetPasswordOTP role='TUTOR'/>}/>
           <Route path = '/login/tutor/forgot-password/otp/reset-password' element={<ResetPassword role='TUTOR'/>}/>
+          <Route path = '/register/tutor/completion/step-one' element={<RegistrationPage/>}/>
           
           
 
@@ -75,9 +77,9 @@ function App() {
                 <TutorRoutes />
               </TutorPrivateRoute>
             }
-          />
+          /> 
 
-          <Route
+          <Route 
             path="/user/*"
             element={
               <UserPrivateRoute roles={['USER']}>

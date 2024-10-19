@@ -106,7 +106,7 @@ function CoursesList() {
             <button
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
-              className="px-4 py-2 bg-gray-200 rounded"
+              className="px-4 py-2 bg-[#DDB3FF] rounded"
             >
               Previous
             </button>
@@ -117,7 +117,7 @@ function CoursesList() {
                 key={pageNumber}
                 onClick={() => handlePageChange(pageNumber)}
                 className={`px-4 py-2 ${
-                  currentPage === pageNumber ? "bg-blue-500 text-white" : "bg-gray-200"
+                  currentPage === pageNumber ? "bg-[#7C24F0] text-white" : "bg-gray-200"
                 } rounded`}
               >
                 {pageNumber}
@@ -127,7 +127,7 @@ function CoursesList() {
             <button
               disabled={currentPage === totalPages}
               onClick={() => handlePageChange(currentPage + 1)}
-              className="px-4 py-2 bg-gray-200 rounded"
+              className="px-4 py-2 bg-[#DDB3FF] rounded"
             >
               Next
             </button>

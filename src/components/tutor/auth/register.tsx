@@ -28,7 +28,9 @@ function RegisterUser() {
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Email is required'),
-
+        phoneNumber: Yup.string()
+            .required('Phone number is required')
+            .matches(/^[6-9][0-9]{9}$/, 'Enter a valid number.'),
         firstName: Yup.string()
             .required('First name is required')
             .matches(/^[A-Za-z]+$/, 'First name can only contain letters')
@@ -125,7 +127,7 @@ function RegisterUser() {
                         <div className="justify-center mb-20 px-28">
 
                             <div className="flex justify-between">
-                                <div>
+                                <div className="w-1/2 mr-6">
                                     <p className="text-base mb-2 font-normal">First-name</p>
                                     <div className="mb-4 items-center">
                                         <Field
@@ -137,7 +139,7 @@ function RegisterUser() {
                                         <ErrorMessage name="firstName" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>
                                 </div>
-                                <div className="w-1/2">
+                                <div className="w-1/2 ">
                                     <p className="text-base mb-2 font-normal">Last-name</p>
                                     <div className="mb-4 items-center">
                                         <Field
@@ -151,33 +153,50 @@ function RegisterUser() {
                                 </div>
 
                             </div>
+                            <div className="flex justify-between">
+                                <div className="w-1/2 mr-6">
+                                    <p className="text-base mb-2 font-normal">Email</p>
+                                    <div className="mb-4 items-center">
+                                        <Field
+                                            type="email"
+                                            name="email"
+                                            className="w-full h-10 p-2 px-7 shadow-lg rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                            placeholder=" Enter your email here."
+                                        />
+                                        <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
+                                    </div>
+                                </div>
 
+                                <div className="w-1/2">
+                                    <p className="text-base mb-2 font-normal">Phone</p>
+                                    <div className="mb-4 items-center">
+                                        <Field
+                                            type="number"
+                                            name="number"
+                                            className="w-full h-10 p-2 px-10 border shadow-lg rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                            placeholder=" Enter your contact number here."
+                                        />
+                                        <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
+                                    </div>
 
-                            <p className="text-base mb-2 font-normal">Email</p>
-                            <div className="mb-4 items-center">
-                                <Field
-                                    type="email"
-                                    name="email"
-                                    className="w-full h-10 p-2 px-4 shadow-lg rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
-                                    placeholder=" Enter your email here."
-                                />
-                                <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
+                                </div>
                             </div>
+
 
 
                             
                             <div className="flex justify-between">
-                                <div className="w-1/2">
+                                <div className="w-1/2 mr-5">
                                     <p className="text-base mb-2 font-normal">Create a password</p>
                                     <div className="mb-4 items-center">
-                                    <div className="relative w-full h-10 flex items-center right-1">
-                                        <Field
-                                            type={showPassword ? "text" : "password"}
-                                            name="password"
-                                            className="abslolute  w-full h-10 shadow-lg p-3 rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
-                                            placeholder="Enter your password here."
-                                        />
-                                        <EyeToggleButton  onClick={togglePasswordVisibility} />
+                                        <div className="relative w-full h-10 flex items-center right-1">
+                                            <Field
+                                                type={showPassword ? "text" : "password"}
+                                                name="password"
+                                                className="abslolute  w-full h-10 shadow-lg p-3 rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                                placeholder="Enter your password here."
+                                            />
+                                            <EyeToggleButton  onClick={togglePasswordVisibility} />
                                         </div>
                                         <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>

@@ -17,6 +17,7 @@ const TutorRoutes = ()=>{
             <Route path = '/courses' element = {<CoursesPage/>}/>
             <Route path="/courses/:id" element={<CourseDetailsPage />} />
             <Route path = "/courses/edit-course" element = {<EditCoursePage/>}/>
+            <Route path = "/complete-registration"   />
         </Routes>
     )
 }
