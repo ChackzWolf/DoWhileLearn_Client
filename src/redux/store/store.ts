@@ -6,7 +6,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import createCourseData from '../tutorSlice/CourseSlice/createCourseData';
 import editCourseData from '../tutorSlice/CourseSlice/editCourseData';
-
+import tutorData from '../tutorSlice/tutorSlice';
 
 const persistConfig = {
     key: "root",
@@ -21,7 +21,8 @@ const rootReducer = combineReducers({
     userAuth:userAuthReducer,
     registerData:registerData,
     createCourseData: createCourseData,
-    editCourseData: editCourseData
+    editCourseData: editCourseData,
+    tutorData:tutorData
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

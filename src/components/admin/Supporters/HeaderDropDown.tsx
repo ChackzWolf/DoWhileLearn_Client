@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa'; // Import an icon from react-icons (or use an image)
-import { removeTutorCookie } from '../../../../src/utils/cookieManager';
+import { removeCookie } from '../../../../src/utils/cookieManager';
 import { useNavigate } from 'react-router-dom';
 
 const HeaderDropdown: React.FC = () => {
@@ -8,9 +8,10 @@ const HeaderDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
     
     const handleLogout = () => {
-      removeTutorCookie('accessToken');
-      removeTutorCookie('refreshToken');
-      removeTutorCookie('userId');
+      removeCookie('accessToken');
+      removeCookie('refreshToken');
+      removeCookie('userId');
+      console.log(3)
       navigate('/login/admin') 
     }
 

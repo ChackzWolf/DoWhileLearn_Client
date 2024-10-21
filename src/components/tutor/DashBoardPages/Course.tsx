@@ -88,6 +88,7 @@ function Course() {
   return (
     <div className="w-full h-screen bg-white p-8">
       <div className="mx-10">
+      {currentCourses.length !== 0 ? (
       <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden m-2">
         <thead>
           <tr>
@@ -99,6 +100,7 @@ function Course() {
             <th className="border border-gray-300 p-2 bg-gray-100">Action</th>
           </tr>
         </thead>
+        
         <tbody>
           {currentCourses.map((course, index) => (
             <tr key={index} className="text-center">
@@ -112,41 +114,45 @@ function Course() {
             <td className="border border-gray-300 p-2">{course?.discountPrice}</td>
               <button className= "bg-[#7C24F0] hover:bg-[#6211cd] transition-all rounded-lg px-4 m-2 py-1 text-white" onClick={()=>handleOnClick(course?._id)}> Detail veiw</button>
             </tr>
+  
           ))}
         </tbody>
-      </table>
-
-                {/* Pagination Controls */}
-                <div className="flex justify-center space-x-4 mt-6">
-            <button
-              disabled={currentPage === 1}
-              onClick={() => handlePageChange(currentPage - 1)}
-              className="px-4 py-2 bg-[#DDB3FF] rounded"
-            >
-              Previous
-            </button>
-
-            {/* Display page numbers */}
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
-              <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-                className={`px-4 py-2 ${
-                  currentPage === pageNumber ? "bg-[#7C24F0] text-white" : "bg-gray-200"
-                } rounded`}
-              >
-                {pageNumber}
-              </button>
-            ))}
-
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => handlePageChange(currentPage + 1)}
-              className="px-4 py-2 bg-[#DDB3FF] rounded"
-            >
-              Next
-            </button>
+      </table>):(
+          <div className="w-full flex justify-center items-center mt-16">
+            <h1 className="text-center w-full text-4xl font-semibold">You have no courses yet.</h1>
           </div>
+        )}
+      {currentCourses.length !== 0 && (
+                <div className="flex justify-center space-x-4 mt-6">
+                      <button
+                        disabled={currentPage === 1}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        className="px-4 py-2 bg-[#DDB3FF] rounded"
+                      >
+                        Previous
+                      </button>
+
+                      {/* Display page numbers */}
+                      { Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                        <button
+                          key={pageNumber}
+                          onClick={() => handlePageChange(pageNumber)}
+                          className={`px-4 py-2 ${
+                            currentPage === pageNumber ? "bg-[#7C24F0] text-white" : "bg-gray-200"
+                          } rounded`}
+                        >
+                          {pageNumber}
+                        </button>
+                      ))}
+
+                      <button
+                        disabled={currentPage === totalPages}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        className="px-4 py-2 bg-[#DDB3FF] rounded"
+                      >
+                        Next
+                      </button>
+                  </div>)}
       </div>
     </div>
   )

@@ -4,7 +4,6 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import {  setCookie } from "../../../utils/cookieManager";
 import { setTutorLogin } from "../../../redux/authSlice/authSlice";
-import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
@@ -12,6 +11,9 @@ import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
 import { toast } from 'react-toastify';
 import Loader from "../../common/icons/loader";
 import { Player } from "@lottiefiles/react-lottie-player";
+import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
+import { useSelector,useDispatch  } from "react-redux";
+import { RootState } from "../../../redux/store/store";
 
 function LoginModal() {
     const dispatch = useDispatch()
@@ -58,17 +60,35 @@ function LoginModal() {
             setIsLoading(true)
             const response = await axios.post(tutorEndpoint.loginTutor, value);
             console.log(response.data,'dkkkkkkkkkddd')
-            const {success, accessToken, refreshToken ,status ,message,_id} = response.data;
+            const {success, accessToken, refreshToken ,status ,message,tutorId, tutorData} = response.data;
             console.log(status)
+
+            const data = {
+                _id: tutorData._id,
+                firstName: tutorData.firstName,
+                lastName: tutorData.lastName,
+                email: tutorData.email,
+                bio: tutorData.bio,
+                expertise: tutorData.expertise,
+                qualifications: tutorData.qualifications,
+                profilePicture: tutorData.profilePicture,
+                cv: tutorData.cv,
+                isblocked: tutorData.isblocked,
+              };
+              dispatch(setTutorData(data));
+            //   console.log("Tutor after dispatch:", useSelector((state: RootState) => state.tutorData));
+
+            console.log(data,'data')
             if(success){
-                
+                console.log(tutorData)
                 setCookie('tutorAccessToken', accessToken, 0.01);
                 console.log("setCookie")
                 setCookie('tutorRefreshToken', refreshToken, 7);
                 console.log("setRefreshCookie");
-                setCookie('tutorId',_id, 7)
+                setCookie('tutorId',tutorId, 7)
+                dispatch(setTutorData(data))
                 dispatch(setTutorLogin())
-                navigate('/tutor');
+                // navigate('/tutor');
             }else{
                 console.log('reached eher')
                 setMessage(message);
@@ -93,7 +113,11 @@ function LoginModal() {
         }
   
     }
-
+    const tutor = useSelector((state:RootState)=> {state.tutorData})
+    useEffect(() => {
+        console.log("Tutor after dispatch:", tutor);
+    }, [tutor]);
+    console.log(tutor, "dta form redux")
     return (
         <>
         {isLoading && <Loader/>}

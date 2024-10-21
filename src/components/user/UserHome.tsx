@@ -4,6 +4,7 @@ import LayerOne from "./Layout/HomePageLayer/LayerOne";
 import axios from "axios";
 import { courseEndpoint } from "../../constraints/courseEndpoints";
 import LayerCourseList from "./Layout/HomePageLayer/LayerCourseList";
+import ChatComponent from "./Chat/ChatComponent";
 
 
 
@@ -31,6 +32,8 @@ const UserHome= () => {
 
 
             <LayerCourseList/>
+
+            <ChatComponent/>
             <h1 className="font-bold self-center text-center text-lg mt-20 text-slate-700">Landing Page</h1>
         </div>
     )

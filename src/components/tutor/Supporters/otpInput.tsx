@@ -5,6 +5,7 @@ import { setCookie } from '../../../utils/cookieManager';
 import {useDispatch} from 'react-redux';
 import { setTutorLogin } from '../../../redux/authSlice/authSlice';
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
+import Loader from '../../common/icons/loader';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -18,11 +19,12 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const [otpCount, setOtpCount] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(false);
 
 
     const [otpCountDown, setOtpCountDown] = useState<number>(() => {
     const savedCount = localStorage.getItem('otpCountDown');
-    return savedCount ? parseInt(savedCount) : 30; // Default 30 seconds
+    return savedCount ? parseInt(savedCount) : 100; // Default 30 seconds
   });
 
   // This effect handles the countdown
@@ -77,6 +79,8 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
   };
 
   const handleSubmit = async() => {
+    try {
+      setIsLoading(true)
     const otpValue = otp.join('');
     if(otpValue.length === 4){
         const data = {
@@ -84,9 +88,11 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             email,
             tempId
         }
-
-        const response =await axios.post(tutorEndpoint.verifyOTP, data); 
-        const {success, refreshToken, accessToken,_id} = response.data;
+        console.log('goin to tutor endpoint')
+        const response = await axios.post(tutorEndpoint.verifyOTP, data); 
+        const {success, refreshToken, accessToken,_id ,tutorId} = response.data;
+        console.log(tutorId, ' tutorId')
+        console.log(_id,' _Id')
 
         if(success){
             
@@ -94,39 +100,56 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             localStorage.removeItem('otpCountDown');
             setCookie('tutorAccessToken', accessToken, 0.01);
             setCookie('tutorRefreshToken', refreshToken, 7);
-            setCookie('tutorId',_id,7)
+            setCookie('tutorId',tutorId,7)
             // ithenthua reandennam
+            setIsLoading(false)
             dispatch(setTutorLogin());
-            navigate('/tutor/complete-regestration')
+            navigate('/register/tutor/completion/step-one')
 
         }else{
+          setIsLoading(false)
             console.log('failed response')
         }
 
         console.log('Entered OTP:', otpValue);
     }else{
+      setIsLoading(false)
         console.log('invalid OTP')
     }
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setIsLoading(false)
+    }
+    
 
   };
 
   const handleResend = async() => {
+    setIsLoading(true);
       const data = {
           email,
           tempId
       }
+      console.log('going to tutor endpoint')
       const response = await axios.post(tutorEndpoint.resendOTP, data);
       const {message, success} = response.data;
       setMessage(message);
       if(success){
-          setOtpCountDown(60);
+        setIsLoading(false)  
+        setOtpCountDown(60);
+
       }else{
+        setIsLoading(false)
+        navigate('/register/tutor?message=registrationTimeOut')
         console.log(message)
       }
   }
 
   return (
+  
     <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto justify-center items-center">
+    {isLoading&& <Loader/>}
       <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">OTP Verification</h2>
       <p className="text-gray-600 text-center mb-1">An OTP has send to {email}</p>
       <p className="text-gray-600 text-center mb-6">Enter the OTP sent to your email</p>

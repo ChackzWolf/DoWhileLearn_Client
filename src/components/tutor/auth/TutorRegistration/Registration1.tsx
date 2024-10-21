@@ -7,6 +7,7 @@ import { tutorEndpoint } from "../../../../constraints/tutorEndpoint"; // Make s
 import { MdAdd, MdOutlineDelete } from "react-icons/md";
 import { FaFileCircleCheck ,FaFileCirclePlus } from "react-icons/fa6";
 import Spinner from "../../../common/icons/Spinner";
+import { getCookie } from "../../../../utils/cookieManager";
 
 function Registeration1() {
   const navigate = useNavigate();
@@ -102,7 +103,6 @@ function Registeration1() {
     }
   };
   const handleCVUpload = async (file:File) => {
-    console.log('triggggggggggggggggggggggggggggggggggggggggggg')
     setCvLoading(true);
     console.log(cvLoading,'cvLoading........................')
     const formData = new FormData();
@@ -192,18 +192,27 @@ function Registeration1() {
     // onSubmit handler
     const onSubmit = async (values: any, { setSubmitting }: any) => {
         console.log('started', values)
-
+        const data = {
+          tutorId: getCookie('tutorId'),
+          bio: values.bio,
+          expertise: values.expertise,
+          qualifications: values.qualifications,
+          profilePicture: values.profilePicture,
+          cv:values.cv
+        }
     try {
       // Sending form data to backend
-      const response = await axios.post(tutorEndpoint.registerDetails, values);
-
+      const response = await axios.post(tutorEndpoint.registerDetails, data);
+      console.log(response.data,'response')
       // Navigate to another page on success
       if (response.data.success) {
-        navigate("/success");
+        console.log('response was success')
+        navigate("/tutor");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
     } finally {
+
       setSubmitting(false);
     }
   };
@@ -312,7 +321,7 @@ function Registeration1() {
 
                                     <div className="w-full md:w-full m-3 mt-4 md:my-5 flex flex-col justify-center items-center">
                                       <div
-                                        className=" bg-gray-100 border-gray-300 cursor-pointer w-full flex items-center justify-center"
+                                        className=" cursor-pointer w-full flex items-center justify-center"
                                         onClick={handlePdfCVUploadClick}
                                       >
                                             {cvLoading ? (

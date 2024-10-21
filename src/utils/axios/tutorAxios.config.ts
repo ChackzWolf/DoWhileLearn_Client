@@ -47,6 +47,7 @@ tutorAxios.interceptors.request.use(
                 removeCookie('tutorAccessToken');
                 removeCookie('tutorRefreshToken');
                 removeCookie('tutorId');
+                console.log(2)
                 // store.dispatch(setTutorLogout())
                 // Optionally, redirect to login
                 window.location.href = '/login/tutor';
@@ -75,6 +76,7 @@ tutorAxios.interceptors.response.use(
             removeCookie('tutorAccessToken');
             removeCookie('tutorRefreshToken');
             removeCookie('tutorId');
+            console.log(1)
             // Redirect to login or blocked user page
             window.location.href = '/login/tutor?message=blocked'; // Change this to your actual login or blocked route
 

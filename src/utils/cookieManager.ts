@@ -35,65 +35,12 @@ export const getCookie= (name:string)=> {
 
 
 export const removeCookie = (name: string) => {
-    console.log('removing token');
+    console.log(`removing token ${name}`);
     document.cookie = `${name}=; Max-Age=-99999999; path=/; SameSite=Strict; Secure`;
     axios.post(userEndpoint.clearCookie)
 };
 
 
-
-// For tutor
-export const setTutorCookie = (name: string, value: string, days: number) => {
-    let expires = '';
-    if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = `expires=${date.toUTCString()}`;
-    }
-    document.cookie = `${name}=${value}; ${expires}; path=/;`;
-};
-
-export const removeTutorCookie = (name: string, path?: string) => {
-    console.log('removing token');
-    
-    // Remove all cookies with the given name
-    document.cookie = `${name}=; Max-Age=0; path=${path || '/'};`;
-    
-    // Get all cookies and remove them one by one
-    const cookies = document.cookie.split(';').filter(cookie => cookie.trim().startsWith(`${name}=`));
-    cookies.forEach(cookie => {
-        document.cookie = cookie.trim() + '; expires=Thu Jan 01 1970 00:00:00 GMT';
-    });
-    
-    console.log(getCookie(name), `Removed ${name}`);
-};
-
-
-// For admin
-export const setAdminCookie = (name: string, value: string, days: number) => {
-    let expires = '';
-    if (days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = `expires=${date.toUTCString()}`;
-    }
-    document.cookie = `${name}=${value}; ${expires}; path=/;`;
-};
-
-export const removeAdminCookie = (name: string, path?: string) => {
-    console.log('removing token');
-    
-    // Remove all cookies with the given name
-    document.cookie = `${name}=; Max-Age=0; path=${path || '/'};`;
-    
-    // Get all cookies and remove them one by one
-    const cookies = document.cookie.split(';').filter(cookie => cookie.trim().startsWith(`${name}=`));
-    cookies.forEach(cookie => {
-        document.cookie = cookie.trim() + '; expires=Thu Jan 01 1970 00:00:00 GMT';
-    });
-    
-    console.log(getCookie(name), `Removed ${name}`);
-};
 
 
 

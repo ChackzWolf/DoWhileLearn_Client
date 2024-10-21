@@ -2,16 +2,19 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import axios from "axios";
 import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
+import Loader from "../../common/icons/loader";
+import { toast } from "react-toastify";
 
 
 
 function RegisterUser() {
     
     const navigate = useNavigate();
+    const [isLoading,setIsLoading] = useState(false);
     const [emailExists,setEmailExists] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -70,19 +73,31 @@ function RegisterUser() {
         firstName:'',
         lastName:'',
         email: '',
+        phoneNumber:'',
         password: '',
         confirmPassword:''
     };
-
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const message = queryParams.get('message');
+    
+        if (message === 'registrationTimeOut') {
+          toast.error('Regestration session has been expired. Try registering again.');
+        }else if(message === 'passwordUpdated'){
+          toast.success('Your password has been updated. Please login with your new password.')
+        }
+      }, [location]);
 
     const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
+
+        setIsLoading(true);
         try{
 
             const response = await axios.post(tutorEndpoint.register, value);
             console.log('register data send succesfully');
             localStorage.removeItem('otpCountDown');
             if(response.data.success){
-                navigate('/tutor/otp',{state: response.data});
+                navigate('/register/tutor/otp',{state: response.data});
                 console.log('success' , response.data)
             }else{
                 console.log(response.data)
@@ -93,6 +108,7 @@ function RegisterUser() {
             console.log(err, "registeration error ");
 
         }finally {
+            setIsLoading(false);
             setSubmitting(false);
         }
     }
@@ -103,7 +119,7 @@ function RegisterUser() {
 
     return (
         <>
-
+        {isLoading && <Loader/>}
         <div className="flex h-screen">
 
 
@@ -172,7 +188,7 @@ function RegisterUser() {
                                     <div className="mb-4 items-center">
                                         <Field
                                             type="number"
-                                            name="number"
+                                            name="phoneNumber"
                                             className="w-full h-10 p-2 px-10 border shadow-lg rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                             placeholder=" Enter your contact number here."
                                         />

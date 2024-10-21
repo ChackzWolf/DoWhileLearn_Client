@@ -13,7 +13,6 @@ import RegisterUser from './components/user/auth/register';
 import LoginTutor from './components/tutor/auth/Login';
 import RegisterTutor from './components/tutor/auth/register';
 import AuthChoice from './components/common/AuthChoice';
-import OtpVarification from './components/user/auth/OtpVarification';
 import UserHome from './components/user/UserHome';
 import AdminLoginPage from './pages/admin/auth/AdminLoginPage';
 import CourseDetailsPage from './pages/user/Courses/CourseDetailsPage';
@@ -25,6 +24,8 @@ import ResetPasswordOTP from './components/common/ResetPasswordOTP';
 import ResetPassword from './components/common/ResetPassword';
 import VerifyEmail from './components/common/EmailVerification';
 import RegistrationPage from './pages/tutor/Registration/RegistrationFirstPage';
+import OTPInput from './components/tutor/Supporters/otpInput';
+import OtpVarification from './components/tutor/auth/OtpVarification';
 
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
            {/* Tutor Auth */}
           <Route path='/login/tutor' element = {<LoginTutor/>}/>
           <Route path='/register/tutor' element ={<RegisterTutor/>}/>
+          <Route path = '/register/tutor/otp' element={<OtpVarification/>}/>
           <Route path = '/login/tutor/forgot-password' element= {<VerifyEmail role='TUTOR'/>}/>
           <Route path = '/login/tutor/forgot-password/otp' element={<ResetPasswordOTP role='TUTOR'/>}/>
           <Route path = '/login/tutor/forgot-password/otp/reset-password' element={<ResetPassword role='TUTOR'/>}/>
