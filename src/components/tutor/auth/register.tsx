@@ -3,17 +3,20 @@ import * as Yup from 'yup';
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useDebugValue } from "react";
 import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import Loader from "../../common/icons/loader";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
 
 
 
 function RegisterUser() {
     
     const navigate = useNavigate();
+    const dispatch = useDispatch()
     const [isLoading,setIsLoading] = useState(false);
     const [emailExists,setEmailExists] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
@@ -94,9 +97,11 @@ function RegisterUser() {
         try{
 
             const response = await axios.post(tutorEndpoint.register, value);
-            console.log('register data send succesfully');
+            
+            console.log('register data send succesfully', response);
             localStorage.removeItem('otpCountDown');
             if(response.data.success){
+                dispatch(setTutorData(response.data.tutorData))
                 navigate('/register/tutor/otp',{state: response.data});
                 console.log('success' , response.data)
             }else{

@@ -6,6 +6,7 @@ import {useDispatch} from 'react-redux';
 import { setTutorLogin } from '../../../redux/authSlice/authSlice';
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
 import Loader from '../../common/icons/loader';
+import { setTutorData } from '../../../redux/tutorSlice/tutorSlice';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -90,7 +91,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
         }
         console.log('goin to tutor endpoint')
         const response = await axios.post(tutorEndpoint.verifyOTP, data); 
-        const {success, refreshToken, accessToken,_id ,tutorId} = response.data;
+        const {success, refreshToken, accessToken,_id ,tutorId, tutorData} = response.data;
         console.log(tutorId, ' tutorId')
         console.log(_id,' _Id')
 
@@ -98,6 +99,19 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             
             console.log('success', response.data);
             localStorage.removeItem('otpCountDown');
+            const data = {
+              _id: tutorId,
+              firstName: tutorData.firstName,
+              lastName: tutorData.lastName,
+              email: tutorData.email,
+              bio: tutorData.bio,
+              expertise: tutorData.expertise,
+              qualifications: tutorData.qualifications,
+              profilePicture: tutorData.profilePicture,
+              cv: tutorData.cv,
+              isblocked: tutorData.isblocked,
+            };
+            dispatch(setTutorData(data));
             setCookie('tutorAccessToken', accessToken, 0.01);
             setCookie('tutorRefreshToken', refreshToken, 7);
             setCookie('tutorId',tutorId,7)

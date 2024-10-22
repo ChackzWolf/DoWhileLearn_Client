@@ -60,22 +60,23 @@ function LoginModal() {
             setIsLoading(true)
             const response = await axios.post(tutorEndpoint.loginTutor, value);
             console.log(response.data,'dkkkkkkkkkddd')
-            const {success, accessToken, refreshToken ,status ,message,tutorId, tutorData} = response.data;
+            const {success, accessToken, refreshToken ,status ,tutorId, tutorData} = response.data;
             console.log(status)
 
-            const data = {
-                _id: tutorData._id,
-                firstName: tutorData.firstName,
-                lastName: tutorData.lastName,
-                email: tutorData.email,
-                bio: tutorData.bio,
-                expertise: tutorData.expertise,
-                qualifications: tutorData.qualifications,
-                profilePicture: tutorData.profilePicture,
-                cv: tutorData.cv,
-                isblocked: tutorData.isblocked,
-              };
-              dispatch(setTutorData(data));
+                const data = {
+                  _id: tutorId,
+                  firstName: tutorData.firstName,
+                  lastName: tutorData.lastName,
+                  email: tutorData.email,
+                  bio: tutorData.bio,
+                  expertise: tutorData.expertise,
+                  qualifications: tutorData.qualifications,
+                  profilePicture: tutorData.profilePicture,
+                  cv: tutorData.cv,
+                  isblocked: tutorData.isblocked,
+                };
+                dispatch(setTutorData(data));
+              
             //   console.log("Tutor after dispatch:", useSelector((state: RootState) => state.tutorData));
 
             console.log(data,'data')
@@ -88,10 +89,10 @@ function LoginModal() {
                 setCookie('tutorId',tutorId, 7)
                 dispatch(setTutorData(data))
                 dispatch(setTutorLogin())
-                // navigate('/tutor');
+                navigate('/tutor');
             }else{
                 console.log('reached eher')
-                setMessage(message);
+                setMessage(response.data.message);
             }
         } catch (error:any) {
            // Catch and handle the error
@@ -113,8 +114,9 @@ function LoginModal() {
         }
   
     }
-    const tutor = useSelector((state:RootState)=> {state.tutorData})
-    useEffect(() => {
+
+    // dispatch(setTutorDataEmpty())
+    const tutor = useSelector((state: RootState) => state.tutorData.tutorData);    useEffect(() => {
         console.log("Tutor after dispatch:", tutor);
     }, [tutor]);
     console.log(tutor, "dta form redux")

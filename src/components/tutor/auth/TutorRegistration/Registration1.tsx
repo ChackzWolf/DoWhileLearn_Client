@@ -2,15 +2,20 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { tutorEndpoint } from "../../../../constraints/tutorEndpoint"; // Make sure this points to your backend tutor registration endpoint
 import { MdAdd, MdOutlineDelete } from "react-icons/md";
 import { FaFileCircleCheck ,FaFileCirclePlus } from "react-icons/fa6";
 import Spinner from "../../../common/icons/Spinner";
 import { getCookie } from "../../../../utils/cookieManager";
+import { useDispatch } from "react-redux";
+import { setTutorData } from "../../../../redux/tutorSlice/tutorSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../redux/store/store";
 
 function Registeration1() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   // Validation Schema
   const validationSchema = Yup.object({
@@ -47,7 +52,7 @@ function Registeration1() {
   
 
   const handleImageUpload = async (file: File) => {
-    setImageLoading(true)
+    setImageLoading(true);
     const formData = new FormData();
     formData.append("image", file);
 
@@ -68,7 +73,7 @@ function Registeration1() {
 
       if (response.data.s3Url) {
         setPreviewImage(response.data.s3Url);
-        console.log("returning");
+        console.log("returning from image");
         setImageLoading(false)
         return response.data.s3Url;
       } else {
@@ -203,9 +208,12 @@ function Registeration1() {
     try {
       // Sending form data to backend
       const response = await axios.post(tutorEndpoint.registerDetails, data);
-      console.log(response.data,'response')
+      console.log(response.data,'response');
+      
+      console.log('register data', response);
       // Navigate to another page on success
       if (response.data.success) {
+        dispatch(setTutorData(response.data.tutorData))
         console.log('response was success')
         navigate("/tutor");
       }
@@ -216,6 +224,12 @@ function Registeration1() {
       setSubmitting(false);
     }
   };
+
+  const tutor = useSelector((state: RootState) => state.tutorData.tutorData);    
+  useEffect(() => {
+    console.log("Tutor after dispatch:", tutor);
+  }, [tutor]);
+  console.log(tutor, "dta form redux")
 
   return (
     <>

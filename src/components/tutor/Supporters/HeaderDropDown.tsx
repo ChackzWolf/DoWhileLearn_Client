@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa'; // Import an icon from react-icons (or use an image)
 import { removeCookie } from '../../../../src/utils/cookieManager';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setTutorDataEmpty } from '../../../redux/tutorSlice/tutorSlice';
 
 const HeaderDropdown: React.FC = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
   const [isOpen, setIsOpen] = useState(false);
     
     const handleLogout = () => {
-      
+      dispatch(setTutorDataEmpty())
       removeCookie('tutorAccessToken');
       removeCookie('tutorRefreshToken');
       removeCookie('tutorId');
