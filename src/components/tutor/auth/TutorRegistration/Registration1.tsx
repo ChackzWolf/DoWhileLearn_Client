@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { setTutorData } from "../../../../redux/tutorSlice/tutorSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
+import Loader from "../../../common/icons/loader";
 
 function Registeration1() {
   const navigate = useNavigate();
@@ -44,7 +45,6 @@ function Registeration1() {
   const pdfCVInputRef = useRef<HTMLInputElement>(null);
   const [pdfFileNames, setPdfFileNames] = useState<string[]>([]);
   const [pdfFileLoading, setPdfFileLoading] = useState<boolean[]>([]);
-  const [error, setError] = useState('');
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const [cvLoading,setCvLoading] = useState(false);
@@ -197,8 +197,9 @@ function Registeration1() {
     // onSubmit handler
     const onSubmit = async (values: any, { setSubmitting }: any) => {
         console.log('started', values)
+        const tutorId = getCookie('tutorId')
         const data = {
-          tutorId: getCookie('tutorId'),
+          tutorId,
           bio: values.bio,
           expertise: values.expertise,
           qualifications: values.qualifications,
@@ -232,8 +233,10 @@ function Registeration1() {
   console.log(tutor, "dta form redux")
 
   return (
-    <>
+    <> 
+    {isLoading && <Loader/>}
       <div className="flex h-full bg-[#FCF6FF]">
+
         <div className="w-2/5 h-full bg-purple-700"></div>
 
         <div className="bg-[#FCF6FF] w-3/5 justify-center h-full">
@@ -371,9 +374,9 @@ function Registeration1() {
                                           }}
                                       />
 
-                                      {error && (
+                                      {/* {error && (
                                         <p className="mt-2 text-red-600">{error}</p>
-                                      )}
+                                      )} */}
                                     <ErrorMessage
                                       name="cv"
                                       component="div"
@@ -502,9 +505,9 @@ function Registeration1() {
                                           }}
                                       />
 
-                                      {error && (
+                                      {/* {error && (
                                         <p className="mt-2 text-red-600">{error}</p>
-                                      )}
+                                      )} */}
                                     </div>
 
 

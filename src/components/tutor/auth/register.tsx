@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect, useDebugValue } from "react";
+import { useState, useEffect } from "react";
 import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import Loader from "../../common/icons/loader";
@@ -16,6 +16,7 @@ import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
 function RegisterUser() {
     
     const navigate = useNavigate();
+    const location = useLocation()
     const dispatch = useDispatch()
     const [isLoading,setIsLoading] = useState(false);
     const [emailExists,setEmailExists] = useState(false)

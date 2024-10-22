@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import axios from "axios";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
@@ -88,6 +87,8 @@ function Course() {
   return (
     <div className="w-full h-screen bg-white p-8">
       <div className="mx-10">
+      <h1 className="text-3xl font-semibold m-5">Courses</h1>
+
       {currentCourses.length !== 0 ? (
       <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden m-2">
         <thead>
