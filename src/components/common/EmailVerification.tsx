@@ -53,31 +53,32 @@ function VerifyEmail({role}:VarifyEmailProp) {
             if(role === 'USER'){
                 const response = await axios.post(userEndpoint.sendOtpToEmail, value);
                 console.log(response.data)
-                const {message,success,email} = response.data;
+                const {message,success} = response.data;
                 if(!success){
                     setMessage(message)
                     return;
                 }
-                navigate(`/login/user/forgot-password/otp?email=${email}`);
+                navigate(`/login/user/forgot-password/otp`,{state: response.data});
             }else if (role === 'TUTOR'){
                 console.log('role',role)
                 const response = await axios.post(tutorEndpoint.sendOtpToEmail, value);
                 console.log(response.data)
-                const {message,success,email} = response.data;
+                const {message,success} = response.data;
                 if(!success){
                     setMessage(message)
                     return;
                 }
-                navigate(`/login/tutor/forgot-password/otp?email=${email}`);
+          
+                navigate(`/login/tutor/forgot-password/otp`,{state: response.data});
             }else if(role === 'ADMIN'){
                 const response = await axios.post(adminEndpoint.sendOtpToEmail, value);
-                console.log(response.data)
-                const {message,success,email} = response.data;
+                console.log(response.data,'response data')
+                const {message,success} = response.data;
                 if(!success){
                     setMessage(message)
                     return;
                 }
-                navigate(`/login/admin/forgot-password/otp?email=${email}`);
+                navigate(`/login/admin/forgot-password/otp`,{state: response.data});
             }
         } catch (error) {
             setIsLoading(false)

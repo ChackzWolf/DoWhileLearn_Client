@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from "react-router-dom";
 import { userEndpoint } from "../../../constraints/userEndpoints";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { setCookie } from "../../../utils/cookieManager";
 import { setUserLogin } from "../../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
@@ -64,8 +64,8 @@ function LoginModal() {
             setIsLoading(true)
             const response = await axios.post(userEndpoint.loginUser, value);
             console.log(response.data)
-            const {success, accessToken, refreshToken, userId, status, msg} = response.data;
-            console.log(status)
+            const {success, accessToken, refreshToken, userId, message} = response.data;
+            console.log(response.data)
             if(success){
                 console.log(accessToken,refreshToken,userId)
                 
@@ -78,13 +78,15 @@ function LoginModal() {
                 navigate('/');
             }else{
                 setIsLoading(false)
-                setMessage(msg);
+                setMessage(message);
             }
             
-        } catch (error) {
+        } catch (error:any) {
             setIsLoading(false)
             if(!handleBlockedUser(error)){
-                throw new Error(`Something went wrong ! status:${status} ${error}`)
+                // throw new Error(`Something went wrong ! status:${status} ${error}`)
+                console.log(error.response)
+                setMessage(error.response.data.message);
             }
             else handleBlockedUser(error);
         }finally{

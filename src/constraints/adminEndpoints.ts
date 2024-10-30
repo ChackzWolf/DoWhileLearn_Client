@@ -7,6 +7,7 @@ export const adminEndpoint = {
     toggleBlockTutor: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/toggleBlockTutor`,
     fetchTutorData: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/fetchTutorData`,
     sendOtpToEmail:`${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/sendOtpToEmail`,
+    resendOtpToEmail: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/resendOtpToEmail`,
     resetPasswordOTP: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/resetPasswordOTP`,
     updatePassword: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/updatePassword`,
 }

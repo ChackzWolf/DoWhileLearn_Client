@@ -7,6 +7,7 @@ import { userEndpoint } from "../../constraints/userEndpoints";
 import { setCookie } from "../../utils/cookieManager";
 import { tutorEndpoint } from "../../constraints/tutorEndpoint";
 import { adminEndpoint } from "../../constraints/adminEndpoints";
+import Loader from "./icons/loader";
 interface OTPInputProps {
   role: string;
 }
@@ -14,11 +15,12 @@ interface OTPInputProps {
 const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false)
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [otpCount, setOtpCount] = useState<number>(60);
   const [message, setMessage] = useState<string>("");
-  const queryParams = new URLSearchParams(location.search);
-  const email = queryParams.get("email");
+  const {email,otpId} = location.state;
+  console.log(email,otpId, 'email and otp')
 
   const [otpCountDown, setOtpCountDown] = useState<number>(() => {
     const savedCount = localStorage.getItem("otpCountDown");
@@ -82,6 +84,7 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
     }
   };
   const handleSubmit = async () => {
+    setIsLoading(true)
     const otpValue = otp.join("");
     if (otpValue.length === 4) {
       const data = {
@@ -95,26 +98,36 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
         console.log(response);
         const { success, message, userId } = response.data;
         if (!success) {
+          setIsLoading(false)
           setMessage(message);
+          return
         }
+        
         setCookie("userId", userId, 0.1);
         navigate("/login/user/forgot-password/otp/reset-password");
+        setIsLoading(false)
       } else if (role === "TUTOR") {
         const response = await axios.post(tutorEndpoint.resetPasswordOTP, data);
         console.log(response);
         const { success, message, tutorId } = response.data;
         if (!success) {
+          setIsLoading(false)
           setMessage(message);
+          return
         }
         setCookie("tutorId", tutorId, 0.1);
         navigate("/login/tutor/forgot-password/otp/reset-password");
+        setIsLoading(false)
       } else if (role === "ADMIN") {
         const response = await axios.post(adminEndpoint.resetPasswordOTP, data);
         console.log(response);
         const { success, message, adminId } = response.data;
         if (!success) {
+          setIsLoading(false)
           setMessage(message);
+          return
         }
+        setIsLoading(false)
         setCookie("adminId", adminId, 0.1);
         navigate("/login/admin/forgot-password/otp/reset-password");
       }
@@ -122,25 +135,63 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
       console.log("Entered OTP:", otpValue);
     } else {
       console.log("invalid OTP");
+      setMessage("Invalid OTP")
+      setIsLoading(false)
     }
   };
 
   const handleResend = async () => {
+    setIsLoading(true)
     const data = {
       email,
+      otpId
     };
-    //   const response = await axios.post(tutorEndpoint.resendOTP, data);
-    //   const {message, success} = response.data;
-    //   setMessage(message);
-    //   if(success){
-    //       setOtpCountDown(60);
-    //   }else{
-    //     console.log(message)
-    //   }
+    if(role === "TUTOR"){
+      const response = await axios.post(tutorEndpoint.resendOtpToEmail, data);
+      console.log(response, 'response for resent otp')
+      const {message, success} = response.data;
+      setMessage(message);
+      if(success){
+          setOtpCountDown(100);
+      }else{
+        console.log(message,'not success')
+        setMessage(message)
+      }
+      setIsLoading(false)
+    }else if (role === 'USER'){
+      const response = await axios.post(userEndpoint.resendOtpToEmail, data);
+      console.log(response, 'response for resent otp')
+      const {message, success} = response.data;
+      setMessage(message);
+      if(success){
+          setIsLoading(false)
+          setOtpCountDown(100);
+      }else{
+        setIsLoading(false)
+        setMessage(message);
+        console.log(message,'not success')
+      }
+    }else if(role==='ADMIN'){
+
+      console.log(data, 'data')
+      const response = await axios.post(adminEndpoint.resendOtpToEmail, data);
+      console.log(response, 'response for resent otp')
+      const {message, success} = response.data;
+      setMessage(message);
+      if(success){
+          setIsLoading(false)
+          setOtpCountDown(100);
+      }else{
+        setIsLoading(false)
+        setMessage(message);
+        console.log(message,'not success')
+      }
+    }
   };
 
   return (
     <div className="min-h-screen w-full bg-slate-400 flex items-center justify-center">
+      {isLoading && <Loader/>}
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto">
         <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">
           OTP Verification

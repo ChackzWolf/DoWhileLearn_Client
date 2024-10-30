@@ -93,6 +93,7 @@ function CourseDetails() {
             courseLevel: response.data.courseData.courseLevel,
             demoURL: response.data.courseData.demoURL,
             courseId: response.data.courseData._id,
+            tutorId:response.data.courseData.tutorId
           };
 
           setCourseData(theCourseData);

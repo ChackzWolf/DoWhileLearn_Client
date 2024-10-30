@@ -11,6 +11,7 @@ export const userEndpoint = {
     fetchCourseDetails: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/fetchCourseDetails`,
     setNewPassword: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/setNewPassword`,
     sendOtpToEmail:`${import.meta.env.VITE_API_GATEWAY_BASE_URL}/sendOtpToEmail`,
+    resendOtpToEmail: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/resendOtpToEmail`,
     resetPasswordOTP: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/resetPasswordOTP`,
     updatePassword: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updatePassword`,
 } 

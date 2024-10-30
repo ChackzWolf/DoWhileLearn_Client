@@ -1,6 +1,7 @@
 
 
 export interface ICreateCourse1 {
+    tutorId?:string
     thumbnail: string;
     courseTitle: string;
     courseDescription: string;
