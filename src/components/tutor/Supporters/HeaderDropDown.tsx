@@ -4,6 +4,7 @@ import { removeCookie } from '../../../../src/utils/cookieManager';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setTutorDataEmpty } from '../../../redux/tutorSlice/tutorSlice';
+import { NavLink } from 'react-router-dom';
 
 const HeaderDropdown: React.FC = () => {
     const navigate = useNavigate()
@@ -32,8 +33,11 @@ const HeaderDropdown: React.FC = () => {
         <div className={`absolute  right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50 transition-all duration-1000 transform ${
             isOpen ? 'right-1 opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
           }`}>
-          <ul>
+            <div className='w-full py-2'>
+              <NavLink key="/tutor" to="/tutor/profile" className="px-4 py-2 hover:bg-gray-100 cursor-pointer block">Profile</NavLink>
+            </div>
 
+          <ul>
             <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>Logout</li>
           </ul>
         </div>

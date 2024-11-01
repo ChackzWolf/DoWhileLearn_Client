@@ -13,4 +13,5 @@ export const tutorEndpoint = {
     uploadImage: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/uploadImage`,
     uploadPDF: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/uploadPDF`,
     registerDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/registerDetails`,
+    fetchTutorDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchTutorDetails`,
 } 
