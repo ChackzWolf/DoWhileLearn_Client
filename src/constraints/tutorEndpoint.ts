@@ -5,7 +5,7 @@ export const tutorEndpoint = {
     verifyOTP: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/verifyOTP`,
     resendOTP: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/resendOTP`,
     loginTutor: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/login`,
-    fetchTutorCourse: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchTutroCourse`,
+    fetchTutorCourse: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchTutorCourse`,
     sendOtpToEmail:`${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/sendOtpToEmail`,
     resendOtpToEmail: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/resendOtpToEmail`,
     resetPasswordOTP: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/resetPasswordOTP`,
@@ -14,4 +14,5 @@ export const tutorEndpoint = {
     uploadPDF: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/uploadPDF`,
     registerDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/registerDetails`,
     fetchTutorDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchTutorDetails`,
+    updateTutorDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/updateTutorDetails`,
 } 

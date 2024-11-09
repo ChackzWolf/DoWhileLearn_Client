@@ -21,6 +21,7 @@ import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import Loader from "../../../common/icons/loader";
+import Spinner from "../../../common/icons/Spinner";
 
 const validationSchema = Yup.object().shape({
   Modules: Yup.array()
@@ -50,6 +51,8 @@ const AddLesson = () => {
   const modules = useSelector(
     (state: RootState) => state.createCourseData.addLessons
   );
+  const [isVideoLoading,setIsVideoLoading] = useState<[number|null,number|null][]>([[null,null]]);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrls, setPreviewUrls] = useState<{
     [moduleIndex: number]: { [lessonIndex: number]: string };
@@ -61,10 +64,18 @@ const AddLesson = () => {
     [moduleIndex: number]: number | null;
   }>({});
 
-  const handleVideoUpload = async (videoFile: File) => {
+  const handleVideoUpload = async (videoFile: File, moduleIndex:number ,lessonIndex:number) => {
+    console.log('moduleIndex', moduleIndex);
+    console.log('lessonIndex', lessonIndex)
+    const updateIsVideoLoading = [...isVideoLoading]; // Make a shallow copy of the array
+    updateIsVideoLoading.push([moduleIndex, lessonIndex]); // Add the new item
+    console.log(updateIsVideoLoading, 1);
+    setIsVideoLoading(updateIsVideoLoading); // Set the updated state
+    console.log(updateIsVideoLoading, 2);
+
     const formData = new FormData();
     formData.append("videoBinary", videoFile);
-
+    console.log(isVideoLoading,'isvideoupload')
     try {
       const response = await axios.post(courseEndpoint.uploadVideo, formData, {
         headers: {
@@ -76,8 +87,13 @@ const AddLesson = () => {
       return response.data.s3Url;
     } catch (error) {
       console.log(error, "errorrorororororo");
+    }finally{
+      const updatedIsVideoLoading = isVideoLoading.filter(subArray => JSON.stringify(subArray) !== JSON.stringify([moduleIndex,lessonIndex]));
+      setIsVideoLoading(updatedIsVideoLoading)
     }
   };
+
+
   const handleFileChange =
     (
       moduleIndex: number,
@@ -90,7 +106,7 @@ const AddLesson = () => {
         try {
           console.log("started HandleFileChange");
           // Upload video and get the URL
-          const videoUrl = await handleVideoUpload(file);
+          const videoUrl = await handleVideoUpload(file,moduleIndex,lessonIndex);
           setPreviewUrls((prevUrls) => ({
             ...prevUrls,
             [moduleIndex]: {
@@ -306,7 +322,7 @@ const AddLesson = () => {
                                           >
                                             <div className="flex flex-col gap-2 mt-4">
                                               <div className="flex flex-col lg:flex-row justify-between">
-                                                <div className="w-full lg:w-1/2 mb-4 lg:mb-0">
+                                                <div className="w-full lg:w-1/2 mb-4 lg:mb-0 flex flex-col justify-center">
                                                   <div className="flex flex-col gap-1">
                                                     <label className="text-sm font-medium text-gray-700">
                                                       Lesson Title
@@ -344,11 +360,11 @@ const AddLesson = () => {
                                                 </div>
 
                                                 <div className="flex flex-col gap-1 w-full lg:w-1/2 lg:ml-6">
-                                                  <label className="text-sm font-medium text-gray-700">
-                                                    Upload Video
-                                                  </label>
+                                                <label className="text-sm font-medium text-gray-700">
+                                                Upload Video
+                                                </label>
                                                   <div
-                                                    className="relative w-full h-40 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer"
+                                                    className="relative w-full h-48 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer"
                                                     onClick={handleUploadClick}
                                                   >
                                                     {previewUrls[moduleIndex]?.[
@@ -381,7 +397,13 @@ const AddLesson = () => {
                                                       </video>
                                                     ) : (
                                                       <span className="absolute inset-0 flex items-center w-full justify-center text-gray-500">
-                                                        Upload Video
+                                                          {
+                                                            isVideoLoading.slice(1).some(subArray => 
+                                                              subArray.length === 2 && 
+                                                              subArray[0] === moduleIndex && 
+                                                              subArray[1] === lessonIndex
+                                                            ) ? <Spinner /> : "Upload Video"
+                                                          }
                                                       </span>
                                                     )}
                                                     <input

@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import Loader from "../../common/icons/loader";
+import tutorAxios from "../../../utils/axios/tutorAxios.config";
+import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
+import { getCookie } from "../../../utils/cookieManager";
 
 const TutorProfile = ({ tutor }: { tutor: any }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   console.log(tutor, "tutor data");
   const [formData, setFormData] = useState({
+    tutorId: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -18,8 +24,11 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   });
 
   useEffect(() => {
+    setIsLoading(true)
     if (tutor) {
+      const tutorId = getCookie('tutorId')
       setFormData({
+        tutorId: tutorId ||'',
         firstName: tutor.firstName || "",
         lastName: tutor.lastName || "",
         email: tutor.email || "",
@@ -31,7 +40,9 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
         cv: tutor.cv || "",
         wallet: tutor.wallet || 0,
       });
+      setIsLoading(false)
     }
+  
   }, [tutor]); // Runs when `tutor` changes
   console.log(formData, "frum data");
   const handleEditClick = () => setIsEditing(!isEditing);
@@ -42,12 +53,24 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   };
 
   const handleSave = () => {
+    setIsLoading(true)
+    const response:any = tutorAxios.post(tutorEndpoint.updateTutorDetails,formData);
+    if(response){
+       console.log(response, 'this is response.');
+       setMessage(response?.message)
+    }
+    
     // Implement save functionality here (e.g., send updated data to server)
     setIsEditing(false);
+    setIsLoading(false);
   };
 
   return (
     <>
+    {message && <div className="flex justify-center items-center text-center w-full">
+                    <h1 className="text-[#7C24F0]">{message}</h1>
+                </div>}
+    
       {formData.firstName ? (
         <div className="max-w-4xl mx-auto my-10 bg-white rounded-lg shadow-md p-8">
           <div className="flex items-center gap-5 w-full">
@@ -68,7 +91,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
                 </h1>
                 <button
                   onClick={handleEditClick}
-                  className="text-blue-600 hover:underline"
+                  className="text-[#7C24F0] hover:underline"
                 >
                   {isEditing ? "Cancel" : "Edit Profile"}
                 </button>
@@ -94,7 +117,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
           <form className="space-y-4">
             <div>
               <label className="block text-gray-600">Email:</label>
-              {isEditing ? (
+              {/* {isEditing ? (
                 <input
                   type="email"
                   name="email"
@@ -102,9 +125,9 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border rounded"
                 />
-              ) : (
+              ) : ( */}
                 <p>{formData.email}</p>
-              )}
+              {/* )} */}
             </div>
 
             <div>
@@ -162,7 +185,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
                 <button
                   type="button"
                   onClick={handleSave}
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-[#7C24F0] text-white px-4 py-2 rounded hover:bg-[#6211cd]"
                 >
                   Save Changes
                 </button>

@@ -28,7 +28,7 @@ const handleSubmit = async() => {
     try{
         setIsLoading(true)
         const data = {
-          tutorId: getCookie('userId'),
+          tutorId: getCookie('tutorId'),
           ...courseData,  // Spread the courseData object
           benefits_prerequisites: {
             ...benifits_prerequisites  // Include benefits and prerequisites

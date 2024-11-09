@@ -4,6 +4,8 @@ import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
 import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
+import axios from "axios";
+import Loader from "../../common/icons/loader";
 
 
 export interface ResponseFetchCourseList {
@@ -40,17 +42,20 @@ export interface Lesson {
 
 function Course() {
   const navigate = useNavigate()
-  const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const [courses, setCourses] = useState<Course[] >([]);
   const itemsPerPage = 12;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(courses.length / itemsPerPage);
+
   useEffect(() => {
       const fetchCourses = async () => {
         try {
+          setIsLoading(true)
           console.log('trig')
           const tutorId:string | null = await getCookie('tutorId')
           if(tutorId){
-            const response = await tutorAxios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId }, withCredentials:true });
+            const response = await axios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId }, withCredentials:true });
             console.log(response,'fetched course')
             setCourses(response.data.courses); // Access the 'courses' property from the response
           }
@@ -58,6 +63,8 @@ function Course() {
         } catch (error) {
           if(!handleBlockedTutor(error)) console.error("Error fetching course data:", error);
           else handleBlockedTutor(error)
+        }finally{
+          setIsLoading(false)
         }
       };
   
@@ -84,12 +91,13 @@ function Course() {
     };
 
   console.log(courses,'courses form outside')
-  return (
+  return !isLoading ? (
+    
     <div className="w-full h-screen bg-white p-8">
       <div className="mx-10">
       <h1 className="text-3xl font-semibold m-5">Courses</h1>
 
-      {currentCourses.length !== 0 ? (
+      {courses.length !== 0 ? (
       <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden m-2">
         <thead>
           <tr>
@@ -156,7 +164,7 @@ function Course() {
                   </div>)}
       </div>
     </div>
-  )
+  ): <><Loader/></>
 }
 
 export default Course

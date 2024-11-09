@@ -251,16 +251,18 @@ function CourseDetails() {
             <h1 className="flex text-center items-center gap-2 text-sm pb-3 p-2">
               <IoCheckmarkDoneOutline /> {courseData?.courseLevel} level
             </h1>
-            <div className="w-full flex justify-between p-5">
+            <div className="w-full flex justify-between p-1">
               <div>
-                <h1 className="font-semibold py-2">
+                <h1 className="font-semibold my-4">
                   What will you get from this course?
                 </h1>
                 <ul>
                   {benefits_prerequisites?.benefits.map((benifits) => (
-                    <li className="flex text-center items-center gap-2 text-sm px-2 pb-1">
-                      <IoCheckmarkDoneOutline /> {benifits}
-                    </li>
+                    <div className='flex'> <IoCheckmarkDoneOutline className="text-xl"/> 
+                      <li className="flex items-center gap-2 text-sm px-2 pb-3 text-left">
+                        {benifits}
+                      </li>
+                    </div>
                   ))}
                 </ul>
               </div>
