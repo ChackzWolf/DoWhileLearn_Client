@@ -3,6 +3,7 @@ import Loader from "../../common/icons/loader";
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
+import axios from "axios";
 
 const TutorProfile = ({ tutor }: { tutor: any }) => {
   const [isEditing, setIsEditing] = useState(false);

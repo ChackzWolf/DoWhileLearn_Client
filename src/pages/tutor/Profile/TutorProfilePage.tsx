@@ -4,13 +4,14 @@ import tutorAxios from '../../../utils/axios/tutorAxios.config'
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint'
 import { getCookie } from '../../../utils/cookieManager'
 import Header from '../../../components/tutor/Layout/Header'
+import axios from 'axios'
 
 function TutorProfilePage() {
     const tutorId = getCookie('tutorId')
     const [data, setData] = useState({});
     useEffect(()=>{
         const fetchTutorDetails = async()=>{
-            const response = await tutorAxios.get(tutorEndpoint.fetchTutorDetails,{
+            const response = await axios.get(tutorEndpoint.fetchTutorDetails,{
                 params: { tutorId }, withCredentials:true
               })
               console.log(response.data.tutorData, '/////////////response from fetching tutor details')

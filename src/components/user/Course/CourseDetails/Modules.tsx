@@ -36,9 +36,9 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
         <div key={moduleIndex} className="mb-4 border rounded-lg shadow-md">
           <button
             onClick={() => toggleModule(moduleIndex)}
-            className="w-full flex justify-between items-center text-left text-xl font-bold bg-gray-200 hover:bg-gray-300 p-2 px-6 rounded-md"
-          >
-            {`Module - ${moduleIndex+1} : `}{ module.name}
+            className="w-full flex justify-between items-center text-left text-sm font-semibold bg-gray-200 hover:bg-gray-300 p-2 px-6 rounded-md items-start"
+          > <p className=" font-bold">{`Module - ${moduleIndex+1} : `}</p>
+            { module.name}
             <span
               className={`transform transition-transform duration-300 mx-2 text-2xl ${
                 openModuleIndex === moduleIndex ? "rotate-180" : ""
@@ -55,7 +55,7 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
             }`}
           >
             <div className="mt-2 px-4">
-              <p className="mb-4">{module.description}</p>
+              <p className="mb-4 text-sm m-5">{module.description}</p>
               {module.lessons.map((lesson, lessonIndex) => (
       
                 <LessonAccordion
@@ -86,9 +86,9 @@ const LessonAccordion: React.FC<{
       
       <button
         onClick={onToggle}
-        className="w-full text-left font-medium bg-gray-200 hover:bg-gray-300 p-2 rounded-md "
+        className="w-full text-left font-bold bg-gray-200 hover:bg-gray-300 p-2 rounded-md text-sm flex "
       >
-      {`Lession-${index} : ${lesson.title}`} 
+      {`Lession-${index} :`}  <p className="font-medium px-5">{lesson.title}</p>
       </button>
 
       {/* Transition for lesson collapse */}
@@ -99,8 +99,8 @@ const LessonAccordion: React.FC<{
       >
         {isOpen && (
           <div className="mt-2 p-2 border rounded-md bg-gray-50 flex justify-between">
-            <div className="w-1/2">
-              <p className="mb-2">{lesson.description}</p>
+            <div className="">
+              <p className="text-sm mx-6">{lesson.description}</p>
             </div>
 
             {/* Uncomment this if you want to add video preview */}

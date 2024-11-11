@@ -59,10 +59,11 @@ function LoginModal() {
         try {
             setIsLoading(true)
             const response = await axios.post(tutorEndpoint.loginTutor, value);
-            console.log(response.data,'dkkkkkkkkkddd')
-            const {success, accessToken, refreshToken ,status ,tutorId, tutorData} = response.data;
-            console.log(status)
-
+            console.log(response.data,'Response')
+            const success= response.data.success;
+                if(success){
+                const { accessToken, refreshToken ,status ,tutorId, tutorData} = response.data;
+                console.log(status)
                 const data = {
                   _id: tutorId,
                   firstName: tutorData.firstName,
@@ -80,7 +81,7 @@ function LoginModal() {
             //   console.log("Tutor after dispatch:", useSelector((state: RootState) => state.tutorData));
 
             console.log(data,'data')
-            if(success){
+            
                 console.log(tutorData)
                 setCookie('tutorAccessToken', accessToken, 0.01);
                 console.log("setCookie")
@@ -91,7 +92,7 @@ function LoginModal() {
                 dispatch(setTutorLogin())
                 navigate('/tutor');
             }else{
-                console.log('reached eher')
+                console.log(response.data.message,'reached eher')
                 setMessage(response.data.message);
             }
         } catch (error:any) {

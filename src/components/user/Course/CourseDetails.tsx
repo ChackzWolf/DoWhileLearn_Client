@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
 import Loader from "../../../components/common/icons/loader";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCookie } from "../../../utils/cookieManager";
+import { getCookie, removeCookie } from "../../../utils/cookieManager";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { userEndpoint } from "../../../constraints/userEndpoints";
 import { BsFillCartCheckFill, BsCart } from "react-icons/bs";
@@ -153,6 +153,9 @@ function CourseDetails() {
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
       const userId = getCookie("userId");
       if (!userId) {
+        removeCookie('userId');
+        removeCookie('userAccessToken');
+        removeCookie('userRefreshToken');
         navigate("/login/user");
         return;
       }
@@ -170,6 +173,7 @@ function CourseDetails() {
       };
 
       // payement API be completed
+      console.log('calling')
       const response = await userAxios.post(userEndpoint.makePayment, data,{withCredentials:true});
       console.log("hayyyy stripe", response.data);
       if(response.data.message == 'user blocked'){
@@ -239,30 +243,30 @@ function CourseDetails() {
         <div className="p-16 w-3/4 ">
           <div className="flex justify-between">
             <div className="">
-              <h1 className=" font-extrabold text-3xl">
+              <h1 className=" font-extrabold text-2xl">
                 {courseData?.courseTitle}
               </h1>
-              <h1 className=" text-lg py-3 p-2">
+              <h1 className=" text-sm py-3 p-2">
                 {courseData?.courseDescription}
               </h1>
             </div>
           </div>
           <div className="flex flex-col ">
             <h1 className="flex text-center items-center gap-2 text-sm pb-3 p-2">
-              <IoCheckmarkDoneOutline /> {courseData?.courseLevel} level
+              <IoCheckmarkDoneOutline className="text-lg" /> {courseData?.courseLevel} level
             </h1>
-            <div className="w-full flex justify-between p-1">
+            <div className="w-full flex flex-col justify-between p-1">
               <div>
                 <h1 className="font-semibold my-4">
                   What will you get from this course?
                 </h1>
                 <ul>
                   {benefits_prerequisites?.benefits.map((benifits) => (
-                    <div className='flex'> <IoCheckmarkDoneOutline className="text-xl"/> 
+                    
                       <li className="flex items-center gap-2 text-sm px-2 pb-3 text-left">
-                        {benifits}
+                      <IoCheckmarkDoneOutline className="text-lg"/> {benifits}
                       </li>
-                    </div>
+                    
                   ))}
                 </ul>
               </div>
@@ -273,8 +277,8 @@ function CourseDetails() {
                 <ul>
                   {benefits_prerequisites?.prerequisites.map(
                     (prerequisites) => (
-                      <li className="flex text-center items-center gap-2 text-sm px-2 pb-1">
-                        <IoCheckmarkDoneOutline /> {prerequisites}
+                      <li className="flex items-center gap-2 text-sm px-2 pb-3 text-left">
+                        <IoCheckmarkDoneOutline className="text-lg" /> {prerequisites}
                       </li>
                     )
                   )}
@@ -287,11 +291,12 @@ function CourseDetails() {
         </div>
         <div className="w-1/3 h-64 sticky top-36">
           <div className="relative w-full h-full md:h-40 lg:h-full rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer flex items-center justify-center m-2 self-center">
-            <img
-              src={courseData?.thumbnail}
-              alt="Thumbnail Preview"
+          <video
+              src={courseData?.demoURL}
+              controls
               className="w-full h-full object-cover rounded-md"
-            />
+            >Demo video
+            </video>
           </div>
 
           <div className="h-full px-5">

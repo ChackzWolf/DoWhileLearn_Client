@@ -55,7 +55,7 @@ function Course() {
           console.log('trig')
           const tutorId:string | null = await getCookie('tutorId')
           if(tutorId){
-            const response = await axios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId }, withCredentials:true });
+            const response = await tutorAxios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId }, withCredentials:true });
             console.log(response,'fetched course')
             setCourses(response.data.courses); // Access the 'courses' property from the response
           }

@@ -4,6 +4,7 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
+
     extend: {
       keyframes: {
         'scale-up': {
@@ -12,12 +13,22 @@ export default {
           '100%': { transform: 'scale(1)', opacity: '1' }
         }
       },
+      "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
       animation: {
-        'scale-up': 'scale-up 0.5s'
+        'scale-up': 'scale-up 0.5s',
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       }
     },
   },
-  plugins: [
+  plugins: [require("tailwindcss-animate"),
     function({ addBase, theme }) {
       addBase({
         '::-webkit-scrollbar': {

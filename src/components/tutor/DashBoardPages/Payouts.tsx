@@ -3,43 +3,14 @@ import axios from "axios";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
+import tutorAxios from "../../../utils/axios/tutorAxios.config";
 
 
-export interface ResponseFetchCourseList {
-  courses: Course[];
-}
-export interface Course {
-  _id:string,
-  courseCategory: string;
-  courseDescription: string;
-  courseLevel: string;
-  coursePrice: string;
-  courseTitle: string;
-  demoURL: string;
-  discountPrice: string;
-  thumbnail: string;
-  benefits_prerequisites: BenefitsPrerequisites;
-  Modules: Module[];
-}
-export interface BenefitsPrerequisites {
-  benefits: string[];
-  prerequisites: string[];
-}
-export interface Module {
-  name: string;
-  description: string;
-  lessons: Lesson[];
-}
-export interface Lesson {
-  title: string;
-  video: string;
-  description: string;
-}
 
 
 function Payouts() {
   const navigate = useNavigate()
-  const [payouts, setPayouts] = useState<Course[]>([]);
+  const [payouts, setPayouts] = useState<any[]>([]);
   const itemsPerPage = 12;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(payouts.length / itemsPerPage);
@@ -47,10 +18,12 @@ function Payouts() {
   useEffect(() => {
       const fetchCourses = async () => {
         try {
-          const tutorId:string | null = await getCookie('userId')
+          const tutorId:string | null = await getCookie('tutorId');
           if(tutorId){
-            const response = await axios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId } });
-            setPayouts(response.data.courses); // Access the 'courses' property from the response
+            console.log('tutorId: ',tutorId)
+            const response = await tutorAxios.get(tutorEndpoint.fetchOrdersOfTutor, {params: { tutorId }, withCredentials:true });
+            console.log(response.data, 'resposne .data')
+            setPayouts(response.data.orderData); // Access the 'courses' property from the response
           }
 
         } catch (error) {
@@ -103,10 +76,10 @@ function Payouts() {
               <img src={payout.thumbnail} alt="" className="w-10 rounded-md mt-4" />
               </div>
               
-              <td className="border border-gray-300 p-2">{payout?.courseTitle}</td>
-            <td className="border border-gray-300 p-2">{payout?.courseLevel}</td>
-            <td className="border border-gray-300 p-2">{payout?.coursePrice}</td>
-            <td className="border border-gray-300 p-2 text-green-500">{payout?.discountPrice}</td>
+              <td className="border border-gray-300 p-2">{payout?.title}</td>
+            <td className="border border-gray-300 p-2">{payout?.adminShare}</td>
+            <td className="border border-gray-300 p-2">{payout?.price}</td>
+            <td className="border border-gray-300 p-2 text-green-500">{payout?.tutorShare}</td>
               <button className= "bg-[#7C24F0] hover:bg-[#6211cd] transition-all rounded-lg px-4 m-2 py-1 text-white" onClick={()=>handleOnClick(payout?._id)}> Detail veiw</button>
             </tr>
           ))}
