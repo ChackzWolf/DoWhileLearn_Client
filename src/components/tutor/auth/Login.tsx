@@ -25,7 +25,7 @@ function LoginModal() {
       setShowPassword(!showPassword);
     };
     const location = useLocation();
-
+   
     useEffect(() => {
       const queryParams = new URLSearchParams(location.search);
       const message = queryParams.get('message');
@@ -36,7 +36,6 @@ function LoginModal() {
         toast.success('Your password has been updated. Please login with your new password.')
       }
     }, [location]);
- 
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Invalid email address').required('Email is required'),

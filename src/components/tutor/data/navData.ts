@@ -6,7 +6,7 @@ import { BsCollectionPlay } from "react-icons/bs";
 
 export const data = [
     {
-        name: 'Users',
+        name: 'Students',
         icon: HiOutlineUsers,
         path:'/tutor/users'
     },

@@ -9,6 +9,7 @@ import {
 } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
+import { TfiArrowCircleDown, TfiArrowCircleUp } from "react-icons/tfi";
 import {
   setEditLesson,
   toNext,
@@ -21,7 +22,7 @@ import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import Loader from "../../../common/icons/loader";
-
+import QuizEditor from "../CreateCourse/AddLessonsComponents/CreateQuestions";
 const validationSchema = Yup.object().shape({
   Modules: Yup.array()
     .of(
@@ -36,6 +37,43 @@ const validationSchema = Yup.object().shape({
               description: Yup.string().required(
                 "Lesson description is required"
               ),
+              questions: Yup.array().of(
+                Yup.object().shape({
+                  id: Yup.number().required(),
+                  type: Yup.string()
+                    .oneOf(["multiple-choice", "coding"])
+                    .required(),
+                  question: Yup.string().required("Question is required"),
+                  options: Yup.array().of(Yup.string()).when("type", {
+                    is: "multiple-choice",
+                    then: (schema) =>
+                      schema.min(2, "At least 2 options are required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  correctAnswer: Yup.number().when("type", {
+                    is: "multiple-choice",
+                    then: (schema) =>
+                      schema.required("Correct answer is required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  startingCode: Yup.string().when("type", {
+                    is: "coding",
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  expectedOutput: Yup.string().when("type", {
+                    is: "coding",
+                    then: (schema) =>
+                      schema.required("Expected output is required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  testCases: Yup.array().of(Yup.string()).when("type", {
+                    is: "coding",
+                    then: (schema) => schema.required(),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                })
+              ),
             })
           )
           .min(1, "At least one lesson is required"),
@@ -43,6 +81,7 @@ const validationSchema = Yup.object().shape({
     )
     .min(1, "At least one module is required"),
 });
+
 
 const AddLesson = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -60,6 +99,10 @@ const AddLesson = () => {
   const [expandedLessonIndex, setExpandedLessonIndex] = useState<{
     [moduleIndex: number]: number | null;
   }>({});
+
+
+  const [quizData, setQuizData] = useState<any[]>([]);
+
 
   const handleVideoUpload = async (videoFile: File) => {
     const formData = new FormData();
@@ -124,6 +167,18 @@ const AddLesson = () => {
         );
       }
     };
+
+    const handleQuizSubmit = (moduleIndex:number, lessonIndex:number, quiz:any[], setFieldValue: (field: string, value: unknown) => void) => {
+      // Update your form values with the quiz data
+      setQuizData(quiz);
+      console.log(quiz, 'question value');
+      setFieldValue(
+        `Modules.${moduleIndex}.lessons.${lessonIndex}.questions`,
+        quiz
+      );
+    };
+
+
 
   const handleUploadClick = () => {
     if (fileInputRef.current) {
@@ -195,20 +250,20 @@ const AddLesson = () => {
                 {({ remove: removeModule, push: pushModule }) => (
                   <>
                     {values.Modules.map((module, moduleIndex: number) => (
-                      <div key={moduleIndex} className="mb-6 rounded-lg ">
+                      <div key={moduleIndex} className="mb-6 rounded-lg">
                         <div className="flex justify-between items-center px-4 py-2 bg-[#DDB3FF] text-white rounded-t-lg">
                           <span className="font-medium">
                             Module {moduleIndex + 1}
                           </span>
                           <button
                             type="button"
-                            className="p-2 rounded-full bg-white text-[#7C24F0] hover:bg-gray-100 transition"
+                            className="transition-all p-2 rounded-full  text-[#7C24F0] hover:shadow-purple-600 font-extrabold hover:scale-110 text-2xl"
                             onClick={() => toggleModule(moduleIndex)}
                           >
                             {expandedModuleIndex === moduleIndex ? (
-                              <FiX size={20} />
+                              <TfiArrowCircleUp/>
                             ) : (
-                              <FiPlus size={20} />
+                              <TfiArrowCircleDown/>
                             )}
                           </button>
                         </div>
@@ -277,7 +332,7 @@ const AddLesson = () => {
                                             </span>
                                             <button
                                               type="button"
-                                              className="p-2 rounded-full bg-white text-[#7C24F0] hover:bg-gray-100 transition"
+                                              className="transition-all p-2 rounded-full bg-white text-[#7C24F0] hover:bg-gray-100 hover:scale-110"
                                               onClick={() =>
                                                 toggleLesson(
                                                   moduleIndex,
@@ -288,9 +343,10 @@ const AddLesson = () => {
                                               {expandedLessonIndex[
                                                 moduleIndex
                                               ] === lessonIndex ? (
-                                                <FiX size={20} />
+                                                <TfiArrowCircleUp size={20} />
+
                                               ) : (
-                                                <FiPlus size={20} />
+                                                <TfiArrowCircleDown size={20}/>
                                               )}
                                             </button>
                                           </div>
@@ -300,13 +356,13 @@ const AddLesson = () => {
                                               expandedLessonIndex[
                                                 moduleIndex
                                               ] === lessonIndex
-                                                ? "max-h-screen opacity-100"
+                                                ? " opacity-100"
                                                 : "max-h-0 opacity-0 overflow-hidden"
                                             }`}
                                           >
-                                            <div className="flex flex-col gap-2 mt-4">
-                                              <div className="flex flex-col lg:flex-row justify-between">
-                                                <div className="w-full lg:w-1/2 mb-4 lg:mb-0">
+                                            <div className="flex flex-col gap-2 mt-4 h-full">
+                                              <div className="flex flex-col lg:flex-row justify-between h-full">
+                                                <div className="w-full lg:w-1/2 mb-4 lg:mb-0 h-full">
                                                   <div className="flex flex-col gap-1">
                                                     <label className="text-sm font-medium text-gray-700">
                                                       Lesson Title
@@ -314,7 +370,7 @@ const AddLesson = () => {
                                                     <Field
                                                       name={`Modules.${moduleIndex}.lessons.${lessonIndex}.title`}
                                                       type="text"
-                                                      className="w-full h-12 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                                                      className="w-full h-full rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
                                                       placeholder="Enter Lesson Title"
                                                     />
                                                     <ErrorMessage
@@ -324,7 +380,7 @@ const AddLesson = () => {
                                                     />
                                                   </div>
 
-                                                  <div className="flex flex-col gap-1 mt-4">
+                                                  <div className="flex flex-col gap-1 mt-4 h-full">
                                                     <label className="text-sm font-medium text-gray-700">
                                                       Lesson Description
                                                     </label>
@@ -332,7 +388,7 @@ const AddLesson = () => {
                                                       as="textarea"
                                                       name={`Modules.${moduleIndex}.lessons.${lessonIndex}.description`}
                                                       rows={3}
-                                                      className="w-full rounded-md text-sm h-24 bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                                                      className="w-full rounded-md text-sm h-full bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
                                                       placeholder="Enter Lesson Description"
                                                     />
                                                     <ErrorMessage
@@ -348,7 +404,7 @@ const AddLesson = () => {
                                                     Upload Video
                                                   </label>
                                                   <div
-                                                    className="relative w-full h-40 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer"
+                                                    className="relative w-full h-full rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer"
                                                     onClick={handleUploadClick}
                                                   >
                                                     {previewUrls[moduleIndex]?.[
@@ -404,7 +460,18 @@ const AddLesson = () => {
                                                     className="text-red-600 text-sm"
                                                   />
                                                 </div>
-                                              </div>
+                                                <div className="flex flex-col lg:flex-row justify-between">
+
+                                              </div>                          
+    
+                                            </div>
+
+                                              <QuizEditor
+                                                moduleIndex={moduleIndex}
+                                                lessonIndex={lessonIndex}
+                                                onQuizChange={handleQuizSubmit}
+                                              />
+                                              
 
                                               <button
                                                 type="button"

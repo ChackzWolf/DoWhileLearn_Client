@@ -3,6 +3,7 @@ import axios from "axios";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
+import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 
 
 export interface ResponseFetchCourseList {
@@ -83,8 +84,9 @@ function Students() {
   console.log(students)
   return (
     <div className="w-full h-screen bg-white p-8">
-      <div className="mx-10">
-        <h1 className="text-3xl font-semibold m-5">Students</h1>
+              <h1 className="text-3xl font-semibold m-5 mx-10">Students</h1>
+
+      <div className="mx-10 flex flex-col justify-center">
         {currentStudents.length !== 0 ?(
 
        
@@ -121,16 +123,14 @@ function Students() {
               </div>
             )}
 
-            {currentStudents.length !== 0 && (
-
-          
-                    <div className="flex justify-center space-x-4 mt-6">
+              {currentStudents.length !== 0 && (
+                <div className="flex justify-center space-x-4 mb-36">
                       <button
                         disabled={currentPage === 1}
                         onClick={() => handlePageChange(currentPage - 1)}
-                        className="px-4 py-2 bg-[#DDB3FF] rounded"
+                        className="px-4 py-2 rounded"
                       >
-                        Previous
+                        <RxDoubleArrowLeft className="text-2xl hover:scale-110 transition-all text-[#7C24F0]" />
                       </button>
 
                       {/* Display page numbers */}
@@ -139,7 +139,7 @@ function Students() {
                           key={pageNumber}
                           onClick={() => handlePageChange(pageNumber)}
                           className={`px-4 py-2 ${
-                            currentPage === pageNumber ? "bg-[#7C24F0] text-white" : "bg-gray-200"
+                            currentPage === pageNumber ? "bg-[#7C24F0] text-white rounded-full" : "bg-white hover:bg-[#DDB3FF] duration-300 transition-all rounded-full"
                           } rounded`}
                         >
                           {pageNumber}
@@ -149,12 +149,11 @@ function Students() {
                       <button
                         disabled={currentPage === totalPages}
                         onClick={() => handlePageChange(currentPage + 1)}
-                        className="px-4 py-2 bg-[#DDB3FF] rounded"
+                        className="px-4 py-2 rounded"
                       >
-                        Next
+                        <RxDoubleArrowRight className="text-2xl hover:scale-110 transition-all text-[#7C24F0]" />
                       </button>
-                  </div>
-                    )}
+                  </div>)}
       </div>
     </div>
   )

@@ -14,13 +14,20 @@ import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
 
 const validationSchema = Yup.object({
-  courseTitle: Yup.string().required("Course name is required"),
+  courseTitle: Yup.string().required("Course name is required")
+                           .max(36, "Course name cannot be more than 36 characters"),
   coursePrice: Yup.string()
-    .matches(/^\d+(\.\d{1,2})?$/, "Price must be a valid number")
-    .required("*required"),
+                  .matches(/^\d+(\.\d{1,2})?$/, "Price must be a valid number")
+                  .required("*required"),
   discountPrice: Yup.string()
-    .matches(/^\d+(\.\d{1,2})?$/, "Discount price must be a valid number")
-    .required("*required"),
+                    .matches(/^\d+(\.\d{1,2})?$/, "Discount price must be a valid number")
+                    .required("*required")
+                    .test("discount-less-than-price", "Discount price cannot be greater than course price",
+                             function (value) {
+                               const { coursePrice } = this.parent;
+                               return parseFloat(value) <= parseFloat(coursePrice);
+                             }
+                           ),
   courseDescription: Yup.string().required("Course description is required"),
   courseCategory: Yup.string().required("*required"),
   courseLevel: Yup.string().required("*required"),

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
 import { GoVideo } from "react-icons/go";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 export interface Module {
@@ -18,8 +19,9 @@ export interface Lesson {
 
 const Modules: React.FC<{
    modules: CreateCourseState | null
-  onVideoSelect: (videoUrl: string) => void; // New prop for video selection
-}> = ({ modules, onVideoSelect }) => {
+  onVideoSelect: (videoUrl: string) => void;
+  onSelectDescription: (description:string) => void ;
+}> = ({ modules, onVideoSelect, onSelectDescription }) => {
   const [openModuleIndex, setOpenModuleIndex] = useState<number | null>(null);
   const [openLessonIndex, setOpenLessonIndex] = useState<{ [key: number]: number | null }>({});
 
@@ -28,73 +30,82 @@ const Modules: React.FC<{
     setOpenLessonIndex({});
   };
 
-  const toggleLesson = (moduleIndex: number, lessonIndex: number, videoUrl: string) => {
+  const toggleLesson = (moduleIndex: number, lessonIndex: number, videoUrl: string, description:string) => {
     setOpenLessonIndex((prev) => ({
       ...prev,
       [moduleIndex]: prev[moduleIndex] === lessonIndex ? null : lessonIndex,
     }));
     onVideoSelect(videoUrl); // Pass the video URL to the parent component
+    onSelectDescription(description)
   };
 
   return (
-    <div className="w-full p-4 overflow-auto">
-      {modules?.Modules.map((module, moduleIndex) => (
-        <div key={moduleIndex} className="mb-4 border rounded-lg shadow-md">
-          <button
-            onClick={() => toggleModule(moduleIndex)}
-            className="w-full flex justify-between items-center text-left text-base font-semibold bg-gray-200 hover:bg-gray-300 p-2 px-6 rounded-md"
+    <motion.div
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.5 }}
+      className="bg-white rounded-2xl shadow-lg p-4 sticky top-16"
+    >
+      <h2 className="text-2xl font-bold mb-6 text-purple-600">Course Content</h2>
+      <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+        {modules?.Modules.map((module, moduleIndex) => (
+          <motion.div
+            key={moduleIndex}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: moduleIndex * 0.1 }}
+            className="border border-gray-200 rounded-xl overflow-hidden"
           >
-            {module.name}
-            <span
-              className={`transform transition-transform duration-300 mx-2 text-2xl ${
-                openModuleIndex === moduleIndex ? "rotate-180" : ""
-              }`}
+            <motion.button
+              whileHover={{ backgroundColor: "#f3f4f6" }}
+              onClick={() => toggleModule(moduleIndex)}
+              className="w-full flex justify-between items-center p-4 bg-white"
             >
-              <IoIosArrowDropdown />
-            </span>
-          </button>
+              <span className="font-medium text-gray-800">{module.name}</span>
+              <motion.span
+                animate={{ rotate: openModuleIndex === moduleIndex ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <IoIosArrowDropdown className="text-purple-600 text-xl" />
+              </motion.span>
+            </motion.button>
 
-          <div
-            className={`transition-all duration-500 ease-in-out overflow-hidden ${
-              openModuleIndex === moduleIndex ? "max-h-screen" : "max-h-0"
-            }`}
-          >
-            <div className="mt-2 px-4">
-              <p className="mb-4">{module.description}</p>
-              {module.lessons.map((lesson, lessonIndex) => (
-                <div key={lessonIndex} className="mb-2">
-                  <button
-                    onClick={() => {
-                      if (typeof lesson.video === "string") {
-                        toggleLesson(moduleIndex, lessonIndex, lesson.video);
-                      } else {
-                        console.log("No video available or invalid video format"); // Handle cases where video is not a string
-                      }
-                    }}
-                    className="w-full text-left font-medium bg-gray-200 hover:bg-gray-300 p-2 rounded-md flex items-center gap-3"
-                  >
-                   <GoVideo className="text-[#7C24F0] text-2xl"/> {lesson.title}
-                  </button>
-
-                  <div
-                    className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                      openLessonIndex[moduleIndex] === lessonIndex ? "max-h-screen" : "max-h-0"
-                    }`}
-                  >
-                    {/* {openLessonIndex[moduleIndex] === lessonIndex && (
-                      <div className="mt-2 p-2 border rounded-md bg-gray-50">
-                        <p className="mb-2">{lesson.description}</p>
-                      </div>
-                    )} */}
+            <AnimatePresence>
+              {openModuleIndex === moduleIndex && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-gray-50"
+                >
+                  <div className="p-4 space-y-2">
+                    {module.lessons.map((lesson, lessonIndex) => (
+                      <motion.button
+                        key={lessonIndex}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => {
+                          if (typeof lesson.video === "string") {
+                            toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description);
+                          }
+                        }}
+                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-white hover:bg-gray-100 transition-colors"
+                      >
+                        <GoVideo className="text-purple-600 text-xl flex-shrink-0" />
+                        <span className="text-left text-gray-700 text-sm">
+                          {lesson.title}
+                        </span>
+                      </motion.button>
+                    ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
   );
 };
-
 export default Modules;

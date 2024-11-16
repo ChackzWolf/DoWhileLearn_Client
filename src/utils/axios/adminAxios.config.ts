@@ -6,6 +6,10 @@ import { getCookie, setCookie, removeCookie } from '../cookieManager';
 const adminAxios = axios.create({
     baseURL: import.meta.env.VITE_API_GATEWAY_BASE_URL,
     timeout: 10000,
+    headers: {
+        "Content-Type": "application/json"
+    },
+    withCredentials:true,
 });
 
 adminAxios.interceptors.request.use(  /////to add JWT token from cookie

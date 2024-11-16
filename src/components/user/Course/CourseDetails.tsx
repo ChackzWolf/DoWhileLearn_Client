@@ -7,7 +7,8 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
-
+import { motion } from 'framer-motion';
+import { FiClock, FiBook, FiAward } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -24,6 +25,7 @@ import PurchasedCourseDetails from "./PurchasedCourseDetails/PurchasedCourseDeta
 import CourseDetailSkeleton from "./Skeletons/CourseDetailsSkeleton";
 import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 import userAxios from "../../../utils/axios/userAxios.config";
+import StudentReviews from "./StudentReview";
 
 interface Module {
   name: string;
@@ -64,6 +66,8 @@ function CourseDetails() {
   const [modules, setModules] =
     useState<CreateCourseState>(initialModulesState);
   // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const { id } = useParams<{ id: string }>();
 
@@ -235,111 +239,195 @@ function CourseDetails() {
     
   };
 
-  if (!isPurchased)
-  
-    return ( courseData ? (
-      <div className=" flex justify-between w-full  gap-4 px-24 mt-16 p-5">
-        {isLoading ? <Loader /> : ""}
-        <div className="p-16 w-3/4 ">
-          <div className="flex justify-between">
-            <div className="">
-              <h1 className=" font-extrabold text-2xl">
-                {courseData?.courseTitle}
-              </h1>
-              <h1 className=" text-sm py-3 p-2">
-                {courseData?.courseDescription}
-              </h1>
-            </div>
-          </div>
-          <div className="flex flex-col ">
-            <h1 className="flex text-center items-center gap-2 text-sm pb-3 p-2">
-              <IoCheckmarkDoneOutline className="text-lg" /> {courseData?.courseLevel} level
-            </h1>
-            <div className="w-full flex flex-col justify-between p-1">
-              <div>
-                <h1 className="font-semibold my-4">
-                  What will you get from this course?
-                </h1>
-                <ul>
-                  {benefits_prerequisites?.benefits.map((benifits) => (
-                    
-                      <li className="flex items-center gap-2 text-sm px-2 pb-3 text-left">
-                      <IoCheckmarkDoneOutline className="text-lg"/> {benifits}
-                      </li>
-                    
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h1 className="font-semibold py-2">
-                  What are the prerequisitest for starting this course?
-                </h1>
-                <ul>
-                  {benefits_prerequisites?.prerequisites.map(
-                    (prerequisites) => (
-                      <li className="flex items-center gap-2 text-sm px-2 pb-3 text-left">
-                        <IoCheckmarkDoneOutline className="text-lg" /> {prerequisites}
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </div>
-            <Modules modules={modules} />
-          </div>
-          <ToastContainer />
-        </div>
-        <div className="w-1/3 h-64 sticky top-36">
-          <div className="relative w-full h-full md:h-40 lg:h-full rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer flex items-center justify-center m-2 self-center">
-          <video
-              src={courseData?.demoURL}
-              controls
-              className="w-full h-full object-cover rounded-md"
-            >Demo video
-            </video>
-          </div>
-
-          <div className="h-full px-5">
-            {courseData?.discountPrice ? (
-              <div className="bottom-0 flex gap-2 pb-3">
-                <h1 className=" rounded-lg font-bold">
-                  Rs. {courseData?.discountPrice}
-                </h1>
-                <h1 className="text-gray-600 line-through text-sm">
-                  Rs. {courseData.coursePrice}
-                </h1>
-              </div>
-            ) : (
-              <div className="bottom-0">
-                <h1 className=" rounded-lg font-bold ">
-                  Rs. {courseData?.coursePrice}
-                </h1>
-              </div>
-            )}
-
-            <div className=" flex w-full gap-3">
-            <button
-  type="button"
-  disabled={isLoading}  // Disable button while loading
-  className={`right-0 bg-[#7C24F0] px-4 py-1 rounded-lg text-white font-semibold hover:bg-[#6211cd] transition-all ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-  onClick={handlePayement}
->
-  {isLoading ? 'Processing...' : 'Buy'}
-              </button>
-              <button
-                className="right-0  px-4 py-1 rounded-lg text-[#7C24F0] font-extrabold text-2xl hover:shadow-[#6211cd] transition-all"
-                onClick={() => handleAddToCart()}
+  if (!isPurchased) {
+    return courseData ? (
+      <div className="min-h-screen bg-gray-50">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+        >
+          {isLoading && <Loader />}
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Course Header */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="bg-white rounded-xl p-6 shadow-sm"
               >
-                {inCart ? <BsFillCartCheckFill /> : <BsCart />}
-              </button>
+                <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                  {courseData.courseTitle}
+                </h1>
+                <p className="text-gray-600 mb-6">
+                  {courseData.courseDescription}
+                </p>
+                
+                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <FiAward className="text-purple-600" />
+                    <span>{courseData.courseLevel} Level</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiBook className="text-purple-600" />
+                    <span>{totalLessons} Lessons</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiClock className="text-purple-600" />
+                    <span>{modules.Modules.length} Modules</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Tabs */}
+              <div className="bg-white rounded-xl shadow-sm">
+                <div className="border-b border-gray-200">
+                  <nav className="flex -mb-px">
+                    {['overview', 'curriculum', 'reviews'].map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`px-6 py-4 text-sm font-medium capitalize ${
+                          activeTab === tab
+                            ? 'border-b-2 border-purple-600 text-purple-600'
+                            : 'text-gray-500 hover:text-gray-700'
+                        }`}
+                      >
+                        {tab}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+
+                <div className="p-6">
+                  {activeTab === 'overview' && (
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="space-y-6"
+                    >
+                      <div>
+                        <h2 className="text-xl font-semibold mb-4">What you'll learn</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {benefits_prerequisites?.benefits.map((benefit, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="flex items-start gap-3"
+                            >
+                              <IoCheckmarkDoneOutline className="text-green-500 text-xl flex-shrink-0 mt-1" />
+                              <span className="text-gray-600">{benefit}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h2 className="text-xl font-semibold mb-4">Prerequisites</h2>
+                        <div className="space-y-3">
+                          {benefits_prerequisites?.prerequisites.map((prerequisite, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="flex items-start gap-3"
+                            >
+                              <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
+                              <span className="text-gray-600">{prerequisite}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) }
+                  {activeTab === 'curriculum' && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <Modules modules={modules} />
+                    </motion.div>
+                  )}
+                  {activeTab === 'reviews' && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <StudentReviews courseId= {courseData.courseId} isPurchased={false}/>
+                    </motion.div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="sticky top-24 bg-white rounded-xl shadow-sm overflow-hidden"
+              >
+                {/* Video Preview */}
+                <div className="aspect-video relative">
+                  <video
+                    src={courseData.demoURL}
+                    controls
+                    className="w-full h-full object-cover"
+                    onPlay={() => setIsVideoPlaying(true)}
+                    onPause={() => setIsVideoPlaying(false)}
+                  />
+                </div>
+
+                {/* Pricing and Actions */}
+                <div className="p-6 space-y-6">
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-3xl font-bold text-gray-900">
+                      ₹{courseData.discountPrice || courseData.coursePrice}
+                    </span>
+                    {courseData.discountPrice && (
+                      <span className="text-xl text-gray-500 line-through">
+                        ₹{courseData.coursePrice}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handlePayement}
+                      disabled={isLoading}
+                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isLoading ? 'Processing...' : 'Enroll Now'}
+                    </button>
+                    <button
+                      onClick={handleAddToCart}
+                      className="p-3 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                    >
+                      {inCart ? (
+                        <BsFillCartCheckFill className="text-2xl" />
+                      ) : (
+                        <BsCart className="text-2xl" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
-        </div>
-      </div>):
-      <CourseDetailSkeleton/>
+        </motion.div>
+        <ToastContainer />
+      </div>
+    ) : (
+      <CourseDetailSkeleton />
     );
+  }
 
-  return <PurchasedCourseDetails/>
-}
+  return <PurchasedCourseDetails />;
+};
 
 export default CourseDetails;

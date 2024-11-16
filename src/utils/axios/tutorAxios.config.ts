@@ -6,6 +6,10 @@ import { getCookie, setCookie, removeCookie } from '../cookieManager';
 const tutorAxios = axios.create({
     baseURL: import.meta.env.VITE_API_GATEWAY_BASE_URL,
     timeout: 10000,
+    headers: {
+        "Content-Type": "application/json"
+    },
+    withCredentials:true,
 });
 
 tutorAxios.interceptors.request.use(  /////to add JWT token from cookie

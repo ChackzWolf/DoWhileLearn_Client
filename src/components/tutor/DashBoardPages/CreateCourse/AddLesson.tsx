@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
+import QuizEditor from "./AddLessonsComponents/CreateQuestions";
 
 const validationSchema = Yup.object().shape({
   Modules: Yup.array()

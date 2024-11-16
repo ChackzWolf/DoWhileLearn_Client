@@ -1,5 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaStar } from "react-icons/fa";
+import { BsStarHalf } from "react-icons/bs";
+
+
 
 interface CourseBadgeProps {
   _id:string;
@@ -11,6 +15,33 @@ interface CourseBadgeProps {
   imageSrc?: string;
   color?: string;
 }
+
+const renderStars = (rating:number) => {
+  const stars = [];
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 !== 0;
+
+  for (let i = 0; i < fullStars; i++) {
+    stars.push(
+      <FaStar key={`star-${i}`} className="text-purple-600" />
+    );
+  }
+
+  if (hasHalfStar) {
+    stars.push(
+      <BsStarHalf key="half-star" className="text-purple-600 " />
+    );
+  }
+
+  const remainingStars = 5 - Math.ceil(rating);
+  for (let i = 0; i < remainingStars; i++) {
+    stars.push(
+      <FaStar key={`empty-star-${i}`} className="text-gray-300" />
+    );
+  }
+
+  return stars;
+};
 
 const CourseBadge: React.FC<CourseBadgeProps> = ({
   _id,
@@ -43,7 +74,7 @@ const CourseBadge: React.FC<CourseBadgeProps> = ({
         )}
       </div>
       <div className='w-full'>
-            <h2 className="text-md font-bold text-gray-800" >{title}</h2>
+            <h2 className="text-md font-bold text-gray-800 line-clamp-2" >{title}</h2>
             <p className="text-xs font-medium text-gray-500  line-clamp-3 mt-1"  >{description}</p>
       </div>
       <div className="flex justify-between w-full mt-auto">
@@ -64,9 +95,9 @@ const CourseBadge: React.FC<CourseBadgeProps> = ({
           )}
         </div>
         <div className="flex items-center mt-2">
-          <span className="text-yellow-400 text-xs">
-            {'⭐'.repeat(rating)} {/* Display stars based on rating */}
-          </span>
+          
+            {renderStars(rating)}
+     
         </div>
       </div>
     </div>

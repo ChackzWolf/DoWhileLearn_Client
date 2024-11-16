@@ -6,6 +6,10 @@ import { setTutorLogout } from '../../redux/authSlice/authSlice';
 const userAxios = axios.create({
     baseURL: import.meta.env.VITE_API_GATEWAY_BASE_URL,
     timeout: 10000,
+    headers: {
+        "Content-Type": "application/json"
+            },
+    withCredentials:true,
 });
 
 userAxios.interceptors.request.use(  /////to add JWT token from cookie

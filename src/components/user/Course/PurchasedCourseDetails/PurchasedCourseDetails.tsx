@@ -8,7 +8,7 @@ import {
 } from "../../../../components/Interfaces/CourseInterface/ICreateCourse";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
-
+import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
@@ -18,6 +18,9 @@ import { getCookie } from "../../../../utils/cookieManager";
 import { Module } from "module";
 import userAxios from "../../../../utils/axios/userAxios.config";
 import { userEndpoint } from "../../../../constraints/userEndpoints";
+import { FaStar, FaUserCircle } from "react-icons/fa";
+import { BsStarHalf } from "react-icons/bs";
+import StudentReviews from "../StudentReview";
 
 interface Module {
     name: string;
@@ -43,6 +46,86 @@ interface Module {
   };
   
   function CoursePurchasedCourseDetailsDetails() {
+
+
+
+
+    const [reviews,setReviews] = useState([
+      {
+        id: 1,
+        name: "Alex Thompson",
+        rating: 5,
+        date: "2024-03-15",
+        comment: "This course exceeded my expectations! The content is well-structured and the instructor explains complex concepts in a very understandable way.",
+        helpful: 24,
+        profilePic: null
+      },
+      {
+        id: 2,
+        name: "Sarah Chen",
+        rating: 4.5,
+        date: "2024-03-10",
+        comment: "Great course overall. The practical examples really helped solidify the concepts. Would highly recommend for beginners.",
+        helpful: 18,
+        profilePic: null
+      },
+      {
+        id: 3,
+        name: "Michael Rodriguez",
+        rating: 5,
+        date: "2024-03-05",
+        comment: "The course content is up-to-date and relevant. The instructor's teaching style is engaging and the exercises are challenging but rewarding.",
+        helpful: 15,
+        profilePic: null
+      }
+    ]);
+  
+    // Function to render stars based on rating
+    const renderStars = (rating:any) => {
+      const stars = [];
+      const fullStars = Math.floor(rating);
+      const hasHalfStar = rating % 1 !== 0;
+  
+      for (let i = 0; i < fullStars; i++) {
+        stars.push(
+          <FaStar key={`star-${i}`} className="text-yellow-400" />
+        );
+      }
+  
+      if (hasHalfStar) {
+        stars.push(
+          <BsStarHalf key="half-star" className="text-yellow-400" />
+        );
+      }
+  
+      const remainingStars = 5 - Math.ceil(rating);
+      for (let i = 0; i < remainingStars; i++) {
+        stars.push(
+          <FaStar key={`empty-star-${i}`} className="text-gray-300" />
+        );
+      }
+  
+      return stars;
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const [activeTab, setActiveTab] = useState('overview');
     const [isLoading, setIsLoading] = useState(false);
     const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
     const [tutorId, setTutorId] = useState();
@@ -111,13 +194,17 @@ interface Module {
               },
               0
             ); // Initialize accumulator as 0
-  
-            console.log(modulesLength);
-            console.log(totalLessonsCount);
+            console.log(courseData, "courseData");
+           
+ 
+       
+            
+            // console.log(modulesLength);
+            // console.log(totalLessonsCount);
   
             setModules(createCourseState);
             setTotalLessons(totalLessonsCount);
-            console.log(courseData, "courseData");
+            
   
             setIsLoading(false);
           } catch (error) {
@@ -136,90 +223,204 @@ interface Module {
 
 
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
-
+  const [selectedVideoDescription, setSelectedVideoDescription] = useState<string | null>(null);
 
   return (
-    <div className="flex justify-between w-full gap-4  p-5">
-      <div className="p-16 w-full">
-        <div className="flex justify-between">
-          <div>
-            <h1 className="font-extrabold text-3xl">
-              {courseData?.courseTitle}
-            </h1>
-            <h1 className="text-lg py-3 p-2">{courseData?.courseDescription}</h1>
-          </div>
-        </div>
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100"
+    >
+      <div className="max-w-7xl mx-auto py-8">
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+        >
+          {/* Main Content Column */}
+          <div className="lg:col-span-2 space-y-6">
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-2xl shadow-lg p-6"
+            >
+              <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
+                {courseData?.courseTitle}
+              </h1>
+              <p className="mt-4 text-gray-600 leading-relaxed">
+                {courseData?.courseDescription}
+              </p>
+            </motion.div>
 
-        <div className="flex justify-between">
-          <div>
-            {/* Render video if selected, otherwise render image */}
-            {selectedVideo ? (
-              <video
-                src={selectedVideo}
-                controls
-                className="w-full h-80 object-cover rounded-md"
-              >
-                Your browser does not support the video tag.
-              </video>
-            ) : (
-              <img
-                src={courseData?.thumbnail}
-                alt="Thumbnail Preview"
-                className="w-full h-80 object-cover rounded-md"
-              />
-            )}
-
-            <h1 className="flex text-center items-center gap-2 text-sm pb-3 p-2">
-              <IoCheckmarkDoneOutline /> {courseData?.courseLevel} level
-            </h1>
-
-            <div className="w-full flex justify-between p-5">
-              <div>
-                <h1 className="font-semibold py-2">
-                  What will you get from this course?
-                </h1>
-                <ul>
-                  {benefits_prerequisites?.benefits.map((benefit:any, index:number) => (
-                    <li
-                      key={index}
-                      className="flex text-center items-center gap-2 text-sm px-2 pb-1"
-                    >
-                      <IoCheckmarkDoneOutline /> {benefit}
-                    </li>
-                  ))}
-                </ul>
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="relative rounded-2xl overflow-hidden shadow-lg"
+            >
+              {selectedVideo ? (
+                <video
+                  src={selectedVideo}
+                  controls
+                  className="w-full aspect-video object-cover"
+                />
+              ) : (
+                <video
+                  src={courseData?.demoURL}
+                  controls
+                  className="w-full aspect-video object-cover"
+                />
+              )}
+          
+            </motion.div>
+                { selectedVideo && 
+              <div className="">
+                <div className="border-b border-gray-200 m-5">
+                  <h1 className="text-gray-600">Description:</h1>
+                  <h1 className="text-gray-600 m-2">{selectedVideoDescription}</h1>
+                </div>
               </div>
-
-              <div>
-                <h1 className="font-semibold py-2">
-                  What are the prerequisites for starting this course?
-                </h1>
-                <ul>
-                  {benefits_prerequisites?.prerequisites.map(
-                    (prerequisite:any, index:number) => (
-                      <li
-                        key={index}
-                        className="flex text-center items-center gap-2 text-sm px-2 pb-1"
+                  }
+            {/* Tabs */}
+            <div className="bg-white rounded-xl shadow-sm">
+              <div className="border-b border-gray-200">
+                  <nav className="flex -mb-px">
+                    {['overview', 'reviews'].map((tab) => (
+                      <button
+                        key={tab}
+                        onClick={() => setActiveTab(tab)}
+                        className={`px-6 py-4 text-sm font-medium capitalize ${
+                          activeTab === tab
+                            ? 'border-b-2 border-purple-600 text-purple-600'
+                            : 'text-gray-500 hover:text-gray-700'
+                        }`}
                       >
-                        <IoCheckmarkDoneOutline /> {prerequisite}
-                      </li>
-                    )
+                        {tab}
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+
+              <div className="p-6">
+                  {activeTab === 'overview' && (
+                    <motion.div 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="space-y-6"
+                    >
+                      <div>
+                        <h2 className="text-xl text-purple-600  font-semibold mb-4">What you'll learn</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {benefits_prerequisites?.benefits.map((benefit, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="flex items-start gap-3"
+                            >
+                              <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
+                              <span className="text-gray-600">{benefit}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h2 className="text-xl text-purple-600  font-semibold mb-4">Prerequisites</h2>
+                        <div className="space-y-3">
+                          {benefits_prerequisites?.prerequisites.map((prerequisite, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="flex items-start gap-3"
+                            >
+                              <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
+                              <span className="text-gray-600">{prerequisite}</span>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) }
+                  {activeTab === 'reviews' && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      <StudentReviews courseId={courseData?.courseId} isPurchased={true}/>
+                    </motion.div>
                   )}
-                </ul>
-              </div>
+                </div>
             </div>
+
+
+
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="grid md:grid-cols-2 gap-6"
+            >
+              {/* Benefits Section */}
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-xl font-semibold mb-4 text-purple-600">
+                  What you'll learn
+                </h2>
+                <motion.ul className="space-y-3">
+                  {benefits_prerequisites?.benefits.map((benefit, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center gap-3 text-gray-700"
+                    >
+                      <IoCheckmarkDoneOutline className="text-green-500 flex-shrink-0" />
+                      <span>{benefit}</span>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </div>
+
+            
+              {/* Prerequisites Section */}
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-xl font-semibold mb-4 text-purple-600">
+                  Prerequisites
+                </h2>
+                <motion.ul className="space-y-3">
+                  {benefits_prerequisites?.prerequisites.map((prerequisite, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center gap-3 text-gray-700"
+                    >
+                      <IoCheckmarkDoneOutline className="text-green-500 flex-shrink-0" />
+                      <span>{prerequisite}</span>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              </div>
+            </motion.div>
           </div>
 
-          <div className="flex flex-col w-2/5">
-            {/* Pass setSelectedVideo to Modules */}
-            <Modules modules={modules} onVideoSelect={setSelectedVideo} />
+          {/* Modules Sidebar */}
+          <div className="w-full">
+            <Modules modules={modules} onVideoSelect={setSelectedVideo} onSelectDescription={setSelectedVideoDescription} />
           </div>
-        </div>
-
-        <ToastContainer />
+        </motion.div>
       </div>
-    </div>
+      <ToastContainer />
+    </motion.div>
   );
 };
+
 
 export default CoursePurchasedCourseDetailsDetails;
