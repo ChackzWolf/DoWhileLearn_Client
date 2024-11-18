@@ -25,14 +25,43 @@ export interface CreateCourseState {
       title: string;
       video: File | null | string;  
       description: string;
-      questions?:quesitons
+      questions?:Question[]
     }>;
   }>;
   
 }
 
 
-interface quesitons { question: string; options:{answer:string; correction:boolean}[]}
+// Types
+type MultipleChoiceQuestion = {
+  id: number;
+  type: "QUIZ";
+  question: string;
+  options: string[];
+  correctAnswer: string;
+};
 
+type CodingQuestion = {
+  id: number;
+  type: "CODING";
+  question: string;
+  startingCode: string;
+  noOfParameters: number;
+  parameters: { value: string; dataType: string }[];
+  expectedOutput: TestOutput;
+  testCases: TestCase[];
+};
+
+type TestCase = {
+  parameters: { value: string; dataType: string }[];
+  expectedValue: TestOutput;
+};
+
+type TestOutput = {
+  value: string;
+  dataType: string;
+};
+
+type Question = MultipleChoiceQuestion | CodingQuestion;
 
  

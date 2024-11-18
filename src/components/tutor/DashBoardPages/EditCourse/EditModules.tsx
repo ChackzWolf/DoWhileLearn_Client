@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import Loader from "../../../common/icons/loader";
 import QuizEditor from "../CreateCourse/AddLessonsComponents/CreateQuestions";
-const validationSchema = Yup.object().shape({
+export const validationSchema = Yup.object().shape({
   Modules: Yup.array()
     .of(
       Yup.object().shape({
@@ -34,42 +34,78 @@ const validationSchema = Yup.object().shape({
             Yup.object().shape({
               title: Yup.string().required("Lesson title is required"),
               video: Yup.mixed().required("Video file is required"),
-              description: Yup.string().required(
-                "Lesson description is required"
-              ),
+              description: Yup.string().required("Lesson description is required"),
               questions: Yup.array().of(
                 Yup.object().shape({
-                  id: Yup.number().required(),
+                  id: Yup.number().required("Question ID is required"),
                   type: Yup.string()
-                    .oneOf(["multiple-choice", "coding"])
-                    .required(),
+                    .oneOf(["QUIZ", "CODING"], "Type must be 'QUIZ' or 'CODING'")
+                    .required("Question type is required"),
                   question: Yup.string().required("Question is required"),
-                  options: Yup.array().of(Yup.string()).when("type", {
-                    is: "multiple-choice",
+                  // For QUIZ type
+                  options: Yup.array().when("type", {
+                    is: "QUIZ",
                     then: (schema) =>
-                      schema.min(2, "At least 2 options are required"),
+                      schema
+                        .of(Yup.string().required("Option cannot be empty"))
+                        .min(2, "At least 2 options are required"),
                     otherwise: (schema) => schema.notRequired(),
                   }),
-                  correctAnswer: Yup.number().when("type", {
-                    is: "multiple-choice",
-                    then: (schema) =>
-                      schema.required("Correct answer is required"),
+                  correctAnswer: Yup.string().when("type", {
+                    is: "QUIZ",
+                    then: (schema) => schema.required("Correct answer is required"),
                     otherwise: (schema) => schema.notRequired(),
                   }),
+                  // For CODING type
                   startingCode: Yup.string().when("type", {
-                    is: "coding",
-                    then: (schema) => schema.required(),
+                    is: "CODING",
+                    then: (schema) => schema.required("Starting code is required"),
                     otherwise: (schema) => schema.notRequired(),
                   }),
-                  expectedOutput: Yup.string().when("type", {
-                    is: "coding",
+                  noOfParameters: Yup.number().when("type", {
+                    is: "CODING",
+                    then: (schema) => schema.required("Number of parameters is required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  parameters: Yup.array().when("type", {
+                    is: "CODING",
                     then: (schema) =>
-                      schema.required("Expected output is required"),
+                      schema.of(
+                        Yup.object().shape({
+                          value: Yup.string().required("Parameter value is required"),
+                          dataType: Yup.string().required("Parameter data type is required"),
+                        })
+                      ),
                     otherwise: (schema) => schema.notRequired(),
                   }),
-                  testCases: Yup.array().of(Yup.string()).when("type", {
-                    is: "coding",
-                    then: (schema) => schema.required(),
+                  expectedOutput: Yup.object().when("type", {
+                    is: "CODING",
+                    then: (schema) =>
+                      schema.shape({
+                        value: Yup.string().required("Expected output value is required"),
+                        dataType: Yup.string().required("Expected output data type is required"),
+                      }),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  testCases: Yup.array().when("type", {
+                    is: "CODING",
+                    then: (schema) =>
+                      schema
+                        .of(
+                          Yup.object().shape({
+                            parameters: Yup.array().of(
+                              Yup.object().shape({
+                                value: Yup.string().required("Test case parameter value is required"),
+                                dataType: Yup.string().required("Test case parameter data type is required"),
+                              })
+                            ),
+                            expectedValue: Yup.object().shape({
+                              value: Yup.string().required("Expected test case value is required"),
+                              dataType: Yup.string().required("Expected test case data type is required"),
+                            }),
+                          })
+                        )
+                        .min(1, "At least one test case is required"),
                     otherwise: (schema) => schema.notRequired(),
                   }),
                 })
@@ -121,6 +157,7 @@ const AddLesson = () => {
       console.log(error, "errorrorororororo");
     }
   };
+
   const handleFileChange =
     (
       moduleIndex: number,
@@ -168,17 +205,26 @@ const AddLesson = () => {
       }
     };
 
-    const handleQuizSubmit = (moduleIndex:number, lessonIndex:number, quiz:any[], setFieldValue: (field: string, value: unknown) => void) => {
+    const handleQuizSubmit = (
+      moduleIndex: number,
+      lessonIndex: number,
+      quiz: any[], // Type this as per your `Question` type
+      setFieldValue: (field: string, value: unknown) => void,
+      validateForm: (values?: any) => Promise<{ [key: string]: string }> // If you want to validate after setting the field
+    ) => {
       // Update your form values with the quiz data
       setQuizData(quiz);
       console.log(quiz, 'question value');
+      
+      // Setting the form field value for questions
       setFieldValue(
         `Modules.${moduleIndex}.lessons.${lessonIndex}.questions`,
         quiz
       );
+    
+      // Optionally, trigger form validation after setting the value
+      validateForm(); // This can be useful if you need to ensure the new data is validated
     };
-
-
 
   const handleUploadClick = () => {
     if (fileInputRef.current) {
@@ -244,8 +290,21 @@ const AddLesson = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ setFieldValue, values }) => (
-            <Form>
+{({ setFieldValue, values, errors, handleSubmit, isSubmitting }) => (
+  <Form
+    onSubmit={(event) => {
+      event.preventDefault(); // Prevent default form submission
+      console.log("Validation errors:", errors); // Logs validation errors from Formik context
+
+      // If there are validation errors, prevent submission
+      if (Object.keys(errors).length === 0) {
+        handleSubmit(); // Triggers Formik's onSubmit logic if no errors
+      } else {
+        console.log("Form has validation errors. Not submitting.");
+      }
+    }}
+  >
+              
               <FieldArray name="Modules">
                 {({ remove: removeModule, push: pushModule }) => (
                   <>
@@ -469,6 +528,7 @@ const AddLesson = () => {
                                               <QuizEditor
                                                 moduleIndex={moduleIndex}
                                                 lessonIndex={lessonIndex}
+                                                initialQuiz={values.Modules[moduleIndex].lessons[lessonIndex].questions}
                                                 onQuizChange={handleQuizSubmit}
                                               />
                                               

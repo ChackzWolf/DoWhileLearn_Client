@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Plus, Trash2, Code, ListChecks, Save, PlusCircle } from "lucide-react";
 import { useFormikContext } from "formik";
-import { MdOutput } from "react-icons/md";
 
-// Types remain the same...
+// Types
 type MultipleChoiceQuestion = {
   id: number;
   type: "QUIZ";
@@ -17,22 +16,20 @@ type CodingQuestion = {
   type: "CODING";
   question: string;
   startingCode: string;
-  expectedOutput: TestOutput; // Updated to use a structured type for expected output
-  testCases: TestCase[]; // Array of test cases
+  noOfParameters: number;
+  parameters: { value: string; dataType: string }[];
+  expectedOutput: TestOutput;
+  testCases: TestCase[];
 };
 
 type TestCase = {
-  input: Input; // Structured input for test cases
-  output: TestOutput; // Structured output for test cases
-};
-
-type Input = {
-  parameters: { value: string; dataType: string }[]; // Array of parameter objects
+  parameters: { value: string; dataType: string }[];
+  expectedValue: TestOutput;
 };
 
 type TestOutput = {
-  value: string; // Expected output value
-  dataType: string; // Data type of the expected output
+  value: string;
+  dataType: string;
 };
 
 type Question = MultipleChoiceQuestion | CodingQuestion;
@@ -40,22 +37,32 @@ type Question = MultipleChoiceQuestion | CodingQuestion;
 const QuizEditor: React.FC<{
   moduleIndex: number;
   lessonIndex: number;
-  initialQuiz?: any[];
+  initialQuiz?: Question[] | undefined;
   onQuizChange: (
     moduleIndex: number,
     lessonIndex: number,
     quiz: any[],
-    setFieldValue: (field: string, value: unknown) => void
+    setFieldValue: (field: string, value: unknown) => void,
+    validateForm: (values?: any) => Promise<{ [key: string]: string }>
   ) => void;
 }> = ({ moduleIndex, lessonIndex, initialQuiz = [], onQuizChange }) => {
-  const [questions, setQuestions] = useState<any[]>(initialQuiz);
+  const [questions, setQuestions] = useState<Question[]>(initialQuiz);
   const [currentType, setCurrentType] = useState("QUIZ");
-  const [noOfParameters, setNoOfParemeters] = useState(1);
+  const [noOfQuizes, setNumberOfQuizes] = useState(0);
+  const [noOfCodes, setNoOfCodes] = useState(0)
   const formik = useFormikContext();
-  const { setFieldValue } = formik;
+  const { setFieldValue,validateForm } = formik;
 
-  // Prevent default for all button handlers
   const addQuestion = (e: React.MouseEvent, type: string) => {
+    e.preventDefault();
+    console.log(type, "type")
+    if(type === 'QUIZ'){
+      const count = noOfQuizes +1;
+      setNumberOfQuizes(count);
+    }else{
+      const count = noOfCodes+1;
+      setNoOfCodes(count);
+    }
     const newQuestion: Question =
       type === "QUIZ"
         ? {
@@ -70,96 +77,75 @@ const QuizEditor: React.FC<{
             type: "CODING",
             question: "",
             startingCode: "",
+            noOfParameters: 1,
+            parameters: [{ value: "", dataType: "string" }],
             expectedOutput: {
               value: "",
-              dataType: "",
+              dataType: "string",
             },
             testCases: [
               {
-                input: {
-                  parameters: [{ value: "", dataType: "" }],
-                },
-                output: {
+                parameters: [{ value: "", dataType: "string" }],
+                expectedValue: {
                   value: "",
-                  dataType: "",
+                  dataType: "string",
                 },
               },
             ],
           };
-  
+
     setQuestions([...questions, newQuestion]);
   };
 
-  const deleteQuestion = (e: React.MouseEvent, id: any) => {
-    // e.preventDefault();
-    setQuestions(questions.filter((q) => q.id !== id));
+  const deleteQuestion = (e: React.MouseEvent, id: number) => {
+    e.preventDefault();
+    setQuestions(questions.filter((q:any) => {
+      q.id !== id
+    console.log(q.type, 'to delete')
+    if(q.type === 'QUIZ'){
+      const count = noOfQuizes -1;
+      setNumberOfQuizes(count)
+    }else{
+      const count = noOfCodes - 1;
+      setNoOfCodes(count);
+    }}));
   };
 
-  const addOption = (e: React.MouseEvent, questionId: any) => {
-    // e.preventDefault();
+  const addOption = (e: React.MouseEvent, questionId: number) => {
+    e.preventDefault();
     setQuestions(
       questions.map((q) =>
-        q.id === questionId && q.type === "QUIZE"
+        q.id === questionId && q.type === "QUIZ"
           ? { ...q, options: [...q.options, ""] }
           : q
       )
     );
   };
 
-  const updateQuestionParameter = (
-    questionId: number,
-    paramIndex: number,
-    field: string,
-    value: any
-  ) => {
+  const updateQuestion = (id: number, field: string, value: any) => {
     setQuestions(
-      questions.map((quest) =>
-        quest.id === questionId
-          ? {
-              ...quest,
-              parameters: quest.parameters.map((param:any, index:any) =>
-                index === paramIndex
-                  ? { ...param, [field]: value }
-                  : param
-              ),
-            }
-          : quest
-      )
+      questions.map((q) => {
+        if (q.id !== id) return q;
+
+        // If updating noOfParameters for a coding question
+        if (q.type === "CODING" && field === "noOfParameters") {
+          const numParams = Math.max(1, Math.min(4, Number(value)));
+          const newParams = Array(numParams).fill({ value: "", dataType: "string" });
+          
+          return {
+            ...q,
+            noOfParameters: numParams,
+            parameters: newParams,
+            testCases: q.testCases.map(tc => ({
+              ...tc,
+              parameters: newParams.map(() => ({ value: "", dataType: "string" }))
+            }))
+          };
+        }
+
+        return { ...q, [field]: value };
+      })
     );
-  };
-
-
-  const addTestCase = (e: React.MouseEvent, questionId: number) => {
-    setQuestions((prevQuestions) =>
-      prevQuestions.map((q) =>
-        q.id === questionId && q.type === "CODING"
-          ? {
-              ...q,
-              testCases: [
-                ...q.testCases,
-                {
-                  input: { parameters: [], dataTypes: [] }, // Add empty input structure
-                  output: [], // Initialize with an empty output
-                },
-              ],
-            }
-          : q
-      )
-    );
-  };
-
-  const handleSaveQuiz = (e: React.MouseEvent) => {
-    // e.preventDefault();
-    onQuizChange(moduleIndex, lessonIndex, questions, setFieldValue);
-  };
-
-  // Other helper functions remain the same...
-  const updateQuestion = (id: any, field: any, value: any) => {
-    console.log(id, field, value, " updateQuestion");
-    setQuestions(
-      questions.map((q) => (q.id === id ? { ...q, [field]: value } : q))
-    );
-    console.log(questions, "questions");
   };
 
   const updateOption = (
@@ -169,16 +155,94 @@ const QuizEditor: React.FC<{
   ) => {
     setQuestions(
       questions.map((q) =>
-        q.id === questionId && q.type === "QUIZE"
+        q.id === questionId && q.type === "QUIZ"
           ? {
               ...q,
-              options: q.options.map((opt: any, idx: any) =>
+              options: q.options.map((opt, idx) =>
                 idx === optionIndex ? value : opt
               ),
             }
           : q
       )
     );
+  };
+
+  const updateParameter = (
+    questionId: number,
+    paramIndex: number,
+    field: string,
+    value: string
+  ) => {
+    setQuestions(
+      questions.map((q) => {
+        if (q.id !== questionId || q.type !== "CODING") return q;
+        return {
+          ...q,
+          parameters: q.parameters.map((param, idx) =>
+            idx === paramIndex ? { ...param, [field]: value } : param
+          ),
+        };
+      })
+    );
+  };
+
+  const updateTestCase = (
+    questionId: number,
+    testCaseIndex: number,
+    paramIndex: number,
+    field: string,
+    value: string,
+    isExpected: boolean = false
+  ) => {
+    setQuestions(
+      questions.map((q) => {
+        if (q.id !== questionId || q.type !== "CODING") return q;
+        return {
+          ...q,
+          testCases: q.testCases.map((tc, tcIdx) => {
+            if (tcIdx !== testCaseIndex) return tc;
+            if (isExpected) {
+              return {
+                ...tc,
+                expectedValue: {
+                  ...tc.expectedValue,
+                  [field]: value,
+                },
+              };
+            }
+            return {
+              ...tc,
+              parameters: tc.parameters.map((param, pIdx) =>
+                pIdx === paramIndex ? { ...param, [field]: value } : param
+              ),
+            };
+          }),
+        };
+      })
+    );
+  };
+
+  const addTestCase = (e: React.MouseEvent, questionId: number) => {
+    e.preventDefault();
+    setQuestions(
+      questions.map((q) => {
+        if (q.id !== questionId || q.type !== "CODING") return q;
+        const newTestCase = {
+          parameters: Array(q.noOfParameters).fill({ value: "", dataType: "string" }),
+          expectedValue: { value: "", dataType: "string" },
+        };
+        return {
+          ...q,
+          testCases: [...q.testCases, newTestCase],
+        };
+      })
+    );
+  };
+
+  const handleSaveQuiz = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onQuizChange(moduleIndex, lessonIndex, questions, setFieldValue, validateForm);
+    
   };
 
   return (
@@ -191,11 +255,8 @@ const QuizEditor: React.FC<{
 
           <div className="flex gap-4 mb-8">
             <button
-              type="button" // Added type="button"
-              onClick={(e) => {
-                // e.preventDefault();
-                setCurrentType("QUIZ");
-              }}
+              type="button"
+              onClick={() => setCurrentType("QUIZ")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
                 currentType === "QUIZ"
                   ? "bg-purple-600 text-white"
@@ -206,11 +267,8 @@ const QuizEditor: React.FC<{
               Multiple Choice
             </button>
             <button
-              type="button" // Added type="button"
-              onClick={(e) => {
-                // e.preventDefault();
-                setCurrentType("CODING");
-              }}
+              type="button"
+              onClick={() => setCurrentType("CODING")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
                 currentType === "CODING"
                   ? "bg-purple-600 text-white"
@@ -220,18 +278,21 @@ const QuizEditor: React.FC<{
               <Code size={20} />
               Coding Challenge
             </button>
+            <div>
+                <h1 className="text-xs text-purple-400">Number of Quizes: {noOfQuizes}</h1>
+                <h1 className="text-xs text-purple-400">Number of Coding Challenges: {noOfCodes}</h1>
+            </div>
           </div>
 
+
+
           <button
-            type="button" // Added type="button"
+            type="button"
             onClick={(e) => addQuestion(e, currentType)}
             className="w-full bg-purple-100 hover:bg-purple-200 text-purple-600 font-medium p-4 rounded-lg mb-8 flex items-center justify-center gap-2"
           >
             <Plus size={20} />
-            Add{" "}
-            {currentType === "QUIZ"
-              ? "Multiple Choice Question"
-              : "Coding Challenge"}
+            Add {currentType === "QUIZ" ? "Multiple Choice Question" : "Coding Challenge"}
           </button>
 
           <div className="space-y-8">
@@ -245,7 +306,7 @@ const QuizEditor: React.FC<{
                     Question {index + 1} ({q.type})
                   </h3>
                   <button
-                    type="button" // Added type="button"
+                    type="button"
                     onClick={(e) => deleteQuestion(e, q.id)}
                     className="text-red-500 hover:text-red-700"
                   >
@@ -265,7 +326,7 @@ const QuizEditor: React.FC<{
 
                 {q.type === "QUIZ" ? (
                   <div className="space-y-4">
-                    {q.options.map((option: any, optionIndex: any) => (
+                    {q.options.map((option, optionIndex) => (
                       <div
                         key={optionIndex}
                         className="flex items-center gap-4"
@@ -273,9 +334,9 @@ const QuizEditor: React.FC<{
                         <input
                           type="radio"
                           name={`correct-${q.id}`}
-                          checked={q.correctAnswer === optionIndex}
+                          checked={q.correctAnswer === optionIndex.toString()}
                           onChange={() =>
-                            updateQuestion(q.id, "correctAnswer", optionIndex)
+                            updateQuestion(q.id, "correctAnswer", optionIndex.toString())
                           }
                           className="w-4 h-4 text-purple-600"
                         />
@@ -291,7 +352,7 @@ const QuizEditor: React.FC<{
                       </div>
                     ))}
                     <button
-                      type="button" // Added type="button"
+                      type="button"
                       onClick={(e) => addOption(e, q.id)}
                       className="text-purple-600 hover:text-purple-800 flex items-center gap-2"
                     >
@@ -315,271 +376,200 @@ const QuizEditor: React.FC<{
                         rows={4}
                       />
                     </div>
-                  <div className="flex flex-col gap-6">
 
+                    <div className="flex flex-col gap-6">
+                      <div className="flex flex-col space-y-2">
+                        <label className="block text-sm font-medium text-purple-700 mb-2">
+                          Number of Parameters
+                        </label>
+                        <input
+                          type="number"
+                          value={(q as CodingQuestion).noOfParameters}
+                          onChange={(e) =>
+                            updateQuestion(q.id, "noOfParameters", e.target.value)
+                          }
+                          min="1"
+                          max="4"
+                          className="w-full p-3 border border-purple-200 rounded-lg font-mono text-sm"
+                        />
+                      </div>
 
-
-  <div className="flex gap-6">
-  {/* Input Parameters Section */}
-  <div className="w-full">
-    <label className="block text-sm font-medium text-purple-700 mb-2">
-      Input Parameters
-    </label>
-
-
-
-
-
-
-
-
-
-    
-    {Array.from({ length: noOfParameters }).map((_, paramIndex) => (
-      <div key={paramIndex} className="flex items-center gap-4 mb-3">
-        {/* Input for parameter value */}
-        <input
-          value={
-            q.parameters?.[paramIndex]?.value || ""
-          }
-          onChange={(e) =>
-            updateQuestionParameter(q.id, paramIndex, "value", e.target.value)
-          }
-          placeholder={`Enter parameter ${paramIndex + 1} value...`}
-          className="w-full p-3 border border-purple-200 rounded-lg font-mono text-sm"
-        />
-        
-        {/* Dropdown for parameter data type */}
-        <select
-          value={
-            q.parameters?.[paramIndex]?.dataType || "string"
-          }
-          onChange={(e) =>
-            updateQuestionParameter(q.id, paramIndex, "dataType", e.target.value)
-          }
-          className="p-3 border border-purple-200 rounded-lg"
-        >
-          <option value="string">String</option>
-          <option value="number">Number</option>
-          <option value="boolean">Boolean</option>
-          <option value="object">Object</option>
-          <option value="array">Array</option>
-        </select>
-      </div>
-    ))}
-  </div>
-
-  {/* Expected Output Section */}
-  <div className="w-full">
-    <label className="block text-sm font-medium text-purple-700 mb-2">
-      Expected Output
-    </label>
-    <div className="flex items-center gap-4">
-      {/* Input for expected output */}
-      <input
-        value={q.expectedOutput?.value || ""}
-        onChange={(e) =>
-          updateQuestion(q.id, "expectedOutput", {
-            ...q.expectedOutput,
-            value: e.target.value,
-          })
-        }
-        placeholder="Enter expected output..."
-        className="w-full p-3 border border-purple-200 rounded-lg font-mono text-sm"
-      />
-
-      {/* Dropdown for expected output data type */}
-      <select
-        value={q.expectedOutput?.dataType || "string"}
-        onChange={(e) =>
-          updateQuestion(q.id, "expectedOutput", {
-            ...q.expectedOutput,
-            dataType: e.target.value,
-          })
-        }
-        className="p-3 border border-purple-200 rounded-lg"
-      >
-        <option value="string">String</option>
-        <option value="number">Number</option>
-        <option value="boolean">Boolean</option>
-        <option value="object">Object</option>
-        <option value="array">Array</option>
-      </select>
-    </div>
-  </div>
-  </div>
-</div>
-                    <label className="block text-sm font-medium text-purple-700 mb-2">
-                      Test Cases
-                    </label>
-                    {
-  q.testCases.map((testCase: any, testIndex: number) => {
-    // Ensure the parameters array matches noOfParameters
-    const parameters = Array.from({ length: noOfParameters }, (_, paramIndex) => 
-      testCase.parameters?.[paramIndex] || { value: "", dataType: "string" }
-    );
-
-    return (
-      <div key={testIndex}>
-        <label className="block text-sm font-medium text-purple-700 mb-2">
-          Test Case {testIndex + 1}
-        </label>
-        
-        {/* Render input fields for each parameter */}
-        {parameters.map((param, paramIndex) => (
-          <div key={paramIndex} className="flex gap-4 mb-2">
-            {/* Input for parameter value */}
-            <input
-              type="text"
-              value={param.value}
-              onChange={(e) =>
-                setQuestions(
-                  questions.map((quest) =>
-                    quest.id === q.id && quest.type === "CODING"
-                      ? {
-                          ...quest,
-                          testCases: quest.testCases.map((tc: any, idx: number) =>
-                            idx === testIndex
-                              ? {
-                                  ...tc,
-                                  parameters: parameters.map((p, pIdx) =>
-                                    pIdx === paramIndex
-                                      ? { ...p, value: e.target.value }
-                                      : p
-                                  ),
+                      <div className="flex gap-6">
+                        <div className="w-full">
+                          <label className="block text-sm font-medium text-purple-700 mb-2">
+                            Input Parameters
+                          </label>
+                          {Array.from({ length: (q as CodingQuestion).noOfParameters }).map((_, paramIndex) => (
+                            <div key={paramIndex} className="flex items-center gap-4 mb-3">
+                              <input
+                                value={(q as CodingQuestion).parameters[paramIndex]?.value || ""}
+                                onChange={(e) =>
+                                  updateParameter(q.id, paramIndex, "value", e.target.value)
                                 }
-                              : tc
-                          ),
-                        }
-                      : quest
-                  )
-                )
-              }
-              placeholder={`Parameter ${paramIndex + 1} Value`}
-              className="w-full p-2 border border-purple-200 rounded-lg font-mono text-sm"
-            />
-
-            {/* Dropdown for parameter data type */}
-            <select
-              value={param.dataType}
-              onChange={(e) =>
-                setQuestions(
-                  questions.map((quest) =>
-                    quest.id === q.id && quest.type === "CODING"
-                      ? {
-                          ...quest,
-                          testCases: quest.testCases.map((tc: any, idx: number) =>
-                            idx === testIndex
-                              ? {
-                                  ...tc,
-                                  parameters: parameters.map((p, pIdx) =>
-                                    pIdx === paramIndex
-                                      ? { ...p, dataType: e.target.value }
-                                      : p
-                                  ),
+                                placeholder={`Parameter ${paramIndex + 1} Value`}
+                                className="w-full p-3 border border-purple-200 rounded-lg font-mono text-sm"
+                              />
+                              <select
+                                value={(q as CodingQuestion).parameters[paramIndex]?.dataType || "string"}
+                                onChange={(e) =>
+                                  updateParameter(q.id, paramIndex, "dataType", e.target.value)
                                 }
-                              : tc
-                          ),
-                        }
-                      : quest
-                  )
-                )
-              }
-              className="p-2 border border-purple-200 rounded-lg"
-            >
-              <option value="string">String</option>
-              <option value="number">Number</option>
-              <option value="boolean">Boolean</option>
-              <option value="object">Object</option>
-              <option value="array">Array</option>
-            </select>
-          </div>
-        ))}
+                                className="p-3 border border-purple-200 rounded-lg"
+                              >
+                                <option value="string">String</option>
+                                <option value="number">Number</option>
+                                <option value="boolean">Boolean</option>
+                                <option value="object">Object</option>
+                                <option value="array">Array</option>
+                              </select>
+                            </div>
+                          ))}
+                        </div>
 
-        {/* Input for expected value */}
-        <div className="flex gap-4 mb-2">
-          <input
-            type="text"
-            value={testCase.expectedValue?.value || ""}
-            onChange={(e) =>
-              setQuestions(
-                questions.map((quest) =>
-                  quest.id === q.id && quest.type === "CODING"
-                    ? {
-                        ...quest,
-                        testCases: quest.testCases.map((tc: any, idx: number) =>
-                          idx === testIndex
-                            ? {
-                                ...tc,
-                                expectedValue: {
-                                  ...tc.expectedValue,
+                        <div className="w-full">
+                          <label className="block text-sm font-medium text-purple-700 mb-2">
+                            Expected Output
+                          </label>
+                          <div className="flex items-center gap-4">
+                            <input
+                              value={(q as CodingQuestion).expectedOutput.value}
+                              onChange={(e) =>
+                                updateQuestion(q.id, "expectedOutput", {
+                                  ...q.expectedOutput,
                                   value: e.target.value,
-                                },
+                                })
                               }
-                            : tc
-                        ),
-                      }
-                    : quest
-                )
-              )
-            }
-            placeholder="Expected Value"
-            className="w-full p-2 border border-purple-200 rounded-lg font-mono text-sm"
-          />
-
-          {/* Dropdown for expected value data type */}
-          <select
-            value={testCase.expectedValue?.dataType || "string"}
-            onChange={(e) =>
-              setQuestions(
-                questions.map((quest) =>
-                  quest.id === q.id && quest.type === "CODING"
-                    ? {
-                        ...quest,
-                        testCases: quest.testCases.map((tc: any, idx: number) =>
-                          idx === testIndex
-                            ? {
-                                ...tc,
-                                expectedValue: {
-                                  ...tc.expectedValue,
+                              placeholder="Enter expected output..."
+                              className="w-full p-3 border border-purple-200 rounded-lg font-mono text-sm"
+                            />
+                            <select
+                              value={(q as CodingQuestion).expectedOutput.dataType}
+                              onChange={(e) =>
+                                updateQuestion(q.id, "expectedOutput", {
+                                  ...q.expectedOutput,
                                   dataType: e.target.value,
-                                },
+                                })
                               }
-                            : tc
-                        ),
-                      }
-                    : quest
-                )
-              )
-            }
-            className="p-2 border border-purple-200 rounded-lg"
-          >
-            <option value="string">String</option>
-            <option value="number">Number</option>
-            <option value="boolean">Boolean</option>
-            <option value="object">Object</option>
-            <option value="array">Array</option>
-          </select>
-        </div>
-        <button
-          type="button"
-          onClick={(e) => addTestCase(e, q.id)}
-          className="text-purple-600 hover:text-purple-800 flex items-center gap-2"
-        >
-          Add Test Case
-        </button>
-      </div>
-    );
-  })}
+                              className="p-3 border border-purple-200 rounded-lg"
+                            >
+                              <option value="string">String</option>
+                              <option value="number">Number</option>
+                              <option value="boolean">Boolean</option>
+                              <option value="object">Object</option>
+                              <option value="array">Array</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-purple-700 mb-2">
+                        Test Cases
+                      </label>
+                      {(q as CodingQuestion).testCases.map((testCase, testIndex) => (
+                        <div key={testIndex} className="mb-6 p-4 border border-purple-200 rounded-lg">
+                          <label className="block text-sm font-medium text-purple-700 mb-2">
+                            Test Case {testIndex + 1}
+                          </label>
+                          
+                          {Array.from({ length: (q as CodingQuestion).noOfParameters }).map((_, paramIndex) => (
+                            <div key={paramIndex} className="flex gap-4 mb-2">
+                              <input
+                                type="text"
+                                value={testCase.parameters[paramIndex]?.value || ""}
+                                onChange={(e) =>
+                                  updateTestCase(
+                                    q.id,
+                                    testIndex,
+                                    paramIndex,
+                                    "value",
+                                    e.target.value
+                                  )
+                                }
+                                placeholder={`Parameter ${paramIndex + 1} Value`}
+                                className="w-full p-2 border border-purple-200 rounded-lg font-mono text-sm"
+                              />
+                              <select
+                                value={testCase.parameters[paramIndex]?.dataType || "string"}
+                                onChange={(e) =>
+                                  updateTestCase(
+                                    q.id,
+                                    testIndex,
+                                    paramIndex,
+                                    "dataType",
+                                    e.target.value
+                                  )
+                                }
+                                className="p-2 border border-purple-200 rounded-lg"
+                              >
+                                <option value="string">String</option>
+                                <option value="number">Number</option>
+                                <option value="boolean">Boolean</option>
+                                <option value="object">Object</option>
+                                <option value="array">Array</option>
+                              </select>
+                            </div>
+                          ))}
+
+                          <div className="flex gap-4 mb-2">
+                            <input
+                              type="text"
+                              value={testCase.expectedValue?.value || ""}
+                              onChange={(e) =>
+                                updateTestCase(
+                                  q.id,
+                                  testIndex,
+                                  0,
+                                  "value",
+                                  e.target.value,
+                                  true
+                                )
+                              }
+                              placeholder="Expected Value"
+                              className="w-full p-2 border border-purple-200 rounded-lg font-mono text-sm"
+                            />
+                            <select
+                              value={testCase.expectedValue?.dataType || "string"}
+                              onChange={(e) =>
+                                updateTestCase(
+                                  q.id,
+                                  testIndex,
+                                  0,
+                                  "dataType",
+                                  e.target.value,
+                                  true
+                                )
+                              }
+                              className="p-2 border border-purple-200 rounded-lg"
+                            >
+                              <option value="string">String</option>
+                              <option value="number">Number</option>
+                              <option value="boolean">Boolean</option>
+                              <option value="object">Object</option>
+                              <option value="array">Array</option>
+                            </select>
+                          </div>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={(e) => addTestCase(e, q.id)}
+                        className="text-purple-600 hover:text-purple-800 flex items-center gap-2"
+                      >
+                        <PlusCircle size={20} />
+                        Add Test Case
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
             ))}
           </div>
-   
+
           {questions.length > 0 && (
             <button
-              type="button" // Added type="button"
+              type="button"
               className="mt-8 w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg flex items-center justify-center gap-2"
               onClick={handleSaveQuiz}
             >
