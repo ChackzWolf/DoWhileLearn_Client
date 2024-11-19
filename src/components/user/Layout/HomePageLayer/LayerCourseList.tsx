@@ -19,6 +19,8 @@ export interface Course {
   thumbnail: string;
   benefits_prerequisites: BenefitsPrerequisites;
   Modules: Module[];
+  ratingCount?:number;
+  averageRating?:number;
 }
 export interface BenefitsPrerequisites {
   benefits: string[];
@@ -94,7 +96,7 @@ let itemsToShow
             key={course.courseTitle + course.coursePrice} // Use a unique key
             title={course.courseTitle}
             description={course.courseDescription}
-            rating={4}
+            rating={course.averageRating || 2}
             price={course.coursePrice}
             discountPrice={course.discountPrice}
             imageSrc={course.thumbnail}

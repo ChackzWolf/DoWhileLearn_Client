@@ -40,29 +40,29 @@ const handleSubmit = async() => {
         const response = await axios.post(courseEndpoint.submitCourse, data)
         console.log(response.data)
      
-            if (response.data.success) {
-                console.log('success')
-                toast.success('Form submitted successfully!', {
-                  position: 'top-right',
-                  autoClose: 5000, // Auto close after 3 seconds
-                  className: 'bg-green-500 text-white rounded-lg p-4',
-                  bodyClassName: 'text-sm',
-                  progressClassName: 'bg-green-200',
-                });
-                setIsLoading(false)
-                dispatch(setCreateCourseEmpty())
-                navigate('/tutor/courses')
-              } else {     
-                console.log('failed')
-                toast.error('Form submission failed!', {
-                  position: 'top-right',
-                  autoClose: 7000,
-                  className: 'bg-red-500 text-white rounded-lg p-4',
-                  bodyClassName: 'text-sm',
-                  progressClassName: 'bg-red-200',
-                });
-                setIsLoading(false)
-              } 
+            // if (response.data.success) {
+            //     console.log('success')
+            //     toast.success('Form submitted successfully!', {
+            //       position: 'top-right',
+            //       autoClose: 5000, // Auto close after 3 seconds
+            //       className: 'bg-green-500 text-white rounded-lg p-4',
+            //       bodyClassName: 'text-sm',
+            //       progressClassName: 'bg-green-200',
+            //     });
+            //     setIsLoading(false)
+            //     dispatch(setCreateCourseEmpty())
+            //     navigate('/tutor/courses')
+            //   } else {     
+            //     console.log('failed')
+            //     toast.error('Form submission failed!', {
+            //       position: 'top-right',
+            //       autoClose: 7000,
+            //       className: 'bg-red-500 text-white rounded-lg p-4',
+            //       bodyClassName: 'text-sm',
+            //       progressClassName: 'bg-red-200',
+            //     });
+            //     setIsLoading(false)
+            //   } 
     }catch(err){
             setIsLoading(false)
             toast.error('Form submission failed! We are facing some internal error. Try again later', {
@@ -72,6 +72,8 @@ const handleSubmit = async() => {
                 bodyClassName: 'text-sm',
                 progressClassName: 'bg-red-200',
               });
+    }finally{
+      setIsLoading(false);
     }
     
           

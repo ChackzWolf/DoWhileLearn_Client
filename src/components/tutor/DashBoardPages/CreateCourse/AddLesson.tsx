@@ -24,7 +24,7 @@ import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
 import QuizEditor from "./AddLessonsComponents/CreateQuestions";
 
-const validationSchema = Yup.object().shape({
+export const validationSchema = Yup.object().shape({
   Modules: Yup.array()
     .of(
       Yup.object().shape({
@@ -35,8 +35,81 @@ const validationSchema = Yup.object().shape({
             Yup.object().shape({
               title: Yup.string().required("Lesson title is required"),
               video: Yup.mixed().required("Video file is required"),
-              description: Yup.string().required(
-                "Lesson description is required"
+              description: Yup.string().required("Lesson description is required"),
+              questions: Yup.array().of(
+                Yup.object().shape({
+                  id: Yup.number().required("Question ID is required"),
+                  type: Yup.string()
+                    .oneOf(["QUIZ", "CODING"], "Type must be 'QUIZ' or 'CODING'")
+                    .required("Question type is required"),
+                  question: Yup.string().required("Question is required"),
+                  // For QUIZ type
+                  options: Yup.array().when("type", {
+                    is: "QUIZ",
+                    then: (schema) =>
+                      schema
+                        .of(Yup.string().required("Option cannot be empty"))
+                        .min(2, "At least 2 options are required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  correctAnswer: Yup.string().when("type", {
+                    is: "QUIZ",
+                    then: (schema) => schema.required("Correct answer is required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  // For CODING type
+                  startingCode: Yup.string().when("type", {
+                    is: "CODING",
+                    then: (schema) => schema.required("Starting code is required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  noOfParameters: Yup.number().when("type", {
+                    is: "CODING",
+                    then: (schema) => schema.required("Number of parameters is required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  parameters: Yup.array().when("type", {
+                    is: "CODING",
+                    then: (schema) =>
+                      schema.of(
+                        Yup.object().shape({
+                          value: Yup.string().required("Parameter value is required"),
+                          dataType: Yup.string().required("Parameter data type is required"),
+                        })
+                      ),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  expectedOutput: Yup.object().when("type", {
+                    is: "CODING",
+                    then: (schema) =>
+                      schema.shape({
+                        value: Yup.string().required("Expected output value is required"),
+                        dataType: Yup.string().required("Expected output data type is required"),
+                      }),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  testCases: Yup.array().when("type", {
+                    is: "CODING",
+                    then: (schema) =>
+                      schema
+                        .of(
+                          Yup.object().shape({
+                            parameters: Yup.array().of(
+                              Yup.object().shape({
+                                value: Yup.string().required("Test case parameter value is required"),
+                                dataType: Yup.string().required("Test case parameter data type is required"),
+                              })
+                            ),
+                            expectedValue: Yup.object().shape({
+                              value: Yup.string().required("Expected test case value is required"),
+                              dataType: Yup.string().required("Expected test case data type is required"),
+                            }),
+                          })
+                        )
+                        .min(1, "At least one test case is required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                })
               ),
             })
           )
@@ -45,6 +118,7 @@ const validationSchema = Yup.object().shape({
     )
     .min(1, "At least one module is required"),
 });
+
 
 const AddLesson = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -64,6 +138,8 @@ const AddLesson = () => {
   const [expandedLessonIndex, setExpandedLessonIndex] = useState<{
     [moduleIndex: number]: number | null;
   }>({});
+  const [quizData, setQuizData] = useState<any[]>([]);
+
 
   const handleVideoUpload = async (videoFile: File, moduleIndex:number ,lessonIndex:number) => {
     console.log('moduleIndex', moduleIndex);
@@ -93,6 +169,29 @@ const AddLesson = () => {
       setIsVideoLoading(updatedIsVideoLoading)
     }
   };
+
+  
+  const handleQuizSubmit = (
+    moduleIndex: number,
+    lessonIndex: number,
+    quiz: any[], // Type this as per your `Question` type
+    setFieldValue: (field: string, value: unknown) => void,
+    validateForm: (values?: any) => Promise<{ [key: string]: string }> // If you want to validate after setting the field
+  ) => {
+    // Update your form values with the quiz data
+    setQuizData(quiz);
+    console.log(quiz, 'question value');
+    
+    // Setting the form field value for questions
+    setFieldValue(
+      `Modules.${moduleIndex}.lessons.${lessonIndex}.questions`,
+      quiz
+    );
+  
+    // Optionally, trigger form validation after setting the value
+    validateForm(); // This can be useful if you need to ensure the new data is validated
+  };
+
 
 
   const handleFileChange =
@@ -317,7 +416,7 @@ const AddLesson = () => {
                                               expandedLessonIndex[
                                                 moduleIndex
                                               ] === lessonIndex
-                                                ? "max-h-screen opacity-100"
+                                                ? "opacity-100"
                                                 : "max-h-0 opacity-0 overflow-hidden"
                                             }`}
                                           >
@@ -428,6 +527,11 @@ const AddLesson = () => {
                                                   />
                                                 </div>
                                               </div>
+                                              <QuizEditor                                                 
+                                                moduleIndex={moduleIndex}
+                                                lessonIndex={lessonIndex}
+                                                initialQuiz={values.Modules[moduleIndex].lessons[lessonIndex].questions}
+                                                onQuizChange={handleQuizSubmit}/>
 
                                               <button
                                                 type="button"

@@ -3,6 +3,9 @@ import { IoIosArrowDropdown } from "react-icons/io";
 import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
 import { GoVideo } from "react-icons/go";
 import { motion, AnimatePresence } from "framer-motion";
+import { FaClipboardQuestion } from "react-icons/fa6";
+import { FaCode } from "react-icons/fa6";
+import { MdOutlineQuiz } from "react-icons/md";
 
 
 export interface Module {
@@ -81,6 +84,7 @@ const Modules: React.FC<{
                 >
                   <div className="p-4 space-y-2">
                     {module.lessons.map((lesson, lessonIndex) => (
+                      <>
                       <motion.button
                         key={lessonIndex}
                         whileHover={{ scale: 1.02 }}
@@ -96,7 +100,41 @@ const Modules: React.FC<{
                         <span className="text-left text-gray-700 text-sm">
                           {lesson.title}
                         </span>
+                        
                       </motion.button>
+                      {lesson.questions ? lesson.questions.map((question,questionIndex)=>(
+                       <motion.button
+                       key={lessonIndex}
+                       whileHover={{ scale: 1.02 }}
+                       whileTap={{ scale: 0.98 }}
+                       onClick={() => {
+                         if (typeof lesson.video === "string") {
+                           toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description);
+                         }
+                       }}
+                       className="w-full flex items-center gap-3 p-3 rounded-lg bg-white hover:bg-gray-100 transition-colors"
+                     >
+                      
+                      {question.type === 'QUIZ'? (
+                            <>
+                            <MdOutlineQuiz  className="text-purple-600 text-xl flex-shrink-0"/>
+                            <span className="text-left text-gray-700 text-sm">
+                                Quiz Challenge
+                            </span>
+                            </>
+                            )
+                            :(
+                            <>
+                            <FaCode className="text-purple-600 text-xl flex-shrink-0"/>
+                            <span className="text-left text-gray-700 text-sm">
+                                Coding challenge
+                            </span>
+                            </>
+                            ) 
+                      }
+                      </motion.button>
+                      )) : 'no questions'}
+                      </>
                     ))}
                   </div>
                 </motion.div>
