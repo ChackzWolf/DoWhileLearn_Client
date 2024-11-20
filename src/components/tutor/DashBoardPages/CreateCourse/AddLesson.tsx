@@ -23,6 +23,7 @@ import { RootState } from "../../../../redux/store/store";
 import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
 import QuizEditor from "./AddLessonsComponents/CreateQuestions";
+import RichTextEditor from "./AddLessonsComponents/createQuestionTrial";
 
 export const validationSchema = Yup.object().shape({
   Modules: Yup.array()
@@ -291,7 +292,6 @@ const AddLesson = () => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Add Modules and Lessons
         </h2>
-
         <Formik
           initialValues={{
             Modules: modules?.Modules || [

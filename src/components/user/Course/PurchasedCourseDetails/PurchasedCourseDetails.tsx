@@ -21,6 +21,7 @@ import { userEndpoint } from "../../../../constraints/userEndpoints";
 import { FaStar, FaUserCircle } from "react-icons/fa";
 import { BsStarHalf } from "react-icons/bs";
 import StudentReviews from "../StudentReview";
+import CodingQuestionInterface from "./Questions/CodeEditor";
 
 interface Module {
     name: string;
@@ -44,6 +45,104 @@ interface Module {
   const initialModulesState: CreateCourseState = {
     Modules: [],
   };
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const questionData = {
+    id: 1,
+    type: "CODING" as const,
+    question: `
+      <h2>Two Sum</h2>
+      <p>Given an array of integers <code>nums</code> and an integer <code>target</code>, 
+      return indices of the two numbers in the array such that they add up to <code>target</code>.</p>
+      
+      <p>You may assume that each input would have exactly one solution, 
+      and you may not use the same element twice.</p>
+
+      <h3>Example:</h3>
+      <pre>
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+      </pre>
+    `,
+    startingCode: `function twoSum(nums, target) {
+    // Write your code here
+    
+}`,
+    noOfParameters: 2,
+    parameters: [
+      { value: "nums", dataType: "number[]" },
+      { value: "target", dataType: "number" }
+    ],
+    expectedOutput: {
+      value: "[0,1]",
+      dataType: "number[]"
+    },
+    testCases: [
+      {
+        parameters: [
+          { value: "[2,7,11,15]", dataType: "number[]" },
+          { value: "9", dataType: "number" }
+        ],
+        expectedValue: { value: "[0,1]", dataType: "number[]" }
+      },
+      {
+        parameters: [
+          { value: "[3,2,4]", dataType: "number[]" },
+          { value: "6", dataType: "number" }
+        ],
+        expectedValue: { value: "[1,2]", dataType: "number[]" }
+      },
+      {
+        parameters: [
+          { value: "[3,3]", dataType: "number[]" },
+          { value: "6", dataType: "number" }
+        ],
+        expectedValue: { value: "[0,1]", dataType: "number[]" }
+      }
+    ],
+    score: 50,
+    hints: [
+      "Try using a hash map to store the numbers you've seen",
+      "For each number, check if its complement (target - num) exists in the hash map",
+      "Remember to return the indices, not the numbers themselves"
+    ],
+    solution: `function twoSum(nums, target) {
+    const map = new Map();
+    
+    for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        
+        if (map.has(complement)) {
+            return [map.get(complement), i];
+        }
+        
+        map.set(nums[i], i);
+    }
+    
+    return []; // No solution found
+}`,
+    difficulty: "Easy" as const
+  };
+
+
+
+
+
+
+
+
   
   function CoursePurchasedCourseDetailsDetails() {
 
@@ -231,6 +330,7 @@ interface Module {
       animate={{ opacity: 1 }}
       className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100"
     >
+      <CodingQuestionInterface {...questionData}/>
       <div className="max-w-7xl mx-auto py-8">
         <motion.div 
           initial={{ y: 20, opacity: 0 }}

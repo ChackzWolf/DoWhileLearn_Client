@@ -46,6 +46,8 @@ type CodingQuestion = {
   type: "CODING";
   question: string;
   startingCode: string;
+  difficulty:string;
+  solution:string;
   noOfParameters: number;
   parameters: { value: string; dataType: string }[];
   expectedOutput: TestOutput;

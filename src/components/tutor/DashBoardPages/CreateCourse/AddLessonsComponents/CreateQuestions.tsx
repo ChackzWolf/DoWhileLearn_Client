@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Plus, Trash2, Code, ListChecks, Save, PlusCircle } from "lucide-react";
 import { useFormikContext } from "formik";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "react-quill/dist/quill.bubble.css";
+
 
 // Types
 type MultipleChoiceQuestion = {
@@ -15,7 +19,9 @@ type CodingQuestion = {
   id: number;
   type: "CODING";
   question: string;
-  startingCode: string;
+  startingCode?: string;
+  difficulty:string;
+  solution:string;
   noOfParameters: number;
   parameters: { value: string; dataType: string }[];
   expectedOutput: TestOutput;
@@ -77,6 +83,8 @@ const QuizEditor: React.FC<{
             type: "CODING",
             question: "",
             startingCode: "",
+            solution:"",
+            difficulty:'',
             noOfParameters: 1,
             parameters: [{ value: "", dataType: "string" }],
             expectedOutput: {
@@ -314,7 +322,18 @@ const QuizEditor: React.FC<{
                   </button>
                 </div>
 
-                <textarea
+                <div className="mb-4">
+                    <ReactQuill
+                      value={q.question}
+                      onChange={(e) =>
+                        updateQuestion(q.id, "question", e)
+                      }
+                      placeholder="Enter your question here..."
+                      theme="snow"
+                    />
+                </div>
+
+                {/* <textarea
                   value={q.question}
                   onChange={(e) =>
                     updateQuestion(q.id, "question", e.target.value)
@@ -322,7 +341,7 @@ const QuizEditor: React.FC<{
                   placeholder="Enter your question here..."
                   className="w-full p-3 border border-purple-200 rounded-lg mb-4 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   rows={3}
-                />
+                /> */}
 
                 {q.type === "QUIZ" ? (
                   <div className="space-y-4">
@@ -377,6 +396,21 @@ const QuizEditor: React.FC<{
                       />
                     </div>
 
+                    <div>
+                      <label className="block text-sm font-medium text-purple-700 mb-2">
+                        Solution Code
+                      </label>
+                      <textarea
+                        value={q.startingCode}
+                        onChange={(e) =>
+                          updateQuestion(q.id, "solution", e.target.value)
+                        }
+                        placeholder="Provide starting code (optional)..."
+                        className="w-full p-3 border border-purple-200 rounded-lg font-mono text-sm"
+                        rows={4}
+                      />
+                    </div>
+
                     <div className="flex flex-col gap-6">
                       <div className="flex flex-col space-y-2">
                         <label className="block text-sm font-medium text-purple-700 mb-2">
@@ -420,6 +454,9 @@ const QuizEditor: React.FC<{
                                 <option value="number">Number</option>
                                 <option value="boolean">Boolean</option>
                                 <option value="object">Object</option>
+                                <option value="object">Number[]</option>
+                              <option value="object">string[]</option>
+                              <option value="boolean">Boolean[]</option>
                                 <option value="array">Array</option>
                               </select>
                             </div>
@@ -456,6 +493,9 @@ const QuizEditor: React.FC<{
                               <option value="number">Number</option>
                               <option value="boolean">Boolean</option>
                               <option value="object">Object</option>
+                              <option value="object">Number[]</option>
+                              <option value="object">string[]</option>
+                              <option value="boolean">Boolean[]</option>
                               <option value="array">Array</option>
                             </select>
                           </div>
@@ -507,6 +547,9 @@ const QuizEditor: React.FC<{
                                 <option value="number">Number</option>
                                 <option value="boolean">Boolean</option>
                                 <option value="object">Object</option>
+                                <option value="object">Number[]</option>
+                                <option value="object">string[]</option>
+                                <option value="boolean">Boolean[]</option>
                                 <option value="array">Array</option>
                               </select>
                             </div>
@@ -547,6 +590,9 @@ const QuizEditor: React.FC<{
                               <option value="number">Number</option>
                               <option value="boolean">Boolean</option>
                               <option value="object">Object</option>
+                              <option value="object">Number[]</option>
+                              <option value="object">string[]</option>
+                              <option value="boolean">Boolean[]</option>
                               <option value="array">Array</option>
                             </select>
                           </div>
