@@ -9,7 +9,7 @@ const tutorAxios = axios.create({
     headers: {
         "Content-Type": "application/json"
     },
-    withCredentials:true,
+    // withCredentials:true,
 });
 
 tutorAxios.interceptors.request.use(  /////to add JWT token from cookie

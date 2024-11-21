@@ -61,6 +61,7 @@ function LoginModal() {
 
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
         try {
+            console.log('trig')
             setIsLoading(true)
             const response = await axios.post(userEndpoint.loginUser, value);
             console.log(response.data)

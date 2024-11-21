@@ -44,6 +44,7 @@ export const validationSchema = Yup.object().shape({
                     .oneOf(["QUIZ", "CODING"], "Type must be 'QUIZ' or 'CODING'")
                     .required("Question type is required"),
                   question: Yup.string().required("Question is required"),
+                  difficulty: Yup.string().required("Question is required"),
                   // For QUIZ type
                   options: Yup.array().when("type", {
                     is: "QUIZ",
@@ -62,6 +63,10 @@ export const validationSchema = Yup.object().shape({
                   startingCode: Yup.string().when("type", {
                     is: "CODING",
                     then: (schema) => schema.required("Starting code is required"),
+                    otherwise: (schema) => schema.notRequired(),
+                  }),
+                  solution: Yup.string().when("type", {
+                    is: "CODING",
                     otherwise: (schema) => schema.notRequired(),
                   }),
                   noOfParameters: Yup.number().when("type", {

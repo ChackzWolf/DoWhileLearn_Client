@@ -38,6 +38,7 @@ type MultipleChoiceQuestion = {
   type: "QUIZ";
   question: string;
   options: string[];
+  difficulty: string;
   correctAnswer: string;
 };
 

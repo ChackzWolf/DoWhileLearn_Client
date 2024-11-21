@@ -24,7 +24,8 @@ const Modules: React.FC<{
    modules: CreateCourseState | null
   onVideoSelect: (videoUrl: string) => void;
   onSelectDescription: (description:string) => void ;
-}> = ({ modules, onVideoSelect, onSelectDescription }) => {
+  onCodeSelect:(questions:any)=>void;
+}> = ({ modules, onVideoSelect, onSelectDescription, onCodeSelect }) => {
   const [openModuleIndex, setOpenModuleIndex] = useState<number | null>(null);
   const [openLessonIndex, setOpenLessonIndex] = useState<{ [key: number]: number | null }>({});
 
@@ -42,6 +43,11 @@ const Modules: React.FC<{
     onSelectDescription(description)
   };
 
+
+  const openCode = (question:any)=> {
+    console.log('trig trig trig')
+      onCodeSelect(question);
+  }
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -107,11 +113,11 @@ const Modules: React.FC<{
                        key={lessonIndex}
                        whileHover={{ scale: 1.02 }}
                        whileTap={{ scale: 0.98 }}
-                       onClick={() => {
-                         if (typeof lesson.video === "string") {
-                           toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description);
-                         }
-                       }}
+                      //  onClick={() => {
+                      //    if (typeof lesson.video === "string") {
+                      //      toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description);
+                      //    }
+                      //  }}
                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-white hover:bg-gray-100 transition-colors"
                      >
                       
@@ -124,12 +130,19 @@ const Modules: React.FC<{
                             </>
                             )
                             :(
-                            <>
+                            <div className="flex gap-3"
+                                  onClick={() => {
+                                   
+                                      openCode(question)
+                                    
+                                  }}>
                             <FaCode className="text-purple-600 text-xl flex-shrink-0"/>
                             <span className="text-left text-gray-700 text-sm">
                                 Coding challenge
                             </span>
-                            </>
+                            </div>
+                            
+                            
                             ) 
                       }
                       </motion.button>

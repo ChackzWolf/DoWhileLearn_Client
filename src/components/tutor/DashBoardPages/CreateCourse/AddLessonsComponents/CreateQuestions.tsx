@@ -12,6 +12,7 @@ type MultipleChoiceQuestion = {
   type: "QUIZ";
   question: string;
   options: string[];
+  difficulty:string;
   correctAnswer: string;
 };
 
@@ -77,6 +78,7 @@ const QuizEditor: React.FC<{
             question: "",
             options: ["", ""],
             correctAnswer: "",
+            difficulty:"Easy",
           }
         : {
             id: Date.now(),
@@ -84,7 +86,7 @@ const QuizEditor: React.FC<{
             question: "",
             startingCode: "",
             solution:"",
-            difficulty:'',
+            difficulty:'Easy',
             noOfParameters: 1,
             parameters: [{ value: "", dataType: "string" }],
             expectedOutput: {
@@ -342,6 +344,24 @@ const QuizEditor: React.FC<{
                   className="w-full p-3 border border-purple-200 rounded-lg mb-4 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   rows={3}
                 /> */}
+{/* 
+                      <div className="flex flex-col space-y-2 my-10">
+                        <label className="block text-sm font-medium text-purple-700 m-2">
+                          Difficulty Level
+                        </label>
+                              <select
+                                value={(q as CodingQuestion).difficulty||"Easy"}
+                                onChange={(e) =>
+                                  updateQuestion(q.id, "difficulty", e.target.value)
+                                }
+                                className=" p-3 border border-purple-200 rounded-lg font-mono text-sm"
+                              >
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
+                 
+                              </select>
+                      </div> */}
 
                 {q.type === "QUIZ" ? (
                   <div className="space-y-4">
@@ -401,7 +421,7 @@ const QuizEditor: React.FC<{
                         Solution Code
                       </label>
                       <textarea
-                        value={q.startingCode}
+                        value={q.solution}
                         onChange={(e) =>
                           updateQuestion(q.id, "solution", e.target.value)
                         }
@@ -412,6 +432,9 @@ const QuizEditor: React.FC<{
                     </div>
 
                     <div className="flex flex-col gap-6">
+                      <div className="flex gap-4">
+
+                      
                       <div className="flex flex-col space-y-2">
                         <label className="block text-sm font-medium text-purple-700 mb-2">
                           Number of Parameters
@@ -428,6 +451,24 @@ const QuizEditor: React.FC<{
                         />
                       </div>
 
+                      <div className="flex flex-col space-y-2">
+                      <label className="block text-sm font-medium text-purple-700 mb-2">
+                          Difficulty Level
+                        </label>
+                      <select
+                                value={(q as CodingQuestion).difficulty||"Easy"}
+                                onChange={(e) =>
+                                  updateQuestion(q.id, "difficulty", e.target.value)
+                                }
+                                className="w-full p-3 border border-purple-200 rounded-lg font-mono text-sm"
+                              >
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
+                 
+                              </select>
+                      </div>
+                      </div>
                       <div className="flex gap-6">
                         <div className="w-full">
                           <label className="block text-sm font-medium text-purple-700 mb-2">

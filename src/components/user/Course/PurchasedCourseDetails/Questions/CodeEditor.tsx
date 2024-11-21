@@ -187,7 +187,7 @@ const CodingQuestionInterface = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 bg-white">
+    <div className="max-w-6xl h-screen mx-auto p-4 bg-white overflow-auto">
       {/* Header */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-4">
@@ -239,7 +239,7 @@ const CodingQuestionInterface = ({
           </div>
 
           {/* Tab Content */}
-          <div className="bg-white rounded-lg border p-6 min-h-[400px]">
+          <div className="bg-white rounded-lg border p-6 min-h-[350px]">
             {activeTab === 'question' && (
               <div className="space-y-4">
                 <div className="prose max-w-none" 
@@ -311,6 +311,14 @@ const CodingQuestionInterface = ({
               </div>
             )}
           </div>
+          {(output || error) && (
+                <Alert
+                  variant={isCorrect ? 'success' : 'error'}
+                  title={isCorrect ? 'Success!' : error ? 'Error' : 'Test Cases Failed'}
+                >
+                  {error || output}
+                </Alert>
+              )}
         </div>
 
         {/* Right Panel - Code Editor */}
@@ -332,14 +340,7 @@ const CodingQuestionInterface = ({
                 Run Code
               </button>
 
-              {(output || error) && (
-                <Alert
-                  variant={isCorrect ? 'success' : 'error'}
-                  title={isCorrect ? 'Success!' : error ? 'Error' : 'Test Cases Failed'}
-                >
-                  {error || output}
-                </Alert>
-              )}
+
             </div>
           </div>
         </div>

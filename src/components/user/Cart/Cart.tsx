@@ -5,7 +5,6 @@ import { getCookie } from '../../../utils/cookieManager'
 import { useNavigate } from 'react-router-dom';
 import { FaOpencart } from "react-icons/fa6";
 import userAxios from '../../../utils/axios/userAxios.config';
-import { handleBlockedUser } from '../../../utils/handleErrors/handleBlocked';
 
 export interface Course {
     _id: string;
@@ -46,7 +45,7 @@ function Cart() {
         const fetchCart = async() => {
           try{
             const userId = getCookie('userId');
-            const response = await userAxios.get(userEndpoint.getCartItems, {params: { userId }, withCredentials : true })
+            const response = await userAxios.get(userEndpoint.getCartItems, {params: { userId }})
             console.log(response.data)
             setCourses(response.data.courses);
           }catch(error){

@@ -149,35 +149,8 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
 
 
 
-    const [reviews,setReviews] = useState([
-      {
-        id: 1,
-        name: "Alex Thompson",
-        rating: 5,
-        date: "2024-03-15",
-        comment: "This course exceeded my expectations! The content is well-structured and the instructor explains complex concepts in a very understandable way.",
-        helpful: 24,
-        profilePic: null
-      },
-      {
-        id: 2,
-        name: "Sarah Chen",
-        rating: 4.5,
-        date: "2024-03-10",
-        comment: "Great course overall. The practical examples really helped solidify the concepts. Would highly recommend for beginners.",
-        helpful: 18,
-        profilePic: null
-      },
-      {
-        id: 3,
-        name: "Michael Rodriguez",
-        rating: 5,
-        date: "2024-03-05",
-        comment: "The course content is up-to-date and relevant. The instructor's teaching style is engaging and the exercises are challenging but rewarding.",
-        helpful: 15,
-        profilePic: null
-      }
-    ]);
+    const [reviews,setReviews] = useState([]);
+    const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
   
     // Function to render stars based on rating
     const renderStars = (rating:any) => {
@@ -190,6 +163,8 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
           <FaStar key={`star-${i}`} className="text-yellow-400" />
         );
       }
+
+      
   
       if (hasHalfStar) {
         stars.push(
@@ -206,24 +181,6 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
   
       return stars;
     };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const [activeTab, setActiveTab] = useState('overview');
     const [isLoading, setIsLoading] = useState(false);
     const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
@@ -237,7 +194,12 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
     const [modules, setModules] =
       useState<CreateCourseState>(initialModulesState);
     // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
-  
+    const [isVisibleCode, setIsVisibleCode] = useState(false);
+
+       const toggleCodeVisibility = () => {
+        setIsVisibleCode(!isVisibleCode);
+        setCodeQuestion(null);
+         };
     const { id } = useParams<{ id: string }>();
   
     useEffect(() => {
@@ -248,7 +210,7 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
             const userId = getCookie("userId");
             console.log();
             const response = await userAxios.get(userEndpoint.fetchCourseDetails, {
-              params: { id, userId }, withCredentials:true 
+              params: { id, userId }
             });
             setTutorId(response.data.courseData.tutorId);
   
@@ -296,10 +258,6 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
             console.log(courseData, "courseData");
            
  
-       
-            
-            // console.log(modulesLength);
-            // console.log(totalLessonsCount);
   
             setModules(createCourseState);
             setTotalLessons(totalLessonsCount);
@@ -324,14 +282,45 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
   const [selectedVideoDescription, setSelectedVideoDescription] = useState<string | null>(null);
 
+  useEffect(()=>{
+    const trig = ()=> {
+      console.log(codeQuestion,',.......//////////////////////////////////')
+      if(codeQuestion){
+        setIsVisibleCode(true);
+      }
+    }
+    trig()
+  },[codeQuestion])
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100"
     >
-      <CodingQuestionInterface {...questionData}/>
+            <button
+        onClick={toggleCodeVisibility}
+        className="mt-8 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
+      >
+        Toggle Question
+      </button>
+      
+      <div
+    className={`fixed top-0 w-full h-full bg-white shadow-lg transition-transform transform ${
+      isVisibleCode ? "translate-x-0" : "-translate-x-full"
+    } z-50`}
+  >
+    <button
+      onClick={toggleCodeVisibility}
+      className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
+    >
+      Close
+    </button>
+      
+      <CodingQuestionInterface {...codeQuestion || questionData}/>
+      </div>
       <div className="max-w-7xl mx-auto py-8">
+        
         <motion.div 
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -513,7 +502,7 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
 
           {/* Modules Sidebar */}
           <div className="w-full">
-            <Modules modules={modules} onVideoSelect={setSelectedVideo} onSelectDescription={setSelectedVideoDescription} />
+            <Modules modules={modules} onVideoSelect={setSelectedVideo} onCodeSelect={setCodeQuestion} onSelectDescription={setSelectedVideoDescription} />
           </div>
         </motion.div>
       </div>
