@@ -7,7 +7,6 @@ import AuthChoice from '../../common/AuthChoice';
 import PaymentSuccessPage from '../../../pages/user/PaymentStatus/PaymentSuccessPage';
 import CartPage from '../../../pages/user/Cart/CartPage';
 
-
 const UserRoutes = ()=>{
     return(
         
@@ -19,8 +18,8 @@ const UserRoutes = ()=>{
             <Route path = '/otp' element = {<OtpVarification/>}/>
             <Route path = '/payment/success' element = {<PaymentSuccessPage/>}/>
             <Route path = '/cart' element = {<CartPage/>}/>
-            
         </Routes>
+        
     )
 }
 

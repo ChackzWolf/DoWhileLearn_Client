@@ -22,46 +22,36 @@ import { FaStar, FaUserCircle } from "react-icons/fa";
 import { BsStarHalf } from "react-icons/bs";
 import StudentReviews from "../StudentReview";
 import CodingQuestionInterface from "./Questions/CodeEditor";
+import ChatComponent from "../../Chat/ChatCoursesRoute";
+ 
 
 interface Module {
-    name: string;
-    description: string;
-    lessons: Array<Lesson>;
-  }
-  
-  interface Lesson {
-    title: string;
-    video: File | null | string;
-    description: string;
-    questions?: questions;
-  }
-  
-  interface questions {
-    questionText: string;
-    options: string[];
-    correctAnswer: string;
-  }
-  
-  const initialModulesState: CreateCourseState = {
-    Modules: [],
-  };
+  name: string;
+  description: string;
+  lessons: Array<Lesson>;
+}
 
+interface Lesson {
+  title: string;
+  video: File | null | string;
+  description: string;
+  questions?: questions;
+}
 
+interface questions {
+  questionText: string;
+  options: string[];
+  correctAnswer: string;
+}
 
+const initialModulesState: CreateCourseState = {
+  Modules: [],
+};
 
-
-
-
-
-
-
-
-
-
-  const questionData = {
-    id: 1,
-    type: "CODING" as const,
-    question: `
+const questionData = {
+  id: 1,
+  type: "CODING" as const,
+  question: `
       <h2>Two Sum</h2>
       <p>Given an array of integers <code>nums</code> and an integer <code>target</code>, 
       return indices of the two numbers in the array such that they add up to <code>target</code>.</p>
@@ -76,49 +66,49 @@ Output: [0,1]
 Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
       </pre>
     `,
-    startingCode: `function twoSum(nums, target) {
+  startingCode: `function twoSum(nums, target) {
     // Write your code here
     
 }`,
-    noOfParameters: 2,
-    parameters: [
-      { value: "nums", dataType: "number[]" },
-      { value: "target", dataType: "number" }
-    ],
-    expectedOutput: {
-      value: "[0,1]",
-      dataType: "number[]"
+  noOfParameters: 2,
+  parameters: [
+    { value: "nums", dataType: "number[]" },
+    { value: "target", dataType: "number" },
+  ],
+  expectedOutput: {
+    value: "[0,1]",
+    dataType: "number[]",
+  },
+  testCases: [
+    {
+      parameters: [
+        { value: "[2,7,11,15]", dataType: "number[]" },
+        { value: "9", dataType: "number" },
+      ],
+      expectedValue: { value: "[0,1]", dataType: "number[]" },
     },
-    testCases: [
-      {
-        parameters: [
-          { value: "[2,7,11,15]", dataType: "number[]" },
-          { value: "9", dataType: "number" }
-        ],
-        expectedValue: { value: "[0,1]", dataType: "number[]" }
-      },
-      {
-        parameters: [
-          { value: "[3,2,4]", dataType: "number[]" },
-          { value: "6", dataType: "number" }
-        ],
-        expectedValue: { value: "[1,2]", dataType: "number[]" }
-      },
-      {
-        parameters: [
-          { value: "[3,3]", dataType: "number[]" },
-          { value: "6", dataType: "number" }
-        ],
-        expectedValue: { value: "[0,1]", dataType: "number[]" }
-      }
-    ],
-    score: 50,
-    hints: [
-      "Try using a hash map to store the numbers you've seen",
-      "For each number, check if its complement (target - num) exists in the hash map",
-      "Remember to return the indices, not the numbers themselves"
-    ],
-    solution: `function twoSum(nums, target) {
+    {
+      parameters: [
+        { value: "[3,2,4]", dataType: "number[]" },
+        { value: "6", dataType: "number" },
+      ],
+      expectedValue: { value: "[1,2]", dataType: "number[]" },
+    },
+    {
+      parameters: [
+        { value: "[3,3]", dataType: "number[]" },
+        { value: "6", dataType: "number" },
+      ],
+      expectedValue: { value: "[0,1]", dataType: "number[]" },
+    },
+  ],
+  score: 50,
+  hints: [
+    "Try using a hash map to store the numbers you've seen",
+    "For each number, check if its complement (target - num) exists in the hash map",
+    "Remember to return the indices, not the numbers themselves",
+  ],
+  solution: `function twoSum(nums, target) {
     const map = new Map();
     
     for (let i = 0; i < nums.length; i++) {
@@ -133,195 +123,175 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
     
     return []; // No solution found
 }`,
-    difficulty: "Easy" as const
+  difficulty: "Easy" as const,
+};
+
+function CoursePurchasedCourseDetailsDetails() {
+  const [reviews, setReviews] = useState([]);
+  const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
+
+  // Function to render stars based on rating
+  const renderStars = (rating: any) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<FaStar key={`star-${i}`} className="text-yellow-400" />);
+    }
+
+    if (hasHalfStar) {
+      stars.push(<BsStarHalf key="half-star" className="text-yellow-400" />);
+    }
+
+    const remainingStars = 5 - Math.ceil(rating);
+    for (let i = 0; i < remainingStars; i++) {
+      stars.push(<FaStar key={`empty-star-${i}`} className="text-gray-300" />);
+    }
+
+    return stars;
   };
+  const [activeTab, setActiveTab] = useState("overview");
+  const [isLoading, setIsLoading] = useState(false);
+  const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
+  const [tutorId, setTutorId] = useState();
+  // const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
+  const dispatch = useDispatch();
+  const [benefits_prerequisites, setbenefits_prerequisites] =
+    useState<ICreateCourse2 | null>(null);
+  // const benifits_prerequisites = useSelector((state: RootState) => state.createCourseData.createCourse2);
+  const [totalLessons, setTotalLessons] = useState();
+  const [modules, setModules] =
+    useState<CreateCourseState>(initialModulesState);
+  // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
+  const [isVisibleCode, setIsVisibleCode] = useState(false);
 
+  const toggleCodeVisibility = () => {
+    setIsVisibleCode(!isVisibleCode);
+    setCodeQuestion(null);
+  };
+  const { id } = useParams<{ id: string }>();
 
+  useEffect(() => {
+    if (id) {
+      const fetchCourseDetails = async () => {
+        try {
+          setIsLoading(true);
+          const userId = getCookie("userId");
+          console.log();
+          const response = await userAxios.get(
+            userEndpoint.fetchCourseDetails,
+            {
+              params: { id, userId },
+            }
+          );
+          setTutorId(response.data.courseData.tutorId);
 
+          console.log(response.data.courseData, "course ");
 
+          const theCourseData: ICreateCourse1 = {
+            thumbnail: response.data.courseData.thumbnail,
+            courseTitle: response.data.courseData.courseTitle,
+            courseDescription: response.data.courseData.courseDescription,
+            coursePrice: response.data.courseData.coursePrice,
+            discountPrice: response.data.courseData.discountPrice,
+            courseCategory: response.data.courseData.courseCategory,
+            courseLevel: response.data.courseData.courseLevel,
+            demoURL: response.data.courseData.demoURL,
+            courseId: response.data.courseData._id,
+          };
 
+          setCourseData(theCourseData);
 
-
-
-  
-  function CoursePurchasedCourseDetailsDetails() {
-
-
-
-
-    const [reviews,setReviews] = useState([]);
-    const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
-  
-    // Function to render stars based on rating
-    const renderStars = (rating:any) => {
-      const stars = [];
-      const fullStars = Math.floor(rating);
-      const hasHalfStar = rating % 1 !== 0;
-  
-      for (let i = 0; i < fullStars; i++) {
-        stars.push(
-          <FaStar key={`star-${i}`} className="text-yellow-400" />
-        );
-      }
-
-      
-  
-      if (hasHalfStar) {
-        stars.push(
-          <BsStarHalf key="half-star" className="text-yellow-400" />
-        );
-      }
-  
-      const remainingStars = 5 - Math.ceil(rating);
-      for (let i = 0; i < remainingStars; i++) {
-        stars.push(
-          <FaStar key={`empty-star-${i}`} className="text-gray-300" />
-        );
-      }
-  
-      return stars;
-    };
-    const [activeTab, setActiveTab] = useState('overview');
-    const [isLoading, setIsLoading] = useState(false);
-    const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
-    const [tutorId, setTutorId] = useState();
-    // const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
-    const dispatch = useDispatch();
-    const [benefits_prerequisites, setbenefits_prerequisites] =
-      useState<ICreateCourse2 | null>(null);
-    // const benifits_prerequisites = useSelector((state: RootState) => state.createCourseData.createCourse2);
-    const [totalLessons, setTotalLessons] = useState();
-    const [modules, setModules] =
-      useState<CreateCourseState>(initialModulesState);
-    // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
-    const [isVisibleCode, setIsVisibleCode] = useState(false);
-
-       const toggleCodeVisibility = () => {
-        setIsVisibleCode(!isVisibleCode);
-        setCodeQuestion(null);
-         };
-    const { id } = useParams<{ id: string }>();
-  
-    useEffect(() => {
-      if (id) {
-        const fetchCourseDetails = async () => {
-          try {
-            setIsLoading(true);
-            const userId = getCookie("userId");
-            console.log();
-            const response = await userAxios.get(userEndpoint.fetchCourseDetails, {
-              params: { id, userId }
-            });
-            setTutorId(response.data.courseData.tutorId);
-  
-            console.log(response.data.courseData, "course ");
-  
-            const theCourseData: ICreateCourse1 = {
-              thumbnail: response.data.courseData.thumbnail,
-              courseTitle: response.data.courseData.courseTitle,
-              courseDescription: response.data.courseData.courseDescription,
-              coursePrice: response.data.courseData.coursePrice,
-              discountPrice: response.data.courseData.discountPrice,
-              courseCategory: response.data.courseData.courseCategory,
-              courseLevel: response.data.courseData.courseLevel,
-              demoURL: response.data.courseData.demoURL,
-              courseId: response.data.courseData._id,
-            };
-  
-            setCourseData(theCourseData);
-  
-            const courseDetails: ICreateCourse2 = {
-              prerequisites:
-                response.data.courseData.benefits_prerequisites.prerequisites,
-              benefits: response.data.courseData.benefits_prerequisites.benefits,
-            };
-            setbenefits_prerequisites(courseDetails);
-            const createCourseState: CreateCourseState = {
-              Modules: response.data.courseData.Modules.map((module: Module) => ({
-                name: module.name,
-                description: module.description,
-                lessons: module.lessons.map((lesson) => ({
-                  title: lesson.title,
-                  video: lesson.video, // Video can be a File, null, or URL string
-                  description: lesson.description,
-                  questions: lesson.questions, // Include questions if they exist
-                })),
+          const courseDetails: ICreateCourse2 = {
+            prerequisites:
+              response.data.courseData.benefits_prerequisites.prerequisites,
+            benefits: response.data.courseData.benefits_prerequisites.benefits,
+          };
+          setbenefits_prerequisites(courseDetails);
+          const createCourseState: CreateCourseState = {
+            Modules: response.data.courseData.Modules.map((module: Module) => ({
+              name: module.name,
+              description: module.description,
+              lessons: module.lessons.map((lesson) => ({
+                title: lesson.title,
+                video: lesson.video, // Video can be a File, null, or URL string
+                description: lesson.description,
+                questions: lesson.questions, // Include questions if they exist
               })),
-            };
-            const modulesLength = response.data.courseData.Modules.length;
-            const totalLessonsCount = response.data.courseData.Modules.reduce(
-              (acc: any, module: any) => {
-                return acc + module.lessons.length;
-              },
-              0
-            ); // Initialize accumulator as 0
-            console.log(courseData, "courseData");
-           
- 
-  
-            setModules(createCourseState);
-            setTotalLessons(totalLessonsCount);
-            
-  
-            setIsLoading(false);
-          } catch (error) {
-            console.error("Error fetching course details:", error);
-            setIsLoading(false);
-          }
-        };
-  
-        console.log(modules, "modules");
-        // const totalLessons = response.data.courseData.Modules.reduce((count,Modules) => count + Modules.Lessons.length,0)
-        // const totalLessons = response.data.courseData.sections.reduce((count,section)=>count +section.lessons.length,0);
-  
-        fetchCourseDetails();
-      }
-    }, [id, dispatch]);
+            })),
+          };
+          const modulesLength = response.data.courseData.Modules.length;
+          const totalLessonsCount = response.data.courseData.Modules.reduce(
+            (acc: any, module: any) => {
+              return acc + module.lessons.length;
+            },
+            0
+          ); // Initialize accumulator as 0
+          console.log(courseData, "courseData");
 
+          setModules(createCourseState);
+          setTotalLessons(totalLessonsCount);
+
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error fetching course details:", error);
+          setIsLoading(false);
+        }
+      };
+
+      console.log(modules, "modules");
+      // const totalLessons = response.data.courseData.Modules.reduce((count,Modules) => count + Modules.Lessons.length,0)
+      // const totalLessons = response.data.courseData.sections.reduce((count,section)=>count +section.lessons.length,0);
+
+      fetchCourseDetails();
+    }
+  }, [id, dispatch]);
 
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
-  const [selectedVideoDescription, setSelectedVideoDescription] = useState<string | null>(null);
+  const [selectedVideoDescription, setSelectedVideoDescription] = useState<
+    string | null
+  >(null);
 
-  useEffect(()=>{
-    const trig = ()=> {
-      console.log(codeQuestion,',.......//////////////////////////////////')
-      if(codeQuestion){
+  useEffect(() => {
+    const trig = () => {
+      console.log(codeQuestion, ",.......//////////////////////////////////");
+      if (codeQuestion) {
         setIsVisibleCode(true);
       }
-    }
-    trig()
-  },[codeQuestion])
+    };
+    trig();
+  }, [codeQuestion]);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100"
     >
-            <button
+      <button
         onClick={toggleCodeVisibility}
         className="mt-8 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
       >
         Toggle Question
       </button>
-      
+
       <div
-    className={`fixed top-0 w-full h-full bg-white shadow-lg transition-transform transform ${
-      isVisibleCode ? "translate-x-0" : "-translate-x-full"
-    } z-50`}
-  >
-    <button
-      onClick={toggleCodeVisibility}
-      className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
-    >
-      Close
-    </button>
-      
-      <CodingQuestionInterface {...codeQuestion || questionData}/>
+        className={`fixed top-0 w-full h-full bg-white shadow-lg transition-transform transform ${
+          isVisibleCode ? "translate-x-0" : "-translate-x-full"
+        } z-50`}
+      >
+        <button
+          onClick={toggleCodeVisibility}
+          className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
+        >
+          Close
+        </button>
+
+        <CodingQuestionInterface {...(codeQuestion || questionData)} />
       </div>
       <div className="max-w-7xl mx-auto py-8">
-        
-        <motion.div 
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -362,47 +332,51 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
                   className="w-full aspect-video object-cover"
                 />
               )}
-          
             </motion.div>
-                { selectedVideo && 
+            {selectedVideo && (
               <div className="">
                 <div className="border-b border-gray-200 m-5">
                   <h1 className="text-gray-600">Description:</h1>
-                  <h1 className="text-gray-600 m-2">{selectedVideoDescription}</h1>
+                  <h1 className="text-gray-600 m-2">
+                    {selectedVideoDescription}
+                  </h1>
                 </div>
               </div>
-                  }
+            )}
             {/* Tabs */}
             <div className="bg-white rounded-xl shadow-sm">
               <div className="border-b border-gray-200">
-                  <nav className="flex -mb-px">
-                    {['overview', 'reviews'].map((tab) => (
-                      <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-6 py-4 text-sm font-medium capitalize ${
-                          activeTab === tab
-                            ? 'border-b-2 border-purple-600 text-purple-600'
-                            : 'text-gray-500 hover:text-gray-700'
-                        }`}
-                      >
-                        {tab}
-                      </button>
-                    ))}
-                  </nav>
-                </div>
+                <nav className="flex -mb-px">
+                  {["overview", "reviews"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-6 py-4 text-sm font-medium capitalize ${
+                        activeTab === tab
+                          ? "border-b-2 border-purple-600 text-purple-600"
+                          : "text-gray-500 hover:text-gray-700"
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </nav>
+              </div>
 
               <div className="p-6">
-                  {activeTab === 'overview' && (
-                    <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="space-y-6"
-                    >
-                      <div>
-                        <h2 className="text-xl text-purple-600  font-semibold mb-4">What you'll learn</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {benefits_prerequisites?.benefits.map((benefit, index) => (
+                {activeTab === "overview" && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="space-y-6"
+                  >
+                    <div>
+                      <h2 className="text-xl text-purple-600  font-semibold mb-4">
+                        What you'll learn
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {benefits_prerequisites?.benefits.map(
+                          (benefit, index) => (
                             <motion.div
                               key={index}
                               initial={{ opacity: 0, x: -20 }}
@@ -413,14 +387,18 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
                               <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
                               <span className="text-gray-600">{benefit}</span>
                             </motion.div>
-                          ))}
-                        </div>
+                          )
+                        )}
                       </div>
+                    </div>
 
-                      <div>
-                        <h2 className="text-xl text-purple-600  font-semibold mb-4">Prerequisites</h2>
-                        <div className="space-y-3">
-                          {benefits_prerequisites?.prerequisites.map((prerequisite, index) => (
+                    <div>
+                      <h2 className="text-xl text-purple-600  font-semibold mb-4">
+                        Prerequisites
+                      </h2>
+                      <div className="space-y-3">
+                        {benefits_prerequisites?.prerequisites.map(
+                          (prerequisite, index) => (
                             <motion.div
                               key={index}
                               initial={{ opacity: 0, x: -20 }}
@@ -429,25 +407,26 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
                               className="flex items-start gap-3"
                             >
                               <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
-                              <span className="text-gray-600">{prerequisite}</span>
+                              <span className="text-gray-600">
+                                {prerequisite}
+                              </span>
                             </motion.div>
-                          ))}
-                        </div>
+                          )
+                        )}
                       </div>
-                    </motion.div>
-                  ) }
-                  {activeTab === 'reviews' && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                    >
-                      <StudentReviews courseId={courseData?.courseId} isPurchased={true}/>
-                    </motion.div>
-                  )}
-                </div>
+                    </div>
+                  </motion.div>
+                )}
+                {activeTab === "reviews" && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <StudentReviews
+                      courseId={courseData?.courseId}
+                      isPurchased={true}
+                    />
+                  </motion.div>
+                )}
+              </div>
             </div>
-
-
 
             <motion.div
               initial={{ y: 20, opacity: 0 }}
@@ -476,25 +455,26 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
                 </motion.ul>
               </div>
 
-            
               {/* Prerequisites Section */}
               <div className="bg-white rounded-2xl shadow-lg p-6">
                 <h2 className="text-xl font-semibold mb-4 text-purple-600">
                   Prerequisites
                 </h2>
                 <motion.ul className="space-y-3">
-                  {benefits_prerequisites?.prerequisites.map((prerequisite, index) => (
-                    <motion.li
-                      key={index}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-center gap-3 text-gray-700"
-                    >
-                      <IoCheckmarkDoneOutline className="text-green-500 flex-shrink-0" />
-                      <span>{prerequisite}</span>
-                    </motion.li>
-                  ))}
+                  {benefits_prerequisites?.prerequisites.map(
+                    (prerequisite, index) => (
+                      <motion.li
+                        key={index}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="flex items-center gap-3 text-gray-700"
+                      >
+                        <IoCheckmarkDoneOutline className="text-green-500 flex-shrink-0" />
+                        <span>{prerequisite}</span>
+                      </motion.li>
+                    )
+                  )}
                 </motion.ul>
               </div>
             </motion.div>
@@ -502,14 +482,19 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
 
           {/* Modules Sidebar */}
           <div className="w-full">
-            <Modules modules={modules} onVideoSelect={setSelectedVideo} onCodeSelect={setCodeQuestion} onSelectDescription={setSelectedVideoDescription} />
+            <Modules
+              modules={modules}
+              onVideoSelect={setSelectedVideo}
+              onCodeSelect={setCodeQuestion}
+              onSelectDescription={setSelectedVideoDescription}
+            />
           </div>
         </motion.div>
       </div>
       <ToastContainer />
+      <ChatComponent />
     </motion.div>
   );
-};
-
+}
 
 export default CoursePurchasedCourseDetailsDetails;

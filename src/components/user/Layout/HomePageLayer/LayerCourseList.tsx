@@ -3,6 +3,7 @@ import CourseBadge from "../CourseBadge";
 import CourseBadgeSkeleton from "../../Course/Skeletons/CourseBadgeSkeleton"; // Import the skeleton loader
 import axios from "axios";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
+import userAxios from "../../../../utils/axios/userAxios.config";
 
 export interface ResponseFetchCourseList {
   courses: Course[];

@@ -26,6 +26,7 @@ import CourseDetailSkeleton from "./Skeletons/CourseDetailsSkeleton";
 import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 import userAxios from "../../../utils/axios/userAxios.config";
 import StudentReviews from "./StudentReview";
+import  ChatComponent from "../Chat/ChatCoursesRoute"
 
 interface Module {
   name: string;
@@ -421,6 +422,7 @@ function CourseDetails() {
           </div>
         </motion.div>
         <ToastContainer />
+        <ChatComponent/>
       </div>
     ) : (
       <CourseDetailSkeleton />
