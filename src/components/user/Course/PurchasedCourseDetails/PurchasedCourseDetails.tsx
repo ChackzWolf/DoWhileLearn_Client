@@ -23,6 +23,7 @@ import { BsStarHalf } from "react-icons/bs";
 import StudentReviews from "../StudentReview";
 import CodingQuestionInterface from "./Questions/CodeEditor";
 import ChatComponent from "../../Chat/ChatCoursesRoute";
+import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
  
 
 interface Module {
@@ -199,6 +200,9 @@ function CoursePurchasedCourseDetailsDetails() {
             courseLevel: response.data.courseData.courseLevel,
             demoURL: response.data.courseData.demoURL,
             courseId: response.data.courseData._id,
+            averageRating:response.data.courseData.averageRating,
+            ratingCount: response.data.courseData.ratingCount,
+
           };
 
           setCourseData(theCourseData);
@@ -269,12 +273,12 @@ function CoursePurchasedCourseDetailsDetails() {
       animate={{ opacity: 1 }}
       className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100"
     >
-      <button
+      {/* <button
         onClick={toggleCodeVisibility}
         className="mt-8 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
       >
         Toggle Question
-      </button>
+      </button> */}
 
       <div
         className={`fixed top-0 w-full h-full bg-white shadow-lg transition-transform transform ${
@@ -308,9 +312,28 @@ function CoursePurchasedCourseDetailsDetails() {
               <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
                 {courseData?.courseTitle}
               </h1>
-              <p className="mt-4 text-gray-600 leading-relaxed">
+              <p className="mt-4 text-gray-600 leading-relaxed m-2 mb-6">
                 {courseData?.courseDescription}
               </p>
+
+              <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <FiAward className="text-purple-600" />
+                    <span>{courseData?.courseLevel} Level</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiBook className="text-purple-600" />
+                    <span>{totalLessons} Lessons</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiClock className="text-purple-600" />
+                    <span>{modules.Modules.length} Modules</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiStar className="text-purple-600" />
+                    <span>{courseData?.averageRating} Rating</span>
+                  </div>
+                </div>
             </motion.div>
 
             <motion.div
@@ -422,6 +445,8 @@ function CoursePurchasedCourseDetailsDetails() {
                     <StudentReviews
                       courseId={courseData?.courseId}
                       isPurchased={true}
+                      averageRating={courseData?.averageRating} 
+                      totalRatings={courseData?.ratingCount}
                     />
                   </motion.div>
                 )}

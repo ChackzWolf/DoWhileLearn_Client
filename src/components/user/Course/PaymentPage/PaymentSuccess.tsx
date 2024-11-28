@@ -15,7 +15,7 @@ const SuccessPage = () => {
         return savedDetails ? JSON.parse(savedDetails) : null;
     });
     const [orderStatus, setOrderStatus] = useState<boolean>();
-    const [countdown, setCountdown] = useState(10); // countdown starts at 10 seconds
+    const [countdown, setCountdown] = useState(20); // countdown starts at 20 seconds
 
     useEffect(() => {
         // Only fetch details if they aren't already saved in state
@@ -30,16 +30,16 @@ const SuccessPage = () => {
                             params: { sessionId },
                         });
                         console.log(response.data, 'response.data');
-                        const { message, success } = response.data;
-
+                        const { message, success, data } = response.data;
+                        console.log(response.data, 'rr3esponse data/./.')
                         if (success) {
                             console.log(message);
                             setOrderStatus(true);
                             console.log('PAYMENT SUCCESS');
-                            setOrderDetails(response.data);
+                            setOrderDetails(data);
                         } else {
                             setOrderStatus(false);
-                            setOrderDetails(response.data);
+                            setOrderDetails(data);
                         }
                     } catch (error) {
                         console.log('error', error);
@@ -58,7 +58,7 @@ const SuccessPage = () => {
             }, 1000);
 
             if (countdown === 0) {
-                navigate('/courses');
+                navigate(`/course/${orderDetails.courseId}`);
             }
 
             return () => clearInterval(intervalId);
@@ -66,11 +66,11 @@ const SuccessPage = () => {
     }, [orderStatus, countdown, navigate]);
     
     const continueToCourse = () => {
-        navigate(`/course/${orderDetails.order.courseId}`)
+        navigate(`/course/${orderDetails.courseId}`)
         // Remove order details from sessionStorage after navigating
         sessionStorage.removeItem("orderDetails");
     }
-
+console.log(orderDetails, 'this is order details')
     if (!orderDetails) return <Loader/>;
 
     return orderStatus ? (
@@ -78,9 +78,9 @@ const SuccessPage = () => {
             <div className="flex flex-col text-center items-center gap-4 border-rounded rounded-lg bg-[#DDB3FF] p-10 shadow-lg">
                 <h1 className="text-green-500 text-7xl"><SiTicktick /></h1>
                 <h1 className="text-2xl font-bold">Payment Successful!</h1>
-                <p>{`Order ID :  ${orderDetails?.order?._id}`}</p>
-                <p>{`Amount Paid :  ${orderDetails?.order?.price}`}</p>
-                <p>{`Course :  ${orderDetails?.order?.title}`}</p>
+                <p>{`Order ID :  ${orderDetails?.tutorId}`}</p>
+                <p>{`Amount Paid :  ${orderDetails?.price}`}</p>
+                <img src={orderDetails.thumbnail} alt=""  className="h-20 w-25 rounded-lg"/>
 
                 <button className="bg-[#7C24F0] border-rounded rounded-lg p-2 shadow-lg text-white font-semibold hover:bg-[#6211cd] transition-all" onClick={()=> {continueToCourse()}}> Continue to the course</button>
             </div>
@@ -90,8 +90,8 @@ const SuccessPage = () => {
     <div className="flex flex-col text-center items-center gap-4 border-rounded rounded-lg bg-[#DDB3FF] p-10 shadow-lg">
         <h1 className="text-red-500 text-7xl"><RxCrossCircled /></h1>
         <h1 className="text-2xl font-bold">Payment failed!</h1>
-        <p>{`Order ID :  ${orderDetails?.order?._id}`}</p>
-        <p>{`Amount of ${orderDetails?.order?.price} will be credited back to account if debited. in 7 buisness days.`}</p>
+        <p>{`Order ID :  ${orderDetails?.tutorId}`}</p>
+        <p>{`Amount of ${orderDetails?.price} will be credited back to account if debited. in 7 buisness days.`}</p>
         <p>{`Redirecting to course page with in ${countdown} seconds.`}</p>
 
         <button className="bg-[#7C24F0] border-rounded rounded-lg p-2 shadow-lg text-white font-semibold hover:bg-[#6211cd] transition-all" onClick={()=> {continueToCourse()}}> Back to course page</button>

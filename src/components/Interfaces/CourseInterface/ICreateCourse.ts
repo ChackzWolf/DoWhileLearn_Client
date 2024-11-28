@@ -11,6 +11,8 @@ export interface ICreateCourse1 {
     courseLevel: string;
     demoURL: string;
     courseId?:string;
+    averageRating?:number
+    ratingCount?:number
   }
   export interface ICreateCourse2 {
     prerequisites: string [];

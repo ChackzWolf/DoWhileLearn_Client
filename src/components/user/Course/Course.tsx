@@ -22,6 +22,7 @@ export interface Course {
   thumbnail: string;
   benefits_prerequisites: BenefitsPrerequisites;
   Modules: Module[];
+  averageRating:number
 }
 
 export interface BenefitsPrerequisites {
@@ -92,7 +93,7 @@ function CoursesList() {
                 key={course._id}
                 title={course.courseTitle}
                 description={course.courseDescription}
-                rating={4}
+                rating={course.averageRating}
                 price={course.coursePrice}
                 discountPrice={course.discountPrice}
                 imageSrc={course.thumbnail}

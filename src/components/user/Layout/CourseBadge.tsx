@@ -96,7 +96,7 @@ const CourseBadge: React.FC<CourseBadgeProps> = ({
         </div>
         <div className="flex items-center mt-2">
           
-            {renderStars(rating)}
+            {rating > 0 ? renderStars(rating): ""}
      
         </div>
       </div>

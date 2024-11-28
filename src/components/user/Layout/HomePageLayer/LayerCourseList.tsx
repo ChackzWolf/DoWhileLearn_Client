@@ -3,7 +3,6 @@ import CourseBadge from "../CourseBadge";
 import CourseBadgeSkeleton from "../../Course/Skeletons/CourseBadgeSkeleton"; // Import the skeleton loader
 import axios from "axios";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
-import userAxios from "../../../../utils/axios/userAxios.config";
 
 export interface ResponseFetchCourseList {
   courses: Course[];
@@ -21,7 +20,7 @@ export interface Course {
   benefits_prerequisites: BenefitsPrerequisites;
   Modules: Module[];
   ratingCount?:number;
-  averageRating?:number;
+  averageRating:number;
 }
 export interface BenefitsPrerequisites {
   benefits: string[];
@@ -97,7 +96,7 @@ let itemsToShow
             key={course.courseTitle + course.coursePrice} // Use a unique key
             title={course.courseTitle}
             description={course.courseDescription}
-            rating={course.averageRating || 2}
+            rating={course.averageRating}
             price={course.coursePrice}
             discountPrice={course.discountPrice}
             imageSrc={course.thumbnail}

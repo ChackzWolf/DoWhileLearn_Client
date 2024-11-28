@@ -8,7 +8,7 @@ import { loadStripe } from "@stripe/stripe-js";
 
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import { motion } from 'framer-motion';
-import { FiClock, FiBook, FiAward } from "react-icons/fi";
+import { FiClock, FiBook, FiAward, FiStar } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -98,7 +98,9 @@ function CourseDetails() {
             courseLevel: response.data.courseData.courseLevel,
             demoURL: response.data.courseData.demoURL,
             courseId: response.data.courseData._id,
-            tutorId:response.data.courseData.tutorId
+            tutorId:response.data.courseData.tutorId,
+            averageRating:response.data.courseData.averageRating,
+            ratingCount: response.data.courseData.ratingCount,
           };
 
           setCourseData(theCourseData);
@@ -259,10 +261,10 @@ function CourseDetails() {
                 animate={{ opacity: 1 }}
                 className="bg-white rounded-xl p-6 shadow-sm"
               >
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">
-                  {courseData.courseTitle}
-                </h1>
-                <p className="text-gray-600 mb-6">
+              <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
+                {courseData?.courseTitle}
+              </h1>
+                <p className="text-gray-600 m-2 mb-6">
                   {courseData.courseDescription}
                 </p>
                 
@@ -278,6 +280,10 @@ function CourseDetails() {
                   <div className="flex items-center gap-2">
                     <FiClock className="text-purple-600" />
                     <span>{modules.Modules.length} Modules</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <FiStar className="text-purple-600" />
+                    <span>{courseData.averageRating} Rating</span>
                   </div>
                 </div>
               </motion.div>
@@ -359,7 +365,7 @@ function CourseDetails() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
-                      <StudentReviews courseId= {courseData.courseId} isPurchased={false}/>
+                      <StudentReviews courseId= {courseData.courseId} isPurchased={false} averageRating={courseData.averageRating} totalRatings={courseData.ratingCount}/>
                     </motion.div>
                   )}
                 </div>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
-import userAxios from '../../../utils/axios/userAxios.config';
-import { userEndpoint } from '../../../constraints/userEndpoints';
 import { getCookie } from '../../../utils/cookieManager';
 import { RiArrowDownSLine, RiArrowLeftSLine } from 'react-icons/ri';
 import { HiChatBubbleLeftRight } from 'react-icons/hi2';
@@ -9,15 +7,19 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
 
 // Course interface
-interface Course {
+interface ChatRoom {
+  courseId: string;
   _id: string;
-  courseTitle: string;
-  description: string;
-  coursePrice: number;
+  name: string;
   instructor: string;
   thumbnail: string;
+  updatedAt:string;
+  lastMessage?: {
+    userId: string;
+    username: string;
+    content: string;
+  };
 }
-
 // Message interface
 interface Message {
   id: string;
@@ -32,34 +34,20 @@ const CourseListAndChat: React.FC = () => {
   const isLogin = useSelector((state: RootState) => state.userAuth.isLogin);
   const userId = getCookie('userId');
   // State management
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<ChatRoom | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>('');
   const [socket, setSocket] = useState<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [viewChat, setViewChat] = useState<boolean>(false);
+  const [chatRoomsList, setChatRoomsList] = useState<ChatRoom[]>([])
 
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Fetch courses effect
-  useEffect(() => {
-    const userId = getCookie('userId');
-    const fetchCourses = async () => {
-      try {
-        const response = await userAxios.get(userEndpoint.fetchPurchasedCourses, {params:{userId}})
-        setCourses(response.data.courses);
-      } catch (error) {
-        console.error('Failed to fetch courses:', error);
-      }
-    };
-
-    fetchCourses();
-  }, []);
-  console.log(courses, 'purchased courses')
+  console.log(chatRoomsList, 'chatroom lists')
   // Socket connection effect
   useEffect(() => {
     // Connect to socket
@@ -71,10 +59,15 @@ const CourseListAndChat: React.FC = () => {
       }
     });
 
+
+
     // Socket event handlers
     newSocket.on('connect', () => {
       console.log('Socket connected', newSocket.id);
     });
+    newSocket.on('chat_rooms',(chatRooms:any)=>{
+      console.log(chatRooms,'These are chat rooms');
+    })
   
     newSocket.on('course_messages', (courseMessages: Message[]) => {
       setMessages(courseMessages);
@@ -85,6 +78,7 @@ const CourseListAndChat: React.FC = () => {
       setMessages(prevMessages => [...prevMessages, message]);
     });
   
+    
     setSocket(newSocket);
   
     // Cleanup socket on unmount
@@ -98,24 +92,48 @@ const CourseListAndChat: React.FC = () => {
   }
   // Join course chat room
   const joinCourseChat = (courseId: string) => {
-    socket?.emit('join_course_room', { courseId });
+    socket?.emit('join_course_room', { courseId,userId });
   };
+  useEffect(() => {
+    if (viewChat) {
+      socket?.emit("get_chat_rooms", {userId}, (response: any) => {
 
+        console.log("map 1 chat room 4", response);
+  
+        // Destructure the `chatRooms` array
+        const chatRoomsArray = response.chatRooms;
+        console.log(chatRoomsArray, 'hcat rooms array')
+  
+        // Create a mapping for easy access
+
+        setChatRoomsList(chatRoomsArray);
+        console.log("merged courses", chatRoomsList);
+      });
+    }
+  }, [viewChat, messages]);
+
+  
   // Send message handler
   const handleSendMessage = () => {
     if (newMessage.trim() && selectedCourse && socket) {
       socket.emit('send_message', {
-        courseId: selectedCourse._id,
+        courseId: selectedCourse.courseId,
         content: newMessage
+      },(response:any)=>{
+        console.log('message send response', response);
+        if(response.success && selectedCourse.courseId === response.courseId){
+          // setMessages(prevMessages => [...prevMessages, response.message]);
+        }
       });
+
       setNewMessage('');
     }
   };
 
   // Select course handler
-  const handleSelectCourse = (course: Course) => {
+  const handleSelectCourse = (course: ChatRoom) => {
     setSelectedCourse(course);
-    joinCourseChat(course._id);
+    joinCourseChat(course.courseId);
   };
 console.log(viewChat, 'view chat')
   return (
@@ -142,7 +160,7 @@ console.log(viewChat, 'view chat')
             </button>
           </div>
 
-      {courses.map(course => (
+      {chatRoomsList.map(course => (
         <div 
           key={course._id} 
           onClick={() => handleSelectCourse(course)}
@@ -152,8 +170,12 @@ console.log(viewChat, 'view chat')
             <img src={course.thumbnail} alt="" className='h-full w-full object-cover'/>
           </div>
           
-          
-          <h3 className=" font-semibold">{course.courseTitle}</h3>
+          <div className='flex flex-col w-full '>
+              <h3 className=" font-semibold">{course.name}</h3>
+              <h1 className='text-xs m-1'>{`${course.lastMessage?.userId=== userId ? "You" : course.lastMessage?.username} : ${course.lastMessage?.content}`}</h1>
+              <h1 className='text-right text-xs'>{new Date(course.updatedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</h1>
+          </div>
+
         </div>
       ))}
     </div>
@@ -168,7 +190,7 @@ console.log(viewChat, 'view chat')
             <button onClick={()=> setSelectedCourse(null)} className='h-full'>
               <RiArrowLeftSLine />
             </button>
-            <h2 className="text-xl font-bold  h-full">{selectedCourse.courseTitle}</h2>
+            <h2 className="text-xl font-bold  h-full">{selectedCourse.name}</h2>
         </div>
 
           <div className="flex-grow h-80 overflow-y-auto mb-4 flex flex-col">
@@ -176,14 +198,19 @@ console.log(viewChat, 'view chat')
             {messages.map(message => (
               <div 
                 key={message.id} 
-                className={`w-3/5 mb-2 p-2 rounded-lg text-sm ${
+                className={`inline-block mb-2 p-2 rounded-lg text-sm ${
                   message.userId === userId
                   ? 'bg-purple-600 text-purple-100 self-end' 
                   : 'bg-purple-100 self-start'
                 }`}
+                style={{
+                  maxWidth: '70%', // Limit the maximum width of the bubble
+                  wordWrap: 'break-word', // Ensure long text wraps within the bubble
+                }}
               >
-                <strong>{message.userId === userId ? "You": message.username}</strong>
+                {message.userId !== userId && <strong> {message.username}</strong>}
                 <p>{message.content}</p>
+                <p className='text-xs text-right'>{new Date(message.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -196,6 +223,11 @@ console.log(viewChat, 'view chat')
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..."
               className="flex-grow p-2 border rounded-l-lg"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSendMessage();
+                }
+              }}
             />
             <button 
               onClick={handleSendMessage}
