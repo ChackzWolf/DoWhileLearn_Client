@@ -5,6 +5,8 @@ import { RiArrowDownSLine, RiArrowLeftSLine } from 'react-icons/ri';
 import { HiChatBubbleLeftRight } from 'react-icons/hi2';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
+import  Picker ,{EmojiClickData, EmojiStyle } from 'emoji-picker-react';
+import { BsEmojiSunglasses } from 'react-icons/bs';
 
 // Course interface
 interface ChatRoom {
@@ -41,7 +43,7 @@ const CourseListAndChat: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [viewChat, setViewChat] = useState<boolean>(false);
   const [chatRoomsList, setChatRoomsList] = useState<ChatRoom[]>([])
-
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -116,6 +118,7 @@ const CourseListAndChat: React.FC = () => {
   // Send message handler
   const handleSendMessage = () => {
     if (newMessage.trim() && selectedCourse && socket) {
+      setShowEmojiPicker(false)
       socket.emit('send_message', {
         courseId: selectedCourse.courseId,
         content: newMessage
@@ -134,6 +137,10 @@ const CourseListAndChat: React.FC = () => {
   const handleSelectCourse = (course: ChatRoom) => {
     setSelectedCourse(course);
     joinCourseChat(course.courseId);
+  };
+
+  const onEmojiClick = (emojiObject: EmojiClickData) => {
+    setNewMessage(prev => prev + emojiObject.emoji);
   };
 console.log(viewChat, 'view chat')
   return (
@@ -216,19 +223,41 @@ console.log(viewChat, 'view chat')
             <div ref={messagesEndRef} />
 
           </div>
-          <div className="flex">
+          <div className="flex border rounded-lg">
+
             <input 
               type="text" 
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..."
-              className="flex-grow p-2 border rounded-l-lg"
+              className="flex-grow p-2 rounded-l-lg   focus:outline-none"
+              onFocus={()=>setShowEmojiPicker(false)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   handleSendMessage();
                 }
               }}
             />
+            <button 
+              onClick={() => setShowEmojiPicker(prev => !prev)}
+              className=" px-2 rounded-r-lg text-xl"
+            >
+              <BsEmojiSunglasses className='text-purple-600 ' />
+            </button>
+            {showEmojiPicker && (
+              <div className="absolute bottom-12">
+
+
+                <Picker 
+                onEmojiClick={onEmojiClick} 
+                searchDisabled
+                height="300px"
+                emojiStyle={EmojiStyle.FACEBOOK}
+                skinTonesDisabled={true}
+                />
+              </div>
+              )}
+
             <button 
               onClick={handleSendMessage}
               className="bg-purple-600 text-white p-2 rounded-r-lg hover:bg-purple-700"

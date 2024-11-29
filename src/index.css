@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer components {
+    .emoji-picker-react .emoji-preview {
+      @apply hidden;
+    }
+  }
