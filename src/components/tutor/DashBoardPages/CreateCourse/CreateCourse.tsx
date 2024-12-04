@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
   setCreateCourse,
+  setCreateCourseEmpty,
   toNext,
 } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import { useSelector } from "react-redux";
@@ -12,6 +13,8 @@ import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import axios from "axios";
 import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
+import { getCookie } from "../../../../utils/cookieManager";
+import VideoPlayer from "../../../common/VideoPlayer";
 
 const validationSchema = Yup.object({
   courseTitle: Yup.string().required("Course name is required")
@@ -35,6 +38,12 @@ const validationSchema = Yup.object({
   thumbnail: Yup.string().required("Thumbnail is required"),
 });
 
+
+
+
+
+
+
 const AddCourse = () => {
   const [isLoading,setIsLoading] = useState(false)
   const createCourse = useSelector(
@@ -48,14 +57,21 @@ const AddCourse = () => {
   const [previewVideo, setPreviewVideo] = useState<string|null>(null)
   const [isImageUploading, setImageUploading] = useState(false);
   const [isVideoUploading, setVideoUploading] = useState(false)
+  // dispatch(setCreateCourseEmpty())
+
+
+
 
 
   const handleUpload = async (file: File) => {
     const formData = new FormData();
-    formData.append("image", file);
+
+    formData.append("image", file)
 
     try {
       setImageUploading(true)
+      
+
       const response = await axios.post(courseEndpoint.uploadImage, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -88,6 +104,12 @@ const AddCourse = () => {
   const handleVideoUpload = async (videoFile: File) => {
 
     const formData = new FormData();
+    const tutorId = getCookie('tutorId') || ''
+
+
+
+    
+    formData.append('tutorId', tutorId)
     formData.append("videoBinary", videoFile);
     try {
       const response = await axios.post(courseEndpoint.uploadVideo, formData, {
@@ -374,6 +396,7 @@ const handleImageUploadClick = () => {
                                   onClick={handleUploadClick}
                                 >
                                   { previewVideo ? (
+                                    <>
                                     <video
                                       className="w-full h-full object-center bg-black rounded-md"
                                       controls
@@ -382,6 +405,9 @@ const handleImageUploadClick = () => {
                                       Your browser does not
                                       support the video tag.
                                     </video>
+
+                                    </>
+
                                   ) : (
                                     <span className="absolute inset-0 flex items-center w-full justify-center text-gray-500">
                                         { isVideoUploading  ? <Spinner /> : "Upload Video"}
@@ -401,6 +427,11 @@ const handleImageUploadClick = () => {
                                   className="text-red-600 text-sm"
                                 />
                               </div>
+
+                              <VideoPlayer
+                                    videoUrl={"https://dowhilelearn.s3.amazonaws.com/2f3df864a8d7de113b30e6d56cea010d6b6f8ade2f0c5243a5f974c5df0495bc/2f3df864a8d7de113b30e6d56cea010d6b6f8ade2f0c5243a5f974c5df0495bc_master.m3u8"}
+                                    subtitleUrl='sdf'
+                              />
                           </div>
                 </div>
 

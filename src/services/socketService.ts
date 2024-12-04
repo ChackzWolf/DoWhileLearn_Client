@@ -1,73 +1,135 @@
-import { io, Socket } from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
+
+// Define interfaces for type safety
+interface ChatRoom {
+  id: string;
+  name: string;
+  // Add other relevant properties
+}
+
+interface Message {
+  id: string;
+  content: string;
+  userId: string;
+  timestamp: string;
+  // Add other relevant properties
+}
+
+interface UploadProgressData {
+  sessionId: string;
+  status: string;
+  progress: number;
+}
 
 class SocketService {
-  private socket: Socket;
+  private static instance: SocketService;
+  private socket: Socket | null = null;
+  private baseUrl: string;
+  private token: string;
 
-  constructor() {
-    
-    this.socket = io('http://localhost:5000?debug=true', {
-      transports: ['websocket', 'polling'],
-    //   upgrade: false,
-    });
+  private constructor(baseUrl: string = 'http://localhost:5000') {
+    this.baseUrl = baseUrl;
+    this.token = this.getCookie('userRefreshToken');
+  }
 
-    this.socket.on('connect', () => {
-      console.log('Socket connected:', this.socket.id);
-    });
+  // Singleton pattern to ensure only one instance
+  public static getInstance(baseUrl?: string): SocketService {
+    if (!SocketService.instance) {
+      SocketService.instance = new SocketService(baseUrl);
+    }
+    return SocketService.instance;
+  }
 
-    this.socket.on('disconnect', (reason) => {
-      if (reason === 'io server disconnect') {
-        this.socket.connect();
+  // Utility method to get cookie (replace with your actual cookie retrieval method)
+  private getCookie(name: string): string {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift() || '';
+    return '';
+  }
+
+  // Connect to socket with authentication
+  public connect(): Promise<Socket> {
+    return new Promise((resolve:any, reject) => {
+      // Disconnect existing connection if any
+      if (this.socket) {
+        this.disconnect();
       }
-    });
 
-    this.socket.on('connect_error', (error) => {
-      console.log('Socket connection error:', error);
+      // Create new socket connection
+      this.socket = io(this.baseUrl, {
+        transports: ['websocket', 'polling'],
+        auth: {
+          token: this.token
+        }
+      });
+
+      // Connection success handler
+      this.socket.on('connect', () => {
+        console.log('Socket connected', this.socket?.id);
+        resolve(this.socket);
+      });
+
+      // Connection error handler
+      this.socket.on('connect_error', (error) => {
+        console.error('Socket connection error:', error);
+        reject(error);
+      });
     });
   }
 
-  connect() {
-    if (!this.socket.connected) {
-      this.socket.connect();
-    }
+  // Chat-related methods
+  public joinCourseChat(courseId: string, userId: string): void {
+    this.socket?.emit('join_course_room', { courseId, userId });
   }
 
-  disconnect() {
-    if (this.socket.connected) {
+  public getChatRooms(userId: string, callback: (chatRooms: ChatRoom[]) => void): void {
+    this.socket?.emit("get_chat_rooms", { userId }, (response: any) => {
+      const chatRoomsArray = response.chatRooms || [];
+      callback(chatRoomsArray);
+    });
+  }
+
+  public listenToCourseMessages(callback: (messages: Message[]) => void): void {
+    this.socket?.on('course_messages', callback);
+  }
+
+  public listenToNewMessage(callback: (message: Message) => void): void {
+    this.socket?.on('new_message', callback);
+  }
+
+  // Video Upload Progress methods
+  public trackUpload(tutorId: string): string {
+    const sessionId = `upload_${Date.now()}_${tutorId}`;
+    this.socket?.emit('track_upload', sessionId);
+    return sessionId;
+  }
+
+  public listenToUploadProgress(callback: (data: UploadProgressData) => void): void {
+    this.socket?.on('upload_progress', callback);
+  }
+
+  // General socket event listeners
+  public onConnect(callback: () => void): void {
+    this.socket?.on('connect', callback);
+  }
+
+  public onDisconnect(callback: () => void): void {
+    this.socket?.on('disconnect', callback);
+  }
+
+  // Disconnect and cleanup
+  public disconnect(): void {
+    if (this.socket) {
       this.socket.disconnect();
+      this.socket = null;
     }
   }
 
-  joinRoom(courseId: string) {
-    console.log('join room ')
-    this.socket.emit('joinRoom', courseId);
-  }
-
-  leaveRoom(courseId: string | null) {
-    if (courseId) {
-      this.socket.emit('leaveRoom', courseId);
-    }
-  }
-
-  sendMessage(courseId: string, message: { userId: string; content: string; courseId:string;}) {
-    console.log('sending message to api')
-    this.socket.emit('sendMessage', { courseId, message });
-  }
-
-  sendImage(courseId: string, imageMessage: { userId: string; image: string }) {
-  this.socket.emit('sendImage', { courseId, imageMessage });
-}
-
-  onMessage(callback: (message: { userId: string; text: string; image:string; courseId: string }) => void) {
-    this.socket.on('receiveMessage', callback);
-  }
-
-  loadPreviousMessages(event: string, callback: (data: any) => void) {
-    this.socket.on(event, callback);
-  }
-
-  removeMessageListener(callback: (message: { userId: string; image:string; text: string; courseId: string }) => void) {
-    this.socket.off('receiveMessage', callback);
+  // Get current socket instance
+  public getSocket(): Socket | null {
+    return this.socket;
   }
 }
 
-export default new SocketService();
+export default SocketService;

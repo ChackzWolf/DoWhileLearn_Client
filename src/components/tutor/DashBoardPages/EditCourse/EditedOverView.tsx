@@ -53,8 +53,8 @@ console.log(data,'dataaaaaaaaaaaaaaaaa')
                   progressClassName: 'bg-green-200',
                 });
                 setIsLoading(false)
-                // dispatch(setEditCourseEmpty())
-                // navigate('/tutor/courses')
+                dispatch(setEditCourseEmpty())
+                navigate('/tutor/courses')
               } else {     
                 console.log('failed')
                 toast.error('Form submission failed!', {

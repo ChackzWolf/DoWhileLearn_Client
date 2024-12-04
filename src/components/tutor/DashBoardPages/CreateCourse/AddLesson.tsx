@@ -24,6 +24,7 @@ import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
 import QuizEditor from "./AddLessonsComponents/CreateQuestions";
 import RichTextEditor from "./AddLessonsComponents/createQuestionTrial";
+import { getCookie } from "../../../../utils/cookieManager";
 
 export const validationSchema = Yup.object().shape({
   Modules: Yup.array()
@@ -155,10 +156,12 @@ const AddLesson = () => {
     console.log(updateIsVideoLoading, 1);
     setIsVideoLoading(updateIsVideoLoading); // Set the updated state
     console.log(updateIsVideoLoading, 2);
-
+    const  tutorId = getCookie('tutorId') || ''
     const formData = new FormData();
+    formData.append('tutorId', tutorId);
     formData.append("videoBinary", videoFile);
     console.log(isVideoLoading,'isvideoupload')
+
     try {
       const response = await axios.post(courseEndpoint.uploadVideo, formData, {
         headers: {
