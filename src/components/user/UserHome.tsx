@@ -27,7 +27,6 @@ const UserHome= () => {
     return (
         <div className=" w-full h-screen">
             <Header/>
-
             <LayerOne/>
             <ChatComponent/>
             <LayerCourseList/>

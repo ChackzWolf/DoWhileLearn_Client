@@ -7,9 +7,24 @@ import CoursesPage from '../../../pages/tutor/DashBoard/CoursesPage'
 import CourseDetailsPage from '../../../pages/tutor/Course/CourseDetailsPage'
 import EditCoursePage from '../../../pages/tutor/Course/EditCourse/EditCoursePage';
 import TutorProfilePage from '../../../pages/tutor/Profile/TutorProfilePage';
+import UploadDetails from '../../tutor/DashBoardPages/UploadingStatus/UploadingStatus';
+import { MdOutlineCloudUpload } from "react-icons/md";
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store/store';
+import UploadSpinner from '../../common/icons/UploadSpinner';
+
 
 const TutorRoutes = ()=>{
+    const [viewUploads, setViewUploads] = useState(false);
+    const uploads = useSelector((state: RootState)=> state.uploadSlice.uploads)
+
+
+    const viewUploadCallback = () => {
+        setViewUploads(false)
+    }
     return(
+        <>
         <Routes>
             <Route path= '/' element={<TutorDashBoard/>}/>
             <Route path= '/users' element={<UsersPage/>}/>
@@ -21,6 +36,20 @@ const TutorRoutes = ()=>{
             <Route path = "/complete-registration"   />
             <Route path='/profile' element ={<TutorProfilePage/>}/>
         </Routes>
+
+        {uploads.length > 0 && 
+          (     
+            <div>
+                
+                <button onClick={()=> setViewUploads(true)} className='fixed right-0 text-purple rounded-lg shadow bottom-0 text-4xl justify-between m-7 hover:scale-105 hover:text-purple-600'>
+                    <UploadSpinner count={uploads.length}/>
+                </button>
+            </div>
+
+          )}
+
+        <UploadDetails viewUploads={viewUploads} closeUploads={viewUploadCallback} />
+    </>
     )
 }
 

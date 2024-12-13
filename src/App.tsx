@@ -60,7 +60,7 @@ function App() {
           <Route path = '/login/tutor/forgot-password/otp' element={<ResetPasswordOTP role='TUTOR'/>}/>
           <Route path = '/login/tutor/forgot-password/otp/reset-password' element={<ResetPassword role='TUTOR'/>}/>
           <Route path = '/register/tutor/completion/step-one' element={<RegistrationPage/>}/>
-          
+
           
 
           {/* Admin Auth */}

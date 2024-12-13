@@ -11,7 +11,7 @@ const ProgressBar = () => {
   const totalSteps = 4;
   // const current = useSelector((state: RootState) => state.createCourseData.step) as number
   const current = useSelector((state: RootState) => {
-    console.log(JSON.stringify(state.createCourseData, null, 2), 'lets see');
+    // console.log(JSON.stringify(state.createCourseData, null, 2), 'lets see');
     return state.createCourseData.step;
   }) as number;
   // dispatch(setCreateCourseEmpty());

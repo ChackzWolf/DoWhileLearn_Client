@@ -4,7 +4,6 @@ import io, { Socket } from 'socket.io-client';
 interface ChatRoom {
   id: string;
   name: string;
-  // Add other relevant properties
 }
 
 interface Message {
@@ -16,9 +15,14 @@ interface Message {
 }
 
 interface UploadProgressData {
+  id:string;
+  message:string;
   sessionId: string;
   status: string;
   progress: number;
+  videoUrl?: string;
+  lessonIndex?: number;
+  moduleIndex?: number;
 }
 
 class SocketService {
@@ -29,7 +33,7 @@ class SocketService {
 
   private constructor(baseUrl: string = 'http://localhost:5000') {
     this.baseUrl = baseUrl;
-    this.token = this.getCookie('userRefreshToken');
+    this.token = this.getCookie('tutorRefreshToken');
   }
 
   // Singleton pattern to ensure only one instance
@@ -100,7 +104,8 @@ class SocketService {
 
   // Video Upload Progress methods
   public trackUpload(tutorId: string): string {
-    const sessionId = `upload_${Date.now()}_${tutorId}`;
+    
+    const sessionId = `upload_${tutorId}`;
     this.socket?.emit('track_upload', sessionId);
     return sessionId;
   }

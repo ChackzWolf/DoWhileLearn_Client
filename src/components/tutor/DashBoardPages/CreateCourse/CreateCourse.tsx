@@ -7,6 +7,7 @@ import {
   setCreateCourseEmpty,
   toNext,
 } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
+import {addVideoUpload} from '../../../../redux/uploadStatSlice'
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
@@ -14,7 +15,11 @@ import axios from "axios";
 import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
 import { getCookie } from "../../../../utils/cookieManager";
-import VideoPlayer from "../../../common/VideoPlayer";
+import VideoPlayer from "./CreateCourse.compoents.ts/VideoPlayer";
+import { generateRandomCode } from "../../../../utils/common.utils";
+import SocketService from "../../../../services/socketService";
+import ProgressBar from "../UploadingStatus/ProgressBar";
+import CircularLoader from "../UploadingStatus/RoundedProgressBar";
 
 const validationSchema = Yup.object({
   courseTitle: Yup.string().required("Course name is required")
@@ -34,10 +39,20 @@ const validationSchema = Yup.object({
   courseDescription: Yup.string().required("Course description is required"),
   courseCategory: Yup.string().required("*required"),
   courseLevel: Yup.string().required("*required"),
-  demoURL: Yup.string().url("Invalid URL").required("Demo URL is required"),
+  demoURL: Yup.mixed().required("Video file is required"),
   thumbnail: Yup.string().required("Thumbnail is required"),
 });
 
+interface VideoUploadEntry {
+  id: string;
+  file: string;
+  tutorId: string;
+  sessionId: string;
+  message: string;
+  progress: number;
+  status: string;
+  error?: string;
+}
 
 
 
@@ -54,24 +69,41 @@ const AddCourse = () => {
   const dispatch = useDispatch();
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [previewVideo, setPreviewVideo] = useState<string|null>(null)
+  const [previewVideo, setPreviewVideo] = useState<string|null>(createCourse?.demoURL || null)
   const [isImageUploading, setImageUploading] = useState(false);
-  const [isVideoUploading, setVideoUploading] = useState(false)
+  const [isVideoUploading, setVideoUploading] = useState<VideoUploadEntry | null>(null)
   // dispatch(setCreateCourseEmpty())
+  const uploadDetails  = useSelector((state:RootState)=> state.uploadSlice.uploads);
+  console.log(uploadDetails, 'totrack changes')
 
 
-
-
+  useEffect(()=>{
+    const updateUploadStatus = ()=>{
+      console.log(previewVideo,';lkj;lk')
+      if(previewVideo){
+        const previewParts = previewVideo.split('_');
+        if (previewParts[0] === 'Pending') {
+          const pendingUploadId = previewParts[1];
+          const matchingUpload = uploadDetails.find(upload => upload.id === pendingUploadId);
+          console.log(matchingUpload,'comon');
+        
+          if(matchingUpload){
+            matchingUpload?.progress < 100 ? setVideoUploading(matchingUpload) : setPreviewVideo(matchingUpload?.videoURL || '');           
+          }
+   
+        }
+      }
+      console.log(isVideoUploading,'loading video')
+    }
+    updateUploadStatus()
+  },[uploadDetails])
 
   const handleUpload = async (file: File) => {
     const formData = new FormData();
-
     formData.append("image", file)
-
     try {
       setImageUploading(true)
       
-
       const response = await axios.post(courseEndpoint.uploadImage, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -83,7 +115,6 @@ const AddCourse = () => {
       // Use the returned URL to update the state or handle accordingly
       setPreviewImage(response.data.s3Url);
    
-
       if (response.data.s3Url) {
         setPreviewImage(response.data.s3Url);
         console.log('returning')
@@ -100,59 +131,76 @@ const AddCourse = () => {
       setImageUploading(false)
     }
   };
-
   const handleVideoUpload = async (videoFile: File) => {
-
+    const socketService = SocketService.getInstance('http://localhost:5000');
+    const id= generateRandomCode(8)
     const formData = new FormData();
     const tutorId = getCookie('tutorId') || ''
+    console.log('tutorId' ,tutorId)
+    let sessionId = ''
+    if(socketService){
+      console.log('yea');
+      sessionId = socketService.trackUpload(tutorId);
+      const data ={
+        id,
+        tutorId,
+        sessionId,
+        progress:0,
+        message:'Starting...',
+        status:'pending',
+        file:videoFile.name,
+        videoUrl:'',
+        error:'',
+        lessonIndex:null,
+        moduleIndex:null,
+      }
+      console.log(data, 'to redux')
+      
+      dispatch(addVideoUpload(data))
+    }
 
-
-
-    
     formData.append('tutorId', tutorId)
+    formData.append('id',id);
     formData.append("videoBinary", videoFile);
     try {
-      const response = await axios.post(courseEndpoint.uploadVideo, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      console.log(" video send ", response.data);
-      return response.data.s3Url;
-    } catch (error) {
+
+      axios.post(courseEndpoint.uploadVideo, formData, {headers: {  "Content-Type": "multipart/form-data",},});
+      
+      console.log(" returning ",id);
+      return id;
+
+    }catch (error) {
       console.log(error, "errorrorororororo");
     }finally{
 
     }
   };
-
   const handleFileChange = (setFieldValue: (field: string, value: unknown) => void) => {
     return async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0] || null;
       if (file) {
         try {
-          setVideoUploading(true);
           console.log("started HandleFileChange");
           // Upload video and get the URL
-          const videoUrl = await handleVideoUpload(file);
-          setPreviewVideo(videoUrl);
+          const id = await handleVideoUpload(file);
+          const topreview = `Pending_${id}`
+          console.log(topreview, 'avastha');
+          setPreviewVideo(topreview);
+          setFieldValue('demoURL', topreview);
           // Set the video URL in the form field (instead of the file)
-          setFieldValue('demoURL', videoUrl);
         } catch (error){
           console.error("Error handling file change:", error);
         }finally{
-          setVideoUploading(false)
         }
       }
     };
   };
-const handleImageUploadClick = () => {
+  const handleImageUploadClick = () => {
     if(imageInputRef.current){
       imageInputRef.current.click()
     }
   }
-
-   const handleUploadClick = () => {
+  const handleUploadClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -184,9 +232,19 @@ const handleImageUploadClick = () => {
             dispatch(toNext());
           }}
         >
-          {({ setFieldValue }) => (
+          {({ setFieldValue }) => {
+            
+
+            useEffect(() => {
+              setFieldValue('videoUrl', previewVideo);
+            }, [previewVideo, setFieldValue]);
+            
+            return(
+
+            
             <Form>
               <section className="flex flex-col">
+                
                 {/* Top Section: Course Details and Thumbnail */}
                 <div className="w-full flex flex-col md:flex-row justify-between">
                   {/* Left Half: Course Details */}
@@ -225,6 +283,7 @@ const handleImageUploadClick = () => {
                           component="div"
                           className="text-red-600 text-xs"
                         />
+
                       </div>
                       <Field
                         as="textarea"
@@ -327,15 +386,14 @@ const handleImageUploadClick = () => {
                         <option value="React">React</option>
                         <option value="JavaScript">JavaScript</option>
                         <option value="MongoDB">MongoDB</option>
-                        <option value="MongoDB">Devops</option>
-                        <option value="MongoDB">Blockchain</option>
-                        <option value="MongoDB">Java</option>
-                        <option value="MongoDB">Python</option>
-                        <option value="MongoDB">Fontend</option>
-                        <option value="MongoDB">Backend</option>
-                        <option value="MongoDB">Cybersecurity</option>
-                        <option value="MongoDB">Cybersecurity</option>
-                        <option value="MongoDB">Tips & tricks</option>
+                        <option value="Devops">Devops</option>
+                        <option value="Blockchain">Blockchain</option>
+                        <option value="Java">Java</option>
+                        <option value="Python">Python</option>
+                        <option value="Fontend">Fontend</option>
+                        <option value="Backend">Backend</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Tips & tricks">Tips & tricks</option>
                       </Field>
                     </div>
                   </div>
@@ -348,7 +406,7 @@ const handleImageUploadClick = () => {
                     className="flex-col lg:p-8 md:p-8 w-full h-full md:w-1/2 mt-4 md:mt-0 flex items-center justify-center"
                    
                   >     <label className="text-sm font-medium text-gray-700 text-left w-full">
-                          Thumbmail
+                          Thumbnail
                         </label>
                         <div className="relative w-full h-48 md:h-40 lg:h-48 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer flex items-center justify-center mx-10"  onClick={handleImageUploadClick}>
                           {previewImage || createCourse?.thumbnail ? (
@@ -394,24 +452,52 @@ const handleImageUploadClick = () => {
                                 <div
                                   className="relative w-full h-48 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer"
                                   onClick={handleUploadClick}
-                                >
-                                  { previewVideo ? (
-                                    <>
-                                    <video
-                                      className="w-full h-full object-center bg-black rounded-md"
-                                      controls
-                                      src={previewVideo}
-                                    >
-                                      Your browser does not
-                                      support the video tag.
-                                    </video>
 
+                                >
+                                  {/* {previewVideo && setFieldValue('demoURL',previewVideo)} */}
+
+                                  { previewVideo  ? (
+                                    <>
+
+                                  {previewVideo.split('_')[0] === 'Pending' ?
+                                        (
+                                          <span className="absolute inset-0 flex flex-col p-5 items-center w-full justify-center text-gray-500">
+                                          { isVideoUploading && (
+                                            <>
+                                              {/* <ProgressBar progress={isVideoUploading.progress}/> */}
+                                              <CircularLoader progress={isVideoUploading.progress} />
+
+                                              <h1>{isVideoUploading?.file}</h1>
+                                              <h1>{isVideoUploading?.message}</h1>
+
+                                            </>
+                                            )
+                                          }
+                                           </span>
+                                        ):(
+                                          <>
+                                              {/* {setFieldValue('demoURL', previewVideo)} */}
+                                              <VideoPlayer
+                                              videoUrl={previewVideo}
+                                              subtitleUrl='sdf'
+                                              />
+                                            </>
+                                        // <video
+                                        //   className="w-full h-full object-center bg-black rounded-md"
+                                        //   controls
+                                        //   src={previewVideo}
+                                        // >
+                                        //   Your browser does not
+                                        //   support the video tag.
+                                        // </video>
+                                        ) 
+                                  }
                                     </>
 
                                   ) : (
                                     <span className="absolute inset-0 flex items-center w-full justify-center text-gray-500">
-                                        { isVideoUploading  ? <Spinner /> : "Upload Video"}
-                                    </span>
+                                    { isVideoUploading  ? <Spinner /> : "Upload Video"}
+                                     </span>
                                   )}
                                   <input
                                     type="file"
@@ -427,11 +513,11 @@ const handleImageUploadClick = () => {
                                   className="text-red-600 text-sm"
                                 />
                               </div>
-
+{/* 
                               <VideoPlayer
                                     videoUrl={"https://dowhilelearn.s3.amazonaws.com/2f3df864a8d7de113b30e6d56cea010d6b6f8ade2f0c5243a5f974c5df0495bc/2f3df864a8d7de113b30e6d56cea010d6b6f8ade2f0c5243a5f974c5df0495bc_master.m3u8"}
                                     subtitleUrl='sdf'
-                              />
+                              /> */}
                           </div>
                 </div>
 
@@ -446,7 +532,7 @@ const handleImageUploadClick = () => {
                 </div>
               </section>
             </Form>
-          )}
+          )}}
         </Formik>
       </div>
     </div>

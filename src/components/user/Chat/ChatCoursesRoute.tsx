@@ -50,9 +50,10 @@ const CourseListAndChat: React.FC = () => {
   }, [messages]);
 
   console.log(chatRoomsList, 'chatroom lists')
+
+
   // Socket connection effect
   useEffect(() => {
-    // Connect to socket
 
     const newSocket = io('http://localhost:5000', {
       transports: ['websocket', 'polling'],
@@ -61,9 +62,6 @@ const CourseListAndChat: React.FC = () => {
       }
     });
 
-
-
-    // Socket event handlers
     newSocket.on('connect', () => {
       console.log('Socket connected', newSocket.id);
     });
@@ -96,6 +94,7 @@ const CourseListAndChat: React.FC = () => {
   const joinCourseChat = (courseId: string) => {
     socket?.emit('join_course_room', { courseId,userId });
   };
+
   useEffect(() => {
     if (viewChat) {
       socket?.emit("get_chat_rooms", {userId}, (response: any) => {

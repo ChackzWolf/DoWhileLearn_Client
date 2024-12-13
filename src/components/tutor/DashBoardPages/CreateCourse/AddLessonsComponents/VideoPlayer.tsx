@@ -6,9 +6,11 @@ import { useFormikContext } from 'formik';
 type Props = {
   videoUrl: string;
   subtitleUrl?: string;
+  moduleIndex:number;
+  lessonIndex:number;
 };
 
-const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl }) => {
+const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl,moduleIndex,lessonIndex }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [qualityLevels, setQualityLevels] = useState<any[]>([]);
   const [currentQuality, setCurrentQuality] = useState<number>(-1); // -1 means auto
@@ -16,7 +18,10 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl }) => {
   const {setFieldValue} = useFormikContext();
   
   useEffect(() => {
-    setFieldValue('demoURL', videoUrl)
+              setFieldValue(
+            `Modules.${moduleIndex}.lessons.${lessonIndex}.video`,
+            videoUrl
+          );
     const video = videoRef.current;
     if (video) {
       if (video.canPlayType('application/vnd.apple.mpegurl')) {

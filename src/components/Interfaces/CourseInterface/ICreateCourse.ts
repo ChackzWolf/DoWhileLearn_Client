@@ -25,7 +25,7 @@ export interface CreateCourseState {
     description: string;
     lessons: Array<{
       title: string;
-      video: File | null | string;  
+      video:  null | string;  
       description: string;
       questions?:Question[]
     }>;

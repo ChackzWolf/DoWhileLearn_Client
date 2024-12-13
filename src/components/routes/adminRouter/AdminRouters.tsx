@@ -7,13 +7,14 @@ import CourseDetailsPage from '../../../pages/tutor/Course/CourseDetailsPage';
 
 const AdminRoutes = ()=>{
     return(
-        
+        <>
         <Routes>
             <Route path ='/' element = {<AdminDashBoardPage/>}/>
             <Route path = '/students' element = {<StudentsPage/>}/>
             <Route path = '/tutors' element = {<TutorsPage/>}/>
     
         </Routes>
+        </>
     )
 }
 
