@@ -24,6 +24,7 @@ import StudentReviews from "../StudentReview";
 import CodingQuestionInterface from "./Questions/CodeEditor";
 import ChatComponent from "../../Chat/ChatCoursesRoute";
 import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
+import VideoPlayer from "../../../common/VideoPlayer";
  
 
 interface Module {
@@ -343,17 +344,27 @@ function CoursePurchasedCourseDetailsDetails() {
               className="relative rounded-2xl overflow-hidden shadow-lg"
             >
               {selectedVideo ? (
-                <video
-                  src={selectedVideo}
-                  controls
-                  className="w-full aspect-video object-cover"
+                // <video
+                //   src={selectedVideo}
+                //   controls
+                //   className="w-full aspect-video object-cover"
+                // />
+                
+                < VideoPlayer
+                videoUrl = {selectedVideo || ''}
+                subtitleUrl = {''}
                 />
               ) : (
-                <video
-                  src={courseData?.demoURL}
-                  controls
-                  className="w-full aspect-video object-cover"
-                />
+
+               < VideoPlayer
+                videoUrl = {courseData?.demoURL || ''}
+                subtitleUrl = {''}
+               />
+                // <video
+                //   src={courseData?.demoURL}
+                //   controls
+                //   className="w-full aspect-video object-cover"
+                // />
               )}
             </motion.div>
             {selectedVideo && (

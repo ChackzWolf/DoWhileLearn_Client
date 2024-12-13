@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -12,6 +12,12 @@ import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import axios from "axios";
 import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
+import SocketService from "../../../../services/socketService";
+import { generateRandomCode } from "../../../../utils/common.utils";
+import { getCookie } from "../../../../utils/cookieManager";
+import VideoPlayer from "../CreateCourse/CreateCourse.compoents.ts/VideoPlayer";
+import ProgressBar from "../UploadingStatus/ProgressBar";
+import { addVideoUpload } from "../../../../redux/uploadStatSlice";
 
 const validationSchema = Yup.object({
   courseTitle: Yup.string().required("Course name is required"),
@@ -24,9 +30,22 @@ const validationSchema = Yup.object({
   courseDescription: Yup.string().required("Course description is required"),
   courseCategory: Yup.string().required("*required"),
   courseLevel: Yup.string().required("*required"),
-  demoURL: Yup.string().url("Invalid URL").required("Demo URL is required"),
+  demoURL: Yup.mixed().required("Video file is required"),
   thumbnail: Yup.string().required("Thumbnail is required"),
 });
+
+
+interface VideoUploadEntry {
+  id: string;
+  file: string;
+  tutorId: string;
+  sessionId: string;
+  message: string;
+  progress: number;
+  status: string;
+  error?: string;
+}
+
 
 const AddCourse = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -38,9 +57,34 @@ const AddCourse = () => {
   const dispatch = useDispatch();
 
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [previewVideo, setPreviewVideo] = useState<string | null>(null);
+  const [previewVideo, setPreviewVideo] = useState<string | null>(editCourse?.demoURL ?? null);
   const [isImageUploading, setImageUploading] = useState(false);
-  const [isVideoUploading, setVideoUploading] = useState(false);
+  const [isVideoUploading, setVideoUploading] = useState<VideoUploadEntry | null>(null)
+  const uploadDetails  = useSelector((state:RootState)=> state.uploadSlice.uploads);
+  console.log(uploadDetails, 'totrack changes')
+
+  useEffect(()=>{
+    const updateUploadStatus = ()=>{
+      console.log(previewVideo,';lkj;lk')
+      if(previewVideo){
+        const previewParts = previewVideo.split('_');
+        if (previewParts[0] === 'Pending') {
+          const pendingUploadId = previewParts[1];
+          const matchingUpload = uploadDetails.find(upload => upload.id === pendingUploadId);
+          console.log(matchingUpload,'comon');
+        
+          if(matchingUpload){
+            matchingUpload?.progress < 100 ? setVideoUploading(matchingUpload) : setPreviewVideo(matchingUpload?.videoURL || '');           
+          }
+   
+        }
+      }
+      console.log(isVideoUploading,'loading video')
+    }
+    updateUploadStatus()
+  },[uploadDetails])
+
+
 
   const handleUpload = async (file: File) => {
     const formData = new FormData();
@@ -76,41 +120,66 @@ const AddCourse = () => {
     }
   };
 
-  const handleVideoUpload = async (videoFile: File) => {
+  const handleVideoUpload = (videoFile: File) => {
+    const socketService = SocketService.getInstance('http://localhost:5000');
+    const id= generateRandomCode(8)
     const formData = new FormData();
-    formData.append("videoBinary", videoFile);
+    const tutorId = getCookie('tutorId') || ''
+    let sessionId = ''
+    if(socketService){
+      console.log('yea');
+      sessionId = socketService.trackUpload(tutorId);
+      const data = {
+        id,
+        tutorId,
+        sessionId,
+        progress:0,
+        message:'Starting...',
+        status:'pending',
+        file:videoFile.name,
+        videoUrl:'',
+        error:'',
+        lessonIndex:null,
+        moduleIndex:null,
+      }
+      dispatch(addVideoUpload(data))
+      formData.append('tutorId', tutorId)
+      formData.append('type','EDIT')
+      formData.append('id',id);
+      formData.append("videoBinary", videoFile);
     try {
-      const response = await axios.post(courseEndpoint.uploadVideo, formData, {
+      axios.post(courseEndpoint.uploadVideo, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(" video send ", response.data);
-      return response.data.s3Url;
+      console.log(" video send ", id);
+      return id;
     } catch (error) {
       console.log(error, "errorrorororororo");
     } finally {
     }
   };
-
+  }
   const handleFileChange = (
     setFieldValue: (field: string, value: unknown) => void
   ) => {
-    return async (event: React.ChangeEvent<HTMLInputElement>) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0] || null;
       if (file) {
         try {
-          setVideoUploading(true);
           console.log("started HandleFileChange");
           // Upload video and get the URL
-          const videoUrl = await handleVideoUpload(file);
-          setPreviewVideo(videoUrl);
+          const id = handleVideoUpload(file);
+          const topreview = `Pending_${id}`
+
+          setPreviewVideo(topreview);
           // Set the video URL in the form field (instead of the file)
-          setFieldValue("demoURL", videoUrl);
+          setFieldValue("demoURL", topreview);
         } catch (error) {
           console.error("Error handling file change:", error);
         } finally {
-          setVideoUploading(false);
+
         }
       }
     };
@@ -355,14 +424,38 @@ const AddCourse = () => {
                         className="relative w-full h-48 rounded-md bg-gray-100 border-2 border-dashed border-gray-300 hover:bg-gray-200 cursor-pointer"
                         onClick={handleUploadClick}
                       >
-                        {previewVideo || editCourse?.demoURL ? (
-                          <video
-                            className="w-full h-full object-center bg-black rounded-md"
-                            controls
-                            src={previewVideo || editCourse?.demoURL}
-                          >
-                            Your browser does not support the video tag.
-                          </video>
+
+                      { previewVideo  ? (
+                        <>
+                        {previewVideo.split('_')[0] === 'Pending' ?
+                          (<>
+                            <span className="absolute inset-0 flex flex-col p-5 items-center w-full justify-center text-gray-500">
+                                          { isVideoUploading && (
+                                            <>
+                                              <ProgressBar progress={isVideoUploading.progress}/>
+                                              {/* <CircularLoader progress={isVideoUploading.progress} /> */}
+
+                                              <h1>{isVideoUploading?.file}</h1>
+                                              <h1>{isVideoUploading?.message}</h1>
+
+                                            </>
+                                            )
+                                          }
+                                           </span>
+                                          
+                                           </>
+                          ):
+                          (
+                            <>
+                            {/* {setFieldValue('demoURL', previewVideo)} */}
+                            <VideoPlayer
+                              videoUrl={previewVideo || ''}
+                              subtitleUrl='sdf'
+                            />
+                            </>
+                          )
+                        }
+                        </>
                         ) : (
                           <span className="absolute inset-0 flex items-center w-full justify-center text-gray-500">
                             {isVideoUploading ? <Spinner /> : "Upload Video"}

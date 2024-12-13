@@ -7,13 +7,18 @@ import EditCourse from '../../../../components/tutor/DashBoardPages/EditCourse/E
 import EditCourse2 from '../../../../components/tutor/DashBoardPages/EditCourse/EditCourse2';
 import EditModule from '../../../../components/tutor/DashBoardPages/EditCourse/EditModules';
 import EditOverView from '../../../../components/tutor/DashBoardPages/EditCourse/EditedOverView';
+import SocketService from "../../../../services/socketService";
+import { useEffect } from "react";
+import { removeVideoUpload, updateUploadProgress } from "../../../../redux/uploadStatSlice";
+import { setEditDemoUrl, updateSpecificEditLessonVideo } from "../../../../redux/tutorSlice/CourseSlice/editCourseData";
+import { useDispatch } from "react-redux";
 
 
 
 
 const EditCoursePage = () => {
   const step = useSelector((state: RootState) => state.editCourseData.step) as number;
-
+  const dispatch = useDispatch()
   // const courseData = useSelector((state: RootState) => state.editCourseData.editCourse);
   // const benifits_prerequisites = useSelector((state: RootState) => state.editCourseData.editCourse2);
   // const modules = useSelector((state:RootState) => state.editCourseData.editLessons);
@@ -54,7 +59,7 @@ const EditCoursePage = () => {
                   dispatch(updateUploadProgress(toAdd))
                   if (data.progress === 100) {
                     console.log('setting video')
-                    dispatch(updateSpecificLessonVideo({moduleIndex:data.moduleIndex,lessonIndex:data.lessonIndex,videoUrl:data.videoUrl||''}))
+                    dispatch(updateSpecificEditLessonVideo({moduleIndex:data.moduleIndex,lessonIndex:data.lessonIndex,videoUrl:data.videoUrl||''}))
                     setTimeout(()=>{
                       dispatch(removeVideoUpload(data.id))
                     },1000)
@@ -72,7 +77,7 @@ const EditCoursePage = () => {
                   dispatch(updateUploadProgress(toAdd))
                   if (data.progress === 100) {
                     console.log('updating demo url with ', data.videoUrl)
-                    dispatch(setDemoUrl({ demoUrl: data.videoUrl || '' }));                    // updateDemoURL(data.videoUrl || '', data.id ||'');
+                    dispatch(setEditDemoUrl({ demoUrl: data.videoUrl || '' }));                    // updateDemoURL(data.videoUrl || '', data.id ||'');
                     setTimeout(()=>{
                       dispatch(removeVideoUpload(data.id))
                     },1000)
@@ -103,11 +108,11 @@ const EditCoursePage = () => {
         <SideNav prop={"/tutor/courses"} />
         <div className="w-full flex-col">
           <div className="">
-            <EditProgressBar  />
+          <EditProgressBar  />
           </div>
           {step == 1 && <EditCourse />}
-          {step == 2 && <EditCourse2 />}
-          {step == 3 && <EditModule/>}
+          {step == 2 && <EditModule/>}
+          {step == 3 && <EditCourse2 />}
           {step == 4 && <EditOverView/>}
         </div>
       </div>

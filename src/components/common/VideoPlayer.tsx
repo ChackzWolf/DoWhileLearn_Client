@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import '@vime/core/themes/default.css';
-import { useFormikContext } from 'formik';
 
 type Props = {
   videoUrl: string;
@@ -13,10 +12,15 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl }) => {
   const [qualityLevels, setQualityLevels] = useState<any[]>([]);
   const [currentQuality, setCurrentQuality] = useState<number>(-1); // -1 means auto
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const {setFieldValue} = useFormikContext();
-  
+
   useEffect(() => {
-    setFieldValue('demoURL', videoUrl)
+    const video = videoRef.current;
+    if (video) {
+      video.load(); // Forces the video to load and display the first frame
+    }
+  }, [videoUrl]);
+
+  useEffect(() => {
     const video = videoRef.current;
     if (video) {
       if (video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -77,6 +81,10 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl }) => {
         controls
         className="absolute top-0 left-0 w-full h-full"
         poster="/media/poster.png"
+        preload="metadata"
+        playsInline
+        autoPlay
+
       >
         {subtitleUrl && (
           <track
@@ -99,7 +107,7 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl }) => {
             <option value="-1">Auto</option>
             {qualityLevels.map((level, index) => (
               <option key={index} value={index}>
-                {level.height}p
+                {level.height}
               </option>
             ))}
           </select>

@@ -653,23 +653,7 @@ const AddLesson = () => {
                                                                 lessonIndex={lessonIndex}
                                                                 subtitleUrl='sdf'
                                                                 />
-                                                              //   <video
-                                                              //   className="w-full h-full object-center bg-black rounded-md"
-                                                              //   controls
-                                                              //   src={
-                                                              //     previewUrls[
-                                                              //       moduleIndex
-                                                              //     ]?.[lessonIndex] ||
-                                                              //     (modules?.Modules[
-                                                              //       moduleIndex
-                                                              //     ]?.lessons[
-                                                              //       lessonIndex
-                                                              //     ]?.video as string)
-                                                              //   }
-                                                              // >
-                                                              //   Your browser does not
-                                                              //   support the video tag.
-                                                              // </video>
+                                           
                                                               )
 
 
@@ -677,19 +661,7 @@ const AddLesson = () => {
 
                                                           }
 
-                                                        {/* {videoUploadStates[moduleIndex]?.[lessonIndex]?.isUploading && (
-                                                          <div className="upload-progress">
-                                                            <p>
-                                                              Uploading: 
-                                                              {videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.progress || 0}%
-                                                            </p>
-                                                            {videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.error && (
-                                                              <p className="text-red-500">
-                                                                {videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.error}
-                                                              </p>
-                                                            )}
-                                                          </div>
-                                                        )} */}
+                                 
                                                     </>
                                                     ) : (
                                                       <span className="absolute inset-0 flex items-center w-full justify-center text-gray-500">

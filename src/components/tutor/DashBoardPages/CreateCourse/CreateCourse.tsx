@@ -18,7 +18,6 @@ import { getCookie } from "../../../../utils/cookieManager";
 import VideoPlayer from "./CreateCourse.compoents.ts/VideoPlayer";
 import { generateRandomCode } from "../../../../utils/common.utils";
 import SocketService from "../../../../services/socketService";
-import ProgressBar from "../UploadingStatus/ProgressBar";
 import CircularLoader from "../UploadingStatus/RoundedProgressBar";
 
 const validationSchema = Yup.object({
@@ -161,6 +160,7 @@ const AddCourse = () => {
 
     formData.append('tutorId', tutorId)
     formData.append('id',id);
+    formData.append('type','CREATE')
     formData.append("videoBinary", videoFile);
     try {
 

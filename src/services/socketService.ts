@@ -20,6 +20,7 @@ interface UploadProgressData {
   sessionId: string;
   status: string;
   progress: number;
+  type: 'EDIT'| 'CREATE';
   videoUrl?: string;
   lessonIndex?: number;
   moduleIndex?: number;

@@ -42,9 +42,54 @@ const editCourseData = createSlice({
         state.editLessons = null;
         state.step = 1;
     },
+
+    updateSpecificEditLessonVideo: (
+      state,
+      action: PayloadAction<{
+        moduleIndex: number;
+        lessonIndex: number;
+        videoUrl: string;
+      }>
+    ) => {
+      const { moduleIndex, lessonIndex, videoUrl } = action.payload;
+    
+      if (state.editLessons?.Modules) {
+        // Create a new state object with updated video URL for the specific lesson
+        const updatedState = {
+          ...state.editLessons,
+          Modules: state.editLessons.Modules.map((mod, modIndex) => {
+            // Update module if the moduleIndex matches
+            if (modIndex === moduleIndex) {
+              return {
+                ...mod,
+                lessons: mod.lessons.map((lesson, lesIndex) => {
+                  // Update lesson if the lessonIndex matches
+                  if (lesIndex === lessonIndex) {
+                    return { ...lesson, video: videoUrl }; // Update video URL
+                  }
+                  return lesson; // Return unmodified lesson if lessonIndex doesn't match
+                }),
+              };
+            }
+            return mod; // Return unmodified module if moduleIndex doesn't match
+          }),
+        };
+    
+        // Only assign the updated state if it's valid
+        state.editLessons = updatedState;
+      }
+    },
+    
+    setEditDemoUrl(state,action:PayloadAction<{demoUrl:string}>){
+      if(state.editCourse){
+        state.editCourse.demoURL = action.payload.demoUrl
+      }
+    }
   },
+
+
 });
 
-export const {setEditCourse, setEditCourse2,setEditLesson, setEditCourseEmpty, toNext, toPrev} = editCourseData.actions;
+export const {setEditCourse, setEditCourse2,setEditLesson, setEditCourseEmpty, toNext, toPrev,setEditDemoUrl, updateSpecificEditLessonVideo} = editCourseData.actions;
 
 export default editCourseData.reducer;
