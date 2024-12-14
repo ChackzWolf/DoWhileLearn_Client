@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import Modules from "./Modules"; // Import the Modules component
 import { ToastContainer } from "react-toastify";
 import {
@@ -7,18 +7,16 @@ import {
   ICreateCourse2,
 } from "../../../../components/Interfaces/CourseInterface/ICreateCourse";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
-import { courseEndpoint } from "../../../../constraints/courseEndpoints";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getCookie } from "../../../../utils/cookieManager";
 import { Module } from "module";
 import userAxios from "../../../../utils/axios/userAxios.config";
 import { userEndpoint } from "../../../../constraints/userEndpoints";
-import { FaStar, FaUserCircle } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { BsStarHalf } from "react-icons/bs";
 import StudentReviews from "../StudentReview";
 import CodingQuestionInterface from "./Questions/CodeEditor";
@@ -254,6 +252,8 @@ function CoursePurchasedCourseDetailsDetails() {
   }, [id, dispatch]);
 
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
+  const [selectedLessonLength, setSelectedLessonLength] = useState(0)
   const [selectedVideoDescription, setSelectedVideoDescription] = useState<
     string | null
   >(null);
@@ -353,6 +353,9 @@ function CoursePurchasedCourseDetailsDetails() {
                 < VideoPlayer
                 videoUrl = {selectedVideo || ''}
                 subtitleUrl = {''}
+                lessonLength = {totalLessons}
+                currentLessonIndex = {selectedVideoIndex}
+                setCurrentLessonIndex = {setSelectedVideoIndex}
                 />
               ) : (
 
@@ -521,8 +524,11 @@ function CoursePurchasedCourseDetailsDetails() {
             <Modules
               modules={modules}
               onVideoSelect={setSelectedVideo}
+              totalLesson = {setSelectedLessonLength}
+              setVideoIndex = {setSelectedVideoIndex}
               onCodeSelect={setCodeQuestion}
               onSelectDescription={setSelectedVideoDescription}
+              videoIndex ={selectedVideoIndex}
             />
           </div>
         </motion.div>

@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import '@vime/core/themes/default.css';
 @layer components {
     .emoji-picker-react .emoji-preview {
       @apply hidden;
@@ -25,3 +24,6 @@
   .custom-vime-theme {
     --vm-player-theme: #b1c86e;
   } 
+
+  
+/* @import '@vime/core/themes/default.css'; */

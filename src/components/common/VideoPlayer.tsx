@@ -1,13 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import '@vime/core/themes/default.css';
+import { MdSkipNext, MdSkipPrevious } from 'react-icons/md';
 
 type Props = {
   videoUrl: string;
   subtitleUrl?: string;
+  lessonLength? : number|null;
+  currentLessonIndex? : number|null;
+  setCurrentLessonIndex? :(num:number)=>void |null;
 };
 
-const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl }) => {
+
+const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl,currentLessonIndex=null , lessonLength = null, setCurrentLessonIndex = null}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [qualityLevels, setQualityLevels] = useState<any[]>([]);
   const [currentQuality, setCurrentQuality] = useState<number>(-1); // -1 means auto
@@ -111,8 +116,35 @@ const VideoPlayer: React.FC<Props> = ({ videoUrl, subtitleUrl }) => {
               </option>
             ))}
           </select>
+          
         </div>
       )}
+
+      
+        
+        {setCurrentLessonIndex !== null && currentLessonIndex !== null && lessonLength !== null && (
+          <div className={`transition-all absolute bottom-7 left-36 flex space-x-2 ${isHovered ?"opacity-100":"opacity-0"}`}>
+            <button
+            onClick={()=>{setCurrentLessonIndex(currentLessonIndex - 1)}}
+            disabled={currentLessonIndex === 0}
+            className={`transition-all px-4 py-2 ${currentLessonIndex > 0 && "hover:bg-gray-800"} text-white rounded-full disabled:opacity-50 text-xl`}
+            >
+              <MdSkipPrevious />
+
+            </button>
+            <button
+              onClick={()=>{setCurrentLessonIndex(currentLessonIndex + 1)}}
+              disabled={currentLessonIndex === lessonLength - 1}
+              className={`transition-all ${currentLessonIndex !== lessonLength - 1 && "hover:bg-gray-800" } px-4 py-2  text-white rounded-full disabled:opacity-50 text-xl`}
+            >
+              <MdSkipNext />
+            </button>
+          </div>
+        ) }
+
+
+      {/* Next and Previous Buttons */}
+
     </div>
   );
 };

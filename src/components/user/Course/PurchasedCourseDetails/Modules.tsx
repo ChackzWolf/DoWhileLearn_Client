@@ -1,32 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
 import { GoVideo } from "react-icons/go";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaClipboardQuestion } from "react-icons/fa6";
 import { FaCode } from "react-icons/fa6";
 import { MdOutlineQuiz } from "react-icons/md";
 
 
-export interface Module {
-  name: string;
-  description: string;
-  lessons: Lesson[];
-}
+// export interface Module {
+//   name: string;
+//   description: string;
+//   lessons: Lesson[];
+// }
 
-export interface Lesson {
-  title: string;
-  video: string;
-  description: string;
-}
+// export interface Lesson {
+//   title: string;
+//   video: string;
+//   description: string;
+// }
 
 const Modules: React.FC<{
-   modules: CreateCourseState | null
+  modules: CreateCourseState 
+  videoIndex: number
   onVideoSelect: (videoUrl: string) => void;
+  totalLesson : (num:number)=>void;
+  setVideoIndex : (num:number)=>void;
   onSelectDescription: (description:string) => void ;
   onCodeSelect:(questions:any)=>void;
-}> = ({ modules, onVideoSelect, onSelectDescription, onCodeSelect }) => {
-  const [openModuleIndex, setOpenModuleIndex] = useState<number | null>(null);
+}> = ({ modules, onVideoSelect, onSelectDescription, onCodeSelect,setVideoIndex, videoIndex, totalLesson }) => {
+  const [openModuleIndex, setOpenModuleIndex] = useState<number | null>(0);
   const [openLessonIndex, setOpenLessonIndex] = useState<{ [key: number]: number | null }>({});
 
   const toggleModule = (index: number) => {
@@ -34,15 +36,57 @@ const Modules: React.FC<{
     setOpenLessonIndex({});
   };
 
-  const toggleLesson = (moduleIndex: number, lessonIndex: number, videoUrl: string, description:string) => {
+  const toggleLesson = (moduleIndex: number, lessonIndex: number, videoUrl: string, description:string, totalLessons:number) => {
     setOpenLessonIndex((prev) => ({
       ...prev,
       [moduleIndex]: prev[moduleIndex] === lessonIndex ? null : lessonIndex,
     }));
     onVideoSelect(videoUrl); // Pass the video URL to the parent component
     onSelectDescription(description)
+    setVideoIndex(lessonIndex)
+    totalLesson(totalLessons)
   };
+useEffect(()=> {
+  const handleIndexChange=()=>{
+    const data = getLessonVideo(modules,openModuleIndex || 0, videoIndex);
+    if(data?.videoUrl){
+      onVideoSelect(data.videoUrl); // Pass the video URL to the parent component
+      onSelectDescription(data.description)
+    }
+  }
+  handleIndexChange()
+},[videoIndex])
 
+
+const getLessonVideo = (
+  state: CreateCourseState,
+  moduleIndex: number,
+  lessonIndex: number
+): {videoUrl:string | null, description:string}|undefined => {
+  // Ensure the Modules array exists and moduleIndex is within bounds
+  if (
+    state.Modules &&
+    moduleIndex >= 0 &&
+    moduleIndex < state.Modules.length
+  ) {
+    const module = state.Modules[moduleIndex];
+
+    // Ensure the lessons array exists and lessonIndex is within bounds
+    if (
+      module.lessons &&
+      lessonIndex >= 0 &&
+      lessonIndex < module.lessons.length
+    ) {
+      return {
+        videoUrl: module.lessons[lessonIndex].video,
+        description : module.lessons[lessonIndex].description,
+      };
+    }
+  }
+
+  // Return undefined if indices are invalid or video is not found
+  return undefined;
+};
 
   const openCode = (question:any)=> {
     console.log('trig trig trig')
@@ -97,10 +141,10 @@ const Modules: React.FC<{
                         whileTap={{ scale: 0.98 }}
                         onClick={() => {
                           if (typeof lesson.video === "string") {
-                            toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description);
+                            toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description, module.lessons.length);
                           }
                         }}
-                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-white hover:bg-gray-100 transition-colors"
+                        className={`w-full flex items-center gap-3 p-3 rounded-lg bg-white ${lessonIndex === videoIndex ? "bg-purple-200":"bg-white"}  hover:bg-gray-100 transition-colors`}
                       >
                         <GoVideo className="text-purple-600 text-xl flex-shrink-0" />
                         <span className="text-left text-gray-700 text-sm">

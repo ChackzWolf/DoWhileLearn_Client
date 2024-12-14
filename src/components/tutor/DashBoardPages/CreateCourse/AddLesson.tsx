@@ -16,12 +16,10 @@ import { RootState } from "../../../../redux/store/store";
 import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
 import QuizEditor from "./AddLessonsComponents/CreateQuestions";
-import RichTextEditor from "./AddLessonsComponents/createQuestionTrial";
 import { getCookie } from "../../../../utils/cookieManager";
 import { generateRandomCode } from "../../../../utils/common.utils";
 import SocketService from "../../../../services/socketService";
 import { addVideoUpload } from "../../../../redux/uploadStatSlice";
-import ProgressBar from "../UploadingStatus/ProgressBar";
 import VideoPlayer from "./AddLessonsComponents/VideoPlayer";
 import CircularLoader from "../UploadingStatus/RoundedProgressBar";
 
@@ -635,7 +633,8 @@ const AddLesson = () => {
 
 
                                                                  </span>
-                                                              ):
+                                                              )
+                                                              :
                                                               (
 
                                                                 <VideoPlayer
