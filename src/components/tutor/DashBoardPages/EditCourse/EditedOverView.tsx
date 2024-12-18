@@ -23,9 +23,14 @@ const dispatch = useDispatch()
 const navigate = useNavigate()
 const benifits_prerequisites = useSelector((state: RootState) => state.editCourseData.editCourse2);
 const modules :CreateCourseState | null = useSelector((state:RootState) => state.editCourseData.editLessons);
+const uploads = useSelector((state: RootState)=> state.uploadSlice.uploads)
 
 const handleSubmit = async() => {
     try{
+      if(uploads.length > 0){
+        toast.error('Please wait until videos are fully uploaded.')
+        return;
+      }
         setIsLoading(true)
         const data = {
           tutorId: getCookie('tutorId'),

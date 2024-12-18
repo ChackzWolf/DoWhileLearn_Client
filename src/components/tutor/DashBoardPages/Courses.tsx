@@ -58,7 +58,7 @@ function Course() {
           if(tutorId){
             const response = await tutorAxios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId }, withCredentials:true });
             console.log(response,'fetched course')
-            setCourses(response.data.courses); // Access the 'courses' property from the response
+            setCourses(response.data.courses);
           }
 
         } catch (error) {

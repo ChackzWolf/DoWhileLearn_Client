@@ -6,41 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 
 
-export interface ResponseFetchCourseList {
-  courses: Course[];
-}
-export interface Course {
-  _id:string,
-  courseCategory: string;
-  courseDescription: string;
-  courseLevel: string;
-  coursePrice: string;
-  courseTitle: string;
-  demoURL: string;
-  discountPrice: string;
-  thumbnail: string;
-  benefits_prerequisites: BenefitsPrerequisites;
-  Modules: Module[];
-}
-export interface BenefitsPrerequisites {
-  benefits: string[];
-  prerequisites: string[];
-}
-export interface Module {
-  name: string;
-  description: string;
-  lessons: Lesson[];
-}
-export interface Lesson {
-  title: string;
-  video: string;
-  description: string;
+interface User {
+  firstName:string,
+  lastName:string,
+  img:string,
+  _id:string
 }
 
 
 function Students() {
   const navigate = useNavigate()
-  const [students, setStudents] = useState<Course[]>([]);
+  const [students, setStudents] = useState<User[]>([]);
   const itemsPerPage = 12;
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(students.length / itemsPerPage);
@@ -49,10 +25,11 @@ function Students() {
   useEffect(() => {
       const fetchCourses = async () => {
         try {
-          const tutorId:string | null = await getCookie('userId')
+          const tutorId:string | null = await getCookie('tutorId')
           if(tutorId){
-            const response = await axios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId } });
-            setStudents(response.data.courses); // Access the 'courses' property from the response
+            const response = await axios.get(tutorEndpoint.FetchStudents, {params: { tutorId }, withCredentials:true });
+            console.log(response.data)
+            setStudents(response.data.users); // Access the 'courses' property from the response
           }
 
         } catch (error) {
@@ -94,10 +71,10 @@ function Students() {
         <thead>
           <tr>
             <th className="border border-gray-300 p-2 bg-gray-100 "></th>
-            <th className="border border-gray-300 p-2 bg-gray-100 ">Course title</th>
-            <th className="border border-gray-300 p-2 bg-gray-100">Course level</th>
+            <th className="border border-gray-300 p-2 bg-gray-100 ">Name</th>
+            {/* <th className="border border-gray-300 p-2 bg-gray-100">Course level</th>
             <th className="border border-gray-300 p-2 bg-gray-100">Course price</th>
-            <th className="border border-gray-300 p-2 bg-gray-100">Earnings</th>
+            <th className="border border-gray-300 p-2 bg-gray-100">Earnings</th> */}
             <th className="border border-gray-300 p-2 bg-gray-100">Action</th>
           </tr>
         </thead>
@@ -105,13 +82,13 @@ function Students() {
           {currentStudents.map((student, index) => (
             <tr key={index} className="text-center">
               <div className="flex items-center justify-center rounded-lg">
-              <img src={student.thumbnail} alt="" className="w-10 rounded-md mt-4" />
+              <img src={student?.img || ''} alt="" className="w-10 rounded-md mt-4" />
               </div>
               
-              <td className="border border-gray-300 p-2">{student?.courseTitle}</td>
-            <td className="border border-gray-300 p-2">{student?.courseLevel}</td>
+              <td className="border border-gray-300 p-2"> {student.firstName +" "+ student.lastName} </td>
+            {/* <td className="border border-gray-300 p-2">{student?.courseLevel}</td>
             <td className="border border-gray-300 p-2">{student?.coursePrice}</td>
-            <td className="border border-gray-300 p-2">{student?.discountPrice}</td>
+            <td className="border border-gray-300 p-2">{student?.discountPrice}</td> */}
               <button className= "bg-[#7C24F0] hover:bg-[#6211cd] transition-all rounded-lg px-4 m-2 py-1 text-white" onClick={()=>handleOnClick(student?._id)}> Detail veiw</button>
             </tr>
           ))}

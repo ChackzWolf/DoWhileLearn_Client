@@ -8,11 +8,11 @@ import CourseDetailsPage from '../../../pages/tutor/Course/CourseDetailsPage'
 import EditCoursePage from '../../../pages/tutor/Course/EditCourse/EditCoursePage';
 import TutorProfilePage from '../../../pages/tutor/Profile/TutorProfilePage';
 import UploadDetails from '../../tutor/DashBoardPages/UploadingStatus/UploadingStatus';
-import { MdOutlineCloudUpload } from "react-icons/md";
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
 import UploadSpinner from '../../common/icons/UploadSpinner';
+import { ToastContainer } from 'react-toastify';
 
 
 const TutorRoutes = ()=>{
@@ -25,6 +25,7 @@ const TutorRoutes = ()=>{
     }
     return(
         <>
+        <ToastContainer/>
         <Routes>
             <Route path= '/' element={<TutorDashBoard/>}/>
             <Route path= '/users' element={<UsersPage/>}/>

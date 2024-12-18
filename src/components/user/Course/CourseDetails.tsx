@@ -27,6 +27,8 @@ import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 import userAxios from "../../../utils/axios/userAxios.config";
 import StudentReviews from "./StudentReview";
 import  ChatComponent from "../Chat/ChatCoursesRoute"
+import VideoPlayer from "../../common/VideoPlayer";
+
 
 interface Module {
   name: string;
@@ -381,13 +383,19 @@ function CourseDetails() {
               >
                 {/* Video Preview */}
                 <div className="aspect-video relative">
-                  <video
+                  < VideoPlayer
+                    videoUrl = {courseData?.demoURL || ''}
+                    subtitleUrl = {''}
+                  />
+
+                  
+                  {/* <video
                     src={courseData.demoURL}
                     controls
                     className="w-full h-full object-cover"
                     onPlay={() => setIsVideoPlaying(true)}
                     onPause={() => setIsVideoPlaying(false)}
-                  />
+                  /> */}
                 </div>
 
                 {/* Pricing and Actions */}

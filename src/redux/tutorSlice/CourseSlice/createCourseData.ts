@@ -1,8 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { CreateCourseState, ICreateCourse1, ICreateCourse2 } from "../../../components/Interfaces/CourseInterface/ICreateCourse";
-import { updateLessonVideo } from "../../../utils/common.utils";
-import { Module } from './../../../components/user/Course/PurchasedCourseDetails/Modules';
-import { Lesson } from './../../../components/user/Layout/HomePageLayer/LayerCourseList';
+
 
 
 

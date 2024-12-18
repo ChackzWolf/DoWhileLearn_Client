@@ -50,7 +50,7 @@ const QuizEditor: React.FC<{
     lessonIndex: number,
     quiz: any[],
     setFieldValue: (field: string, value: unknown) => void,
-    validateForm: (values?: any) => Promise<{ [key: string]: string }>
+
   ) => void;
 }> = ({ moduleIndex, lessonIndex, initialQuiz = [], onQuizChange }) => {
   const [questions, setQuestions] = useState<Question[]>(initialQuiz);
@@ -58,8 +58,9 @@ const QuizEditor: React.FC<{
   const [noOfQuizes, setNumberOfQuizes] = useState(0);
   const [noOfCodes, setNoOfCodes] = useState(0)
   const formik = useFormikContext();
-  const { setFieldValue,validateForm } = formik;
+  const { setFieldValue, validateField } = formik;
 
+ 
   const addQuestion = (e: React.MouseEvent, type: string) => {
     e.preventDefault();
     console.log(type, "type")
@@ -251,7 +252,7 @@ const QuizEditor: React.FC<{
 
   const handleSaveQuiz = (e: React.MouseEvent) => {
     e.preventDefault();
-    onQuizChange(moduleIndex, lessonIndex, questions, setFieldValue, validateForm);
+    onQuizChange(moduleIndex, lessonIndex, questions, setFieldValue);
     
   };
 

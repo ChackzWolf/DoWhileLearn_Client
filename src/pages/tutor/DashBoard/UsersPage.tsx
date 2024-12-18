@@ -1,6 +1,6 @@
 import Header from "../../../components/tutor/Layout/Header";
 import SideNav from '../../../components/tutor/Layout/SideNav';
-import Users from "../../../components/tutor/DashBoardPages/Users";
+import Users from "../../../components/tutor/DashBoardPages/Students";
 
 const UsersPage = () => {
 //DDB3FF

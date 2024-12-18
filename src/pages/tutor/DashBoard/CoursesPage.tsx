@@ -1,6 +1,6 @@
 import Header from "../../../components/tutor/Layout/Header";
 import SideNav from '../../../components/tutor/Layout/SideNav';
-import Course from "../../../components/tutor/DashBoardPages/Course";
+import Course from "../../../components/tutor/DashBoardPages/Courses";
 
 const PayoutsPage = () => {
 //DDB3FF

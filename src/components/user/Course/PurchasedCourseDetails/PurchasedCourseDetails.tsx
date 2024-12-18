@@ -23,7 +23,6 @@ import CodingQuestionInterface from "./Questions/CodeEditor";
 import ChatComponent from "../../Chat/ChatCoursesRoute";
 import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
 import VideoPlayer from "../../../common/VideoPlayer";
- 
 
 interface Module {
   name: string;

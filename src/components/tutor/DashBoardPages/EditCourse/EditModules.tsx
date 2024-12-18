@@ -29,6 +29,9 @@ import { addVideoUpload } from "../../../../redux/uploadStatSlice";
 import VideoPlayer from "../CreateCourse/AddLessonsComponents/VideoPlayer";
 import CircularLoader from "../UploadingStatus/RoundedProgressBar";
 import Spinner from "../../../common/icons/Spinner";
+import VideoInput from "./EditModuleComponets/VideoInput";
+import { toast, ToastContainer  } from "react-toastify";
+import { validate } from "uuid";
 export const validationSchema = Yup.object().shape({
   Modules: Yup.array()
     .of(
@@ -40,12 +43,17 @@ export const validationSchema = Yup.object().shape({
             Yup.object().shape({
               title: Yup.string().required("Lesson title is required"),
               video: Yup.mixed().required("Video file is required"),
-              description: Yup.string().required("Lesson description is required"),
+              description: Yup.string().required(
+                "Lesson description is required"
+              ),
               questions: Yup.array().of(
                 Yup.object().shape({
                   id: Yup.number().required("Question ID is required"),
                   type: Yup.string()
-                    .oneOf(["QUIZ", "CODING"], "Type must be 'QUIZ' or 'CODING'")
+                    .oneOf(
+                      ["QUIZ", "CODING"],
+                      "Type must be 'QUIZ' or 'CODING'"
+                    )
                     .required("Question type is required"),
                   question: Yup.string().required("Question is required"),
                   // For QUIZ type
@@ -59,18 +67,21 @@ export const validationSchema = Yup.object().shape({
                   }),
                   correctAnswer: Yup.string().when("type", {
                     is: "QUIZ",
-                    then: (schema) => schema.required("Correct answer is required"),
+                    then: (schema) =>
+                      schema.required("Correct answer is required"),
                     otherwise: (schema) => schema.notRequired(),
                   }),
                   // For CODING type
                   startingCode: Yup.string().when("type", {
                     is: "CODING",
-                    then: (schema) => schema.required("Starting code is required"),
+                    then: (schema) =>
+                      schema.required("Starting code is required"),
                     otherwise: (schema) => schema.notRequired(),
                   }),
                   noOfParameters: Yup.number().when("type", {
                     is: "CODING",
-                    then: (schema) => schema.required("Number of parameters is required"),
+                    then: (schema) =>
+                      schema.required("Number of parameters is required"),
                     otherwise: (schema) => schema.notRequired(),
                   }),
                   parameters: Yup.array().when("type", {
@@ -78,8 +89,12 @@ export const validationSchema = Yup.object().shape({
                     then: (schema) =>
                       schema.of(
                         Yup.object().shape({
-                          value: Yup.string().required("Parameter value is required"),
-                          dataType: Yup.string().required("Parameter data type is required"),
+                          value: Yup.string().required(
+                            "Parameter value is required"
+                          ),
+                          dataType: Yup.string().required(
+                            "Parameter data type is required"
+                          ),
                         })
                       ),
                     otherwise: (schema) => schema.notRequired(),
@@ -88,8 +103,12 @@ export const validationSchema = Yup.object().shape({
                     is: "CODING",
                     then: (schema) =>
                       schema.shape({
-                        value: Yup.string().required("Expected output value is required"),
-                        dataType: Yup.string().required("Expected output data type is required"),
+                        value: Yup.string().required(
+                          "Expected output value is required"
+                        ),
+                        dataType: Yup.string().required(
+                          "Expected output data type is required"
+                        ),
                       }),
                     otherwise: (schema) => schema.notRequired(),
                   }),
@@ -101,13 +120,21 @@ export const validationSchema = Yup.object().shape({
                           Yup.object().shape({
                             parameters: Yup.array().of(
                               Yup.object().shape({
-                                value: Yup.string().required("Test case parameter value is required"),
-                                dataType: Yup.string().required("Test case parameter data type is required"),
+                                value: Yup.string().required(
+                                  "Test case parameter value is required"
+                                ),
+                                dataType: Yup.string().required(
+                                  "Test case parameter data type is required"
+                                ),
                               })
                             ),
                             expectedValue: Yup.object().shape({
-                              value: Yup.string().required("Expected test case value is required"),
-                              dataType: Yup.string().required("Expected test case data type is required"),
+                              value: Yup.string().required(
+                                "Expected test case value is required"
+                              ),
+                              dataType: Yup.string().required(
+                                "Expected test case data type is required"
+                              ),
                             }),
                           })
                         )
@@ -125,29 +152,29 @@ export const validationSchema = Yup.object().shape({
 });
 interface VideoUploadEntry {
   id: string;
-  space?:string;
-  file:  string;
+  space?: string;
+  file: string;
   tutorId: string;
   sessionId: string;
   message: string;
   progress: number;
   status: string;
-  videoURL?:string;
+  videoURL?: string;
   error?: string;
-  moduleIndex:number |  null;
-  lessonIndex:number |  null; 
+  moduleIndex: number | null;
+  lessonIndex: number | null;
 }
 interface VideoUploadState {
   [moduleIndex: number]: {
     [lessonIndex: number]: {
       isUploading: boolean;
       uploadDetails?: VideoUploadEntry | null;
-    }
-  }
+    };
+  };
 }
 
 const AddLesson = () => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const modules = useSelector(
     (state: RootState) => state.editCourseData.editLessons
@@ -159,10 +186,10 @@ const AddLesson = () => {
     const initialPreviewUrls: {
       [moduleIndex: number]: { [lessonIndex: number]: string };
     } = {};
-  
+
     modules?.Modules?.forEach((module, moduleIndex) => {
       initialPreviewUrls[moduleIndex] = {};
-      
+
       module.lessons.forEach((lesson, lessonIndex) => {
         // If a video URL exists, add it to preview URLs
         if (lesson.video) {
@@ -173,8 +200,9 @@ const AddLesson = () => {
     return initialPreviewUrls;
   });
 
-  const [isVideoLoading,setIsVideoLoading] = useState<[number|null,number|null][]>([[null,null]]);
-
+  const [isVideoLoading, setIsVideoLoading] = useState<
+    [number | null, number | null][]
+  >([[null, null]]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   // const [previewUrls, setPreviewUrls] = useState<{
@@ -186,7 +214,9 @@ const AddLesson = () => {
   // const [expandedLessonIndex, setExpandedLessonIndex] = useState<{
   //   [moduleIndex: number]: number | null;
   // }>({});
-  const [videoUploadStates, setVideoUploadStates] = useState<VideoUploadState>({});
+  const [videoUploadStates, setVideoUploadStates] = useState<VideoUploadState>(
+    {}
+  );
 
   const [expandedModuleIndex, setExpandedModuleIndex] = useState<number | null>(
     null
@@ -197,9 +227,9 @@ const AddLesson = () => {
   }>({});
 
   const [quizData, setQuizData] = useState<any[]>([]);
-  const uploadDetails  = useSelector((state:RootState)=> state.uploadSlice.uploads);
-
-
+  const uploadDetails = useSelector(
+    (state: RootState) => state.uploadSlice.uploads
+  );
 
   useEffect(() => {
     const updateUploadStatuses = () => {
@@ -216,37 +246,43 @@ const AddLesson = () => {
           const lessonIndex = Number(lessonIndexStr);
 
           // Check if the preview URL indicates a pending upload
-          if (previewUrl.startsWith('Pending_')) {
-            console.log('yes it start wiht _')
-            const pendingUploadId = previewUrl.split('_')[1];
-            
+          if (previewUrl.startsWith("Pending_")) {
+            console.log("yes it start wiht _");
+            const pendingUploadId = previewUrl.split("_")[1];
+
             // Find matching upload in uploadDetails
-            const matchingUpload = uploadDetails.find(upload => upload.id === pendingUploadId);
-            console.log(matchingUpload,';asldkfja;sldkf')
+            const matchingUpload = uploadDetails.find(
+              (upload) => upload.id === pendingUploadId
+            );
+            console.log(matchingUpload, ";asldkfja;sldkf");
 
             if (matchingUpload) {
               // Update upload state
               updatedUploadStates[moduleIndex][lessonIndex] = {
                 isUploading: matchingUpload.progress < 100,
-                uploadDetails: matchingUpload
+                uploadDetails: matchingUpload,
               };
-              console.log(updatedUploadStates[moduleIndex][lessonIndex], 'updatedUploadStates[moduleIndex][lessonIndex]')
+              console.log(
+                updatedUploadStates[moduleIndex][lessonIndex],
+                "updatedUploadStates[moduleIndex][lessonIndex]"
+              );
 
               // If upload is complete, update the preview URL
               if (matchingUpload.progress === 100) {
-                console.log('this shit reached 100',matchingUpload.videoURL )
-                updatedPreviewUrls[moduleIndex][lessonIndex] = matchingUpload.videoURL || '';
+                console.log("this shit reached 100", matchingUpload.videoURL);
+                updatedPreviewUrls[moduleIndex][lessonIndex] =
+                  matchingUpload.videoURL || "";
                 setPreviewUrls((prevUrls) => ({
                   ...prevUrls,
                   [moduleIndex]: {
                     ...(prevUrls[moduleIndex] || {}),
-                    [lessonIndex]: matchingUpload.videoURL || '',
+                    [lessonIndex]: matchingUpload.videoURL || "",
                   },
                 }));
               }
             }
-          }else{
-            console.log('no it not')
+          } else {
+            console.log("no it not");
           }
         });
       });
@@ -259,35 +295,39 @@ const AddLesson = () => {
     updateUploadStatuses();
   }, [uploadDetails]);
 
-  const handleVideoUpload =  (videoFile: File, moduleIndex:number ,lessonIndex:number) => {
-    const socketService = SocketService.getInstance('http://localhost:5000');
-    const  tutorId = getCookie('tutorId') || ''
-    socketService.trackUpload(tutorId)
-    const id= generateRandomCode(8)
+  const handleVideoUpload = (
+    videoFile: File,
+    moduleIndex: number,
+    lessonIndex: number
+  ) => {
+    const socketService = SocketService.getInstance("http://localhost:5000");
+    const tutorId = getCookie("tutorId") || "";
+    socketService.trackUpload(tutorId);
+    const id = generateRandomCode(8);
 
     const formData = new FormData();
-    formData.append('tutorId', tutorId);
-    formData.append('id',id);
-    formData.append('moduleIndex', moduleIndex.toString()); // converting to string becouse blob will not allow integer;
-    formData.append('lessonIndex',lessonIndex.toString());
+    formData.append("tutorId", tutorId);
+    formData.append("id", id);
+    formData.append("moduleIndex", moduleIndex.toString()); // converting to string becouse blob will not allow integer;
+    formData.append("lessonIndex", lessonIndex.toString());
     formData.append("videoBinary", videoFile);
-    let sessionId = ''
-    if(socketService){
-      console.log('yea');
+    let sessionId = "";
+    if (socketService) {
+      console.log("yea");
       sessionId = socketService.trackUpload(tutorId);
-      const data ={
+      const data = {
         id,
         tutorId,
         sessionId,
-        progress:0,
-        message:'Starting...',
-        status:'pending',
-        file:videoFile.name,
-        videoUrl:'',
-        error:'',
+        progress: 0,
+        message: "Starting...",
+        status: "pending",
+        file: videoFile.name,
+        videoUrl: "",
+        error: "",
         lessonIndex,
-        moduleIndex
-      }
+        moduleIndex,
+      };
       dispatch(addVideoUpload(data));
     }
     try {
@@ -297,27 +337,30 @@ const AddLesson = () => {
         },
       });
 
-      console.log(" video send ",id);
+      console.log(" video send ", id);
       return id;
     } catch (error) {
       console.log(error, "errorrorororororo");
     }
   };
 
-  const handleFileChange =
-    (
-      moduleIndex: number,
-      lessonIndex: number,
-      setFieldValue: (field: string, value: unknown) => void
-    ) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0] || null;
+  const handleFileChange = (
+    moduleIndex: number,
+    lessonIndex: number,
+    file: File,
+    setFieldValue: (field: string, value: unknown) => void
+  ) =>
+    // (event: React.ChangeEvent<HTMLInputElement>) =>
+    {
+      console.log(moduleIndex, "moduleIndx");
+      console.log(lessonIndex, "lessonIndex");
+      // const file = event.target.files?.[0] || null;
       if (file) {
         try {
           console.log("started HandleFileChange");
           // Upload video and get the URL
-          const id = handleVideoUpload(file,moduleIndex,lessonIndex);
-          const topreview = `Pending_${id}`
+          const id = handleVideoUpload(file, moduleIndex, lessonIndex);
+          const topreview = `Pending_${id}`;
           setPreviewUrls((prevUrls) => ({
             ...prevUrls,
             [moduleIndex]: {
@@ -325,7 +368,7 @@ const AddLesson = () => {
               [lessonIndex]: topreview,
             },
           }));
-          console.log("kazhne",topreview);
+          console.log("kazhne", topreview);
           // Set the video URL in the form field (instead of the file)
           setFieldValue(
             `Modules.${moduleIndex}.lessons.${lessonIndex}.video`,
@@ -352,26 +395,54 @@ const AddLesson = () => {
       }
     };
 
-    const handleQuizSubmit = (
-      moduleIndex: number,
-      lessonIndex: number,
-      quiz: any[], // Type this as per your `Question` type
-      setFieldValue: (field: string, value: unknown) => void,
-      validateForm: (values?: any) => Promise<{ [key: string]: string }> // If you want to validate after setting the field
-    ) => {
-      // Update your form values with the quiz data
-      setQuizData(quiz);
-      console.log(quiz, 'question value');
+    const handleQuizSubmit =async (
+        moduleIndex: number,
+        lessonIndex: number,
+        quiz: any[], // Type this as per your `Question` type
+        setFieldValue: (field: string, value: unknown) => void
+      ) => {
+        // Update your form values with the quiz data
+        setQuizData(quiz);
+        console.log(quiz, "question value");
+        const error = validateQuizQuestions(quiz)
+        if(error){
+            console.log(error, 'this is the rror')
+            toast.error(`Validation failed: ${error}`);
+        }else{
+            setFieldValue(
+                `Modules.${moduleIndex}.lessons.${lessonIndex}.questions`,
+                quiz
+              );
+            toast.success("Quiz updated successfully!");
+        }
+
+      };
+
+      const validateQuizQuestions = (quiz: any[]) => {
+        const errors: string[] = [];
       
-      // Setting the form field value for questions
-      setFieldValue(
-        `Modules.${moduleIndex}.lessons.${lessonIndex}.questions`,
-        quiz
-      );
-    
-      // Optionally, trigger form validation after setting the value
-      validateForm(); // This can be useful if you need to ensure the new data is validated
-    };
+        quiz.forEach((question, index) => {
+          if (!question.id) {
+            errors.push(`Question ID is missing in question #${index + 1}`);
+          }
+          if (!["QUIZ", "CODING"].includes(question.type)) {
+            errors.push(`Invalid type in question #${index + 1}. Must be 'QUIZ' or 'CODING'`);
+          }
+          if (!question.question) {
+            errors.push(`Question text is missing in question #${index + 1}`);
+          }
+          if (question.type === "QUIZ" && (!question.options || question.options.length < 2)) {
+            errors.push(`At least 2 options are required in question #${index + 1}`);
+          }
+          if (question.type === "QUIZ" && !question.correctAnswer) {
+            errors.push(`Correct answer is missing in question #${index + 1}`);
+          }
+        });
+      if(errors.length > 0)return errors
+      else return false
+      
+      };
+      
 
   const handleUploadClick = () => {
     if (fileInputRef.current) {
@@ -394,31 +465,29 @@ const AddLesson = () => {
   const handleSubmit = async (
     values: CreateCourseState,
     { setSubmitting }: FormikHelpers<CreateCourseState>
-    
   ) => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       // Prepare the final form data
       const finalValues = { ...values };
       console.log(finalValues, "kkkkkkkkkkkkkkkkkkkkkkkkk");
       // Dispatch the data to Redux store
       dispatch(setEditLesson(finalValues));
-      setIsLoading(false)
+      setIsLoading(false);
       // Call the `onNext` prop function if provided
       dispatch(toNext());
     } catch (error) {
       console.error("Error handling form submission:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
       setSubmitting(false);
     }
   };
 
   return (
     <div className="flex items-center justify-center m-5 px-4 min-h-[600px]">
-
-      {isLoading? <Loader/> : ""}
-      
+      {isLoading ? <Loader /> : ""}
+      <ToastContainer />
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg px-8 py-6 h-full">
         <h2 className="text-2xl font-semibold text-gray-800 mb-6">
           Add Modules and Lessons
@@ -437,21 +506,20 @@ const AddLesson = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-{({ setFieldValue, values, errors, handleSubmit, isSubmitting }) => (
-  <Form
-    onSubmit={(event) => {
-      event.preventDefault(); // Prevent default form submission
-      console.log("Validation errors:", errors); // Logs validation errors from Formik context
+          {({ setFieldValue, values, errors, handleSubmit, isSubmitting ,validateField}) => (
+            <Form
+              onSubmit={(event) => {
+                event.preventDefault(); // Prevent default form submission
+                console.log("Validation errors:", errors); // Logs validation errors from Formik context
 
-      // If there are validation errors, prevent submission
-      if (Object.keys(errors).length === 0) {
-        handleSubmit(); // Triggers Formik's onSubmit logic if no errors
-      } else {
-        console.log("Form has validation errors. Not submitting.");
-      }
-    }}
-  >
-              
+                // If there are validation errors, prevent submission
+                if (Object.keys(errors).length === 0) {
+                  handleSubmit(); // Triggers Formik's onSubmit logic if no errors
+                } else {
+                  console.log("Form has validation errors. Not submitting.");
+                }
+              }}
+            >
               <FieldArray name="Modules">
                 {({ remove: removeModule, push: pushModule }) => (
                   <>
@@ -467,9 +535,9 @@ const AddLesson = () => {
                             onClick={() => toggleModule(moduleIndex)}
                           >
                             {expandedModuleIndex === moduleIndex ? (
-                              <TfiArrowCircleUp/>
+                              <TfiArrowCircleUp />
                             ) : (
-                              <TfiArrowCircleDown/>
+                              <TfiArrowCircleDown />
                             )}
                           </button>
                         </div>
@@ -527,7 +595,7 @@ const AddLesson = () => {
                                 }) => (
                                   <>
                                     {module.lessons.map(
-                                      (_, lessonIndex: number) => (
+                                      (lesson: any, lessonIndex: number) => (
                                         <div
                                           key={lessonIndex}
                                           className="mt-4 border rounded-lg p-4"
@@ -550,9 +618,8 @@ const AddLesson = () => {
                                                 moduleIndex
                                               ] === lessonIndex ? (
                                                 <TfiArrowCircleUp size={20} />
-
                                               ) : (
-                                                <TfiArrowCircleDown size={20}/>
+                                                <TfiArrowCircleDown size={20} />
                                               )}
                                             </button>
                                           </div>
@@ -624,76 +691,116 @@ const AddLesson = () => {
                                                       ]?.lessons[
                                                         lessonIndex
                                                       ]) ? (
-                                                        <>
-                                                        { previewUrls[0][0].split('_')[0] === 'Pending' ?
-                                                         (
-                                                          <span className="absolute inset-0 flex flex-col p-5 items-center w-full justify-center text-gray-500">
-                                                          
+                                                      <>
+                                                        {previewUrls[moduleIndex][lessonIndex].split(
+                                                          "_"
+                                                        )[0] === "Pending" ? (
+                                                          <span className="absolute inset-0 flex flex-col p-5 items-center w-full justify-center h-40 text-gray-500">
                                                             <>
                                                               {/* <ProgressBar progress={videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.progress as number || 0}/> */}
-                                                              <CircularLoader progress={videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.progress as number || 0} />
-                                                              <h1>{`${videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.file || 0}`}</h1>
-                                                              <h1>{`${videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.message || 0}`}</h1>
-                                                              {videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.error && (
-                                                              <p className="text-red-500">
-                                                                {videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.error}
-                                                              </p>
-                                                      )}
+                                                              <CircularLoader
+                                                                progress={
+                                                                  (videoUploadStates[
+                                                                    moduleIndex
+                                                                  ]?.[
+                                                                    lessonIndex
+                                                                  ]
+                                                                    ?.uploadDetails
+                                                                    ?.progress as number) ||
+                                                                  0
+                                                                }
+                                                              />
+                                                              <h1>{`${
+                                                                videoUploadStates[
+                                                                  moduleIndex
+                                                                ]?.[lessonIndex]
+                                                                  ?.uploadDetails
+                                                                  ?.file || 0
+                                                              }`}</h1>
+                                                              <h1>{`${
+                                                                videoUploadStates[
+                                                                  moduleIndex
+                                                                ]?.[lessonIndex]
+                                                                  ?.uploadDetails
+                                                                  ?.message || 0
+                                                              }`}</h1>
+                                                              {videoUploadStates[
+                                                                moduleIndex
+                                                              ]?.[lessonIndex]
+                                                                ?.uploadDetails
+                                                                ?.error && (
+                                                                <p className="text-red-500">
+                                                                  {
+                                                                    videoUploadStates[
+                                                                      moduleIndex
+                                                                    ]?.[
+                                                                      lessonIndex
+                                                                    ]
+                                                                      ?.uploadDetails
+                                                                      ?.error
+                                                                  }
+                                                                </p>
+                                                              )}
                                                             </>
-
-
-                                                           </span>
-                                                        ):(
-
-                                                          <VideoPlayer
-                                                          videoUrl={
-                                                            previewUrls[
-                                                              moduleIndex
-                                                            ]?.[lessonIndex] ||
-                                                            (modules?.Modules[
-                                                              moduleIndex
-                                                            ]?.lessons[
-                                                              lessonIndex
-                                                            ]?.video as string)
-                                                          }
-                                                          moduleIndex={moduleIndex}
-                                                          lessonIndex={lessonIndex}
-                                                          subtitleUrl='sdf'
-                                                          />
-                                                        
-
-                                        
-                                                    )
-                                                    
-                                                  }
-                                                  </>
-                                                 )
-                                                  
-                                                  
-                                                  : (
+                                                          </span>
+                                                        ) : (
+                                                          <>
+                                                            {
+                                                              videoUploadStates[
+                                                                moduleIndex
+                                                              ]?.[lessonIndex]
+                                                                ?.uploadDetails
+                                                                ?.progress
+                                                            }
+                                                            <VideoPlayer
+                                                              videoUrl={
+                                                                previewUrls[
+                                                                  moduleIndex
+                                                                ]?.[
+                                                                  lessonIndex
+                                                                ] ||
+                                                                (modules
+                                                                  ?.Modules[
+                                                                  moduleIndex
+                                                                ]?.lessons[
+                                                                  lessonIndex
+                                                                ]
+                                                                  ?.video as string)
+                                                              }
+                                                              moduleIndex={
+                                                                moduleIndex
+                                                              }
+                                                              lessonIndex={
+                                                                lessonIndex
+                                                              }
+                                                              subtitleUrl="sdf"
+                                                            />
+                                                          </>
+                                                        )}
+                                                      </>
+                                                    ) : (
                                                       <span className="absolute inset-0 flex items-center w-full justify-center text-gray-500">
-                                                          {
-                                                            isVideoLoading.slice(1).some(subArray => 
-                                                              subArray.length === 2 && 
-                                                              subArray[0] === moduleIndex && 
-                                                              subArray[1] === lessonIndex
-                                                            ) ? <Spinner /> : "Upload Video"
-                                                          }
+                                                        {isVideoLoading
+                                                          .slice(1)
+                                                          .some(
+                                                            (subArray) =>
+                                                              subArray.length ===
+                                                                2 &&
+                                                              subArray[0] ===
+                                                                moduleIndex &&
+                                                              subArray[1] ===
+                                                                lessonIndex
+                                                          ) ? (
+                                                          <Spinner />
+                                                        ) : (
+                                                          "Upload Video"
+                                                        )}
                                                       </span>
                                                     )}
-                                                    <input
-                                                      type="file"
-                                                      ref={fileInputRef}
-                                                      className="hidden"
-                                                      accept="video/*"
-                                                      onChange={(event) =>
-                                                        handleFileChange(
-                                                          moduleIndex,
-                                                          lessonIndex,
-                                                          setFieldValue
-                                                        )(event)
-                                                      }
-                                                    />
+                                                    <div className="bg-gray-600 absolute bottom-0">
+                
+                                                    </div>
+       
                                                   </div>
                                                   <ErrorMessage
                                                     name={`Modules.${moduleIndex}.lessons.${lessonIndex}.video`}
@@ -701,19 +808,32 @@ const AddLesson = () => {
                                                     className="text-red-600 text-sm"
                                                   />
                                                 </div>
+
                                                 <div className="flex flex-col lg:flex-row justify-between">
-
-                                              </div>                          
-    
-                                            </div>
-
+                                                    
+                                                </div>
+                                              </div>
+                                              <div className="flex justify-end">
+                                              <VideoInput
+                                                      lessonIndex={lessonIndex}
+                                                      moduleIndex={moduleIndex}
+                                                      name={lesson.title}
+                                                      uploadVideoCallback={
+                                                        handleFileChange
+                                                      }
+                                                />
+</div>
                                               <QuizEditor
                                                 moduleIndex={moduleIndex}
                                                 lessonIndex={lessonIndex}
-                                                initialQuiz={values.Modules[moduleIndex].lessons[lessonIndex].questions}
+                                                initialQuiz={
+                                                  values.Modules[moduleIndex]
+                                                    .lessons[lessonIndex]
+                                                    .questions
+                                                }
                                                 onQuizChange={handleQuizSubmit}
+
                                               />
-                                              
 
                                               <button
                                                 type="button"

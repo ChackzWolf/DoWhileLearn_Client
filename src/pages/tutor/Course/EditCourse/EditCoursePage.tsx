@@ -40,7 +40,7 @@ const EditCoursePage = () => {
         
             // Listen for progress updates
             socketService.listenToUploadProgress((data) => {
-                console.log(`Progress for session ${data.message}: ${data.progress}%`);
+                console.log(`Progress for sessionn ${data.message}: ${data.progress}%`);
                 console.log(`Status: ${data.status}`);
                 console.log(data)
 
@@ -58,7 +58,7 @@ const EditCoursePage = () => {
                   }
                   dispatch(updateUploadProgress(toAdd))
                   if (data.progress === 100) {
-                    console.log('setting video')
+                    console.log('setting video',data.moduleIndex,data.lessonIndex,data.videoUrl)
                     dispatch(updateSpecificEditLessonVideo({moduleIndex:data.moduleIndex,lessonIndex:data.lessonIndex,videoUrl:data.videoUrl||''}))
                     setTimeout(()=>{
                       dispatch(removeVideoUpload(data.id))
@@ -77,7 +77,7 @@ const EditCoursePage = () => {
                   dispatch(updateUploadProgress(toAdd))
                   if (data.progress === 100) {
                     console.log('updating demo url with ', data.videoUrl)
-                    dispatch(setEditDemoUrl({ demoUrl: data.videoUrl || '' }));                    // updateDemoURL(data.videoUrl || '', data.id ||'');
+                    dispatch(setEditDemoUrl({ demoUrl: data.videoUrl || '' }));                  
                     setTimeout(()=>{
                       dispatch(removeVideoUpload(data.id))
                     },1000)

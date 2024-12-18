@@ -54,19 +54,25 @@ const editCourseData = createSlice({
       const { moduleIndex, lessonIndex, videoUrl } = action.payload;
     
       if (state.editLessons?.Modules) {
+        console.log('found ',state.editLessons.Modules)
         // Create a new state object with updated video URL for the specific lesson
         const updatedState = {
           ...state.editLessons,
           Modules: state.editLessons.Modules.map((mod, modIndex) => {
             // Update module if the moduleIndex matches
             if (modIndex === moduleIndex) {
+              console.log('matched index:',modIndex)
+              console.log(mod,'mod')
               return {
                 ...mod,
                 lessons: mod.lessons.map((lesson, lesIndex) => {
                   // Update lesson if the lessonIndex matches
-                  if (lesIndex === lessonIndex) {
+                  if (lesIndex === lessonIndex) 
+                  {
+                    console.log('matched lesson Index', lesIndex);
                     return { ...lesson, video: videoUrl }; // Update video URL
                   }
+                  console.log(lesson, 'returning lesson')
                   return lesson; // Return unmodified lesson if lessonIndex doesn't match
                 }),
               };

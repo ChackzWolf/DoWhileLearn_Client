@@ -17,4 +17,5 @@ export const tutorEndpoint = {
     updateTutorDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/updateTutorDetails`,
     fetchOrdersOfTutor: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchOrdersOfTutor`,
     TranscodeVideo: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/TranscodeVideo`,
+    FetchStudents:`${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/FetchStudents`,
 } 

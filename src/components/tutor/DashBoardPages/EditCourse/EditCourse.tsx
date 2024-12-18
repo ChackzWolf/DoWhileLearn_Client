@@ -359,18 +359,16 @@ const AddCourse = () => {
                           name="courseCategory"
                           className="w-full h-9 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
                         >
-                          <option value="">Select Category</option>
-                          <option value="NodeJS">NodeJS</option>
-                          <option value="React">React</option>
-                          <option value="JavaScript">JavaScript</option>
-                          <option value="MongoDB">Devops</option>
-                          <option value="MongoDB">Blockchain</option>
-                          <option value="MongoDB">Java</option>
-                          <option value="MongoDB">Python</option>
-                          <option value="MongoDB">Fontend</option>
-                          <option value="MongoDB">Backend</option>
-                          <option value="MongoDB">Cybersecurity</option>
-                          <option value="MongoDB">Tips & tricks</option>
+                        <option value="">Select Category</option>
+                        <option value="JavaScript">JavaScript</option>
+                        <option value="MongoDB">Database</option>
+                        <option value="Devops">Devops</option>
+                        <option value="Blockchain">Blockchain</option>
+                        <option value="Java">Java</option>
+                        <option value="Python">Python</option>
+                        <option value="Fontend">Fontend</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Tips & tricks">Tips & tricks</option>
                         </Field>
                       </div>
                     </div>

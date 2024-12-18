@@ -382,16 +382,13 @@ const AddCourse = () => {
                         className="w-full h-9 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="">Select Category</option>
-                        <option value="NodeJS">NodeJS</option>
-                        <option value="React">React</option>
                         <option value="JavaScript">JavaScript</option>
-                        <option value="MongoDB">MongoDB</option>
+                        <option value="MongoDB">Database</option>
                         <option value="Devops">Devops</option>
                         <option value="Blockchain">Blockchain</option>
                         <option value="Java">Java</option>
                         <option value="Python">Python</option>
                         <option value="Fontend">Fontend</option>
-                        <option value="Backend">Backend</option>
                         <option value="Cybersecurity">Cybersecurity</option>
                         <option value="Tips & tricks">Tips & tricks</option>
                       </Field>
@@ -436,15 +433,7 @@ const AddCourse = () => {
                               setFieldValue("thumbnail", s3Url,);
                             }
                           }}
-                        />
-
-
-
-
-
-
-
-                                         
+                        />             
                           <div className="flex flex-col w-full h-48">
                               <label className="text-sm font-medium text-gray-700">
                               Demo Video
@@ -482,14 +471,6 @@ const AddCourse = () => {
                                               subtitleUrl='sdf'
                                               />
                                             </>
-                                        // <video
-                                        //   className="w-full h-full object-center bg-black rounded-md"
-                                        //   controls
-                                        //   src={previewVideo}
-                                        // >
-                                        //   Your browser does not
-                                        //   support the video tag.
-                                        // </video>
                                         ) 
                                   }
                                     </>
