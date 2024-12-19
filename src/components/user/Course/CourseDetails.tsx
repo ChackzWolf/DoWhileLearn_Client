@@ -28,6 +28,7 @@ import userAxios from "../../../utils/axios/userAxios.config";
 import StudentReviews from "./StudentReview";
 import  ChatComponent from "../Chat/ChatCoursesRoute"
 import VideoPlayer from "../../common/VideoPlayer";
+import { FaUserCircle } from "react-icons/fa";
 
 
 interface Module {
@@ -53,9 +54,16 @@ const initialModulesState: CreateCourseState = {
   Modules: [],
 };
 
+interface TutorData {
+  firstName:string;
+  lastName:string;
+  expertise:string[];
+  profilePicture:string;
+}
 function CourseDetails() {
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
+  const [tutorData, setTutorData ] = useState<TutorData | null>(null);
   const [inCart, setInCart] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false);
   const [tutorId, setTutorId] = useState();
@@ -139,15 +147,15 @@ function CourseDetails() {
           setModules(createCourseState);
           setTotalLessons(totalLessonsCount);
           console.log(courseData, "courseData");
-
+          setTutorData(response.data.tutorData)
+          console.log(tutorData, "tutorData")
           setIsLoading(false);
         } catch (error) {
           console.error("Error fetching course details:", error);
           setIsLoading(false);
         }
       };
-
-      console.log(modules, "modules");
+;
       // const totalLessons = response.data.courseData.Modules.reduce((count,Modules) => count + Modules.Lessons.length,0)
       // const totalLessons = response.data.courseData.sections.reduce((count,section)=>count +section.lessons.length,0);
 
@@ -430,6 +438,33 @@ function CourseDetails() {
                       )}
                     </button>
                   </div>
+                        {tutorData &&
+                        (
+                          <div>
+                            <div className="flex items-center">
+                              <div className="mx-2">
+                                  {!tutorData.profilePicture ? (
+                                  <img src="https://dowhilelearn.s3.eu-north-1.amazonaws.com/1729592301214-openart-image_HBGAKw6G_1723024732100_raw.jpg" alt="" />
+
+                                  ): <FaUserCircle size={40} />}
+                              </div>
+
+                              <h1 className=" mx-1 text-lg font-semibold">{ `${tutorData.firstName} ${tutorData.lastName}` }</h1>
+                            </div>
+
+                            <div className="flex m-2">
+                              <h1 className="m-1 font-semibold">Expertise:</h1>
+                              {Array.isArray(tutorData.expertise) && tutorData.expertise.length > 0 ? (
+                                tutorData.expertise.map((expert: string) => {
+                                  return <h1 key={expert} className=" m-1">{expert || ""}</h1>;
+                                })
+                              ) : (
+                                <h1>No expertise listed</h1> // Display a fallback message when no expertise is available
+                              )}
+                            </div>
+                          </div>
+                        )}
+                  
                 </div>
               </motion.div>
             </div>

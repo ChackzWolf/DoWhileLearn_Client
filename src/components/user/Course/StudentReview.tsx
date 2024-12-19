@@ -249,7 +249,7 @@ const StudentReviews: React.FC<{
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-1xl font-semibold text-purple-600">
-                        {averageRating}
+                        {averageRating|| ""}
                       </div>
                       <div className="flex items-center gap-1 my-2">
                         {averageRating && renderStars(averageRating)}
@@ -258,7 +258,7 @@ const StudentReviews: React.FC<{
                     </div>
                     <div className="text-right">
                       <div className="text-1xl font-semibold text-gray-800">
-                        {totalRatings}
+                        {totalRatings || 'No reviews yet'}
                       </div>
                       <div className="text-gray-600 text-sm">
                         Total reviews
@@ -269,7 +269,7 @@ const StudentReviews: React.FC<{
 
                 {/* Individual Reviews */}
                 <div className="space-y-6">
-                  {reviews.length > -1
+                  {reviews.length > 0
                     ? reviews.map((review, index) => (
                         <motion.div
                           key={index}
@@ -341,7 +341,7 @@ const StudentReviews: React.FC<{
                   whileTap={{ scale: 0.98 }}
                   className="w-full mt-6 py-3 bg-purple-100 text-purple-600 rounded-xl hover:bg-purple-200 transition-colors font-medium"
                 >
-                  Load More Reviews
+                  {averageRating ? "Load More Reviews": "No reviews yet"}
                 </motion.button>
               </motion.section>
             </div>

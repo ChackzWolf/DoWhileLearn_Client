@@ -25,6 +25,7 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
     setOpenLessonIndex({});
   };
 
+  
   const toggleLesson = (moduleIndex: number, lessonIndex: number) => {
     setOpenLessonIndex((prev) => ({
       ...prev,
@@ -159,12 +160,12 @@ const LessonAccordion: React.FC<{
           >
             <div className="p-4 text-sm text-gray-600 bg-gray-50 rounded-b-lg">
               <p>{lesson.description}</p>
-              {lesson.video && (
+              {/* {lesson.video && (
                 <div className="mt-3 flex items-center text-purple-600 text-sm">
                   <FiPlay className="mr-2" />
                   <span>Preview available</span>
                 </div>
-              )}
+              )} */}
             </div>
           </motion.div>
         )}

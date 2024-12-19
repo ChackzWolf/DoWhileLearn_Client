@@ -1,23 +1,49 @@
-import { useEffect, useState } from "react";
-import Loader from "../../common/icons/loader";
+import { useEffect, useRef, useState } from "react";
+import { MdAdd, MdOutlineDelete, MdEdit, MdClose } from "react-icons/md";
+import { FaGraduationCap, FaUserTie, FaEnvelope, FaPhone, FaWallet } from "react-icons/fa";
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import axios from "axios";
+import { courseEndpoint } from "../../../constraints/courseEndpoints";
+
+interface Qualification {
+  qualification: string;
+  certificate: string;
+}
+
+interface TutorData {
+  tutorId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  bio: string;
+  expertise: string[];
+  qualifications: Qualification[];
+  profilePicture: string;
+  cv: string;
+  wallet: number;
+}
 
 const TutorProfile = ({ tutor }: { tutor: any }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  console.log(tutor, "tutor data");
-  const [formData, setFormData] = useState({
+  const [isImageUploading, setImageUploading] = useState(false);
+  const [isCertificateUploading, setCertificateUploading] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const certificateInputRef = useRef<HTMLInputElement>(null);
+
+  const [formData, setFormData] = useState<TutorData>({
     tutorId: "",
     firstName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
     bio: "",
-    expertise: "",
+    expertise: [],
     qualifications: [],
     profilePicture: "",
     cv: "",
@@ -25,180 +51,405 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   });
 
   useEffect(() => {
-    setIsLoading(true)
     if (tutor) {
-      const tutorId = getCookie('tutorId')
+      const tutorId = getCookie("tutorId");
       setFormData({
-        tutorId: tutorId ||'',
+        tutorId: tutorId || "",
         firstName: tutor.firstName || "",
         lastName: tutor.lastName || "",
         email: tutor.email || "",
         phoneNumber: tutor.phoneNumber || "",
         bio: tutor.bio || "",
-        expertise: tutor.expertise?.join(", ") || "", // Join expertise array into a string
+        expertise: tutor.expertise || [],
         qualifications: tutor.qualifications || [],
         profilePicture: tutor.profilePicture || "",
         cv: tutor.cv || "",
         wallet: tutor.wallet || 0,
       });
-      setIsLoading(false)
     }
-  
-  }, [tutor]); // Runs when `tutor` changes
-  console.log(formData, "frum data");
-  const handleEditClick = () => setIsEditing(!isEditing);
+  }, [tutor]);
 
-  const handleInputChange = (e: any) => {
+  const handleImageUploadClick = () => {
+    if (imageInputRef.current) {
+      imageInputRef.current.click();
+    }
+  };
+
+  const handleCertificateUploadClick = (index: number) => {
+    if (certificateInputRef.current) {
+      certificateInputRef.current.dataset.qualificationIndex = index.toString();
+      certificateInputRef.current.click();
+    }
+  };
+
+  const handleUpload = async (file: File, type: 'image' | 'certificate') => {
+    const formData = new FormData();
+    formData.append(type, file);
+    try {
+      if (type === 'image') setImageUploading(true);
+      if (type === 'certificate') setCertificateUploading(true);
+
+      const response = await axios.post(courseEndpoint.uploadImage, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data.s3Url) {
+        if (type === 'image') {
+          setFormData((prev) => ({ ...prev, profilePicture: response.data.s3Url }));
+        }
+        return response.data.s3Url;
+      }
+    } catch (error) {
+      console.error(`Error uploading ${type}:`, error);
+    } finally {
+      if (type === 'image') setImageUploading(false);
+      if (type === 'certificate') setCertificateUploading(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    setIsLoading(true)
-    const response:any = tutorAxios.post(tutorEndpoint.updateTutorDetails,formData);
-    if(response){
-       console.log(response, 'this is response.');
-       setMessage(response?.message)
-    }
+  const handleExpertiseChange = (index: number, value: string) => {
+    const newExpertise = [...formData.expertise];
+    newExpertise[index] = value;
+    setFormData((prev) => ({ ...prev, expertise: newExpertise }));
+  };
+
+  const addExpertise = () => {
+    setFormData((prev) => ({ ...prev, expertise: [...prev.expertise, ""] }));
+  };
+
+  const removeExpertise = (index: number) => {
+    const newExpertise = formData.expertise.filter((_, i) => i !== index);
+    setFormData((prev) => ({ ...prev, expertise: newExpertise }));
+  };
+
+  const handleQualificationChange = (index: number, value: string) => {
+    const newQualifications = [...formData.qualifications];
+    newQualifications[index] = { ...newQualifications[index], qualification: value };
+    setFormData((prev) => ({ ...prev, qualifications: newQualifications }));
+  };
+
+  const addQualification = () => {
+    setFormData((prev) => ({
+      ...prev,
+      qualifications: [...prev.qualifications, { qualification: "", certificate: "" }],
+    }));
+  };
+
+  const removeQualification = (index: number) => {
+    const newQualifications = formData.qualifications.filter((_, i) => i !== index);
+    setFormData((prev) => ({ ...prev, qualifications: newQualifications }));
+  };
+
+  const handleCertificateUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const index = Number(e.target.dataset.qualificationIndex);
     
-    // Implement save functionality here (e.g., send updated data to server)
-    setIsEditing(false);
-    setIsLoading(false);
+    if (file && !isNaN(index)) {
+      const certificateUrl = await handleUpload(file, 'certificate');
+      if (certificateUrl) {
+        const newQualifications = [...formData.qualifications];
+        newQualifications[index] = {
+          ...newQualifications[index],
+          certificate: certificateUrl,
+        };
+        setFormData((prev) => ({ ...prev, qualifications: newQualifications }));
+      }
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      setIsLoading(true);
+      const response = await tutorAxios.post(tutorEndpoint.updateTutorDetails, formData);
+      setMessage(response.data.message);
+      setShowMessage(true);
+      setTimeout(() => setShowMessage(false), 3000);
+      setIsEditing(false);
+    } catch (error) {
+      setMessage("Error updating profile");
+      setShowMessage(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <>
-    {message && <div className="flex justify-center items-center text-center w-full">
-                    <h1 className="text-[#7C24F0]">{message}</h1>
-                </div>}
-    
-      {formData.firstName ? (
-        <div className="max-w-4xl mx-auto my-10 bg-white rounded-lg shadow-md p-8">
-          <div className="flex items-center gap-5 w-full">
-            <div className="flex items-center justify-center mb-6 w-1/4">
-              <img
-                src={
-                  formData.profilePicture || "https://via.placeholder.com/150"
-                }
-                alt="Profile"
-                className=" rounded-full object-cover"
+    <div className="min-h-screen bg-gray-50 py-8">
+      {showMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-500">
+          {message}
+        </div>
+      )}
+
+      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="p-8">
+          {/* Profile Header */}
+          <div className="flex items-center gap-8 mb-8">
+            <div className="relative w-32 h-32">
+              {isEditing ? (
+                <div
+                  onClick={handleImageUploadClick}
+                  className="w-full h-full rounded-full cursor-pointer overflow-hidden relative group"
+                >
+                  <img
+                    src={formData.profilePicture || "/default-avatar.png"}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-white text-sm">Change Photo</span>
+                  </div>
+                  {isImageUploading && (
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <img
+                  src={formData.profilePicture || "/default-avatar.png"}
+                  alt="Profile"
+                  className="w-full h-full rounded-full object-cover"
+                />
+              )}
+              <input
+                type="file"
+                ref={imageInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (file) await handleUpload(file, 'image');
+                }}
               />
             </div>
-            <div className="w-full">
-              {/* Name and Edit Button */}
-              <div className="flex w-full justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold text-gray-800">
+
+            <div className="flex-1">
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-3xl font-bold text-gray-800">
                   {formData.firstName} {formData.lastName}
                 </h1>
                 <button
-                  onClick={handleEditClick}
-                  className="text-[#7C24F0] hover:underline"
+                  onClick={() => setIsEditing(!isEditing)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200
+                    ${isEditing ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-purple-100 text-purple-600 hover:bg-purple-200'}`}
                 >
-                  {isEditing ? "Cancel" : "Edit Profile"}
+                  {isEditing ? (
+                    <>
+                      <MdClose className="text-xl" /> Cancel
+                    </>
+                  ) : (
+                    <>
+                      <MdEdit className="text-xl" /> Edit Profile
+                    </>
+                  )}
                 </button>
               </div>
-
-              <div>
-                <label className="block text-gray-600">Bio:</label>
-                {isEditing ? (
-                  <textarea
-                    name="bio"
-                    value={formData.bio}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                ) : (
-                  <p>{formData.bio}</p>
-                )}
-              </div>
+              {isEditing ? (
+                <textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                  rows={3}
+                  placeholder="Tell us about yourself..."
+                />
+              ) : (
+                <p className="text-gray-600">{formData.bio}</p>
+              )}
             </div>
           </div>
 
-          {/* Form Fields */}
-          <form className="space-y-4">
-            <div>
-              <label className="block text-gray-600">Email:</label>
-              {/* {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              ) : ( */}
-                <p>{formData.email}</p>
-              {/* )} */}
-            </div>
-
-            <div>
-              <label className="block text-gray-600">Phone Number:</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              ) : (
-                <p>{formData.phoneNumber}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-gray-600">Expertise:</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="expertise"
-                  value={formData.expertise}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              ) : (
-                <p>{formData.expertise}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-gray-600">Qualifications:</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="qualifications"
-                  value={formData.qualifications.join(", ")}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              ) : (
-                <p>{formData.qualifications.map((q: any) => q).join(", ")}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-gray-600">Wallet Balance:</label>
-              <p className="text-green-500 font-semibold">${formData.wallet}</p>
-            </div>
-
-            {isEditing && (
-              <div className="flex justify-end space-x-2">
-                <button
-                  type="button"
-                  onClick={handleSave}
-                  className="bg-[#7C24F0] text-white px-4 py-2 rounded hover:bg-[#6211cd]"
-                >
-                  Save Changes
-                </button>
+          {/* Profile Content */}
+          <div className="space-y-6">
+            {/* Contact Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-center gap-3">
+                <FaEnvelope className="text-gray-400 text-xl" />
+                <div>
+                  <p className="text-sm text-gray-500">Email</p>
+                  <p className="text-gray-800">{formData.email}</p>
+                </div>
               </div>
-            )}
-          </form>
+              <div className="flex items-center gap-3">
+                <FaPhone className="text-gray-400 text-xl" />
+                <div>
+                  <p className="text-sm text-gray-500">Phone</p>
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      name="phoneNumber"
+                      value={formData.phoneNumber}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                    />
+                  ) : (
+                    <p className="text-gray-800">{formData.phoneNumber}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Expertise Section */}
+            <div className="border-t pt-6">
+              <div className="flex items-center gap-3 mb-4">
+                <FaUserTie className="text-gray-400 text-xl" />
+                <h2 className="text-xl font-semibold text-gray-800">Expertise</h2>
+              </div>
+              {isEditing ? (
+                <div className="space-y-3">
+                  {formData.expertise.map((exp, index) => (
+                    <div key={index} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={exp}
+                        onChange={(e) => handleExpertiseChange(index, e.target.value)}
+                        className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+                        placeholder="Add expertise"
+                      />
+                      <button
+                        onClick={() => removeExpertise(index)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <MdOutlineDelete className="text-xl" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={addExpertise}
+                    className="flex items-center gap-2 text-purple-600 hover:text-purple-700"
+                  >
+                    <MdAdd className="text-xl" /> Add Expertise
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {formData.expertise.map((exp, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-sm"
+                    >
+                      {exp}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Qualifications Section */}
+            <div className="border-t pt-6">
+              <div className="flex items-center gap-3 mb-4">
+                <FaGraduationCap className="text-gray-400 text-xl" />
+                <h2 className="text-xl font-semibold text-gray-800">Qualifications</h2>
+              </div>
+              <div className="space-y-3">
+                {isEditing ? (
+                  <>
+                    {formData.qualifications.map((qual, index) => (
+  <div key={index} className="flex gap-2">
+    <input
+      type="text"
+      value={qual.qualification}
+      onChange={(e) => handleQualificationChange(index, e.target.value)}
+      className="flex-1 px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500"
+      placeholder="Add qualification"
+    />
+    <button
+      onClick={() => handleCertificateUploadClick(index)}
+      className="px-3 py-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
+    >
+      Upload Certificate
+    </button>
+    <button
+      onClick={() => removeQualification(index)}
+      className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+    >
+      <MdOutlineDelete className="text-xl" />
+    </button>
+  </div>
+))}
+<button
+  onClick={addQualification}
+  className="flex items-center gap-2 text-purple-600 hover:text-purple-700"
+>
+  <MdAdd className="text-xl" /> Add Qualification
+</button>
+<input
+  type="file"
+  ref={certificateInputRef}
+  className="hidden"
+  accept=".pdf,.doc,.docx"
+  onChange={handleCertificateUpload}
+/>
+</>
+) : (
+<div className="space-y-3">
+  {formData.qualifications.map((qual, index) => (
+    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+      <span className="text-gray-800">{qual.qualification}</span>
+      {qual.certificate && (
+        <a
+          href={qual.certificate}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-purple-600 hover:text-purple-700 flex items-center gap-2"
+        >
+          <FaGraduationCap className="text-lg" />
+          View Certificate
+        </a>
+      )}
+    </div>
+  ))}
+</div>
+)}
+</div>
+</div>
+
+{/* Wallet Section */}
+<div className="border-t pt-6">
+  <div className="flex items-center gap-3">
+    <FaWallet className="text-gray-400 text-xl" />
+    <div>
+      <p className="text-sm text-gray-500">Wallet Balance</p>
+      <p className="text-2xl font-semibold text-green-600">
+        ${formData.wallet.toFixed(2)}
+      </p>
+    </div>
+  </div>
+</div>
+
+{/* Save Button */}
+{isEditing && (
+  <div className="border-t pt-6 flex justify-end">
+    <button
+      onClick={handleSave}
+      disabled={isLoading}
+      className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 
+        transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {isLoading ? (
+        <div className="flex items-center gap-2">
+          <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white"></div>
+          Saving...
         </div>
       ) : (
-        <Loader />
+        "Save Changes"
       )}
-    </>
-  );
+    </button>
+  </div>
+)}
+</div>
+</div>
+</div>
+</div>
+);
 };
 
 export default TutorProfile;
