@@ -40,10 +40,11 @@ function App() {
           <Route path='/AuthChoice' element= {<AuthChoice/>}/>
           <Route path ='/courses' element = {<CoursesListPage/>}/>
           <Route path="/course/:id" element={<CourseDetailsPage/>} />
+          
 
           {/* User auth */}
-          <Route path='/login/user' element = {<LoginUser/>}/>
-          <Route path='/register/user' element ={<RegisterUser/>}/>
+          <Route path = '/login/user' element = {<LoginUser/>}/>
+          <Route path = '/register/user' element ={<RegisterUser/>}/>
           <Route path = '/login/user/forgot-password' element= {<VerifyEmail role='USER'/>}/>
           <Route path = '/login/user/forgot-password/otp' element={<ResetPasswordOTP role='USER'/>}/>
           <Route path = '/login/user/forgot-password/otp/reset-password' element={<ResetPassword role='USER'/>}/>

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react"
-import axios from "axios";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
-import { useNavigate } from "react-router-dom";
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
 import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 
@@ -11,7 +9,6 @@ import { RxDoubleArrowRight, RxDoubleArrowLeft } from "react-icons/rx";
 
 
 function Payouts() {
-  const navigate = useNavigate()
   const [payouts, setPayouts] = useState<any[]>([]);
   const itemsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +22,8 @@ function Payouts() {
             console.log('tutorId: ',tutorId)
             const response = await tutorAxios.get(tutorEndpoint.fetchOrdersOfTutor, {params: { tutorId }, withCredentials:true });
             console.log(response.data, 'resposne .data')
-            setPayouts(response.data.orderData); // Access the 'courses' property from the response
+            const orderData = response.data.orderData.reverse();
+            setPayouts(orderData); // Access the 'courses' property from the response
           }
 
         } catch (error) {
@@ -37,7 +35,7 @@ function Payouts() {
     }, []);
 
     
-      // Get the courses for the current page
+  // Get the courses for the current page
   const currentPayouts = payouts.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -50,18 +48,15 @@ function Payouts() {
     }
   };
 
-    const handleOnClick = (id: string) => {
-      navigate(`/tutor/courses/${id}`);
-    };
 
   console.log(currentPayouts)
   return (
-    <div className="w-full h-screen bg-white p-8">
+    <div className="w-10/12 h-screen bg-white p-8">
             <h1 className="text-3xl font-semibold m-5 mx-10">Payouts</h1>
 
       <div className="mx-10 h-full flex flex-col justify-between">
       { currentPayouts.length !== 0? (
-      <table className="transition-all w-full border-collapse border border-gray-300 rounded-lg overflow-hidden m-2 ">
+      <table className="transition-all w-full border-collapse border border-gray-300 rounded-lg overflow-hidden m-2  ">
         <thead>
           <tr>
             <th className="border border-gray-300 p-2 bg-gray-100 "></th>
@@ -69,21 +64,19 @@ function Payouts() {
             <th className="border border-gray-300 p-2 bg-gray-100">Course level</th>
             <th className="border border-gray-300 p-2 bg-gray-100">Course price</th>
             <th className="border border-gray-300 p-2 bg-gray-100">Earnings</th>
-            <th className="border border-gray-300 p-2 bg-gray-100">Action</th>
           </tr>
         </thead>
         <tbody>
           {currentPayouts.map((payout, index) => (
             <tr key={index} className="text-center">
               <div className="flex items-center justify-center rounded-lg">
-              <img src={payout.thumbnail} alt="" className="w-10 rounded-md mt-4" />
+              <img src={payout.thumbnail} alt="" className="w-10 rounded-md mt-4"/>
               </div>
               
               <td className="transition-all border border-gray-300 p-2">{payout?.title}</td>
             <td className="transition-all border border-gray-300 p-2">{payout?.adminShare}</td>
             <td className="transition-all border border-gray-300 p-2">{payout?.price}</td>
             <td className="transition-all border border-gray-300 p-2 text-green-500">{payout?.tutorShare}</td>
-              <button className= "bg-[#7C24F0] hover:bg-[#6211cd] transition-all rounded-lg px-4 m-2 py-1 text-white" onClick={()=>handleOnClick(payout?._id)}> Detail veiw</button>
             </tr>
           ))}
         </tbody>

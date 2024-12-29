@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import {  setCookie } from "../../../utils/cookieManager";
-import { setTutorLogin } from "../../../redux/authSlice/authSlice";
+import { setTutorLogin, setTutorProfilePic } from "../../../redux/authSlice/authSlice";
 import { useState, useEffect } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
@@ -89,6 +89,7 @@ function LoginModal() {
                 setCookie('tutorId',tutorId, 7)
                 dispatch(setTutorData(data))
                 dispatch(setTutorLogin())
+                dispatch(setTutorProfilePic(tutorData.profilePicture))
                 navigate('/tutor');
             }else{
                 console.log(response.data.message,'reached eher')

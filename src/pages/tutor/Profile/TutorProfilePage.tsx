@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TutorProfile from '../../../components/tutor/Profile/tutorProfile'
-import tutorAxios from '../../../utils/axios/tutorAxios.config'
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint'
 import { getCookie } from '../../../utils/cookieManager'
 import Header from '../../../components/tutor/Layout/Header'
@@ -24,7 +23,6 @@ function TutorProfilePage() {
     },[])
   return (
     <>
-    <Header/>
     {data ? <TutorProfile tutor={data}/> : <h1>Loading...</h1>}
     </>
   )

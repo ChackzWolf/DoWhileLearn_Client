@@ -1,4 +1,3 @@
-import Header from "../../../../components/tutor/Layout/Header";
 import SideNav from "../../../../components/tutor/Layout/SideNav";
 import CreateCourse from "../../../../components/tutor/DashBoardPages/CreateCourse/CreateCourse";
 import CreateCourse2 from "../../../../components/tutor/DashBoardPages/CreateCourse/CreateCourse2";
@@ -11,10 +10,8 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { setCreateCourseEmpty, setDemoUrl, updateSpecificLessonVideo } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import SocketService from "../../../../services/socketService";
-import { setSocketService } from "../../../../redux/socketSlice";
-import { getCookie } from "../../../../utils/cookieManager";
+
 import { removeVideoUpload, updateUploadProgress } from "../../../../redux/uploadStatSlice";
-import { updateDemoURL } from "../../../../utils/common.utils";
 
 
 
@@ -112,11 +109,8 @@ const CreateCoursePage = () => {
 
 
   return (
-    <div className="w-full h-screen">
-      <Header />
-      <div className="flex w-full h-full">
-        <SideNav prop={"/tutor/createCourse"} />
-        <div className="w-full flex-col">
+
+        <div className="w-10/12 flex-col">
 
             <div className="">
               <ProgressBar  />
@@ -126,8 +120,6 @@ const CreateCoursePage = () => {
           {step == 3 && <CreateCourse2 />}
           {step == 4 && <OverView/>}
         </div>
-      </div>
-    </div>
   );
 };
 

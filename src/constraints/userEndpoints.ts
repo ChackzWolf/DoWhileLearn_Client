@@ -17,4 +17,6 @@ export const userEndpoint = {
     addUserReview: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/addUserReview`,
     fetchReviewsOfCourse: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/fetchReviewsOfCourse`,
     fetchPurchasedCourses:`${import.meta.env.VITE_API_GATEWAY_BASE_URL}/fetchPurchasedCourses`,
+    fetchUserData: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/fetchUserData`,
+    updateUserDetails: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateUserDetails`,
 } 

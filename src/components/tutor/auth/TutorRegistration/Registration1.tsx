@@ -385,22 +385,6 @@ function Registeration1() {
 
                                     </div>
 
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
                   {/* Expertise (dynamic array) */}
                   <div className="mb-4">
                     <p className="text-base mb-2 font-normal">Expertise</p>

@@ -5,6 +5,7 @@ import PayoutsPage from '../../../pages/tutor/DashBoard/PayoutPage';
 import CreateCoursePage from '../../../pages/tutor/Course/CreateCourse/CreateCoursePage';
 import CoursesPage from '../../../pages/tutor/DashBoard/CoursesPage'
 import CourseDetailsPage from '../../../pages/tutor/Course/CourseDetailsPage'
+import UserDetailsPage from '../../../pages/tutor/DashBoard/UsersPage/UserDetailsPage'
 import EditCoursePage from '../../../pages/tutor/Course/EditCourse/EditCoursePage';
 import TutorProfilePage from '../../../pages/tutor/Profile/TutorProfilePage';
 import UploadDetails from '../../tutor/DashBoardPages/UploadingStatus/UploadingStatus';
@@ -13,6 +14,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
 import UploadSpinner from '../../common/icons/UploadSpinner';
 import { ToastContainer } from 'react-toastify';
+import Header from '../../tutor/Layout/Header';
+import SideNav from '../../tutor/Layout/SideNav';
 
 
 const TutorRoutes = ()=>{
@@ -25,32 +28,34 @@ const TutorRoutes = ()=>{
     }
     return(
         <>
-        <ToastContainer/>
-        <Routes>
-            <Route path= '/' element={<TutorDashBoard/>}/>
-            <Route path= '/users' element={<UsersPage/>}/>
-            <Route path= '/payouts' element={<PayoutsPage/>}/>
-            <Route path= '/createCourse' element={<CreateCoursePage/>}/>
-            <Route path = '/courses' element = {<CoursesPage/>}/>
-            <Route path="/courses/:id" element={<CourseDetailsPage />} />
-            <Route path = "/courses/edit-course" element = {<EditCoursePage/>}/>
-            <Route path = "/complete-registration"   />
-            <Route path='/profile' element ={<TutorProfilePage/>}/>
-        </Routes>
-
-        {uploads.length > 0 && 
-          (     
-            <div>
-                
-                <button onClick={()=> setViewUploads(true)} className='fixed right-0 text-purple rounded-lg shadow bottom-0 text-4xl justify-between m-7 hover:scale-105 hover:text-purple-600'>
-                    <UploadSpinner count={uploads.length}/>
-                </button>
+            <ToastContainer/>
+            <Header/>
+            <div className="flex w-full h-full">
+            <SideNav/>
+                <Routes>
+                    <Route path= '/' element={<TutorDashBoard/>}/>
+                    <Route path= '/users' element={<UsersPage/>}/>
+                    <Route path= '/payouts' element={<PayoutsPage/>}/>
+                    <Route path= '/createCourse' element={<CreateCoursePage/>}/>
+                    <Route path = '/courses' element = {<CoursesPage/>}/>
+                    <Route path="/courses/:id" element={<CourseDetailsPage />} />
+                    <Route path = "/courses/edit-course" element = {<EditCoursePage/>}/>
+                    <Route path = "/complete-registration"   />
+                    <Route path='/profile' element ={<TutorProfilePage/>}/>
+                    <Route path= '/user/details/:id' element={<UserDetailsPage/>}/>
+                </Routes>
             </div>
 
-          )}
-
-        <UploadDetails viewUploads={viewUploads} closeUploads={viewUploadCallback} />
-    </>
+            {uploads.length > 0 && 
+                (     
+                    <div>
+                        <button onClick={()=> setViewUploads(true)} className='fixed right-0 text-purple rounded-lg shadow bottom-0 text-4xl justify-between m-7 hover:scale-105 hover:text-purple-600'>
+                            <UploadSpinner count={uploads.length}/>
+                        </button>
+                    </div>
+                )}
+            <UploadDetails viewUploads={viewUploads} closeUploads={viewUploadCallback} />
+        </>
     )
 }
 

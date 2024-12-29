@@ -69,3 +69,18 @@ export const updateLessonVideo = (
   
     return updatedState;
   };
+
+  export function calculateAverageRating(courses:any) {
+    // Filter out courses with a rating of 0
+    const ratedCourses = courses.filter((course:any) => course.averageRating > 0);
+  
+    // Check if there are any courses with ratings to avoid division by zero
+    if (ratedCourses.length === 0) return 0;
+  
+    // Sum up the ratings of the filtered courses
+    const totalRating = ratedCourses.reduce((sum:any, course:any) => sum + course.averageRating, 0);
+  
+    // Calculate the average rating
+    const averageRating = totalRating / ratedCourses.length
+    return parseFloat(averageRating.toFixed(1));
+  }

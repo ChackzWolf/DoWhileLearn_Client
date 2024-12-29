@@ -204,7 +204,7 @@ function CoursesList() {
 
         {/* Content Placeholder */}
         <div className="flex-1  rounded-lg">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
             {currentCourses.map((course) => (
               <CourseBadge
                 key={course._id}

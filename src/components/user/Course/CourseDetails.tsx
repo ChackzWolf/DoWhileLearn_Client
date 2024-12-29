@@ -59,6 +59,7 @@ interface TutorData {
   lastName:string;
   expertise:string[];
   profilePicture:string;
+  _id:string;
 }
 function CourseDetails() {
   const [isLoading, setIsLoading] = useState(false);
@@ -395,15 +396,6 @@ function CourseDetails() {
                     videoUrl = {courseData?.demoURL || ''}
                     subtitleUrl = {''}
                   />
-
-                  
-                  {/* <video
-                    src={courseData.demoURL}
-                    controls
-                    className="w-full h-full object-cover"
-                    onPlay={() => setIsVideoPlaying(true)}
-                    onPause={() => setIsVideoPlaying(false)}
-                  /> */}
                 </div>
 
                 {/* Pricing and Actions */}
@@ -441,16 +433,19 @@ function CourseDetails() {
                         {tutorData &&
                         (
                           <div>
-                            <div className="flex items-center">
+                            <div className="flex items-center gap-2">
                               <div className="mx-2">
-                                  {!tutorData.profilePicture ? (
-                                  <img src="https://dowhilelearn.s3.eu-north-1.amazonaws.com/1729592301214-openart-image_HBGAKw6G_1723024732100_raw.jpg" alt="" />
+                                  {tutorData.profilePicture ? (
+                                  <img src={tutorData.profilePicture} alt="" className="h-10 w-10 rounded-full" />
 
                                   ): <FaUserCircle size={40} />}
                               </div>
+                              <button className=" mx-1 text-lg font-semibold hover:text-[#7C24F0]" onClick={()=> {navigate(`/user/tutor/profile/${tutorData._id}`)}}>
+                                  { `${tutorData.firstName} ${tutorData.lastName}` }
+                              </button>
 
-                              <h1 className=" mx-1 text-lg font-semibold">{ `${tutorData.firstName} ${tutorData.lastName}` }</h1>
                             </div>
+
 
                             <div className="flex m-2">
                               <h1 className="m-1 font-semibold">Expertise:</h1>

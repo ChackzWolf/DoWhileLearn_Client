@@ -7,6 +7,7 @@ import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist
 import createCourseData from '../tutorSlice/CourseSlice/createCourseData';
 import editCourseData from '../tutorSlice/CourseSlice/editCourseData';
 import tutorData from '../tutorSlice/tutorSlice';
+import userData from '../UserSlice/UserSlice'
 import uploadSlice from '../uploadStatSlice'
 import socketSlice from '../socketSlice'
 
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     createCourseData: createCourseData,
     editCourseData: editCourseData,
     tutorData:tutorData,
+    userData:userData,
     uploadSlice:uploadSlice,
     socketSlice:socketSlice,
 })

@@ -7,6 +7,7 @@ import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
 import axios from "axios";
 import Loader from "../../common/icons/loader";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
+import { ROUTES } from "../../../routes/Routes";
 
 
 export interface ResponseFetchCourseList {
@@ -88,13 +89,13 @@ function Course() {
 
 
     const handleOnClick = (id: string) => {
-      navigate(`/tutor/courses/${id}`);
+      navigate(ROUTES.tutor.courseDetails(id));
     };
 
   console.log(courses,'courses form outside')
   return !isLoading ? (
     
-    <div className="w-full h-screen bg-white p-8">
+    <div className="w-10/12 h-screen bg-white p-8">
             <h1 className="text-3xl font-semibold m-5 mx-10">Courses</h1>
 
       <div className="mx-10 flex flex-col justify-between h-full">

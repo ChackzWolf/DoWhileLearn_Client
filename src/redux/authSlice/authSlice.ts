@@ -1,14 +1,19 @@
 import cookie from 'js-cookie';
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import UserProfile from './../../components/user/UserProfile';
 
 interface AuthState{
     isLogin:boolean;
+    userProfilePic:string;
     isTutorLogin:boolean;
+    tutorProfilePic:string
 }
 
 const initialState: AuthState = {
     isLogin : false,
+    userProfilePic: '',
     isTutorLogin: false,
+    tutorProfilePic:'',
 }
 
 const authSlice = createSlice({
@@ -20,6 +25,10 @@ const authSlice = createSlice({
         },
         setUserLogout:(state)=>{
             state.isLogin = false;
+            state.userProfilePic = ''
+        },
+        setUserProfilePic:(state,action: PayloadAction<string>)=> {
+            state.userProfilePic = action.payload
         },
         checkUserAuth: (state) =>{
             const userData = cookie.get('userData')
@@ -28,8 +37,12 @@ const authSlice = createSlice({
         setTutorLogin: (state) => {
             state.isTutorLogin = true
         },
+        setTutorProfilePic:(state,action: PayloadAction<string>)=> {
+            state.tutorProfilePic = action.payload
+        },
         setTutorLogout: (state)=>{
             state.isTutorLogin = false
+            state.tutorProfilePic = ''
         },
         checkTutorAuth:(state) =>{
             const userData = cookie.get('userData')
@@ -38,5 +51,5 @@ const authSlice = createSlice({
     }
 })
 
-export const {setUserLogin, setUserLogout, checkUserAuth, setTutorLogin, setTutorLogout, checkTutorAuth} = authSlice.actions;
+export const {setUserLogin, setUserProfilePic, setTutorProfilePic, setUserLogout, checkUserAuth, setTutorLogin, setTutorLogout, checkTutorAuth} = authSlice.actions;
 export default authSlice.reducer;

@@ -6,6 +6,8 @@ import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import axios from "axios";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
+import { setTutorProfilePic } from "../../../redux/authSlice/authSlice";
+import { useDispatch } from "react-redux";
 
 interface Qualification {
   qualification: string;
@@ -27,6 +29,7 @@ interface TutorData {
 }
 
 const TutorProfile = ({ tutor }: { tutor: any }) => {
+  const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +38,8 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   const [showMessage, setShowMessage] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const certificateInputRef = useRef<HTMLInputElement>(null);
+  const [pdfFileNames, setPdfFileNames] = useState<string[]>([]);//
+  const [pdfFileLoading, setPdfFileLoading] = useState<boolean[]>([]);//
 
   const [formData, setFormData] = useState<TutorData>({
     tutorId: "",
@@ -74,6 +79,39 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
       imageInputRef.current.click();
     }
   };
+
+  const handlePDFUpload = async (file: File) => {
+
+    const formData = new FormData();
+    formData.append("pdf", file); // Adjust the key to 'pdf' for the PDF file
+
+    console.log(formData,'form data data data')
+    try {
+      const response = await axios.post(tutorEndpoint.uploadPDF, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      console.log("PDF upload completed", response.data);
+  
+      // Use the returned URL to update the state or handle accordingly
+      if (response.data.s3Url) {
+
+        console.log("PDF uploaded successfully:", response.data.s3Url)
+
+        return response.data.s3Url;
+      } else {
+        console.error("s3Url is missing in the response");
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error uploading PDF:", error);
+    }finally{
+
+    }
+  };
+
 
   const handleCertificateUploadClick = (index: number) => {
     if (certificateInputRef.current) {
@@ -152,7 +190,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
     const index = Number(e.target.dataset.qualificationIndex);
     
     if (file && !isNaN(index)) {
-      const certificateUrl = await handleUpload(file, 'certificate');
+      const certificateUrl = await handlePDFUpload(file);
       if (certificateUrl) {
         const newQualifications = [...formData.qualifications];
         newQualifications[index] = {
@@ -168,6 +206,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
     try {
       setIsLoading(true);
       const response = await tutorAxios.post(tutorEndpoint.updateTutorDetails, formData);
+      dispatch(setTutorProfilePic(formData.profilePicture))
       setMessage(response.data.message);
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 3000);
@@ -181,7 +220,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen w-10/12 bg-gray-50 py-8">
       {showMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-500">
           {message}

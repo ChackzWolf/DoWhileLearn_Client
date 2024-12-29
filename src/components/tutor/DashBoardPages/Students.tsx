@@ -4,13 +4,15 @@ import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
+import { FaUserCircle } from "react-icons/fa";
 
 
 interface User {
   firstName:string,
   lastName:string,
   img:string,
-  _id:string
+  _id:string,
+  profilePicture:string
 }
 
 
@@ -41,7 +43,7 @@ function Students() {
     }, []);
 
     const handleOnClick = (id: string) => {
-      navigate(`/tutor/courses/${id}`);
+      navigate(`/tutor/user/details/${id}`);
     };
 
 
@@ -60,7 +62,7 @@ function Students() {
 
   console.log(students)
   return (
-    <div className="w-full h-screen bg-white p-8">
+    <div className="w-10/12 h-screen bg-white p-8">
               <h1 className="text-3xl font-semibold m-5 mx-10">Students</h1>
 
       <div className="mx-10 flex flex-col justify-center">
@@ -72,23 +74,20 @@ function Students() {
           <tr>
             <th className="border border-gray-300 p-2 bg-gray-100 "></th>
             <th className="border border-gray-300 p-2 bg-gray-100 ">Name</th>
-            {/* <th className="border border-gray-300 p-2 bg-gray-100">Course level</th>
-            <th className="border border-gray-300 p-2 bg-gray-100">Course price</th>
-            <th className="border border-gray-300 p-2 bg-gray-100">Earnings</th> */}
             <th className="border border-gray-300 p-2 bg-gray-100">Action</th>
           </tr>
         </thead>
         <tbody>
           {currentStudents.map((student, index) => (
             <tr key={index} className="text-center">
-              <div className="flex items-center justify-center rounded-lg">
-              <img src={student?.img || ''} alt="" className="w-10 rounded-md mt-4" />
+              { student.profilePicture?
+              <div className="flex justify-center items-center rounded-full contain-content w-10 h-10">
+                <img src={student?.profilePicture || ''} alt=""  />
               </div>
-              
+              :
+              <FaUserCircle size={39} />
+              }
               <td className="border border-gray-300 p-2"> {student.firstName +" "+ student.lastName} </td>
-            {/* <td className="border border-gray-300 p-2">{student?.courseLevel}</td>
-            <td className="border border-gray-300 p-2">{student?.coursePrice}</td>
-            <td className="border border-gray-300 p-2">{student?.discountPrice}</td> */}
               <button className= "bg-[#7C24F0] hover:bg-[#6211cd] transition-all rounded-lg px-4 m-2 py-1 text-white" onClick={()=>handleOnClick(student?._id)}> Detail veiw</button>
             </tr>
           ))}

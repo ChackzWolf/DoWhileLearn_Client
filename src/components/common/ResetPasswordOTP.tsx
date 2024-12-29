@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { userEndpoint } from "../../constraints/userEndpoints";
 import { setCookie } from "../../utils/cookieManager";
@@ -109,12 +108,13 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
       } else if (role === "TUTOR") {
         const response = await axios.post(tutorEndpoint.resetPasswordOTP, data);
         console.log(response);
-        const { success, message, tutorId } = response.data;
+        const { success, message, tutorId ,tutorData} = response.data;
         if (!success) {
           setIsLoading(false)
           setMessage(message);
           return
         }
+
         setCookie("tutorId", tutorId, 0.1);
         navigate("/login/tutor/forgot-password/otp/reset-password");
         setIsLoading(false)

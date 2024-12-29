@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import { FaUserCircle } from 'react-icons/fa'; // Import an icon from react-icons (or use an image)
+import React, { useEffect, useRef, useState } from 'react';
+import { FaAngleDown, FaUserCircle } from 'react-icons/fa'; // Import an icon from react-icons (or use an image)
 import { removeCookie } from '../../../../src/utils/cookieManager';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setTutorDataEmpty } from '../../../redux/tutorSlice/tutorSlice';
 import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store/store';
+import { ROUTES } from '../../../routes/Routes';
 
 const HeaderDropdown: React.FC = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null); // Ref for the dropdown
+  const profilePicture = useSelector((state:RootState)=> state.userAuth.tutorProfilePic)
     
     const handleLogout = () => {
       dispatch(setTutorDataEmpty())
@@ -18,28 +24,54 @@ const HeaderDropdown: React.FC = () => {
       removeCookie('tutorId');
       navigate('/login/tutor') 
     }
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+          setIsOpen(false);
+      }
+  };
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
+  useEffect(() => {
+    if (isOpen) {
+        document.addEventListener('click', handleClickOutside);
+    } else {
+        document.removeEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+        document.removeEventListener('click', handleClickOutside);
+    };
+}, [isOpen]);
+
+  const handleNavigate = (path:string)=> {
+    navigate(path);
+    setIsOpen(false)
+  }
   return (
-    <div className="">
-      <button onClick={toggleDropdown} className="focus:outline-none">
-        {/* You can replace the FaUserCircle with an img tag if you're using a custom image */}
-        <FaUserCircle size={30} />
+    <div className="" ref={dropdownRef}>
+      <button onClick={toggleDropdown} className="focus:outline-none flex items-center hover:text-[#7C24F0] text-lg gap-2">
+        {profilePicture ?
+        <>
+        <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/>
+        <img src={profilePicture} className='h-10 w-10 rounded-full' />
+        </>
+        :
+        <>
+        <FaAngleDown />
+        <FaUserCircle size={36} />
+        </>
+        }
       </button>
+      
       {isOpen && (
-        <div className={`absolute  right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50 transition-all duration-1000 transform ${
+        <div className={`absolute  right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50 transition-all duration-1000 transform ${
             isOpen ? 'right-1 opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
           }`}>
-            <div className='w-full py-2'>
-              <NavLink key="/tutor" to="/tutor/profile" className="px-4 py-2 hover:bg-gray-100 cursor-pointer block">Profile</NavLink>
-            </div>
-
-          <ul>
-            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>Logout</li>
-          </ul>
+              <button key="/tutor" onClick={()=> handleNavigate(ROUTES.tutor.profile)} className={`transition-all rounded-t-lg text-left px-4 py-2 ${location.pathname === ROUTES.tutor.profile ? 'bg-[#7C24F0] text-white' : 'hover:bg-[#7c24f04a] '} cursor-pointer block w-full h-full"`}>Profile</button>
+              <button  onClick={handleLogout} className="transition-all rounded-b-lg text-left px-4 py-2 hover:bg-[#7c24f04a] cursor-pointer block w-full h-full">Logout</button>
         </div>
       )}
     </div>

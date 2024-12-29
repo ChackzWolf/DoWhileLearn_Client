@@ -14,10 +14,10 @@ const Header = () =>{
    
     return (
         
-          <div className="sticky top-0 z-50 bg-opacity-30 backdrop-blur-md items-center w-full mx-auto p-3 px-5 shadow-xl shadow-[#7C24F0] rounded-b-lg">
-                <div className="justify-between flex">
-                    <div className="col-span-1">
-                        <h1 className="text-2xl font-extrabold text-[#7C24F0]">DoWhile{' { Learn } '}</h1>
+          <div className="sticky top-0 z-50 bg-opacity-30 backdrop-blur-md items-center w-full mx-auto p-1 px-5 shadow-xl shadow-[#7C24F0] rounded-b-lg">
+                <div className="justify-between flex  items-center">
+                    <div className="col-span-1 h-full flex items-center">
+                        <h1 className="text-2xl font-extrabold text-[#7C24F0] flex items-center ">DoWhile{' { Learn } '}</h1>
                         {/* <img src={logo} className="w-20" alt="GeniusGrid Logo" /> */}
                     </div>
 
@@ -31,17 +31,17 @@ const Header = () =>{
            
                     </div>
                 
-                        {isLogin ?
+                    {isLogin ?
                         <div>
                             <HeaderDropdown/>
                         </div>
-                        : 
-                        <>
-                        <NavLink to='/login/user'><button className=" p-1 px-8 hover:scale-105 transition-all" > Login</button></NavLink>
+                     : 
+                    <div>
+                        <NavLink to='/login/user'><button className=" p-1 my-2 px-8 hover:scale-105 transition-all" > Login</button></NavLink>
                         <NavLink to='/AuthChoice'><button className="bg-[#7C24F0] text-white font-semibold rounded-lg p-1 px-3 hover:scale-105 transition-all" > Get started</button></NavLink>
-                        </>
+                    </div>
 
-                        }
+                    }
                     </div>    
 
                 </div>

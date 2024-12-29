@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Calendar, Users, BookOpen, DollarSign, TrendingUp, Filter } from 'lucide-react';
+import { Calendar, Users, BookOpen, DollarSign, TrendingUp, Filter, Star } from 'lucide-react';
 import { DashboardCard } from './DashBoard/DashboardCard';
-import axios from 'axios';
 import tutorAxios from '../../../utils/axios/tutorAxios.config';
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
 import { getCookie } from '../../../utils/cookieManager';
+import { PiCurrencyInrBold } from "react-icons/pi";
+import { calculateAverageRating } from '../../../utils/common.utils';
+import axios from 'axios';
+import { userEndpoint } from '../../../constraints/userEndpoints';
+import { courseEndpoint } from '../../../constraints/courseEndpoints';
+
 
 const mockData = {
   monthlyStats: [
@@ -22,7 +27,19 @@ const mockData = {
 };
 
 
+const courseCategories = [
+  { name: 'Web Development', count: 15 },
+  { name: 'Mobile Dev', count: 12 },
+  { name: 'UI/UX Design', count: 8 },
+  { name: 'Data Science', count: 10 },
+  { name: 'DevOps', count: 5 }
+];
 
+const studentDistribution = [
+  { category: 'Enrolled', value: 850 },
+  { category: 'Completed', value: 250 },
+  { category: 'Active', value: 150 }
+];
 const TutorDashboard = () => {
   const [timeFilter, setTimeFilter] = useState('month');
   const [orders, setOrders] = useState<any[]>([]);
@@ -30,36 +47,42 @@ const TutorDashboard = () => {
   const [courseCount, setCourseCount] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalStudents, setTotalStudents] = useState(0);
+  const [averageRating, setAverageRating] = useState(0);
 
   useEffect(()=> {
     const tutorId = getCookie('tutorId')
     const fetchData  = async()=> {
       const tutorDetails = await tutorAxios.get(tutorEndpoint.fetchTutorDetails,{params:{tutorId}, withCredentials:true}  )
       const tutorData = tutorDetails.data.tutorData;
-      const courses = tutorData.courses
+      const courseIds:any = [...new Set(tutorData.courses.flatMap((course:any) => course.course))]
+
+      const coursesDataResponse = await axios.get(courseEndpoint.fetchCoursesByIds, {params:{ids:courseIds}})
       const studentIds = [
-        ...new Set(tutorData.courses.flatMap(course => course.students))
+        ...new Set(tutorData.courses.flatMap((course:any) => course.students))
       ];
+      const averageRating = calculateAverageRating(coursesDataResponse.data.courses);
+      setAverageRating(averageRating);
       setTotalStudents(studentIds.length)
-      const ordersResponse = await tutorAxios.get(tutorEndpoint.fetchOrdersOfTutor, {params:{tutorId}, withCredentials:true} );
+      const ordersResponse = await tutorAxios.get(tutorEndpoint.fetchOrdersOfTutor, {params: { tutorId }, withCredentials:true });
+      console.log(ordersResponse, 'this is order reponse')
       setOrders(ordersResponse.data.orderData);
-      const coursesResponse = await tutorAxios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId }, withCredentials:true })
-      setCourses(coursesResponse.data.courses);
-      setCourseCount(coursesResponse.data.courses.length);
+      const sortedCourses = coursesDataResponse.data.courses.sort((a:any, b:any) => b.averageRating - a.averageRating);
+      console.log(coursesDataResponse.data.courses,'this is top course')
+      setCourses(sortedCourses);
+      setCourseCount(coursesDataResponse.data.courses.length);
+
       const totalEarnings = ordersResponse.data.orderData.reduce((acc:any, order:any) => acc + Number(order.tutorShare), 0);
-      console.log(totalEarnings, 'total revenue');
-      console.log(tutorDetails);
       setTotalRevenue(totalEarnings);
     }
     fetchData()
   },[])
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-8">
+    <div className="min-h-screen w-10/12 bg-gray-50 p-8">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Tutor Dashboard</h1>
-        <div className="flex items-center space-x-4">
+        {/* <div className="flex items-center space-x-4">
           <button className="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow hover:shadow-md transition-all duration-150">
             <Filter className="w-4 h-4" />
             <span>Filter</span>
@@ -73,7 +96,7 @@ const TutorDashboard = () => {
             <option value="month">This Month</option>
             <option value="year">This Year</option>
           </select>
-        </div>
+        </div> */}
       </div>
 
       {/* Stats Grid */}
@@ -81,84 +104,64 @@ const TutorDashboard = () => {
         <DashboardCard 
           title="Total Students" 
           value={totalStudents} 
-          icon={Users} 
-          trend={12}
-          color="text-[#7C24F0]"
+          icon={Users}
+          discription='Currently enrolled students'
         />
         <DashboardCard 
           title="Active Courses" 
           value={courseCount} 
           icon={BookOpen}
-          trend={8}
-          color="text-[#7C24F0]"
+          discription='Currently active courses'
         />
         <DashboardCard 
           title="Total Revenue" 
-          value={`₹ ${totalRevenue}`}
-          icon={DollarSign}
-          trend={15}
-          color="text-[#7C24F0]"
+          value={`${Math.floor(totalRevenue)}`}
+          icon={PiCurrencyInrBold}
+          discription='All courses created'
         />
-        {/* <DashboardCard 
-          title="Completion Rate" 
-          value="92%" 
-          icon={TrendingUp}
-          trend={5}
-          color="text-[#7C24F0]"
-        /> */}
+        <DashboardCard 
+          title="Average rating" 
+          value={`${averageRating}`} 
+          icon={Star}
+          discription='Average student satisfaction'
+        />
       </div>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <div className="bg-white p-6 rounded-xl shadow-lg">
-          <h3 className="text-xl font-semibold mb-4">Revenue & Students Trend</h3>
-          <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={mockData.monthlyStats}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis yAxisId="left" />
-                <YAxis yAxisId="right" orientation="right" />
-                <Tooltip />
-                <Legend />
-                <Line 
-                  yAxisId="left"
-                  type="monotone" 
-                  dataKey="revenue" 
-                  stroke="#7C24F0" 
-                  strokeWidth={2}
-                  animationDuration={1500}
-                />
-                <Line 
-                  yAxisId="right"
-                  type="monotone" 
-                  dataKey="students" 
-                  stroke="#7C24F0" 
-                  strokeWidth={2}
-                  animationDuration={1500}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+          {/* Course Categories Distribution */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h3 className="text-xl font-semibold mb-4 text-gray-800">Course Categories</h3>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={courseCategories} layout="vertical">
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" />
+                  <YAxis dataKey="name" type="category" />
+                  <Tooltip />
+                  <Bar dataKey="count" fill="#7C24F0" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-        </div>
 
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <h3 className="text-xl font-semibold mb-4">Top Performing Courses</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={mockData.topCourses}>
+              <BarChart data={courses}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
+                <XAxis dataKey="courseTitle" />
                 <YAxis />
                 <Tooltip />
                 <Legend />
                 <Bar 
-                  dataKey="students" 
+                  dataKey="students"  //should set number of students
                   fill="#7C24F0"
                   animationDuration={1500}
                 />
                 <Bar 
-                  dataKey="rating" 
+                  dataKey="averageRating" 
                   fill="#DDB3FF"
                   animationDuration={1500}
                 />
@@ -172,20 +175,20 @@ const TutorDashboard = () => {
       <div className="bg-white rounded-xl shadow-lg p-6">
         <h3 className="text-xl font-semibold mb-4">Top Performing Courses</h3>
         <div className="space-y-4">
-          {mockData.topCourses.map((course, index) => (
+          {courses.map((course, index) => (
             <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-150">
               <div className="flex items-center space-x-4">
                 <div className="w-10 h-10 rounded-full bg-[#e7d1f9] flex items-center justify-center">
                   <BookOpen className="w-6 h-6 text-[#7C24F0]" />
                 </div>
                 <div>
-                  <h4 className="font-semibold">{course.name}</h4>
-                  <p className="text-sm text-gray-500">{course.students} students enrolled</p>
+                  <h4 className="font-semibold">{course.courseTitle}</h4>
+                  {/* <p className="text-sm text-gray-500">{course.students} students enrolled</p> */}
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-[#7C24F0]">★</span>
-                <span className="font-semibold">{course.rating}</span>
+                <span className="font-semibold">{course.averageRating}</span>
               </div>
             </div>
           ))}

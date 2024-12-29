@@ -102,11 +102,7 @@ const EditCoursePage = () => {
 
   //DDB3FF
   return (
-    <div className="w-full h-screen">
-      <Header />
-      <div className="flex w-full h-full">
-        <SideNav prop={"/tutor/courses"} />
-        <div className="w-full flex-col">
+    <div className="w-full flex-col">
           <div className="">
           <EditProgressBar  />
           </div>
@@ -114,8 +110,6 @@ const EditCoursePage = () => {
           {step == 2 && <EditModule/>}
           {step == 3 && <EditCourse2 />}
           {step == 4 && <EditOverView/>}
-        </div>
-      </div>
     </div>
   );
 };

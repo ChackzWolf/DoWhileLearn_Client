@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { userEndpoint } from "../../../constraints/userEndpoints";
 import axios, { AxiosError } from "axios";
 import { setCookie } from "../../../utils/cookieManager";
-import { setUserLogin } from "../../../redux/authSlice/authSlice";
+import { setUserLogin, setUserProfilePic } from "../../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
 import { useState,useEffect } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
@@ -65,16 +65,21 @@ function LoginModal() {
             setIsLoading(true)
             const response = await axios.post(userEndpoint.loginUser, value);
             console.log(response.data)
-            const {success, accessToken, refreshToken, userId, message} = response.data;
+            const {success, accessToken, refreshToken, userId, message, userData} = response.data;
             console.log(response.data)
             if(success){
                 console.log(accessToken,refreshToken,userId)
                 
                 setCookie('userId', userId, 10)
-                setCookie('userAccessToken', accessToken, 0.1); // Set a short-lived access token
+                setCookie('userAccessToken', accessToken, 0.1);
                 setCookie('userRefreshToken', refreshToken, 10);
 
                 dispatch(setUserLogin())
+                console.log(userData, 'this is user data')
+                if(userData.profilePicture){
+                    console.log('setting profile picture to redux:', userData.profilePicture )
+                    dispatch(setUserProfilePic(userData.profilePicture))
+                }
                 setIsLoading(false)
                 navigate('/');
             }else{

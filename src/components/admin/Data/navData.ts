@@ -1,4 +1,4 @@
-import { HiOutlineUsers } from "react-icons/hi2";
+import { HiAcademicCap, HiOutlineUsers } from "react-icons/hi2";
 import { RiMoneyRupeeCircleLine } from "react-icons/ri";
 import { BsCollectionPlay } from "react-icons/bs";
 
@@ -11,7 +11,7 @@ export const data = [
     },
     {
         name: 'Tutors',
-        icon: RiMoneyRupeeCircleLine,
+        icon: HiAcademicCap,
         path: '/admin/tutors'
     },
     {
@@ -24,13 +24,7 @@ export const data = [
 export const content = [
     {
         name: "Courses",
-        path: "/tutor/courses",
+        path: "/admin/courses",
         icon: BsCollectionPlay
-    },
-    {
-        name: "On going lives",
-        path: "tutor/live",
-        icon: HiOutlineUsers
     }
-
 ]

@@ -3,8 +3,6 @@ import * as Yup from 'yup';
 import {  useNavigate } from "react-router-dom";
 import { userEndpoint } from "../../constraints/userEndpoints";
 import axios from "axios";
-import { setCookie } from "../../utils/cookieManager";
-import { setUserLogin } from "../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
 import { useState,useEffect } from "react";
 import Loader from "./icons/loader";
