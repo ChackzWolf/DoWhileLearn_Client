@@ -17,6 +17,7 @@ import VideoPlayer from "../../../common/VideoPlayer";
 import StudentReviews from "../../../user/Course/StudentReview";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
+import { ROUTES } from "../../../../routes/Routes";
 
 
 
@@ -82,7 +83,7 @@ console.log(data,'dataaaaaaaaaaaaaaaaa')
                 });
                 setIsLoading(false)
                 dispatch(setEditCourseEmpty())
-                navigate('/tutor/courses')
+                navigate(ROUTES.tutor.courseList);
               } else {     
                 console.log('failed')
                 toast.error('Form submission failed!', {

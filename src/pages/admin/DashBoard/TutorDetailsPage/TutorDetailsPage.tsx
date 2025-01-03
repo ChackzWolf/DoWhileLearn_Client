@@ -3,8 +3,9 @@ import axios from 'axios'
 import TutorProfile from '../../../../components/common/Tutor/TutorDetails'
 import { useParams } from 'react-router-dom';
 import { tutorEndpoint } from '../../../../constraints/tutorEndpoint';
-import Header from '../../../../components/admin/Layout/header';
 import Loader from '../../../../components/common/icons/loader';
+
+
 function TutorDetailsPage() {
     const { id } = useParams<{ id: string }>();
     const [data, setData] = useState({});
@@ -21,12 +22,7 @@ function TutorDetailsPage() {
         }
         fetchTutorDetails()
     },[])
-  return (
-    <>
-    <Header/>
-    {data ? <TutorProfile tutor={data} role = "ADMIN" /> : <Loader/>}
-    </>
-  )
+  return   data ? <TutorProfile tutor={data} role = "ADMIN" /> : <Loader/>
 }
 
 export default TutorDetailsPage

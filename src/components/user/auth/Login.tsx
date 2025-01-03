@@ -14,8 +14,9 @@ import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 import { Player } from "@lottiefiles/react-lottie-player";
+import { ROUTES } from "../../../routes/Routes";
 
-function LoginModal() {
+function LoginUser() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [message, setMessage] = useState('')
@@ -81,7 +82,7 @@ function LoginModal() {
                     dispatch(setUserProfilePic(userData.profilePicture))
                 }
                 setIsLoading(false)
-                navigate('/');
+                navigate(ROUTES.common.landingPage);
             }else{
                 setIsLoading(false)
                 setMessage(message);
@@ -138,7 +139,7 @@ function LoginModal() {
                                 <div className="flex w-full justify-between">
                                     <p className="text-base mb-2 font-normal">Password</p>
                                     {/* <p className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</p> */}
-                                    <a href="/login/user/forgot-password" className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</a>
+                                    <a href={ROUTES.user.forgotPasswordEmailEntry} className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</a>
                                 </div>
 
                                 <div className="justify-center mb-6 ">
@@ -172,7 +173,7 @@ function LoginModal() {
 
                                     <div className="flex w-full">
                                         <h1>Don't have an account? </h1>
-                                        <NavLink to="/register/user" className="pl-2 text-sky-700">
+                                        <NavLink to={ROUTES.user.signup} className="pl-2 text-sky-700">
                                             Signup
                                         </NavLink>
                                     </div>
@@ -188,4 +189,4 @@ function LoginModal() {
     )
 }
 
-export default LoginModal
+export default LoginUser

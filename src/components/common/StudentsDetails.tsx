@@ -59,11 +59,7 @@ const StudentDetails = ({ user, role }: { user: any, role:string }) => {
   }, [user]);
 
   const handleGoback = () => {
-    if(role === 'ADMIN'){
-      navigate('/admin/students')
-    }else{
-      navigate('/tutor/users')
-    }
+    navigate(-1)
   }
 
   return (

@@ -5,6 +5,8 @@ import { orderEndpoint } from "../../../../constraints/orderEndpoints";
 import Loader from "../../../common/icons/loader";
 import { SiTicktick } from "react-icons/si";
 import { RxCrossCircled } from "react-icons/rx";
+import { ROUTES } from "../../../../routes/Routes";
+import CourseDetails from "../CourseDetails";
 
 const SuccessPage = () => {
     const location = useLocation();
@@ -58,7 +60,7 @@ const SuccessPage = () => {
             }, 1000);
 
             if (countdown === 0) {
-                navigate(`/course/${orderDetails.courseId}`);
+                navigate(ROUTES.common.courseDetails(orderDetails.courseId));
             }
 
             return () => clearInterval(intervalId);
@@ -66,7 +68,7 @@ const SuccessPage = () => {
     }, [orderStatus, countdown, navigate]);
     
     const continueToCourse = () => {
-        navigate(`/course/${orderDetails.courseId}`)
+        navigate(ROUTES.common.courseDetails(orderDetails.courseId));
         // Remove order details from sessionStorage after navigating
         sessionStorage.removeItem("orderDetails");
     }

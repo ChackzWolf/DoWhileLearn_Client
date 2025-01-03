@@ -16,6 +16,7 @@ import UploadSpinner from '../../common/icons/UploadSpinner';
 import { ToastContainer } from 'react-toastify';
 import Header from '../../tutor/Layout/Header';
 import SideNav from '../../tutor/Layout/SideNav';
+import RegistrationPage from '../../../pages/tutor/Registration/RegistrationFirstPage';
 
 
 const TutorRoutes = ()=>{
@@ -33,6 +34,7 @@ const TutorRoutes = ()=>{
             <div className="flex w-full h-full">
             <SideNav/>
                 <Routes>
+                    <Route path = '/complete-registration' element={<RegistrationPage/>}/>
                     <Route path= '/' element={<TutorDashBoard/>}/>
                     <Route path= '/users' element={<UsersPage/>}/>
                     <Route path= '/payouts' element={<PayoutsPage/>}/>
@@ -53,7 +55,8 @@ const TutorRoutes = ()=>{
                             <UploadSpinner count={uploads.length}/>
                         </button>
                     </div>
-                )}
+                )
+            }
             <UploadDetails viewUploads={viewUploads} closeUploads={viewUploadCallback} />
         </>
     )

@@ -8,6 +8,7 @@ import { getCookie, removeCookie } from "../../utils/cookieManager";
 import { userEndpoint } from "../../constraints/userEndpoints";
 import { tutorEndpoint } from "../../constraints/tutorEndpoint";
 import { adminEndpoint } from "../../constraints/adminEndpoints";
+import { ROUTES } from "../../routes/Routes";
 
 
 interface ResetPasswordProps{
@@ -77,7 +78,7 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                     return;
                 }
                 removeCookie('userId');
-                navigate(`/login/user?message=passwordUpdated`)
+                navigate(`${ROUTES.user.signin}${'?message=passwordUpdated'}`)
             }else if(role === 'TUTOR'){
                 const tutorId = getCookie('tutorId');
                 const data = {
@@ -92,7 +93,7 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                     return;
                 }
                 removeCookie('tutorId');
-                navigate(`/login/tutor?message=passwordUpdated`)
+                navigate(`${ROUTES.tutor.signin}${'?message=passwordUpdated'}`)
             }else if(role === 'ADMIN'){
                 const adminId = getCookie('adminId');
                 const data = {
@@ -108,7 +109,7 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                     return;
                 }
                 removeCookie('adminId');
-                navigate(`/login/admin?message=passwordUpdated`)
+                navigate(`${ROUTES.admin.signin}${'?message=passwordUpdated'}`)
             }
 
 

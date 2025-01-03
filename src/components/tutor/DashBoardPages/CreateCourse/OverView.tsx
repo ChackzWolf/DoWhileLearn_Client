@@ -12,6 +12,7 @@ import { useState } from "react";
 import Loader from "../../../common/icons/loader";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../../../utils/cookieManager";
+import { ROUTES } from "../../../../routes/Routes";
 
 
 
@@ -56,7 +57,7 @@ const handleSubmit = async() => {
                 });
                 setIsLoading(false)
                 dispatch(setCreateCourseEmpty())
-                navigate('/tutor/courses')
+                navigate(ROUTES.tutor.courseList)
               } else {     
                 console.log('failed')
                 toast.error('Form submission failed!', {

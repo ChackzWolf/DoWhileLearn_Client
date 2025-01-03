@@ -53,7 +53,7 @@ function SideNav() {
             className={
               currentPath === "/tutor"
                 ? "flex transition-all bg-[#7C24F0] text-white text-sm font-semibold w-full rounded-lg "
-                : "flex transition-all bg-white hover:bg-[#7c24f04a]  text-sm font-semibold w-full rounded-lg "
+                : "flex transition-all bg-white hover:bg-[#7c24f018]  text-sm font-semibold w-full rounded-lg "
             }
           >
             <button
@@ -74,7 +74,7 @@ function SideNav() {
                 className={
                   currentPath === links.path
                     ? "flex transition-all bg-[#7C24F0]  text-white text-center text-sm font-semibold w-full rounded-lg"
-                    : "flex transition-all hover:bg-[#7c24f04a] text-center text-sm font-semibold w-full rounded-lg"
+                    : "flex transition-all hover:bg-[#7c24f018] text-center text-sm font-semibold w-full rounded-lg"
                 }
               >
                 <button
@@ -96,7 +96,7 @@ function SideNav() {
                 className={
                   currentPath === links.path
                     ? "flex transition-all bg-[#7C24F0] text-white text-center text-sm font-semibold w-full rounded-lg"
-                    : "flex transition-all hover:bg-[#7c24f04a] text-center text-sm font-semibold w-full rounded-lg"
+                    : "flex transition-all hover:bg-[#7c24f018] text-center text-sm font-semibold w-full rounded-lg"
                 }
               >
                 <button

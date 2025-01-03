@@ -8,8 +8,8 @@ import { getCookie } from '../../../utils/cookieManager';
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { calculateAverageRating } from '../../../utils/common.utils';
 import axios from 'axios';
-import { userEndpoint } from '../../../constraints/userEndpoints';
 import { courseEndpoint } from '../../../constraints/courseEndpoints';
+import DashBoardLoader from '../../common/icons/DashboardLoader';
 
 
 const mockData = {
@@ -41,7 +41,7 @@ const studentDistribution = [
   { category: 'Active', value: 150 }
 ];
 const TutorDashboard = () => {
-  const [timeFilter, setTimeFilter] = useState('month');
+  const [isLoading, setIsLoading] = useState(false)
   const [orders, setOrders] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
   const [courseCount, setCourseCount] = useState(0);
@@ -50,53 +50,48 @@ const TutorDashboard = () => {
   const [averageRating, setAverageRating] = useState(0);
 
   useEffect(()=> {
-    const tutorId = getCookie('tutorId')
-    const fetchData  = async()=> {
-      const tutorDetails = await tutorAxios.get(tutorEndpoint.fetchTutorDetails,{params:{tutorId}, withCredentials:true}  )
-      const tutorData = tutorDetails.data.tutorData;
-      const courseIds:any = [...new Set(tutorData.courses.flatMap((course:any) => course.course))]
+    
+    try {
 
-      const coursesDataResponse = await axios.get(courseEndpoint.fetchCoursesByIds, {params:{ids:courseIds}})
-      const studentIds = [
-        ...new Set(tutorData.courses.flatMap((course:any) => course.students))
-      ];
-      const averageRating = calculateAverageRating(coursesDataResponse.data.courses);
-      setAverageRating(averageRating);
-      setTotalStudents(studentIds.length)
-      const ordersResponse = await tutorAxios.get(tutorEndpoint.fetchOrdersOfTutor, {params: { tutorId }, withCredentials:true });
-      console.log(ordersResponse, 'this is order reponse')
-      setOrders(ordersResponse.data.orderData);
-      const sortedCourses = coursesDataResponse.data.courses.sort((a:any, b:any) => b.averageRating - a.averageRating);
-      console.log(coursesDataResponse.data.courses,'this is top course')
-      setCourses(sortedCourses);
-      setCourseCount(coursesDataResponse.data.courses.length);
-
-      const totalEarnings = ordersResponse.data.orderData.reduce((acc:any, order:any) => acc + Number(order.tutorShare), 0);
-      setTotalRevenue(totalEarnings);
+      const tutorId = getCookie('tutorId')
+      const fetchData  = async()=> {
+        setIsLoading(true);
+        const tutorDetails = await tutorAxios.get(tutorEndpoint.fetchTutorDetails,{params:{tutorId}, withCredentials:true}  )
+        const tutorData = tutorDetails.data.tutorData;
+        const courseIds:any = [...new Set(tutorData.courses.flatMap((course:any) => course.course))]
+  
+        const coursesDataResponse = await axios.get(courseEndpoint.fetchCoursesByIds, {params:{ids:courseIds}})
+        const studentIds = [
+          ...new Set(tutorData.courses.flatMap((course:any) => course.students))
+        ];
+        const averageRating = calculateAverageRating(coursesDataResponse.data.courses);
+        setAverageRating(averageRating);
+        setTotalStudents(studentIds.length)
+        const ordersResponse = await tutorAxios.get(tutorEndpoint.fetchOrdersOfTutor, {params: { tutorId }, withCredentials:true });
+        console.log(ordersResponse, 'this is order reponse')
+        setOrders(ordersResponse.data.orderData);
+        const sortedCourses = coursesDataResponse.data.courses.sort((a:any, b:any) => b.averageRating - a.averageRating);
+        console.log(coursesDataResponse.data.courses,'this is top course')
+        setCourses(sortedCourses);
+        setCourseCount(coursesDataResponse.data.courses.length);
+  
+        const totalEarnings = ordersResponse.data.orderData.reduce((acc:any, order:any) => acc + Number(order.tutorShare), 0);
+        setTotalRevenue(totalEarnings);
+      }
+      fetchData()
+    } catch (error) {
+      
+    }finally{
+      setIsLoading(false)
     }
-    fetchData()
+   
   },[])
 
-  return (
+  return isLoading ? < DashBoardLoader/> : (
     <div className="min-h-screen w-10/12 bg-gray-50 p-8">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Tutor Dashboard</h1>
-        {/* <div className="flex items-center space-x-4">
-          <button className="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg shadow hover:shadow-md transition-all duration-150">
-            <Filter className="w-4 h-4" />
-            <span>Filter</span>
-          </button>
-          <select 
-            value={timeFilter}
-            onChange={(e) => setTimeFilter(e.target.value)}
-            className="bg-white px-4 py-2 rounded-lg shadow hover:shadow-md transition-all duration-150"
-          >
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="year">This Year</option>
-          </select>
-        </div> */}
       </div>
 
       {/* Stats Grid */}

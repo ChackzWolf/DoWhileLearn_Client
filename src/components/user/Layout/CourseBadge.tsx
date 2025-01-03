@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaStar } from "react-icons/fa";
 import { BsStarHalf } from "react-icons/bs";
+import { ROUTES } from '../../../routes/Routes';
 
 
 
@@ -57,11 +58,11 @@ const CourseBadge: React.FC<CourseBadgeProps> = ({
 
   console.log(_id,'hello htis is')
   const handleCourseSelect = (_id:string) => {
-    navigate(`/course/${_id}`)
+    navigate(ROUTES.common.courseDetails(_id))
   }
   return (
     <div
-      className={`flex flex-col items-start mx-2 p-4 bg-white rounded-lg shadow-md border ${color}  w-64 md:w-52 xl:w-64 h-80 overflow-hidden cursor-pointer hover:scale-105 transition-all`} // Fixed width and height
+      className={`flex flex-col items-start p-4 bg-white rounded-lg shadow-md border ${color}  w-64 md:w-52 xl:w-64 h-80 overflow-hidden cursor-pointer hover:scale-105 transition-all`} // Fixed width and height
       onClick={()=>handleCourseSelect(_id)}
     >
       <div className="flex-shrink-0 w-full h-32 mb-2">

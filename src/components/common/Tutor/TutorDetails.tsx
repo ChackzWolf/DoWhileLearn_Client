@@ -89,11 +89,7 @@ const TutorProfile = ({ tutor, role }: { tutor: any; role: string }) => {
   }, [tutor]);
 
   const handleGoback = () => {
-    if (role === 'ADMIN') {
-      navigate('/admin/tutors');
-    } else {
       navigate(-1);
-    }
   };
 
   return (

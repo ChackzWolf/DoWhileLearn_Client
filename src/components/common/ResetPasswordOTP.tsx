@@ -7,6 +7,7 @@ import { setCookie } from "../../utils/cookieManager";
 import { tutorEndpoint } from "../../constraints/tutorEndpoint";
 import { adminEndpoint } from "../../constraints/adminEndpoints";
 import Loader from "./icons/loader";
+import { ROUTES } from "../../routes/Routes";
 interface OTPInputProps {
   role: string;
 }
@@ -103,12 +104,12 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
         }
         
         setCookie("userId", userId, 0.1);
-        navigate("/login/user/forgot-password/otp/reset-password");
+        navigate(ROUTES.user.forgotPasswordReset);
         setIsLoading(false)
       } else if (role === "TUTOR") {
         const response = await axios.post(tutorEndpoint.resetPasswordOTP, data);
         console.log(response);
-        const { success, message, tutorId ,tutorData} = response.data;
+        const { success, message, tutorId } = response.data;
         if (!success) {
           setIsLoading(false)
           setMessage(message);
@@ -116,7 +117,7 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
         }
 
         setCookie("tutorId", tutorId, 0.1);
-        navigate("/login/tutor/forgot-password/otp/reset-password");
+        navigate(ROUTES.tutor.forgotPasswordReset);
         setIsLoading(false)
       } else if (role === "ADMIN") {
         const response = await axios.post(adminEndpoint.resetPasswordOTP, data);
@@ -129,7 +130,7 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
         }
         setIsLoading(false)
         setCookie("adminId", adminId, 0.1);
-        navigate("/login/admin/forgot-password/otp/reset-password");
+        navigate(ROUTES.admin.forgotPasswordReset);
       }
 
       console.log("Entered OTP:", otpValue);

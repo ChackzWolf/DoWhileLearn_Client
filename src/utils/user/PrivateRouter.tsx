@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { getCookie, removeCookie, setCookie } from '../cookieManager';  // Your cookie utility
 import { getRoleFromToken } from '../jwtUtils';
 import axios from 'axios';
+import { ROUTES } from '../../routes/Routes';
 
 export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
   const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
@@ -27,7 +28,7 @@ export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; r
           removeCookie('userAccessToken');
           removeCookie('userRefreshToken');
           removeCookie('userId');
-          window.location.href = '/login/user';
+          window.location.href = ROUTES.user.signin;
           return;
         }
       }

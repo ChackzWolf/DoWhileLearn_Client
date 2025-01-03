@@ -3,8 +3,6 @@ import UserProfile from '../../../components/user/UserProfile'
 import userAxios from '../../../utils/axios/userAxios.config'
 import { userEndpoint } from '../../../constraints/userEndpoints'
 import { getCookie } from '../../../utils/cookieManager'
-import ProfilePictureUpload from './../../../components/tutor/auth/TutorRegistration/RegistrationComponets/ProfilePreview';
-import Header from '../../../components/user/Layout/Header'
 
 
 
@@ -47,7 +45,6 @@ function ProfilePage() {
     },[])
   return (
     <>
-    <Header/>
     <UserProfile user={userData}/>
     </>
   )

@@ -22,7 +22,7 @@ const HeaderDropdown: React.FC = () => {
       removeCookie('tutorAccessToken');
       removeCookie('tutorRefreshToken');
       removeCookie('tutorId');
-      navigate('/login/tutor') 
+      navigate(ROUTES.tutor.signin); 
     }
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {

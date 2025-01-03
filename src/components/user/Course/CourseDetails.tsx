@@ -29,6 +29,7 @@ import StudentReviews from "./StudentReview";
 import  ChatComponent from "../Chat/ChatCoursesRoute"
 import VideoPlayer from "../../common/VideoPlayer";
 import { FaUserCircle } from "react-icons/fa";
+import { ROUTES } from "../../../routes/Routes";
 
 
 interface Module {
@@ -174,7 +175,7 @@ function CourseDetails() {
         removeCookie('userId');
         removeCookie('userAccessToken');
         removeCookie('userRefreshToken');
-        navigate("/login/user");
+        navigate(ROUTES.user.signin);
         return;
       }
 
@@ -195,7 +196,7 @@ function CourseDetails() {
       const response = await userAxios.post(userEndpoint.makePayment, data,{withCredentials:true});
       console.log("hayyyy stripe", response.data);
       if(response.data.message == 'user blocked'){
-        window.location.href = '/login/user?message:blocked'
+        window.location.href = `${ROUTES.user.signin}?message:blocked`
       }
 
       const sessionId = response.data.session_id;
@@ -232,7 +233,7 @@ function CourseDetails() {
       console.log(response.status);
       console.log(response.data)
       if(response.data.message == 'user blocked'){
-        window.location.href = '/login/user?message:blocked'
+        window.location.href = `${ROUTES.user.signin}?message:blocked`
       }
       if (response.data.inCart) {
         setInCart(true);
@@ -242,7 +243,7 @@ function CourseDetails() {
       console.log(response, "addto cart response");
     } else {
       console.log("else");
-      navigate("/login/user");
+      navigate(ROUTES.user.signin);
     }
 
     } catch (error) {
@@ -440,7 +441,7 @@ function CourseDetails() {
 
                                   ): <FaUserCircle size={40} />}
                               </div>
-                              <button className=" mx-1 text-lg font-semibold hover:text-[#7C24F0]" onClick={()=> {navigate(`/user/tutor/profile/${tutorData._id}`)}}>
+                              <button className=" mx-1 text-lg font-semibold hover:text-[#7C24F0]" onClick={()=> {navigate(ROUTES.user.tutorDetails(tutorData._id))}}>
                                   { `${tutorData.firstName} ${tutorData.lastName}` }
                               </button>
 

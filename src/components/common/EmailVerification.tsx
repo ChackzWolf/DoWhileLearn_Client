@@ -12,12 +12,12 @@ import { handleBlockedUser } from "../../utils/handleErrors/handleBlocked";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { tutorEndpoint } from "../../constraints/tutorEndpoint";
 import { adminEndpoint } from "../../constraints/adminEndpoints";
+import { ROUTES } from "../../routes/Routes";
 
 interface VarifyEmailProp {
     role:string
 }
 function VerifyEmail({role}:VarifyEmailProp) {
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [message, setMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +56,7 @@ function VerifyEmail({role}:VarifyEmailProp) {
                     setMessage(message)
                     return;
                 }
-                navigate(`/login/user/forgot-password/otp`,{state: response.data});
+                navigate(ROUTES.user.forgotPasswordOTP,{state: response.data});
             }else if (role === 'TUTOR'){
                 console.log('role',role)
                 const response = await axios.post(tutorEndpoint.sendOtpToEmail, value);
@@ -67,7 +67,7 @@ function VerifyEmail({role}:VarifyEmailProp) {
                     return;
                 }
           
-                navigate(`/login/tutor/forgot-password/otp`,{state: response.data});
+                navigate(ROUTES.tutor.forgotPasswordOTP,{state: response.data});
             }else if(role === 'ADMIN'){
                 const response = await axios.post(adminEndpoint.sendOtpToEmail, value);
                 console.log(response.data,'response data')
@@ -76,7 +76,7 @@ function VerifyEmail({role}:VarifyEmailProp) {
                     setMessage(message)
                     return;
                 }
-                navigate(`/login/admin/forgot-password/otp`,{state: response.data});
+                navigate(ROUTES.admin.forgotPasswordOTP,{state: response.data});
             }
         } catch (error) {
             setIsLoading(false)

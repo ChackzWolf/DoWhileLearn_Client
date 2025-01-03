@@ -3,7 +3,7 @@ import StudentDetails from '../../../../components/common/StudentsDetails';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { userEndpoint } from '../../../../constraints/userEndpoints';
-import Header from '../../../../components/tutor/Layout/Header';
+import DashBoardLoader from '../../../../components/common/icons/DashboardLoader';
 
 
 const userData = {
@@ -51,11 +51,7 @@ function ProfilePage() {
         }
         fetchUserData()
     },[])
-  return (
-    <>
-    <StudentDetails user={userData} role={'TUTOR'}/>
-    </>
-  )
+  return !userData ?  <DashBoardLoader/> : <StudentDetails user={userData} role={'TUTOR'}/> 
 }
 
 export default ProfilePage

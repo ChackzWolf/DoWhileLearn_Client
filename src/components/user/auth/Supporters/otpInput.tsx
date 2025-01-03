@@ -5,6 +5,7 @@ import {useDispatch} from 'react-redux';
 import { userEndpoint } from '../../../../constraints/userEndpoints';
 import { setUserLogin } from '../../../../redux/authSlice/authSlice';
 import { setCookie } from '../../../../utils/cookieManager';
+import { ROUTES } from '../../../../routes/Routes';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -99,7 +100,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             setCookie('userRefreshToken', refreshToken, 10);
             
             dispatch(setUserLogin());
-            navigate('/')
+            navigate(ROUTES.common.landingPage)
 
         }else{
             console.log('failed response')

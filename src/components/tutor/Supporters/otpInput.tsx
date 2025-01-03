@@ -7,6 +7,7 @@ import { setTutorLogin } from '../../../redux/authSlice/authSlice';
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
 import Loader from '../../common/icons/loader';
 import { setTutorData } from '../../../redux/tutorSlice/tutorSlice';
+import { ROUTES } from '../../../routes/Routes';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -118,7 +119,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             // ithenthua reandennam
             setIsLoading(false)
             dispatch(setTutorLogin());
-            navigate('/register/tutor/completion/step-one')
+            navigate(ROUTES.tutor.completeRegisteration);
 
         }else{
           setIsLoading(false)
@@ -155,7 +156,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
 
       }else{
         setIsLoading(false)
-        navigate('/register/tutor?message=registrationTimeOut')
+        navigate(`${ROUTES.tutor.signup}${'?message=registrationTimeOut'}`)
         console.log(message)
       }
   }

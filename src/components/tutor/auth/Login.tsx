@@ -14,6 +14,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
 import { useSelector,useDispatch  } from "react-redux";
 import { RootState } from "../../../redux/store/store";
+import { ROUTES } from "../../../routes/Routes";
 
 function LoginModal() {
     const dispatch = useDispatch()
@@ -90,7 +91,7 @@ function LoginModal() {
                 dispatch(setTutorData(data))
                 dispatch(setTutorLogin())
                 dispatch(setTutorProfilePic(tutorData.profilePicture))
-                navigate('/tutor');
+                navigate(ROUTES.tutor.dashBoard);
             }else{
                 console.log(response.data.message,'reached eher')
                 setMessage(response.data.message);
@@ -197,7 +198,7 @@ function LoginModal() {
                                     </div>
                                     <div className="flex w-full">
                                         <h1>Are you a student?  </h1>
-                                        <NavLink to="/register/user" className="pl-2 text-sky-700">
+                                        <NavLink to={ROUTES.user.signup} className="pl-2 text-sky-700">
                                             Login
                                         </NavLink>
                                     </div>

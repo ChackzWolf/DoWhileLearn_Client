@@ -10,7 +10,6 @@ import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // You can skip this if you're not using default styles
 import { useEffect, useState } from "react";
-import Loader from "../../../common/icons/loader";
 import { useNavigate, useParams } from "react-router-dom";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import {setEditCourse, setEditCourse2, setEditLesson} from "../../../../redux/tutorSlice/CourseSlice/editCourseData";
@@ -18,6 +17,8 @@ import { motion } from 'framer-motion';
 import VideoPlayer from "../../../common/VideoPlayer";
 import StudentReviews from "../../../user/Course/StudentReview";
 import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
+import DashBoardLoader from "../../../common/icons/DashboardLoader";
+import { ROUTES } from "../../../../routes/Routes";
 
 interface Module {
   name: string;
@@ -48,14 +49,11 @@ function OverView() {
   const [activeTab, setActiveTab] = useState('overview');
   const [totalModules,setTotalModules] = useState<number>(0);
   const [totalLessons,setTotalLessons] = useState<number>(0);
-  // const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [benefits_prerequisites, setbenefits_prerequisites] = useState<ICreateCourse2 | null>(null);
-  // const benifits_prerequisites = useSelector((state: RootState) => state.createCourseData.createCourse2);
 
   const [modules, setModules] = useState<CreateCourseState>(initialModulesState);
-  // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
 
   const { id } = useParams<{ id: string }>();
 
@@ -142,7 +140,7 @@ function OverView() {
       dispatch(setEditCourse(courseData));
       dispatch(setEditCourse2(benefits_prerequisites));
       dispatch(setEditLesson(modules))
-      navigate('/tutor/courses/edit-course')
+      navigate(ROUTES.tutor.editCourse);
     } catch (err) {
       setIsLoading(false);
       toast.error(
@@ -158,19 +156,19 @@ function OverView() {
     }
   };
 
-  return (
+  return !isLoading ? (
     <div className="min-h-screen bg-gray-50">
 
 
 
 
 
-<motion.div 
+      <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px- lg:min-w-7xl 8 py-8"
         >
-          {isLoading && <Loader />}
+          
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
@@ -352,7 +350,7 @@ function OverView() {
       </div>
       <ToastContainer />
     </div>
-  );
+  ) : <DashBoardLoader />
 }
 
 export default OverView;

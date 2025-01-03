@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { data, content } from "../Data/navData";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
+import { ROUTES } from "../../../routes/Routes";
 
-function SideNav({ prop }: { prop: string }) {
+function SideNav() {
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
-
+  const location = useLocation();
   const toggleNav = () => {
     setIsOpen(!isOpen);
   };
@@ -40,15 +42,15 @@ function SideNav({ prop }: { prop: string }) {
         {/* Main Content */}
         <div
           className={
-            prop === "/admin"
-              ? "flex bg-[#7C24F0] p-2  text-white text-sm font-semibold w-full rounded-lg"
-              : "flex bg-white p-2  text-sm font-semibold w-full rounded-lg"
+            location.pathname === "/admin"
+              ? "transition-all flex bg-[#7C24F0] p-2  text-white text-sm font-semibold w-full rounded-lg"
+              : "transition-all flex bg-white  hover:bg-[#7c24f018] text-sm font-semibold w-full rounded-lg"
           }
         >
-          <NavLink key="/admin" to="/admin" className="flex items-center">
+          <button key="/admin" onClick={()=> navigate(ROUTES.admin.dashBoard)} className="flex items-center h-full w-full p-2">
             <RxDashboard className="m-2" />
             Dashboard
-          </NavLink>
+          </button>
         </div>
 
         {/* Data Section */}
@@ -58,15 +60,15 @@ function SideNav({ prop }: { prop: string }) {
             <div
               key={links.path}
               className={
-                prop === links.path
-                  ? "flex bg-[#7C24F0] p-2 text-white text-center text-sm font-semibold w-full rounded-lg"
-                  : "flex p-2 text-center text-sm font-semibold w-full rounded-lg"
+                location.pathname === links.path
+                  ? "transition-all flex bg-[#7C24F0] text-white text-center text-sm font-semibold w-full rounded-lg"
+                  : "transition-all flex   hover:bg-[#7c24f018] text-center text-sm font-semibold w-full rounded-lg"
               }
             >
-              <NavLink to={links.path} className="flex items-center">
+              <button onClick={()=> navigate(links.path)} className="flex items-center w-full h-full p-2">
                 {<links.icon className="mx-3 my-1 text-xl" />}
                 {links.name}
-              </NavLink>
+              </button>
             </div>
           ))}
         </div>
@@ -78,15 +80,15 @@ function SideNav({ prop }: { prop: string }) {
             <div
               key={links.path}
               className={
-                prop === links.path
-                  ? "flex bg-[#7C24F0] p-2 text-white text-center text-sm font-semibold w-full rounded-lg"
-                  : "flex p-2 text-center text-sm font-semibold w-full rounded-lg"
+                location.pathname === links.path
+                  ? "transition-all flex bg-[#7C24F0] text-white text-center text-sm font-semibold w-full rounded-lg"
+                  : "transition-all flex  hover:bg-[#7c24f018] text-center text-sm font-semibold w-full rounded-lg"
               }
             >
-              <NavLink to={links.path} className="flex items-center">
+              <button onClick={()=>navigate(links.path)} className="flex items-center w-full h-full p-2">
                 {<links.icon className="mx-3 my-1 text-xl" />}
-                {links.name}
-              </NavLink>
+                  {links.name}
+              </button>
             </div>
           ))}
         </div>

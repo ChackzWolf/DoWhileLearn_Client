@@ -3,6 +3,7 @@ import HeaderNav from "./headerComponents/Nav/UserHeaderNav";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import HeaderDropdown from "./headerComponents/DropDown";
+import { ROUTES } from "../../../routes/Routes";
 
 
 
@@ -37,8 +38,8 @@ const Header = () =>{
                         </div>
                      : 
                     <div>
-                        <NavLink to='/login/user'><button className=" p-1 my-2 px-8 hover:scale-105 transition-all" > Login</button></NavLink>
-                        <NavLink to='/AuthChoice'><button className="bg-[#7C24F0] text-white font-semibold rounded-lg p-1 px-3 hover:scale-105 transition-all" > Get started</button></NavLink>
+                        <NavLink to={ROUTES.user.signin}><button className=" p-1 my-2 px-8 hover:scale-105 transition-all" > Login</button></NavLink>
+                        <NavLink to={ROUTES.common.AuthChoice}><button className="bg-[#7C24F0] text-white font-semibold rounded-lg p-1 px-3 hover:scale-105 transition-all" > Get started</button></NavLink>
                     </div>
 
                     }

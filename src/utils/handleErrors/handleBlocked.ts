@@ -1,4 +1,5 @@
 import { AxiosError } from "axios";
+import { ROUTES } from "../../routes/Routes";
 
 
 export const handleBlockedUser = (error: unknown) => {
@@ -8,7 +9,7 @@ export const handleBlockedUser = (error: unknown) => {
     
         if (axiosError.response.status === 403) {
             // Redirect to the login page if blocked
-            window.location.href = 'http://localhost:5173/login/user?message=blocked';
+            window.location.href = `http://localhost:5173${ROUTES.user.signin}?message=blocked`;
             return true; // Indicate that redirection occurred
         }
     }
@@ -22,7 +23,7 @@ export const handleBlockedTutor = (error: unknown) => {
         console.log('trig tutor blocked')
         if (axiosError.response.status === 403) {
             // Redirect to the login page if blocked
-            window.location.href = 'http://localhost:5173/login/tutor?message=blocked';
+            window.location.href = `http://localhost:5173${ROUTES.tutor.signin}?message=blocked`;
             return true; // Indicate that redirection occurred
         }
     }

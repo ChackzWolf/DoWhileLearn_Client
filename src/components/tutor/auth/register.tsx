@@ -10,10 +10,11 @@ import Loader from "../../common/icons/loader";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
+import { ROUTES } from "../../../routes/Routes";
 
 
 
-function RegisterUser() {
+function RegisterTutor() {
     
     const navigate = useNavigate();
     const location = useLocation()
@@ -272,7 +273,7 @@ function RegisterUser() {
                                 </div>
                                 <div className="flex w-full">
                                     <h1>Are you a student?  </h1>
-                                    <NavLink to="/register/user">
+                                    <NavLink to={ROUTES.user.signin}>
                                         <h1 className="pl-2 text-sky-700"> Click here</h1>
                                     </NavLink>
                                 </div>
@@ -292,4 +293,4 @@ function RegisterUser() {
     )
 }
 
-export default RegisterUser
+export default RegisterTutor

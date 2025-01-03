@@ -8,7 +8,8 @@ import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import { adminEndpoint } from "../../../constraints/adminEndpoints";
 import Loader from "../../common/icons/loader";
 import { toast } from 'react-toastify';
-function LoginModal() {
+import { ROUTES } from "../../../routes/Routes";
+function LoginAdmin () {
     const navigate = useNavigate()
     const [message, setMessage] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -60,7 +61,7 @@ function LoginModal() {
                 console.log("setRefreshCookie");
                 setCookie('adminId',_id, 7);
             
-                navigate('/admin');
+                navigate(ROUTES.admin.dashBoard);
             }else{
                 setMessage(message);
             }
@@ -143,7 +144,7 @@ function LoginModal() {
     
                                     <div className="flex w-full">
                                         <h1>Are you a student?</h1>
-                                        <NavLink to="/register/user" className="pl-2 text-sky-700">
+                                        <NavLink to={ROUTES.user.signin} className="pl-2 text-sky-700">
                                             Login
                                         </NavLink>
                                     </div>
@@ -158,4 +159,4 @@ function LoginModal() {
     )
 }
 
-export default LoginModal
+export default LoginAdmin 

@@ -5,6 +5,7 @@ import { getCookie } from '../../../utils/cookieManager'
 import { useNavigate } from 'react-router-dom';
 import { FaOpencart } from "react-icons/fa6";
 import userAxios from '../../../utils/axios/userAxios.config';
+import { ROUTES } from '../../../routes/Routes';
 
 export interface Course {
     _id: string;
@@ -74,7 +75,7 @@ function Cart() {
     },[courses])
 
     const handleCourseDetails = (_id:string)=> {
-        navigate(`/course/${_id}`)
+        navigate(ROUTES.common.courseDetails(_id))
     }
 
     const removeCart = async (id:string) => {
@@ -90,7 +91,7 @@ function Cart() {
           console.log(response, "addto cart response");
         } else {
           console.log("else");
-          navigate("/login/user");
+          navigate(ROUTES.user.signin);
         }
       };
     console.log(courses)

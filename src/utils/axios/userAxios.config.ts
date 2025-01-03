@@ -2,6 +2,7 @@ import axios from 'axios';
 import { getCookie, setCookie, removeCookie } from '../cookieManager';
 import store from '../../redux/store/store';
 import { setTutorLogout } from '../../redux/authSlice/authSlice';
+import { ROUTES } from '../../routes/Routes';
 
 const userAxios = axios.create({
     baseURL: import.meta.env.VITE_API_GATEWAY_BASE_URL,
@@ -53,7 +54,7 @@ userAxios.interceptors.request.use(
                 removeCookie('userId');
                 store.dispatch(setTutorLogout())
                 // Optionally, redirect to login
-                window.location.href = '/login/user';
+                window.location.href = ROUTES.user.signin
                 return Promise.reject(refreshError);
             }
         }
@@ -82,7 +83,7 @@ userAxios.interceptors.response.use(
             removeCookie('userRefreshToken');
             removeCookie('userId');
             // Redirect to login or blocked user page
-            window.location.href = '/login/user?message=blocked'; // Change this to your actual login or blocked route
+            window.location.href = `${ROUTES.user.signin}?message=blocked`; // Change this to your actual login or blocked route
 
             return Promise.reject(error);
         }

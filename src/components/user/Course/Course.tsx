@@ -98,10 +98,12 @@ function CoursesList() {
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedRating("");
     setSelectedPrice(e.target.value);
   };
 
   const handleRatingChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedPrice("");
     setSelectedRating(e.target.value);
   };
 
@@ -119,7 +121,7 @@ function CoursesList() {
       ) : (
         <>
           
-    <div className="flex flex-col gap-5 m-10 p-8 bg-white rounded-lg shadow-lg">
+    <div className="flex flex-col justify-self-center max-w-7xl gap-5 m-10 p-8 bg-white rounded-lg shadow-lg">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold text-gray-700 flex items-center gap-2">
@@ -221,6 +223,8 @@ function CoursesList() {
           </div>
 
           {/* Pagination Controls */}
+          {courses.length > itemsPerPage &&
+        
           <div className="flex justify-center space-x-4 mb-16">
             <button
               disabled={currentPage === 1}
@@ -255,6 +259,7 @@ function CoursesList() {
               <RxDoubleArrowRight className="text-2xl hover:scale-110 transition-all text-[#7C24F0]" />
             </button>
           </div>
+            }
         </div>
       </div>
     </div>

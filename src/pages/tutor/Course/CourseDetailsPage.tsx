@@ -3,5 +3,4 @@ import CourseDetails from '../../../components/tutor/DashBoardPages/Course/Cours
 function CourseDetailsPage() {
   return   <CourseDetails/>
 }
-
 export default CourseDetailsPage

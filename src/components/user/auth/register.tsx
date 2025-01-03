@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import Header from "../Layout/Header";
+import { ROUTES } from "../../../routes/Routes";
 
 
 
@@ -81,7 +82,7 @@ function RegisterUser() {
             console.log('register data send succesfully');
             localStorage.removeItem('otpCountDown');
             if(response.data.success){
-                navigate('/register/user/otp',{state: response.data});
+                navigate(ROUTES.user.signupOTP,{state: response.data});
                 console.log('success' , response.data)
             }else{
                 console.log(response.data)
@@ -227,7 +228,7 @@ function RegisterUser() {
 
                                 <div className="flex w-full">
                                     <h1>Already have an account?  </h1>
-                                    <NavLink to="/login/user">
+                                    <NavLink to={ROUTES.user.signin}>
                                         <h1 className="pl-2 text-sky-700"> Login</h1>
                                     </NavLink>
                                 </div>

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom';
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
-import Header from '../../../components/user/Layout/Header';
 import TutorProfile from '../../../components/common/Tutor/TutorDetails';
 import Loader from '../../../components/common/icons/loader';
 function TutorDetailsPage() {
@@ -25,7 +24,6 @@ function TutorDetailsPage() {
     },[])
   return (
     <>
-    <Header/>
     {data ? <TutorProfile tutor={data} role = "USER" /> : <Loader/>}
     </>
   )

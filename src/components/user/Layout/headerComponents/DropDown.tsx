@@ -10,6 +10,7 @@ import { RiAccountBoxLine } from "react-icons/ri";
 import { CiLogout } from "react-icons/ci";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store/store';
+import { ROUTES } from '../../../../routes/Routes';
 
 
 
@@ -29,7 +30,7 @@ const HeaderDropdown: React.FC = () => {
             removeCookie('userRefreshToken');
             removeCookie('userId');
             if(!getCookie('userAccessToken') && !getCookie('userRefreshToken') && !getCookie('userId')) dispatch(setUserLogout());
-            navigate('/')
+            navigate(ROUTES.common.landingPage)
         }
     };
 
@@ -59,11 +60,11 @@ const HeaderDropdown: React.FC = () => {
         };
     }, [isOpen]);
 
-    const toCart =() => {
-        navigate('/user/cart')
+    const toWishList =() => {
+        navigate(ROUTES.user.wishlist)
     }
     const toProfile =()=> {
-        navigate('/user/profile')
+        navigate(ROUTES.user.profile);
     }
     return (
         <div className="relative" ref={dropdownRef}>
@@ -78,7 +79,7 @@ const HeaderDropdown: React.FC = () => {
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50 transition-all duration-1000 transform opacity-100 scale-100">
                     <ul>
-                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toCart}> <FaRegHeart /> Cart</li>
+                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toWishList}> <FaRegHeart /> Cart</li>
                         <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toProfile}> <RiAccountBoxLine /> Profile</li>
                         <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={handleLogout}> <CiLogout /> Logout</li>
                     </ul>

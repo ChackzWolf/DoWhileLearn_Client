@@ -3,7 +3,6 @@ import StudentDetails from '../../../../components/common/StudentsDetails';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { userEndpoint } from '../../../../constraints/userEndpoints';
-import Header from '../../../../components/admin/Layout/header';
 
 interface UserData {
     userId: string;
@@ -40,12 +39,7 @@ function StudentDetailsPage() {
         }
         fetchUserData()
     },[])
-  return (
-    <>
-        <Header/>
-        <StudentDetails user={userData} role={'ADMIN'}/>
-    </>
-  )
+  return <StudentDetails user={userData} role={'ADMIN'}/>
 }
 
 export default StudentDetailsPage

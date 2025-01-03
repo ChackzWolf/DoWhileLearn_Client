@@ -10,33 +10,6 @@ import HeaderDropdown from "../Supporters/HeaderDropDown";
 
 
 const Header = () =>{
-    // const dispatch = useDispatch()
-    // const navigate = useNavigate()
-    // const isLogin = useSelector((state: RootState) => state.userAuth.isTutorLogin);
-
-    // useEffect(() => {
-    //     // Function to check authentication status
-    //     const checkAuth = async () => {
-    //         try {
-    //             const token = getCookie('token');
-    //             const refreshToken = getCookie('refreshToken')
-    //             console.log(token)
-    //             if (!token || !refreshToken) {
-    //                 console.log('token is null')
-    //                 dispatch(setTutorLogout())
-    //                 navigate('/tutor/login')
-    //             }else{
-    //                 dispatch(setTutorLogin())
-    //             }
-    //         } catch (error) {
-    //             console.error('Authentication check failed:', error);
-    //             dispatch(setTutorLogout())
-    //             navigate('/tutor/login')
-    //         }
-    //     };
-
-    //     checkAuth();
-    // });
 
 
    
@@ -47,13 +20,10 @@ const Header = () =>{
                     <div className="col-span-1 flex">
                         <h1 className="text-2xl font-extrabold text-[#7C24F0]">DoWhile{' { Learn } '}</h1>
                         <h1 className="text-[#7C24F0] font-bold m-2">Admin</h1>
-                        {/* <img src={logo} className="w-20" alt="GeniusGrid Logo" /> */}
                     </div>
 
 
-                    <div className="justify-end flex">
-                        {/* <HeaderNav /> */}
-                        
+                    <div className="justify-end flex">                        
                         <div>
                             <HeaderDropdown/>
                         </div>

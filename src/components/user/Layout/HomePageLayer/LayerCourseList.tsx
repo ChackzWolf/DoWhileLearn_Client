@@ -37,54 +37,43 @@ export interface Lesson {
   description: string;
 }
 
-const LayerCourseList = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [isLoading, setIsLoading] = useState(true); // Loading state
+const LayerCourseList = ({courses,title}:{courses:Course[],title:string}) => {
+  const [coursesToShow , setCourseToShow] = useState<Course[] | null> (null)
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   useEffect(() => {
     checkScreenSize(); // Initial check
     window.addEventListener("resize", checkScreenSize);
-
-
     return () => {
       window.removeEventListener("resize", checkScreenSize);
     };
   }, [])
+
+  useEffect(()=> {
+    setCourseToShow(courses)
+  },[courses])
 let itemsToShow
   if(window.innerWidth <= 1024 && window.innerWidth > 767 ) itemsToShow = 3
   if(window.innerWidth > 752 && window.innerWidth < 900) itemsToShow = 3
   else if (isLargeScreen) itemsToShow = 5;
   else itemsToShow = 4
-  console.log(window.innerWidth)
-    
-  
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await axios.get<ResponseFetchCourseList>(courseEndpoint.fetchCourseData);
-        setCourses(response.data.courses);
-
-
-      } catch (error) {
-        console.error("Error fetching course data:", error);
-      } finally {
-        setIsLoading(false); // Set loading to false after fetching
-      }
-    };
-
-    fetchCourses();
-  }, []);
 
   const checkScreenSize = () => {
     setIsLargeScreen(window.innerWidth >= 1025); // 1024px is the lg breakpoint in Tailwind
   };
 
   console.log(courses, "coursess");
+  console.log(itemsToShow)
   return (
-<div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${itemsToShow} lg:grid-cols-5 gap-5 px-3 md:px-10 lg:px-max-40 justify-items-center`}>
-  {isLoading
+<div className={`place-self-center max-w-screen-2xl my-16`}>
+  <h1 className="text-2xl font-bold mx-12 m-6">
+    {title}
+  </h1>
+  <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${itemsToShow} lg:grid-cols-5 gap-5 px-3 md:px-10 lg:px-max-40 justify-center items-center">
+
+  
+  {coursesToShow === null
     ? // Show skeletons while loading
-      Array.from({ length: 4 }).map((_, index) => (
+      Array.from({ length: itemsToShow }).map((_, index) => (
         <CourseBadgeSkeleton key={index} />
       ))
     : courses
@@ -104,6 +93,7 @@ let itemsToShow
             _id={course._id}    
           />
         ))}
+        </div>
 </div>
 
 
