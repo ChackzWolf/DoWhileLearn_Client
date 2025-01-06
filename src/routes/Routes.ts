@@ -40,7 +40,7 @@ export const ROUTES = {
         userDetails:   (id:string) => `/tutor/user/details/${id}`
     },
     admin: {
-        signin: '/login/admin',
+        signin: '/admin/auth/login',
         
         forgotPasswordEmailEntry: '/admin/auth/forgot-password',
         forgotPasswordReset:      '/admin/auth/forgot-password/reset',

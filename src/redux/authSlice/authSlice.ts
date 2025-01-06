@@ -1,6 +1,5 @@
 import cookie from 'js-cookie';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import UserProfile from './../../components/user/UserProfile';
 
 interface AuthState{
     isLogin:boolean;

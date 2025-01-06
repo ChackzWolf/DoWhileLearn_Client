@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react"
-import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
 import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
-import axios from "axios";
-import Loader from "../../common/icons/loader";
-import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import { ListShadowLoader } from "./Shadoloader/ListShadowLoader";
 import Table from "../../common/Layouts/Table";
 import { ROUTES } from "../../../routes/Routes";
+import adminAxios from "../../../utils/axios/adminAxios.config";
 
 
 export interface ResponseFetchCourseList {
@@ -59,7 +56,7 @@ function Course() {
           console.log('trig')
           const tutorId:string | null = await getCookie('tutorId')
           if(tutorId){
-            const response = await axios.get(courseEndpoint.fetchCourseData);
+            const response = await adminAxios.get(courseEndpoint.fetchCourseData);
             console.log(response,'fetched course')
             setCourses(response.data.courses);
           }

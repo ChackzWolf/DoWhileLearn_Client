@@ -4,6 +4,8 @@ import { getCookie, removeCookie, setCookie } from '../cookieManager';  // Your 
 import { getRoleFromToken } from '../jwtUtils';
 import axios from 'axios';
 import { ROUTES } from '../../routes/Routes';
+import store from '../../redux/store/store';
+import { setUserLogout } from '../../redux/authSlice/authSlice';
 
 export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
   const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
@@ -28,6 +30,7 @@ export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; r
           removeCookie('userAccessToken');
           removeCookie('userRefreshToken');
           removeCookie('userId');
+          store.dispatch(setUserLogout())
           window.location.href = ROUTES.user.signin;
           return;
         }

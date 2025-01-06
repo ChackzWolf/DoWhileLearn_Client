@@ -1,14 +1,10 @@
 import { useEffect, useState } from "react"
 import { adminEndpoint } from "../../../constraints/adminEndpoints";
-import axios from "axios";
 import { ListShadowLoader } from "./Shadoloader/ListShadowLoader";
-import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import Table from "../../common/Layouts/Table";
-import { Columns } from 'lucide-react';
-import { data } from './../../tutor/data/navData';
 import { ROUTES } from "../../../routes/Routes";
+import adminAxios from "../../../utils/axios/adminAxios.config";
 
 
 interface IUser{
@@ -33,7 +29,7 @@ function Students() {
       setIsLoading(true)
       const fetchCourses = async () => {
         try {
-          const response = await axios.get(adminEndpoint.fetchStudentData);
+          const response = await adminAxios.get(adminEndpoint.fetchStudentData);
           setStudents(response.data.students); // Access the 'courses' property from the response
         } catch (error) {
           console.error("Error fetching course data:", error);
@@ -46,7 +42,7 @@ function Students() {
     }, []);
 
     const handleToggleBlock = async (studentId:string) => {
-      const response = await axios.post(adminEndpoint.toggleBlockStudent, {userId:studentId})
+      const response = await adminAxios.post(adminEndpoint.toggleBlockStudent, {userId:studentId})
       if(response.status = 202){
         setStudents((prevStudents) =>
         prevStudents.map((student) =>

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getCookie, setCookie, removeCookie } from '../cookieManager';
+import { isTokenExpired } from '../jwtUtils';
 // import store from '../../redux/store/store';
 // import { setTutorLogout } from '../../redux/authSlice/authSlice';
 
@@ -9,7 +10,7 @@ const tutorAxios = axios.create({
     headers: {
         "Content-Type": "application/json"
     },
-    // withCredentials:true,
+    withCredentials:true,
 });
 
 tutorAxios.interceptors.request.use(  /////to add JWT token from cookie
@@ -31,7 +32,7 @@ tutorAxios.interceptors.request.use(
         let token = getCookie('tutorAccessToken');
         console.log(token, 'accessToken in request');
 
-        if (!token) {
+        if (!token || isTokenExpired(token)) {
             // If access token is null, attempt to refresh token
             try {
                 console.log('trig refresh token')

@@ -4,11 +4,7 @@ import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
 import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
-import axios from "axios";
-import Loader from "../../common/icons/loader";
-import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import { ROUTES } from "../../../routes/Routes";
-import DashBoardLoader from "../../common/icons/DashboardLoader";
 import Table from "../../common/Layouts/Table";
 import { ListShadowLoader } from "../../admin/DashBoardPages/Shadoloader/ListShadowLoader";
 

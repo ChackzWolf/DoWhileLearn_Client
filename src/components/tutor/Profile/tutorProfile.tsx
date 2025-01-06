@@ -4,7 +4,6 @@ import { FaGraduationCap, FaUserTie, FaEnvelope, FaPhone, FaWallet } from "react
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
-import axios from "axios";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import { setTutorProfilePic } from "../../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
@@ -87,7 +86,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
 
     console.log(formData,'form data data data')
     try {
-      const response = await axios.post(tutorEndpoint.uploadPDF, formData, {
+      const response = await tutorAxios.post(tutorEndpoint.uploadPDF, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -127,7 +126,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
       if (type === 'image') setImageUploading(true);
       if (type === 'certificate') setCertificateUploading(true);
 
-      const response = await axios.post(courseEndpoint.uploadImage, formData, {
+      const response = await tutorAxios.post(courseEndpoint.uploadImage, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import StudentDetails from '../../../../components/common/StudentsDetails';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { userEndpoint } from '../../../../constraints/userEndpoints';
+import tutorAxios from '../../../../utils/axios/tutorAxios.config';
 
 interface UserData {
     userId: string;
@@ -20,7 +20,7 @@ function StudentDetailsPage() {
 
     useEffect(()=> {
         const fetchUserData = async()=> {
-            const response = await axios.get(userEndpoint.fetchUserData, {params:{userId:id}, withCredentials:true})
+            const response = await tutorAxios.get(userEndpoint.fetchUserData, {params:{userId:id}, withCredentials:true})
             console.log(response.data.result.userData, ' this is user data')
             const {_id, firstName, lastName, profilePicture, email, phoneNumber,bio, purchasedCourses } = response.data.result.userData
             console.log(purchasedCourses, 'prucased code')

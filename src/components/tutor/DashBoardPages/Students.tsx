@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react"
-import axios from "axios";
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import { useNavigate } from "react-router-dom";
-import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
-import { FaUserCircle } from "react-icons/fa";
-import DashBoardLoader from "../../common/icons/DashboardLoader";
 import Table from './../../common/Layouts/Table';
 import { ROUTES } from "../../../routes/Routes";
 import { ListShadowLoader } from "../../admin/DashBoardPages/Shadoloader/ListShadowLoader";
+import tutorAxios from "../../../utils/axios/tutorAxios.config";
 
 
 interface User {
@@ -58,7 +55,7 @@ function Students() {
         try {
           const tutorId:string | null = await getCookie('tutorId')
           if(tutorId){
-            const response = await axios.get(tutorEndpoint.FetchStudents, {params: { tutorId }, withCredentials:true });
+            const response = await tutorAxios.get(tutorEndpoint.FetchStudents, {params: { tutorId }, withCredentials:true });
             console.log(response.data)
             setStudents(response.data.users);
           }

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
 import { adminEndpoint } from "../../../constraints/adminEndpoints";
-import axios from "axios";
 import { ListShadowLoader } from "./Shadoloader/ListShadowLoader";
-import { FaUserCircle } from "react-icons/fa";
-import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../../routes/Routes";
 import Table from "../../common/Layouts/Table";
+import adminAxios from "../../../utils/axios/adminAxios.config";
 
 
 interface IUser{
@@ -27,7 +25,7 @@ function Tutors() {
       setIsLoading(true)
       const fetchCourses = async () => {
         try {
-          const response = await axios.get(adminEndpoint.fetchTutorData);
+          const response = await adminAxios.get(adminEndpoint.fetchTutorData);
           setTutors(response.data.tutors); // Access the 'courses' property from the response
         } catch (error) {
           console.error("Error fetching course data:", error);
@@ -40,7 +38,7 @@ function Tutors() {
     }, []);
 
     const handleToggleBlock = async (tutorId:string) => {
-        const response = await axios.post(adminEndpoint.toggleBlockTutor, {tutorId})
+        const response = await adminAxios.post(adminEndpoint.toggleBlockTutor, {tutorId})
         if(response.status = 202){
 
           setTutors((prevTutors) =>

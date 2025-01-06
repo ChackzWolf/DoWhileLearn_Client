@@ -30,6 +30,7 @@ import  ChatComponent from "../Chat/ChatCoursesRoute"
 import VideoPlayer from "../../common/VideoPlayer";
 import { FaUserCircle } from "react-icons/fa";
 import { ROUTES } from "../../../routes/Routes";
+import { setUserLogout } from "../../../redux/authSlice/authSlice";
 
 
 interface Module {
@@ -157,10 +158,6 @@ function CourseDetails() {
           setIsLoading(false);
         }
       };
-;
-      // const totalLessons = response.data.courseData.Modules.reduce((count,Modules) => count + Modules.Lessons.length,0)
-      // const totalLessons = response.data.courseData.sections.reduce((count,section)=>count +section.lessons.length,0);
-
       fetchCourseDetails();
     }
   }, [id, dispatch]);
@@ -175,6 +172,7 @@ function CourseDetails() {
         removeCookie('userId');
         removeCookie('userAccessToken');
         removeCookie('userRefreshToken');
+        dispatch(setUserLogout())
         navigate(ROUTES.user.signin);
         return;
       }

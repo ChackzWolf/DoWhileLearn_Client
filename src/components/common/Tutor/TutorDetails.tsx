@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { MdAdd, MdOutlineDelete, MdEdit, MdClose } from "react-icons/md";
+import { useEffect,useState } from "react";
 import {
   FaGraduationCap,
   FaUserTie,
@@ -7,8 +6,6 @@ import {
   FaPhone,
   FaWallet,
 } from "react-icons/fa";
-import tutorAxios from "../../../utils/axios/tutorAxios.config";
-import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import axios from "axios";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";

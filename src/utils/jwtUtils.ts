@@ -5,13 +5,26 @@ const base64UrlDecode = (str: string) => {
     return decodeURIComponent(atob(base64).split('').map((c) => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`).join(''));
   };
   
-  const decodeJwt = (token: string) => {
+  export const decodeJwt = (token: string) => {
     const parts = token.split('.');
     if (parts.length !== 3) {
       throw new Error('JWT does not have 3 parts');
     }
     const payload = base64UrlDecode(parts[1]);
     return JSON.parse(payload);
+  };
+  
+  
+  export const isTokenExpired = (token: string): boolean => {
+    try {
+      const decoded: any = decodeJwt(token); // Decode the JWT
+      const expirationTime = decoded.exp * 1000; // Convert expiration time from seconds to milliseconds
+      const currentTime = Date.now(); // Current time in milliseconds
+      return currentTime > expirationTime; // Check if the token is expired
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      return true; // Return true if decoding fails (e.g., malformed token)
+    }
   };
   
 

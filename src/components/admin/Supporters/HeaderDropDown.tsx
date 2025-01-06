@@ -10,9 +10,9 @@ const HeaderDropdown: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null); // Ref for the dropdown
 
     const handleLogout = () => {
-      removeCookie('accessToken');
-      removeCookie('refreshToken');
-      removeCookie('userId');
+      removeCookie('adminAccessToken');
+      removeCookie('adminRefreshToken');
+      removeCookie('adminId');
       navigate(ROUTES.admin.signin);
       setIsOpen(false);
     }

@@ -13,10 +13,9 @@ import {
   setAddLesson,
   toNext,
   toPrev,
-} from "../../../../redux/tutorSlice/CourseSlice/createCourseData"; // Adjust path as needed
+} from "../../../../redux/tutorSlice/CourseSlice/createCourseData"; 
 import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
-import { FiPlus, FiX } from "react-icons/fi"; // Import icons
-import axios from "axios";
+import { FiPlus, FiX } from "react-icons/fi";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
@@ -30,6 +29,7 @@ import { addVideoUpload } from "../../../../redux/uploadStatSlice";
 import VideoPlayer from "./AddLessonsComponents/VideoPlayer";
 import CircularLoader from "../UploadingStatus/RoundedProgressBar";
 import { ToastContainer, toast } from "react-toastify";
+import tutorAxios from "../../../../utils/axios/tutorAxios.config";
 
 export const validationSchema = Yup.object().shape({
   Modules: Yup.array()
@@ -342,7 +342,7 @@ const AddLesson = () => {
     }
 
     try {
-      axios.post(courseEndpoint.uploadVideo, formData, {
+      tutorAxios.post(courseEndpoint.uploadVideo, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       console.log(" video send ");

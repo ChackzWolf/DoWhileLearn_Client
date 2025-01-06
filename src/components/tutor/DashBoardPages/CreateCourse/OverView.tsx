@@ -4,7 +4,6 @@ import Modules from "./OverView/Modules";
 import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
 import { setCreateCourseEmpty, toPrev } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // You can skip this if you're not using default styles
@@ -13,6 +12,7 @@ import Loader from "../../../common/icons/loader";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../../../utils/cookieManager";
 import { ROUTES } from "../../../../routes/Routes";
+import tutorAxios from "../../../../utils/axios/tutorAxios.config";
 
 
 
@@ -43,7 +43,7 @@ const handleSubmit = async() => {
           Modules: modules && modules.Modules ? [...modules.Modules] : [],  // Safely access and spread the array
         };
         console.log('started')
-        const response = await axios.post(courseEndpoint.submitCourse, data)
+        const response = await tutorAxios.post(courseEndpoint.submitCourse, data)
         console.log(response.data)
      
             if (response.data.success) {

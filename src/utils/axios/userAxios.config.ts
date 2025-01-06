@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { getCookie, setCookie, removeCookie } from '../cookieManager';
 import store from '../../redux/store/store';
-import { setTutorLogout } from '../../redux/authSlice/authSlice';
+import { setUserLogout } from '../../redux/authSlice/authSlice';
 import { ROUTES } from '../../routes/Routes';
+import { isTokenExpired } from '../jwtUtils';
 
 const userAxios = axios.create({
     baseURL: import.meta.env.VITE_API_GATEWAY_BASE_URL,
@@ -27,12 +28,14 @@ userAxios.interceptors.request.use(  /////to add JWT token from cookie
 );
 
 
+
+
 userAxios.interceptors.request.use(
     async (config) => {
         let token = getCookie('userAccessToken');
         console.log(token, 'accessToken in request');
 
-        if (!token) {
+        if (!token || isTokenExpired(token)) {
             // If access token is null, attempt to refresh token
             try {
                 console.log('trig refresh token')
@@ -52,7 +55,9 @@ userAxios.interceptors.request.use(
                 removeCookie('userAccessToken');
                 removeCookie('userRefreshToken');
                 removeCookie('userId');
-                store.dispatch(setTutorLogout())
+
+                store.dispatch(setUserLogout())
+
                 // Optionally, redirect to login
                 window.location.href = ROUTES.user.signin
                 return Promise.reject(refreshError);
@@ -74,14 +79,13 @@ export default userAxios;
 userAxios.interceptors.response.use(
     response => response,
     async error => {
-
-
         // Handle 403 Forbidden (user blocked)
         if (error.response.status === 403) {
             console.log('User is blocked. Redirecting to login or blocked page.');
             removeCookie('userAccessToken');
             removeCookie('userRefreshToken');
             removeCookie('userId');
+            store.dispatch(setUserLogout())
             // Redirect to login or blocked user page
             window.location.href = `${ROUTES.user.signin}?message=blocked`; // Change this to your actual login or blocked route
 

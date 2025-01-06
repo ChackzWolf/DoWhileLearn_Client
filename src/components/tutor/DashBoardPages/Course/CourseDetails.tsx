@@ -5,7 +5,6 @@ import {
   ICreateCourse2,
 } from "../../../Interfaces/CourseInterface/ICreateCourse";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // You can skip this if you're not using default styles
@@ -19,6 +18,7 @@ import StudentReviews from "../../../user/Course/StudentReview";
 import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
 import DashBoardLoader from "../../../common/icons/DashboardLoader";
 import { ROUTES } from "../../../../routes/Routes";
+import tutorAxios from "../../../../utils/axios/tutorAxios.config";
 
 interface Module {
   name: string;
@@ -64,7 +64,7 @@ function OverView() {
           setIsLoading(true);
 
           console.log();
-          const response = await axios.get(courseEndpoint.fetchCourseDetails, {
+          const response = await tutorAxios.get(courseEndpoint.fetchCourseDetails, {
             params: { id },
           });
           console.log(response.data, "course ");

@@ -1,30 +1,17 @@
 import { useEffect, useState } from 'react';
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Calendar, Users, BookOpen, DollarSign, TrendingUp, Filter, Star } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Users, BookOpen, Star } from 'lucide-react';
 import { DashboardCard } from './DashBoard/DashboardCard';
 import tutorAxios from '../../../utils/axios/tutorAxios.config';
 import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
 import { getCookie } from '../../../utils/cookieManager';
 import { PiCurrencyInrBold } from "react-icons/pi";
 import { calculateAverageRating } from '../../../utils/common.utils';
-import axios from 'axios';
 import { courseEndpoint } from '../../../constraints/courseEndpoints';
 import DashBoardLoader from '../../common/icons/DashboardLoader';
 
 
-const mockData = {
-  monthlyStats: [
-    { month: 'Jan', students: 45, revenue: 4500, courses: 12 },
-    { month: 'Feb', students: 52, revenue: 5200, courses: 14 },
-    { month: 'Mar', students: 68, revenue: 6800, courses: 15 },
-    { month: 'Apr', students: 75, revenue: 7500, courses: 16 },
-  ],
-  topCourses: [
-    { name: 'Advanced React', students: 120, rating: 4.8 },
-    { name: 'Full Stack Dev', students: 98, rating: 4.7 },
-    { name: 'Python Mastery', students: 85, rating: 4.6 },
-  ]
-};
+
 
 
 const courseCategories = [
@@ -35,11 +22,6 @@ const courseCategories = [
   { name: 'DevOps', count: 5 }
 ];
 
-const studentDistribution = [
-  { category: 'Enrolled', value: 850 },
-  { category: 'Completed', value: 250 },
-  { category: 'Active', value: 150 }
-];
 const TutorDashboard = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [orders, setOrders] = useState<any[]>([]);
@@ -58,9 +40,9 @@ const TutorDashboard = () => {
         setIsLoading(true);
         const tutorDetails = await tutorAxios.get(tutorEndpoint.fetchTutorDetails,{params:{tutorId}, withCredentials:true}  )
         const tutorData = tutorDetails.data.tutorData;
-        const courseIds:any = [...new Set(tutorData.courses.flatMap((course:any) => course.course))]
+      const courseIds:any = [...new Set(tutorData.courses.flatMap((course:any) => course.course))]
   
-        const coursesDataResponse = await axios.get(courseEndpoint.fetchCoursesByIds, {params:{ids:courseIds}})
+        const coursesDataResponse = await tutorAxios.get(courseEndpoint.fetchCoursesByIds, {params:{ids:courseIds}})
         const studentIds = [
           ...new Set(tutorData.courses.flatMap((course:any) => course.students))
         ];

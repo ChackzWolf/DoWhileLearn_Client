@@ -10,9 +10,9 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { adminEndpoint } from '../../../constraints/adminEndpoints';
-import axios from 'axios';
 import { courseEndpoint } from '../../../constraints/courseEndpoints';
 import { calculateAverageRating } from '../../../utils/common.utils';
+import adminAxios from '../../../utils/axios/adminAxios.config';
 
 const courseCategories = [
   { name: 'Web Development', count: 15 },
@@ -37,9 +37,9 @@ const AdminDashboard = () => {
     const [averageRating, setAverageRating] = useState(0);
   useEffect(()=> {
     const fetchUsers = async()=>{
-        const userResponse = await axios.get(adminEndpoint.fetchStudentData);
-        const tutorResponse = await axios.get(adminEndpoint.fetchTutorData);
-        const courseResponse = await axios.get(courseEndpoint.fetchCourseData);
+        const userResponse = await adminAxios.get(adminEndpoint.fetchStudentData);
+        const tutorResponse = await adminAxios.get(adminEndpoint.fetchTutorData);
+        const courseResponse = await adminAxios.get(courseEndpoint.fetchCourseData);
         console.log(courseResponse, 'this is response');
         setTotalStudents(userResponse.data.students.length);
         setTotalTutors(tutorResponse.data.tutors.length);

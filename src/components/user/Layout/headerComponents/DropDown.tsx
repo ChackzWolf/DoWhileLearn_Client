@@ -29,6 +29,7 @@ const HeaderDropdown: React.FC = () => {
             removeCookie('userAccessToken')
             removeCookie('userRefreshToken');
             removeCookie('userId');
+            dispatch(setUserLogout())
             if(!getCookie('userAccessToken') && !getCookie('userRefreshToken') && !getCookie('userId')) dispatch(setUserLogout());
             navigate(ROUTES.common.landingPage)
         }

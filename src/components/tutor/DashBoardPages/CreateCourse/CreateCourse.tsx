@@ -11,7 +11,6 @@ import {addVideoUpload} from '../../../../redux/uploadStatSlice'
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
-import axios from "axios";
 import Loader from "../../../common/icons/loader";
 import Spinner from "../../../common/icons/Spinner";
 import { getCookie } from "../../../../utils/cookieManager";
@@ -19,6 +18,7 @@ import VideoPlayer from "./CreateCourse.compoents.ts/VideoPlayer";
 import { generateRandomCode } from "../../../../utils/common.utils";
 import SocketService from "../../../../services/socketService";
 import CircularLoader from "../UploadingStatus/RoundedProgressBar";
+import tutorAxios from "../../../../utils/axios/tutorAxios.config";
 
 const validationSchema = Yup.object({
   courseTitle: Yup.string().required("Course name is required")
@@ -103,7 +103,7 @@ const AddCourse = () => {
     try {
       setImageUploading(true)
       
-      const response = await axios.post(courseEndpoint.uploadImage, formData, {
+      const response = await tutorAxios.post(courseEndpoint.uploadImage, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -164,7 +164,7 @@ const AddCourse = () => {
     formData.append("videoBinary", videoFile);
     try {
 
-      axios.post(courseEndpoint.uploadVideo, formData, {headers: {  "Content-Type": "multipart/form-data",},});
+      tutorAxios.post(courseEndpoint.uploadVideo, formData, {headers: {  "Content-Type": "multipart/form-data",},});
       
       console.log(" returning ",id);
       return id;

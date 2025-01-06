@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { userEndpoint } from '../../../constraints/userEndpoints'
 import { getCookie } from '../../../utils/cookieManager'
@@ -83,7 +82,7 @@ function Cart() {
         console.log(userId, "addtocart clicked");
     
         if (userId && userId !== "undefined") {
-          const response = await axios.post(userEndpoint.addToCart, {
+          const response = await userAxios.post(userEndpoint.addToCart, {
             courseId: id,
             userId,
           });
