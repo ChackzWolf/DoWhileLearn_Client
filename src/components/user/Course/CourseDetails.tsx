@@ -19,7 +19,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getCookie, removeCookie } from "../../../utils/cookieManager";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { userEndpoint } from "../../../constraints/userEndpoints";
-import { BsFillCartCheckFill, BsCart } from "react-icons/bs";
 import { Module } from "module";
 import PurchasedCourseDetails from "./PurchasedCourseDetails/PurchasedCourseDetails";
 import CourseDetailSkeleton from "./Skeletons/CourseDetailsSkeleton";
@@ -31,6 +30,7 @@ import VideoPlayer from "../../common/VideoPlayer";
 import { FaUserCircle } from "react-icons/fa";
 import { ROUTES } from "../../../routes/Routes";
 import { setUserLogout } from "../../../redux/authSlice/authSlice";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
 
 
 interface Module {
@@ -81,7 +81,6 @@ function CourseDetails() {
     useState<CreateCourseState>(initialModulesState);
   // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
   const [activeTab, setActiveTab] = useState('overview');
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const { id } = useParams<{ id: string }>();
 
@@ -115,7 +114,7 @@ function CourseDetails() {
             averageRating:response.data.courseData.averageRating,
             ratingCount: response.data.courseData.ratingCount,
           };
-
+          console.log(' this is the data ', response.data.tutorData )
           setCourseData(theCourseData);
 
           const courseDetails: ICreateCourse2 = {
@@ -156,7 +155,7 @@ function CourseDetails() {
         } catch (error) {
           console.error("Error fetching course details:", error);
           setIsLoading(false);
-        }
+        } 
       };
       fetchCourseDetails();
     }
@@ -213,7 +212,9 @@ function CourseDetails() {
       if(!handleBlockedUser(error)){
         console.log('error in fetching course', error)
       }else handleBlockedUser(error)
-  }
+    }finally{
+      setIsLoading(false);
+    }
   };
 
   const handleAddToCart = async () => {
@@ -254,7 +255,7 @@ function CourseDetails() {
 
   if (!isPurchased) {
     return courseData ? (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen ">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -262,16 +263,16 @@ function CourseDetails() {
         >
           {isLoading && <Loader />}
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-3">
               {/* Course Header */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="bg-white rounded-xl p-6 shadow-sm"
+                className="bg-accent rounded-xl p-6 shadow-sm"
               >
-              <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
+              <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
                 {courseData?.courseTitle}
               </h1>
                 <p className="text-gray-600 m-2 mb-6">
@@ -299,7 +300,7 @@ function CourseDetails() {
               </motion.div>
 
               {/* Tabs */}
-              <div className="bg-white rounded-xl shadow-sm">
+              <div className="bg-accent rounded-xl shadow-sm">
                 <div className="border-b border-gray-200">
                   <nav className="flex -mb-px">
                     {['overview', 'curriculum', 'reviews'].map((tab) => (
@@ -383,11 +384,11 @@ function CourseDetails() {
             </div>
 
             {/* Sidebar */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 ">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="sticky top-24 bg-white rounded-xl shadow-sm overflow-hidden"
+                className="sticky h-full top-24 bg-accent rounded-xl shadow-sm overflow-hidden"
               >
                 {/* Video Preview */}
                 <div className="aspect-video relative">
@@ -414,7 +415,7 @@ function CourseDetails() {
                     <button
                       onClick={handlePayement}
                       disabled={isLoading}
-                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-accent px-6 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isLoading ? 'Processing...' : 'Enroll Now'}
                     </button>
@@ -423,9 +424,9 @@ function CourseDetails() {
                       className="p-3 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                     >
                       {inCart ? (
-                        <BsFillCartCheckFill className="text-2xl" />
+                        <FaHeart className="text-2xl" />
                       ) : (
-                        <BsCart className="text-2xl" />
+                        <FaRegHeart className="text-2xl" />
                       )}
                     </button>
                   </div>

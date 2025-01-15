@@ -144,10 +144,10 @@ const StudentReviews: React.FC<{
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-gradient-to-br"
+      className="h-full bg-gradient-to-br"
     >
       {reviews.length > 0  || isReviewed? (
-        <div className="max-w-7xl mx-auto p-1">
+        <div className="max-w-7xl mx-auto bg-accent">
           {/* Previous content remains the same until the end of the modules section */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
@@ -156,7 +156,7 @@ const StudentReviews: React.FC<{
             className="grid grid-cols-1 lg:grid-cols-2 gap-8"
           >
             {/* Main Content Column */}
-            <div className="lg:col-span-2 ">
+            <div className="lg:col-span-2 bg-accent ">
               {/* ... Previous content remains the same ... */}
 
               {/* Reviews Section */}
@@ -164,7 +164,7 @@ const StudentReviews: React.FC<{
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="bg-white px-6"
+                className="bg-accent px-6 h-full"
               >
                 <h2 className="text-2xl font-bold text-purple-600 mb-6">
                   Student Reviews

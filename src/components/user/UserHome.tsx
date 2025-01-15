@@ -4,6 +4,9 @@ import axios from "axios";
 import { courseEndpoint } from "../../constraints/courseEndpoints";
 import LayerCourseList from "./Layout/HomePageLayer/LayerCourseList";
 import ChatComponent from "./Chat/ChatCoursesRoute";
+import { PopularQA } from "./Layout/HomePageLayer/PopularQA";
+import { Footer } from "./Layout/Footer";
+import { Features } from "./Layout/HomePageLayer/Features";
 
 export interface Course {
   _id: string;
@@ -61,13 +64,16 @@ const UserHome= () => {
       fetchCourses();
     }, []);
     return (
-        <div className=" w-full h-screen">
+        <div className="w-full h-full">
             <LayerOne/>
             <ChatComponent/>
             <LayerCourseList courses={topRatedCourses} title={"Top rated courses"}/>
             <LayerCourseList courses={latestCourses} title={"Latest courses"}/>
+            <Features/>
+            {/* <Featuress/> */}
+            <PopularQA/>
 
-            <h1 className="font-bold self-center text-center text-lg mt-20 text-slate-700">Landing Page</h1>
+            <Footer/>
         </div>
     )
 }

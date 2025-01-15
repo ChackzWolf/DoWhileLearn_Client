@@ -1,19 +1,14 @@
-// import { Player } from '@lottiefiles/react-lottie-player';
-import animationData from "../../../../public/assets/Lottie/frontPageAnim.json";
+import animationData from "../../../../public/assets/Lottie/anim2.json";
 import Lottie from 'lottie-react';
-// Accept className as a prop
+
 const FirstImg = () => {
   return (
-    <div className={`flex justify-center items-center w-full h-auto max-w-xs sm:max-w-md lg:max-w-lg`}>
-      {/* <Player
-        autoplay
-        loop
-        src={animationData} // Reference your downloaded JSON animation here
-        style={{ height: '300px', width: '300px' }}
-      /> */}
-
-<Lottie animationData={animationData} loop={true} />
-
+    <div className="flex justify-center items-center w-full md:h-auto lg:h-auto sm:h-48">
+      <Lottie 
+        animationData={animationData} 
+        loop={true} 
+        style={{ height: '800px', width: '1400px' }} // Adjust height and width here
+      />
     </div>
   );
 };

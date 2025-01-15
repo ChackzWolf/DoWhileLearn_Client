@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
 import { ROUTES } from '../../../routes/Routes';
-
+import { AnimatePresence, motion } from 'framer-motion';
 const HeaderDropdown: React.FC = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -60,20 +60,29 @@ const HeaderDropdown: React.FC = () => {
         </>
         :
         <>
-        <FaAngleDown />
+        <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/>
         <FaUserCircle size={36} />
         </>
         }
       </button>
-      
+      <AnimatePresence>
       {isOpen && (
-        <div className={`absolute  right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50 transition-all duration-1000 transform ${
+        <motion.div
+          initial={{ opacity: 0, y: -60,x:60, scale: 0 }}  
+          animate={{ opacity: 1, y:0,x:0, scale: 1 }}  
+          exit={{ opacity: 0, y: -60,x:60, scale: 0 }}  
+          transition={{    
+              duration: 0.03,
+            ease: 'easeOut',      
+          }}
+         className={`absolute  right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-50 transition-all duration-1000 transform ${
             isOpen ? 'right-1 opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
           }`}>
               <button key="/tutor" onClick={()=> handleNavigate(ROUTES.tutor.profile)} className={`transition-all rounded-t-lg text-left px-4 py-2 ${location.pathname === ROUTES.tutor.profile ? 'bg-[#7C24F0] text-white' : 'hover:bg-[#7c24f04a] '} cursor-pointer block w-full h-full"`}>Profile</button>
               <button  onClick={handleLogout} className="transition-all rounded-b-lg text-left px-4 py-2 hover:bg-[#7c24f04a] cursor-pointer block w-full h-full">Logout</button>
-        </div>
+        </motion.div>
       )}
+        </AnimatePresence>
     </div>
   );
 };

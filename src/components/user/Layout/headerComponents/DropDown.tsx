@@ -11,7 +11,8 @@ import { CiLogout } from "react-icons/ci";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store/store';
 import { ROUTES } from '../../../../routes/Routes';
-
+import { FaAngleDown } from 'react-icons/fa6';
+import {AnimatePresence, motion} from 'framer-motion'
 
 
 const HeaderDropdown: React.FC = () => {
@@ -69,23 +70,41 @@ const HeaderDropdown: React.FC = () => {
     }
     return (
         <div className="relative" ref={dropdownRef}>
-            <button onClick={toggleDropdown} className="focus:outline-none">
+            <button onClick={toggleDropdown} className="focus:outline-none flex gap-1 py-1 items-center">
                 {/* You can replace the FaUserCircle with an img tag if you're using a custom image */}
                 {profilePicture? 
-                    <div className='h-10 w-10 rounded-full contain-content'>
-                        <img src={profilePicture} alt="" />
-                    </div>
-                :<FaUserCircle size={39} />}
+                <div className='transition-all rounded-full hover:bg-opacity-65 p-1    hover:backdrop-blur-sm '>
+                    {/* <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/> */}
+                    <img src={profilePicture} className='h-8 w-8 rounded-full ' /> 
+                    {/* <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'} `}/> */}
+                </div>
+                :
+                <div className='hover:text-[#7C24F0] flex items-center gap-2'>
+                    <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/>
+                    <FaUserCircle size={39} />
+                </div>
+                }
             </button>
+            <AnimatePresence>
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50 transition-all duration-1000 transform opacity-100 scale-100">
+                <motion.div
+                initial={{ opacity: 0, y: -60,x:60, scale: 0 }}  
+                animate={{ opacity: 1, y:0,x:0, scale: 1 }}  
+                exit={{ opacity: 0, y: -60,x:60, scale: 0 }}  
+                transition={{    
+                    duration: 0.06, // Extremely fast duration (50ms)   
+                  ease: 'easeOut',      
+                }}
+                 className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-[100] transform opacity-100 scale-100"
+                 >
                     <ul>
-                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toWishList}> <FaRegHeart /> Cart</li>
+                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toWishList}> <FaRegHeart /> Wishlist</li>
                         <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toProfile}> <RiAccountBoxLine /> Profile</li>
                         <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={handleLogout}> <CiLogout /> Logout</li>
                     </ul>
-                </div>
+                </motion.div>
             )}
+            </AnimatePresence>
         </div>
     );
 };

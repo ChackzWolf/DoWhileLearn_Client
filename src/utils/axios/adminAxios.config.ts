@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { getCookie, setCookie, removeCookie } from '../cookieManager';
-import { decodeJwt, isTokenExpired } from '../jwtUtils';
-import { store } from 'emoji-mart';
+import { isTokenExpired } from '../jwtUtils';
 import { setTutorLogout } from '../../redux/authSlice/authSlice';
+import store from '../../redux/store/store';
 // import store from '../../redux/store/store';
 // import { setTutorLogout } from '../../redux/authSlice/authSlice';
 
@@ -14,21 +14,6 @@ const adminAxios = axios.create({
     },
     withCredentials:true,
 });
-
-// adminAxios.interceptors.request.use(  /////to add JWT token from cookie
-//     (config) => {
-//         const token = getCookie('adminAccessToken');
-//         console.log(token, 'token')
-//         if (token) {
-            
-//             config.headers.Authorization = `Bearer ${token}`;
-//         }
-//         return config;
-//     },
-//     (error) => Promise.reject(error)
-// );
-
-
 
 
 adminAxios.interceptors.request.use(

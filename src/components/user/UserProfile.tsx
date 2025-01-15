@@ -128,14 +128,16 @@ const UserProfile = ({ user }: { user: any }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen  py-8">
+      
       {showMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-500">
           {message}
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      <div className="max-w-7xl mx-auto bg-accent rounded-xl shadow-lg overflow-hidden">
+  
         <div className="p-8">
           {/* Profile Header */}
           <div className="flex items-center gap-8 mb-11">

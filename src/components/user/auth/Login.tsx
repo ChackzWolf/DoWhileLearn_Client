@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
 import { NavLink, useNavigate } from "react-router-dom";
 import { userEndpoint } from "../../../constraints/userEndpoints";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { setCookie } from "../../../utils/cookieManager";
 import { setUserLogin, setUserProfilePic } from "../../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
@@ -65,7 +65,7 @@ function LoginUser() {
             console.log('trig')
             setIsLoading(true)
             const response = await axios.post(userEndpoint.loginUser, value);
-            console.log(response.data)
+            console.log('this is resposne. data ',response.data)
             const {success, accessToken, refreshToken, userId, message, userData} = response.data;
             console.log(response.data)
             if(success){

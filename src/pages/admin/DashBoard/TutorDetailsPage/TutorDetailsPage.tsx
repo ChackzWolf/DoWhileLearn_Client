@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import TutorProfile from '../../../../components/common/Tutor/TutorDetails'
 import { useParams } from 'react-router-dom';
-import { tutorEndpoint } from '../../../../constraints/tutorEndpoint';
 import Loader from '../../../../components/common/icons/loader';
 import adminAxios from '../../../../utils/axios/adminAxios.config';
+import { adminEndpoint } from '../../../../constraints/adminEndpoints';
 
 
 function TutorDetailsPage() {
@@ -11,7 +11,7 @@ function TutorDetailsPage() {
     const [data, setData] = useState({});
     useEffect(()=>{
         const fetchTutorDetails = async()=>{
-            const response = await adminAxios.get(tutorEndpoint.fetchTutorDetails,{
+            const response = await adminAxios.get(adminEndpoint.fetchTutorDetails,{
                 params: { tutorId:id }, withCredentials:true
               })
               console.log(response.data.tutorData, '/////////////response from fetching tutor details')

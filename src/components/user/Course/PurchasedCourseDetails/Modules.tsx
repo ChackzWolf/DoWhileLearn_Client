@@ -97,9 +97,9 @@ const getLessonVideo = (
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.5 }}
-      className="bg-white rounded-2xl shadow-lg p-4 sticky top-16"
+      className="bg-accent rounded-2xl p-4 top-16"
     >
-      <h2 className="text-2xl font-bold mb-6 text-purple-600">Course Content</h2>
+      <h2 className="text-2xl font-bold mb-6 text-primary">Course Content</h2>
       <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
         {modules?.Modules.map((module, moduleIndex) => (
           <motion.div
@@ -112,7 +112,7 @@ const getLessonVideo = (
             <motion.button
               whileHover={{ backgroundColor: "#f3f4f6" }}
               onClick={() => toggleModule(moduleIndex)}
-              className="w-full flex justify-between items-center p-4 bg-white"
+              className="w-full flex justify-between items-center p-4 bg-accent"
             >
               <span className="font-medium text-gray-800">{module.name}</span>
               <motion.span
@@ -144,7 +144,7 @@ const getLessonVideo = (
                             toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description, module.lessons.length);
                           }
                         }}
-                        className={`w-full flex items-center gap-3 p-3 rounded-lg bg-white ${lessonIndex === videoIndex ? "bg-purple-200":"bg-white"}  hover:bg-gray-100 transition-colors`}
+                        className={`w-full flex items-center gap-3 p-3 rounded-lg bg-accent ${lessonIndex === videoIndex ? "bg-purple-200":"bg-accent"}  hover:bg-gray-100 transition-colors`}
                       >
                         <GoVideo className="text-purple-600 text-xl flex-shrink-0" />
                         <span className="text-left text-gray-700 text-sm">
@@ -162,7 +162,7 @@ const getLessonVideo = (
                       //      toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description);
                       //    }
                       //  }}
-                       className="w-full flex items-center gap-3 p-3 rounded-lg bg-white hover:bg-gray-100 transition-colors"
+                       className="w-full flex items-center gap-3 p-3 rounded-lg bg-accent hover:bg-gray-100 transition-colors"
                      >
                       
                       {question.type === 'QUIZ'? (

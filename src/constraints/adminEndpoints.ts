@@ -11,4 +11,5 @@ export const adminEndpoint = {
     resetPasswordOTP: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/resetPasswordOTP`,
     updatePassword: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/updatePassword`,
     fetchAllOrders: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/fetchAllOrders`,
-}
+    fetchTutorDetails: `${import.meta.env.VITE_API_GATEWAY_BASE_URL_ADMIN}/fetchTutorDetails`,
+}  

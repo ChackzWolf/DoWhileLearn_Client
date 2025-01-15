@@ -70,7 +70,8 @@ const TutorProfile = ({ tutor, role }: { tutor: any; role: string }) => {
 
       const fetchPurchasedCourses = async () => {
         if (tutor.courses) {
-          console.log(tutor.courses  , ' courses ids')
+          console.log(tutor.courses  , ' courses ids');
+          
           const courseIds:any = [...new Set(tutor.courses.flatMap((course:any) => course.course))]
           const response = await axios.get(
             courseEndpoint.fetchCoursesByIds,
@@ -90,7 +91,7 @@ const TutorProfile = ({ tutor, role }: { tutor: any; role: string }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="p-8">
 

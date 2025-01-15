@@ -11,18 +11,19 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCookie } from "../../../../utils/cookieManager";
 import { Module } from "module";
 import userAxios from "../../../../utils/axios/userAxios.config";
 import { userEndpoint } from "../../../../constraints/userEndpoints";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaUserCircle } from "react-icons/fa";
 import { BsStarHalf } from "react-icons/bs";
 import StudentReviews from "../StudentReview";
 import CodingQuestionInterface from "./Questions/CodeEditor";
 import ChatComponent from "../../Chat/ChatCoursesRoute";
 import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
 import VideoPlayer from "../../../common/VideoPlayer";
+import { ROUTES } from "../../../../routes/Routes";
 
 interface Module {
   name: string;
@@ -124,9 +125,18 @@ Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
 }`,
   difficulty: "Easy" as const,
 };
-
+interface TutorData {
+  firstName:string;
+  lastName:string;
+  expertise:string[];
+  profilePicture:string;
+  _id:string;
+}
 function CoursePurchasedCourseDetailsDetails() {
+  
+  const [tutorData, setTutorData ] = useState<TutorData | null>(null);
   const [reviews, setReviews] = useState([]);
+  const navigate = useNavigate()
   const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
 
   // Function to render stars based on rating
@@ -202,7 +212,8 @@ function CoursePurchasedCourseDetailsDetails() {
             ratingCount: response.data.courseData.ratingCount,
 
           };
-
+          console.log(response.data)
+          setTutorData(response.data.tutorData)
           setCourseData(theCourseData);
 
           const courseDetails: ICreateCourse2 = {
@@ -230,7 +241,7 @@ function CoursePurchasedCourseDetailsDetails() {
             },
             0
           ); // Initialize accumulator as 0
-          console.log(courseData, "courseData");
+          console.log(response.data, "courseData");
 
           setModules(createCourseState);
           setTotalLessons(totalLessonsCount);
@@ -271,17 +282,17 @@ function CoursePurchasedCourseDetailsDetails() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100"
+      className="min-h-screen"
     >
       {/* <button
         onClick={toggleCodeVisibility}
-        className="mt-8 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
+        className="mt-8 px-4 py-2 bg-blue-600 text-accent rounded-lg shadow hover:bg-blue-700"
       >
         Toggle Question
       </button> */}
 
       <div
-        className={`fixed top-0 w-full h-full bg-white shadow-lg transition-transform transform ${
+        className={`fixed top-0 w-full h-full bg-accent shadow-lg transition-transform transform ${
           isVisibleCode ? "translate-x-0" : "-translate-x-full"
         } z-50`}
       >
@@ -307,7 +318,7 @@ function CoursePurchasedCourseDetailsDetails() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-2xl shadow-lg p-6"
+              className="bg-accent rounded-2xl shadow-lg p-6"
             >
               <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
                 {courseData?.courseTitle}
@@ -340,7 +351,7 @@ function CoursePurchasedCourseDetailsDetails() {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="relative rounded-2xl overflow-hidden shadow-lg"
+              className="relative rounded-2xl overflow-hidden shadow-lg bg-violet-950"
             >
               {selectedVideo ? (
                 // <video
@@ -370,7 +381,7 @@ function CoursePurchasedCourseDetailsDetails() {
               )}
             </motion.div>
             {selectedVideo && (
-              <div className="">
+              <div className="bg-accent rounded-xl p-1">
                 <div className="border-b border-gray-200 m-5">
                   <h1 className="text-gray-600">Description:</h1>
                   <h1 className="text-gray-600 m-2">
@@ -380,7 +391,7 @@ function CoursePurchasedCourseDetailsDetails() {
               </div>
             )}
             {/* Tabs */}
-            <div className="bg-white rounded-xl shadow-sm">
+            <div className="bg-accent rounded-xl shadow-sm">
               <div className="border-b border-gray-200">
                 <nav className="flex -mb-px">
                   {["overview", "reviews"].map((tab) => (
@@ -465,61 +476,10 @@ function CoursePurchasedCourseDetailsDetails() {
                 )}
               </div>
             </div>
-
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="grid md:grid-cols-2 gap-6"
-            >
-              {/* Benefits Section */}
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-xl font-semibold mb-4 text-purple-600">
-                  What you'll learn
-                </h2>
-                <motion.ul className="space-y-3">
-                  {benefits_prerequisites?.benefits.map((benefit, index) => (
-                    <motion.li
-                      key={index}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-center gap-3 text-gray-700"
-                    >
-                      <IoCheckmarkDoneOutline className="text-green-500 flex-shrink-0" />
-                      <span>{benefit}</span>
-                    </motion.li>
-                  ))}
-                </motion.ul>
-              </div>
-
-              {/* Prerequisites Section */}
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-xl font-semibold mb-4 text-purple-600">
-                  Prerequisites
-                </h2>
-                <motion.ul className="space-y-3">
-                  {benefits_prerequisites?.prerequisites.map(
-                    (prerequisite, index) => (
-                      <motion.li
-                        key={index}
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="flex items-center gap-3 text-gray-700"
-                      >
-                        <IoCheckmarkDoneOutline className="text-green-500 flex-shrink-0" />
-                        <span>{prerequisite}</span>
-                      </motion.li>
-                    )
-                  )}
-                </motion.ul>
-              </div>
-            </motion.div>
           </div>
 
           {/* Modules Sidebar */}
-          <div className="w-full">
+          <div className="w-full bg-accent rounded-2xl shadow-lg sticky top-16 h-full">
             <Modules
               modules={modules}
               onVideoSelect={setSelectedVideo}
@@ -529,6 +489,37 @@ function CoursePurchasedCourseDetailsDetails() {
               onSelectDescription={setSelectedVideoDescription}
               videoIndex ={selectedVideoIndex}
             />
+
+
+                                    {tutorData &&
+                                    (
+                                      <div className="m-5 bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                                        <div className="flex items-center gap-2">
+                                          <div className="mx-2">
+                                              {tutorData.profilePicture ? (
+                                              <img src={tutorData.profilePicture} alt="" className="h-10 w-10 rounded-full" />
+            
+                                              ): <FaUserCircle size={40} />}
+                                          </div>
+                                          <button className=" mx-1 text-lg font-semibold hover:text-[#7C24F0]" onClick={()=> {navigate(ROUTES.user.tutorDetails(tutorData._id))}}>
+                                              { `${tutorData.firstName} ${tutorData.lastName}` }
+                                          </button>
+            
+                                        </div>
+            
+            
+                                        <div className="flex m-2">
+                                          <h1 className="m-1 font-semibold">Expertise:</h1>
+                                          {Array.isArray(tutorData.expertise) && tutorData.expertise.length > 0 ? (
+                                            tutorData.expertise.map((expert: string) => {
+                                              return <h1 key={expert} className=" m-1">{expert || ""}</h1>;
+                                            })
+                                          ) : (
+                                            <h1>No expertise listed</h1> // Display a fallback message when no expertise is available
+                                          )}
+                                        </div>
+                                      </div>
+                                    )}
           </div>
         </motion.div>
       </div>

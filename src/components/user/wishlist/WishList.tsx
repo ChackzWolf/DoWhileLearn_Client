@@ -37,7 +37,7 @@ export interface Course {
     description: string;
   }
 
-function Cart() {
+function WishList() {
     const [courses,setCourses] = useState<Course[]>([])
     const [totalPrice, setTotalPrice] = useState(0)
     const navigate = useNavigate()
@@ -87,6 +87,8 @@ function Cart() {
             userId,
           });
 
+          const updatedCourse = courses.filter((course) => course._id !== id);
+          setCourses(updatedCourse);
           console.log(response, "addto cart response");
         } else {
           console.log("else");
@@ -95,27 +97,26 @@ function Cart() {
       };
     console.log(courses)
   return (
-<div>
+<div className=' min-h-screen h-full'>
   {courses.length > 0 ? (
-    <div className='flex flex-col items-center'>
-        <h1 className='flex  items-center gap-2 text-4xl font-bold m-8'><FaOpencart  className='text-[#7C24F0] '/> Cart</h1>
+    <div className='flex flex-col items-center '>
+        <h1 className='flex  items-center gap-2 text-4xl text-accent font-bold m-8'><FaOpencart  className='text-accent'/> Wishlist</h1>
         <div className='flex flex-col justify-center items-center w-2/3'>
         
             {courses.map((course) => (
                 <div className='flex h-16 m-12 '>
                     <div className='h-16 flex items-center'>
-                        <div className='h-full'>
-                            <img src={course.thumbnail} alt="" className='w-full h-full object-contain'/>
-                        </div>
-                        <div className='mx-4'>
-                            <h1 className='font-bold'>{course.courseTitle}</h1>
-                            <h1>{course.courseDescription}</h1>
-                            <h1 className='text-xs font-bold'>Rs. {course.discountPrice}</h1>
+                    <div className='rounded-lg w-1/5 overflow-hidden'>
+                        <img src={course.thumbnail} alt="" className='w-full h-full object-cover'/>
+                    </div>
+                        <div className='mx-4 w-4/5'>
+                            <h1 className='font-bold text-lg text-accent'>{course.courseTitle}</h1>
+                            <h1 className=' text-s text-accent'>{course.courseDescription}</h1>
                         </div>
                     </div>
-                    <div className=''>
-                        <button className='bg-[#7C24F0] hover:bg-[#6211cd] rounded-lg px-3 py-1 font-semibold text-white transition-all mx-5' onClick={()=>handleCourseDetails(course._id)}>Details</button>
-                        <button className='font-semibold text-[#7C24F0] hover:text-[#6211cd] transition-all' onClick={()=>removeCart(course._id)}>Remove</button>
+                    <div className='flex flex-col gap-2'>
+                        <button className='bg-accent hover:bg-accent hover:scale-105 rounded-lg px-3 py-1 font-semibold text-primary transition-all mx-5' onClick={()=>handleCourseDetails(course._id)}>Details</button>
+                        <button className='font-semibold text-accent hover:scale-105  transition-all mx-5  py-1 px-3' onClick={()=>removeCart(course._id)}>Remove</button>
                     </div>
 
                 </div>
@@ -132,7 +133,7 @@ function Cart() {
 
           </div> */}
 
-          <div className="h-full px-5">
+          {/* <div className="h-full px-5">
   
               <div className="bottom-0">
                 <h1 className=" rounded-lg font-bold text-3xl">
@@ -142,21 +143,16 @@ function Cart() {
         
 
             <div className=" flex w-full gap-3">
-            <button
-  type="button"
-  className={`right-0 bg-[#7C24F0] px-4 py-1 text-xl m-3 rounded-lg text-white font-semibold hover:bg-[#6211cd] transition-all`}
-> Buy all
-</button>
 
             </div>
-          </div>
+          </div> */}
         </div>
         </div>
     </div>
   ):
     (
-      <div className='flex justify-center items-center h-full m-56'>
-          <h1 className='text-3xl font-bold text-center'>Your cart is empty</h1>
+      <div className='flex justify-center items-center h-full m-28'>
+          <h1 className='text-5xl text-accent font-bold text-center'>Your wishlist is empty</h1>
       </div>
       
     )
@@ -166,4 +162,4 @@ function Cart() {
   )
 }
 
-export default Cart
+export default WishList

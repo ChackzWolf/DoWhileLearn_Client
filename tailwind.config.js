@@ -1,10 +1,10 @@
-/** @type {import('tailwindcss').Config} */
+import tailwindcssAnimate from "tailwindcss-animate";
+
 export default {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}"
   ],
   theme: {
-
     extend: {
       keyframes: {
         'scale-up': {
@@ -13,22 +13,25 @@ export default {
           '100%': { transform: 'scale(1)', opacity: '1' }
         }
       },
-      "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
       animation: {
         'scale-up': 'scale-up 0.5s',
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-      }
+      },
+      colors: {
+        primary: '#7C24F0', // New vibrant purple
+        accent: '#f4f2f5', // Retaining the golden yellow for strong contrast
+        softPeach: '#E0BFFF', // Soft lavender-peach for balance
+        lavender: '#D1B3FF', // Adjusted lighter lavender for gradients
+        'purple-to-lavender-start': '#7C24F0', // Matches new primary
+        'purple-to-lavender-end': '#D1B3FF', // Adjusted lavender
+        'purple-to-peach-start': '#7C24F0', // Matches new primary
+        'purple-to-peach-end': '#E0BFFF', // Soft peach-lavender
+      },
     },
   },
-  plugins: [require("tailwindcss-animate"),
+  plugins: [
+    tailwindcssAnimate,
     function({ addBase, theme }) {
       addBase({
         '::-webkit-scrollbar': {
@@ -57,7 +60,8 @@ export default {
           'text-overflow': 'ellipsis',
         },
       });
-    },
-  
+    }
   ],
 }
+
+

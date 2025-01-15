@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
 import  Picker ,{EmojiClickData, EmojiStyle } from 'emoji-picker-react';
 import { BsEmojiSunglasses } from 'react-icons/bs';
-
+import { motion } from 'framer-motion';
 // Course interface
 interface ChatRoom {
   courseId: string;
@@ -44,6 +44,29 @@ const CourseListAndChat: React.FC = () => {
   const [viewChat, setViewChat] = useState<boolean>(false);
   const [chatRoomsList, setChatRoomsList] = useState<ChatRoom[]>([])
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+
+  const [isVisible, setIsVisible] = useState(false);
+    
+  // Show the button when the user scrolls down 100px
+  const handleScroll = () => {
+    if (window.scrollY > 100) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  // Scroll smoothly to the top when the button is clicked
+
+
+  // Add scroll event listener when component is mounted
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    
+    // Cleanup the event listener when the component unmounts
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -143,11 +166,14 @@ const CourseListAndChat: React.FC = () => {
   };
 console.log(viewChat, 'view chat')
   return (
-    <div className="fixed inset-0 z-50 pointer-events-none">
+    <div className="fixed inset-0 z-50 pointer-events-none ">
     {isLogin && 
-          <button className='fixed bg-purple-600 right-11 bottom-9 text-3xl text-white rounded-full p-3 pointer-events-auto opacity-100 scale-100' onClick={toggleChat}>
+          <motion.button
+          initial={{ y: -10 }}  // Start position
+
+           className={`fixed bg-[#7C24F0]  right-10 transition-all ${isVisible ? 'bottom-28': 'bottom-9'} shadow-xl text-2xl text-white rounded-full p-3 pointer-events-auto opacity-100 scale-100`} onClick={toggleChat}>
           <HiChatBubbleLeftRight />
-          </button>
+          </motion.button>
     
     }
 

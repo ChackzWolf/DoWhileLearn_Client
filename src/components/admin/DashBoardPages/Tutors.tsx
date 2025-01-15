@@ -100,9 +100,9 @@ function Tutors() {
       )
     }
   ]
-
+  
   console.log(tutors)
-  return isLoading ? <ListShadowLoader/> : <Table columns={columns} data= {tutors} title={"Tutor list"}/>
+  return isLoading ? <ListShadowLoader/> : <Table columns={columns} data={tutors} title={"Tutor list"}/>
 }
 
 export default Tutors

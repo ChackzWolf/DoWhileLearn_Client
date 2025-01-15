@@ -30,6 +30,8 @@ export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; r
           removeCookie('userAccessToken');
           removeCookie('userRefreshToken');
           removeCookie('userId');
+
+          console.log('user is logged out')
           store.dispatch(setUserLogout())
           window.location.href = ROUTES.user.signin;
           return;

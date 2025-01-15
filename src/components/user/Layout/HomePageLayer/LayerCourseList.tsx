@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import CourseBadge from "../CourseBadge";
 import CourseBadgeSkeleton from "../../Course/Skeletons/CourseBadgeSkeleton"; // Import the skeleton loader
-import axios from "axios";
-import { courseEndpoint } from "../../../../constraints/courseEndpoints";
+import { motion } from "framer-motion";
 
 export interface ResponseFetchCourseList {
   courses: Course[];
@@ -65,7 +64,7 @@ let itemsToShow
   console.log(itemsToShow)
   return (
 <div className={`place-self-center max-w-screen-2xl my-16`}>
-  <h1 className="text-2xl font-bold mx-12 m-6">
+  <h1 className="text-4xl font-bold m-8 text-accent text-center">
     {title}
   </h1>
   <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${itemsToShow} lg:grid-cols-5 gap-5 px-3 md:px-10 lg:px-max-40 justify-center items-center">
@@ -80,7 +79,13 @@ let itemsToShow
         .slice() // Copy the array to avoid mutating the original
         .reverse() // Reverse the array
         .slice(0, itemsToShow) // Take the first 5 items from the reversed array
-        .map((course) => (
+        .map((course,index) => (
+          <motion.div
+          key={course._id}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: index * 0.15 }}>
+
           <CourseBadge
             key={course.courseTitle + course.coursePrice} // Use a unique key
             title={course.courseTitle}
@@ -89,9 +94,10 @@ let itemsToShow
             price={course.coursePrice}
             discountPrice={course.discountPrice}
             imageSrc={course.thumbnail}
-            color={""}
+            color={"bg-white/40 backdrop-blur-md"}
             _id={course._id}    
           />
+          </motion.div>
         ))}
         </div>
 </div>
