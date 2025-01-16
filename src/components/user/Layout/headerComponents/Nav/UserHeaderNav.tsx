@@ -10,7 +10,7 @@ const HeaderNav = () => {
                     key={link.path}
                     to={link.path}
                     className={({ isActive }) =>
-                        isActive ? "text-white" : "hover:text-gray-50 transition-all"
+                        isActive ? "text-accent underline" : "hover:underline hover:scale-105 text-accent transition-all"
                     }
                 >
                     {link.name}

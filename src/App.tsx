@@ -17,8 +17,7 @@ import AdminAuthRoutes from './components/routes/authRouter/AdminRoutes';
 function App() {
 
   return (
-    <>
-      <div className='App'>
+      <div className='App max-w-screen'>
         <Router>
           <Routes>
             <Route path = '/*' element = {<CommonRoutes/>}/>
@@ -62,7 +61,6 @@ function App() {
         </Router>
         <ToastContainer />
       </div>
-    </>
   )
 }
 

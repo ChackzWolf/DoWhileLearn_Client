@@ -7,7 +7,7 @@ import {motion} from 'framer-motion'
 
 export function Features() {
     return (
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-between overflow-hidden">
         
             <div className="w-full flex justify-between items-center">
             <motion.div

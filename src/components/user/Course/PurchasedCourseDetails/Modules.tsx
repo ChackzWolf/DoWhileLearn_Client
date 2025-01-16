@@ -26,8 +26,9 @@ const Modules: React.FC<{
   totalLesson : (num:number)=>void;
   setVideoIndex : (num:number)=>void;
   onSelectDescription: (description:string) => void ;
+  onQuizSelect:(questions:any)=>void;
   onCodeSelect:(questions:any)=>void;
-}> = ({ modules, onVideoSelect, onSelectDescription, onCodeSelect,setVideoIndex, videoIndex, totalLesson }) => {
+}> = ({ modules, onVideoSelect, onSelectDescription, onCodeSelect,setVideoIndex,onQuizSelect, videoIndex, totalLesson }) => {
   const [openModuleIndex, setOpenModuleIndex] = useState<number | null>(0);
   const [openLessonIndex, setOpenLessonIndex] = useState<{ [key: number]: number | null }>({});
 
@@ -89,8 +90,12 @@ const getLessonVideo = (
 };
 
   const openCode = (question:any)=> {
-    console.log('trig trig trig')
+    console.log('trig trig trig', question)
       onCodeSelect(question);
+  }
+  const openQuiz = (question:any)=>{
+    console.log('trig quiz',question)
+    onQuizSelect(question)
   }
   return (
     <motion.div
@@ -100,7 +105,7 @@ const getLessonVideo = (
       className="bg-accent rounded-2xl p-4 top-16"
     >
       <h2 className="text-2xl font-bold mb-6 text-primary">Course Content</h2>
-      <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+      <div className="space-y-4  overflow-y-auto">
         {modules?.Modules.map((module, moduleIndex) => (
           <motion.div
             key={moduleIndex}
@@ -166,12 +171,13 @@ const getLessonVideo = (
                      >
                       
                       {question.type === 'QUIZ'? (
-                            <>
+                            <div className="flex gap-3"
+                            onClick={()=>openQuiz(question)}>
                             <MdOutlineQuiz  className="text-purple-600 text-xl flex-shrink-0"/>
                             <span className="text-left text-gray-700 text-sm">
                                 Quiz Challenge
                             </span>
-                            </>
+                            </div>
                             )
                             :(
                             <div className="flex gap-3"

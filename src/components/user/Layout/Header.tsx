@@ -23,10 +23,10 @@ const Header = () => {
 
 
 
-
+                {/* bg-white rounded-full z-[10] bg-white/40 backdrop-blur-md */}
 
                 <div 
-                    className=" relative  justify-end flex px-5 bg-white rounded-full z-[10] bg-white/40 backdrop-blur-md mx-8"
+                    className=" relative  justify-end flex px-5  mx-8"
                 >
                     <HeaderNav />
                     <div className="flex gap-5 items-center">

@@ -24,6 +24,7 @@ import ChatComponent from "../../Chat/ChatCoursesRoute";
 import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
 import VideoPlayer from "../../../common/VideoPlayer";
 import { ROUTES } from "../../../../routes/Routes";
+import QuizChallenge from "./Questions/Quize";
 
 interface Module {
   name: string;
@@ -48,83 +49,19 @@ const initialModulesState: CreateCourseState = {
   Modules: [],
 };
 
-const questionData = {
-  id: 1,
-  type: "CODING" as const,
-  question: `
-      <h2>Two Sum</h2>
-      <p>Given an array of integers <code>nums</code> and an integer <code>target</code>, 
-      return indices of the two numbers in the array such that they add up to <code>target</code>.</p>
-      
-      <p>You may assume that each input would have exactly one solution, 
-      and you may not use the same element twice.</p>
 
-      <h3>Example:</h3>
-      <pre>
-Input: nums = [2,7,11,15], target = 9
-Output: [0,1]
-Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
-      </pre>
-    `,
-  startingCode: `function twoSum(nums, target) {
-    // Write your code here
-    
-}`,
-  noOfParameters: 2,
-  parameters: [
-    { value: "nums", dataType: "number[]" },
-    { value: "target", dataType: "number" },
-  ],
-  expectedOutput: {
-    value: "[0,1]",
-    dataType: "number[]",
-  },
-  testCases: [
-    {
-      parameters: [
-        { value: "[2,7,11,15]", dataType: "number[]" },
-        { value: "9", dataType: "number" },
-      ],
-      expectedValue: { value: "[0,1]", dataType: "number[]" },
-    },
-    {
-      parameters: [
-        { value: "[3,2,4]", dataType: "number[]" },
-        { value: "6", dataType: "number" },
-      ],
-      expectedValue: { value: "[1,2]", dataType: "number[]" },
-    },
-    {
-      parameters: [
-        { value: "[3,3]", dataType: "number[]" },
-        { value: "6", dataType: "number" },
-      ],
-      expectedValue: { value: "[0,1]", dataType: "number[]" },
-    },
-  ],
-  score: 50,
-  hints: [
-    "Try using a hash map to store the numbers you've seen",
-    "For each number, check if its complement (target - num) exists in the hash map",
-    "Remember to return the indices, not the numbers themselves",
-  ],
-  solution: `function twoSum(nums, target) {
-    const map = new Map();
-    
-    for (let i = 0; i < nums.length; i++) {
-        const complement = target - nums[i];
-        
-        if (map.has(complement)) {
-            return [map.get(complement), i];
-        }
-        
-        map.set(nums[i], i);
-    }
-    
-    return []; // No solution found
-}`,
-  difficulty: "Easy" as const,
-};
+
+
+
+
+
+
+
+
+
+
+
+
 interface TutorData {
   firstName:string;
   lastName:string;
@@ -132,13 +69,20 @@ interface TutorData {
   profilePicture:string;
   _id:string;
 }
+
+
+interface QuizeData {
+  question:string,
+  options:string[],
+  correctAnswer :number;
+}
 function CoursePurchasedCourseDetailsDetails() {
   
   const [tutorData, setTutorData ] = useState<TutorData | null>(null);
   const [reviews, setReviews] = useState([]);
   const navigate = useNavigate()
   const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
-
+  const [quizData, setQuizData] = useState<QuizeData | null>(null)
   // Function to render stars based on rating
   const renderStars = (rating: any) => {
     const stars = [];
@@ -174,11 +118,14 @@ function CoursePurchasedCourseDetailsDetails() {
     useState<CreateCourseState>(initialModulesState);
   // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
   const [isVisibleCode, setIsVisibleCode] = useState(false);
-
+const [quizVisible, setQuizVisible]  = useState(false)
   const toggleCodeVisibility = () => {
     setIsVisibleCode(!isVisibleCode);
-    setCodeQuestion(null);
+    // setCodeQuestion(null);
   };
+  const toggleQuestionVisibility = () => {
+    setQuizVisible(!quizVisible)
+  }
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -188,14 +135,9 @@ function CoursePurchasedCourseDetailsDetails() {
           setIsLoading(true);
           const userId = getCookie("userId");
           console.log();
-          const response = await userAxios.get(
-            userEndpoint.fetchCourseDetails,
-            {
-              params: { id, userId },
-            }
-          );
+          const response = await userAxios.get(userEndpoint.fetchCourseDetails,{  params: { id, userId }} );
           setTutorId(response.data.courseData.tutorId);
-
+ 
           console.log(response.data.courseData, "course ");
 
           const theCourseData: ICreateCourse1 = {
@@ -277,6 +219,8 @@ function CoursePurchasedCourseDetailsDetails() {
     };
     trig();
   }, [codeQuestion]);
+  console.log(modules, ' these are modules again and again')
+  console.log(codeQuestion, 'this is code question ');
 
   return (
     <motion.div
@@ -303,7 +247,22 @@ function CoursePurchasedCourseDetailsDetails() {
           Close
         </button>
 
-        <CodingQuestionInterface {...(codeQuestion || questionData)} />
+        {codeQuestion&& <CodingQuestionInterface {...(codeQuestion)} />}
+      </div>
+
+      <div
+        className={`fixed top-0 w-full h-full bg-accent shadow-lg transition-transform transform ${
+          isVisibleCode ? "translate-x-0" : "-translate-x-full"
+        } z-50`}
+      >
+        <button
+          onClick={toggleQuestionVisibility}
+          className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
+        >
+          Close
+        </button>
+
+        {quizData && <QuizChallenge quizData={quizData}/>}
       </div>
       <div className="max-w-7xl mx-auto py-8">
         <motion.div
@@ -478,7 +437,7 @@ function CoursePurchasedCourseDetailsDetails() {
             </div>
           </div>
 
-          {/* Modules Sidebar */}
+          {/* Modules Sidebar */} 
           <div className="w-full bg-accent rounded-2xl shadow-lg sticky top-16 h-full">
             <Modules
               modules={modules}
@@ -486,6 +445,7 @@ function CoursePurchasedCourseDetailsDetails() {
               totalLesson = {setSelectedLessonLength}
               setVideoIndex = {setSelectedVideoIndex}
               onCodeSelect={setCodeQuestion}
+              onQuizSelect = {setQuizData}
               onSelectDescription={setSelectedVideoDescription}
               videoIndex ={selectedVideoIndex}
             />

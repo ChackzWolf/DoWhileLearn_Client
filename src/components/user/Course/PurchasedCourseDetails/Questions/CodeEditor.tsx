@@ -8,24 +8,13 @@ import {
   Code2, 
   TestTube,
   Check,
-  X,
-  ChevronRight
+  X
 } from 'lucide-react';
 
-// Types remain the same as before
-type CodingQuestion = {
-  id: number;
-  type: "CODING";
-  question: string;
-  startingCode: string;
-  noOfParameters: number;
-  parameters: { value: string; dataType: string }[];
-  expectedOutput: TestOutput;
-  testCases: TestCase[];
-  score: number;
-  hints: string[];
-  solution: string;
-  difficulty: 'Easy' | 'Medium' | 'Hard';
+// Updated types to match your data structure
+type TestOutput = {
+  value: string;
+  dataType: string;
 };
 
 type TestCase = {
@@ -33,9 +22,17 @@ type TestCase = {
   expectedValue: TestOutput;
 };
 
-type TestOutput = {
-  value: string;
-  dataType: string;
+type CodingQuestion = {
+  id: string;
+  type: "CODING";
+  question: string;
+  startingCode: string;
+  noOfParameters: number;
+  parameters: { value: string; dataType: string }[];
+  expectedOutput: TestOutput;
+  testCases: TestCase[];
+  solution: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
 };
 
 const DifficultyBadge = ({ difficulty }: { difficulty: 'Easy' | 'Medium' | 'Hard' }) => {
@@ -101,16 +98,13 @@ const CodingQuestionInterface = ({
   testCases,
   expectedOutput,
   parameters,
-  score,
-  hints,
   solution,
   difficulty
 }: CodingQuestion) => {
-  const [code, setCode] = useState(startingCode);
+  const [code, setCode] = useState(startingCode.replace(/\\n/g, '\n'));
   const [output, setOutput] = useState<string>('');
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [error, setError] = useState<string>('');
-  const [showHints, setShowHints] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [activeTab, setActiveTab] = useState('question');
   const [testResults, setTestResults] = useState<{ passed: boolean; input: string; expected: string; actual: string }[]>([]);
@@ -120,7 +114,7 @@ const CodingQuestionInterface = ({
     const container = document.getElementById('monaco-container');
     if (container) {
       const editor = monaco.editor.create(container, {
-        value: startingCode,
+        value: startingCode.replace(/\\n/g, '\n'),
         language: 'javascript',
         theme: 'vs-dark',
         minimap: { enabled: false },
@@ -141,7 +135,18 @@ const CodingQuestionInterface = ({
       setEditorInstance(editor);
       return () => editor.dispose();
     }
-  }, []);
+  }, [startingCode]);
+
+  useEffect(() => {
+    const initialTestResults = testCases.map(test => ({
+      passed: false,
+      input: test.parameters.map(p => p.value).join(', '),
+      expected: test.expectedValue.value,
+      actual: 'Not run yet'
+    }));
+    setTestResults(initialTestResults);
+  }, [testCases]);
+  
 
   const runCode = async () => {
     try {
@@ -149,29 +154,34 @@ const CodingQuestionInterface = ({
       setOutput('');
       setTestResults([]);
 
+      // First, verify the code compiles by creating a function
+      const userFunction = new Function(...parameters.map(p => p.value), code);
+
       const results = testCases.map(test => {
         try {
-          const userFunction = new Function(...parameters.map(p => p.value), code);
           const result = userFunction(...test.parameters.map(p => {
+            // Parse the input values based on their data type
             switch(p.dataType.toLowerCase()) {
               case 'number': return Number(p.value);
               case 'boolean': return p.value === 'true';
+              case 'string': return p.value;
               default: return p.value;
             }
           }));
 
+          const resultString = result?.toString() || '';
           return {
-            passed: result.toString() === test.expectedValue.value,
+            passed: resultString === test.expectedValue.value,
             input: test.parameters.map(p => p.value).join(', '),
             expected: test.expectedValue.value,
-            actual: result.toString()
+            actual: resultString
           };
-        } catch (err:any) {
+        } catch (err: any) {
           return {
             passed: false,
             input: test.parameters.map(p => p.value).join(', '),
             expected: test.expectedValue.value,
-            actual: 'Error: ' + err?.message
+            actual: `Error: ${err?.message || 'Unknown error'}`
           };
         }
       });
@@ -180,8 +190,8 @@ const CodingQuestionInterface = ({
       const allPassed = results.every(r => r.passed);
       setIsCorrect(allPassed);
       setOutput(allPassed ? 'All test cases passed!' : 'Some test cases failed');
-    } catch (err:any) {
-      setError(err?.message ||'Unidentified error.');
+    } catch (err: any) {
+      setError(`Compilation Error: ${err?.message || 'Unknown error'}`);
       setIsCorrect(false);
     }
   };
@@ -194,10 +204,6 @@ const CodingQuestionInterface = ({
           <h1 className="text-2xl font-bold text-gray-900">Coding Challenge</h1>
           <div className="flex items-center gap-4">
             <DifficultyBadge difficulty={difficulty} />
-            <div className="flex items-center gap-2 text-amber-600">
-              <Trophy className="h-5 w-5" />
-              <span className="font-medium">{score} points</span>
-            </div>
           </div>
         </div>
       </div>
@@ -214,13 +220,6 @@ const CodingQuestionInterface = ({
             >
               <Book className="h-4 w-4" />
               Question
-            </TabButton>
-            <TabButton 
-              active={activeTab === 'hints'} 
-              onClick={() => setActiveTab('hints')}
-            >
-              <LightbulbIcon className="h-4 w-4" />
-              Hints
             </TabButton>
             <TabButton 
               active={activeTab === 'solution'} 
@@ -261,25 +260,12 @@ const CodingQuestionInterface = ({
               </div>
             )}
 
-            {activeTab === 'hints' && (
-              <div className="space-y-3">
-                {hints.map((hint, index) => (
-                  <Alert key={index} variant="info">
-                    <div className="flex gap-2">
-                      <LightbulbIcon className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                      <span>{hint}</span>
-                    </div>
-                  </Alert>
-                ))}
-              </div>
-            )}
-
             {activeTab === 'solution' && (
               <div>
                 {showSolution ? (
                   <div className="space-y-4">
                     <pre className="p-4 bg-gray-50 rounded-lg overflow-x-auto">
-                      <code>{solution}</code>
+                      <code>{solution.replace(/\\n/g, '\n')}</code>
                     </pre>
                   </div>
                 ) : (
@@ -292,33 +278,36 @@ const CodingQuestionInterface = ({
                 )}
               </div>
             )}
-
-            {activeTab === 'tests' && (
-              <div className="space-y-3">
-                {testResults.map((result, index) => (
-                  <Alert
-                    key={index}
-                    variant={result.passed ? 'success' : 'error'}
-                    title={`Test Case ${index + 1}`}
-                  >
-                    <div className="space-y-1">
-                      <div>Input: {result.input}</div>
-                      <div>Expected: {result.expected}</div>
-                      <div>Actual: {result.actual}</div>
-                    </div>
-                  </Alert>
-                ))}
-              </div>
-            )}
+      {activeTab === 'tests' && (
+        <div className="space-y-3">
+          {testResults.length > 0 ? (
+            testResults.map((result, index) => (
+              <Alert
+                key={index}
+                variant={result.passed ? 'success' : 'error'}
+                title={`Test Case ${index + 1}`}
+              >
+                <div className="space-y-1">
+                  <div><strong>Input:</strong> {result.input}</div>
+                  <div><strong>Expected:</strong> {result.expected}</div>
+                  <div><strong>Actual:</strong> {result.actual}</div>
+                </div>
+              </Alert>
+            ))
+          ) : (
+            <div className="text-gray-600">Run your code to see test results</div>
+          )}
+        </div>
+      )}
           </div>
           {(output || error) && (
-                <Alert
-                  variant={isCorrect ? 'success' : 'error'}
-                  title={isCorrect ? 'Success!' : error ? 'Error' : 'Test Cases Failed'}
-                >
-                  {error || output}
-                </Alert>
-              )}
+            <Alert
+              variant={isCorrect ? 'success' : 'error'}
+              title={isCorrect ? 'Success!' : error ? 'Error' : 'Test Cases Failed'}
+            >
+              {error || output}
+            </Alert>
+          )}
         </div>
 
         {/* Right Panel - Code Editor */}
@@ -339,8 +328,6 @@ const CodingQuestionInterface = ({
                 <PlayCircle className="h-4 w-4" />
                 Run Code
               </button>
-
-
             </div>
           </div>
         </div>
