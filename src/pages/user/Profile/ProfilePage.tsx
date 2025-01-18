@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import UserProfile from '../../../components/user/UserProfile'
 import userAxios from '../../../utils/axios/userAxios.config'
 import { userEndpoint } from '../../../constraints/userEndpoints'

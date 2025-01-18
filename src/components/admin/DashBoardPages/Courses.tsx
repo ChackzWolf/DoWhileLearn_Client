@@ -45,9 +45,6 @@ function Course() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [courses, setCourses] = useState<Course[] >([]);
-  const itemsPerPage = 12;
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(courses.length / itemsPerPage);
 
   useEffect(() => {
       const fetchCourses = async () => {
@@ -71,6 +68,7 @@ function Course() {
   
       fetchCourses();
     }, []);
+    
     const columns = [
     {
       header: '',
@@ -106,14 +104,9 @@ function Course() {
       )
     }
   ]
-
-
-
-
-
-    const handleOnClick = (id: string) => {
-      navigate(ROUTES.tutor.courseDetails(id));
-    };
+  const handleOnClick = (id: string) => {
+    navigate(ROUTES.tutor.courseDetails(id));
+  };
 
   return isLoading ? <ListShadowLoader/> : <Table columns={columns} data = {courses} title={'Course list'}/> 
 }

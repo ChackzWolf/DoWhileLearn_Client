@@ -58,7 +58,7 @@ const QuizEditor: React.FC<{
   const [noOfQuizes, setNumberOfQuizes] = useState(0);
   const [noOfCodes, setNoOfCodes] = useState(0)
   const formik = useFormikContext();
-  const { setFieldValue, validateField } = formik;
+  const { setFieldValue } = formik;
 
  
   const addQuestion = (e: React.MouseEvent, type: string) => {

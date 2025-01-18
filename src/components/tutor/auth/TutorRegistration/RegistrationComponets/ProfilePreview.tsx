@@ -1,6 +1,6 @@
 import { useFormik } from 'formik';
 
-const ProfilePictureUpload = ({ setFieldValue }: any) => {
+const ProfilePictureUpload = () => {
   const formik = useFormik({
     initialValues: {
       profilePicture: "",

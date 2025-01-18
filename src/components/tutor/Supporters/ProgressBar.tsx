@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 
 
 const ProgressBar = () => {
-  const dispatch = useDispatch()
   const totalSteps = 4;
   // const current = useSelector((state: RootState) => state.createCourseData.step) as number
   const current = useSelector((state: RootState) => {

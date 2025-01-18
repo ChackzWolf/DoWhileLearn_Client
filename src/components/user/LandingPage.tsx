@@ -134,7 +134,6 @@ const LandingPage = () => {
               transition={{ delay: index * 0.2 }}
               whileHover={{ scale: 1.05 }}
               className="bg-white/10 backdrop-blur-lg rounded-xl shadow-lg p-6 text-white cursor-pointer"
-              onHover={() => setActiveFeature(index)}
             >
               <div className="flex flex-col items-center text-center">
                 <motion.div 

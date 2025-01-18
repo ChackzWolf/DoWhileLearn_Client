@@ -55,7 +55,7 @@ tutorAxios.interceptors.request.use(
                 console.log(2)
                 // store.dispatch(setTutorLogout())
                 // Optionally, redirect to login
-                window.location.href = '/login/tutor';
+                window.location.href = '';
                 return Promise.reject(refreshError);
             }
         }
@@ -83,7 +83,7 @@ tutorAxios.interceptors.response.use(
             removeCookie('tutorId');
             console.log(1)
             // Redirect to login or blocked user page
-            window.location.href = '/login/tutor?message=blocked'; // Change this to your actual login or blocked route
+            window.location.href = '?message=blocked'; // Change this to your actual login or blocked route
 
             return Promise.reject(error);
         }

@@ -1,4 +1,3 @@
-import SideNav from "../../../../components/tutor/Layout/SideNav";
 import CreateCourse from "../../../../components/tutor/DashBoardPages/CreateCourse/CreateCourse";
 import CreateCourse2 from "../../../../components/tutor/DashBoardPages/CreateCourse/CreateCourse2";
 import AddLesson from "../../../../components/tutor/DashBoardPages/CreateCourse/AddLesson";
@@ -7,8 +6,8 @@ import OverView from "../../../../components/tutor/DashBoardPages/CreateCourse/O
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { setCreateCourseEmpty, setDemoUrl, updateSpecificLessonVideo } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
+import { useEffect } from "react";
+import { setDemoUrl, updateSpecificLessonVideo } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import SocketService from "../../../../services/socketService";
 
 import { removeVideoUpload, updateUploadProgress } from "../../../../redux/uploadStatSlice";

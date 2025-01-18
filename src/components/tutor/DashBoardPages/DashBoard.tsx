@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Users, BookOpen, Star } from 'lucide-react';
 import { DashboardCard } from './DashBoard/DashboardCard';
 import tutorAxios from '../../../utils/axios/tutorAxios.config';
@@ -9,20 +8,15 @@ import { PiCurrencyInrBold } from "react-icons/pi";
 import { calculateAverageRating } from '../../../utils/common.utils';
 import { courseEndpoint } from '../../../constraints/courseEndpoints';
 import DashBoardLoader from '../../common/icons/DashboardLoader';
+import OrdersChart from './DashBoard/OrderGraph';
+import TopCoursesChart from './DashBoard/CourseGraph';
 
 
 
 
-
-const courseCategories = [
-  { name: 'Web Development', count: 15 },
-  { name: 'Mobile Dev', count: 12 },
-  { name: 'UI/UX Design', count: 8 },
-  { name: 'Data Science', count: 10 },
-  { name: 'DevOps', count: 5 }
-];
 
 const TutorDashboard = () => {
+
   const [isLoading, setIsLoading] = useState(false)
   const [orders, setOrders] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
@@ -69,6 +63,9 @@ const TutorDashboard = () => {
    
   },[])
 
+
+  console.log(orders)
+  console.log(courses)
   return isLoading ? < DashBoardLoader/> : (
     <div className="min-h-screen w-10/12 bg-gray-50 p-8">
       {/* Header */}
@@ -105,47 +102,9 @@ const TutorDashboard = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Course Categories Distribution */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">Course Categories</h3>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={courseCategories} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type="number" />
-                  <YAxis dataKey="name" type="category" />
-                  <Tooltip />
-                  <Bar dataKey="count" fill="#7C24F0" radius={[0, 4, 4, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-
-        <div className="bg-white p-6 rounded-xl shadow-lg">
-          <h3 className="text-xl font-semibold mb-4">Top Performing Courses</h3>
-          <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={courses}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="courseTitle" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar 
-                  dataKey="students"  //should set number of students
-                  fill="#7C24F0"
-                  animationDuration={1500}
-                />
-                <Bar 
-                  dataKey="averageRating" 
-                  fill="#DDB3FF"
-                  animationDuration={1500}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 h-[420px]">
+        <OrdersChart orders={orders}/>
+        <TopCoursesChart courses={courses}/>
       </div>
 
       {/* Recent Activity */}

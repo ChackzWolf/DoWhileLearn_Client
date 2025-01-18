@@ -1,7 +1,6 @@
 import { AppDispatch, RootState } from "../redux/store/store"; // Adjust the import paths to match your project structure
 import { setCreateCourse } from "../redux/tutorSlice/CourseSlice/createCourseData"; // Update the path if necessary
 import { CreateCourseState, ICreateCourse1 } from "../components/Interfaces/CourseInterface/ICreateCourse";
-import { removeVideoUpload } from "../redux/uploadStatSlice";
 
 export const updateDemoURL = (demoURL: string,id:string) => {
   console.log('trigered here ')

@@ -16,8 +16,7 @@ import { getCookie } from "../../../../utils/cookieManager";
 import { Module } from "module";
 import userAxios from "../../../../utils/axios/userAxios.config";
 import { userEndpoint } from "../../../../constraints/userEndpoints";
-import { FaStar, FaUserCircle } from "react-icons/fa";
-import { BsStarHalf } from "react-icons/bs";
+import { FaUserCircle } from "react-icons/fa";
 import StudentReviews from "../StudentReview";
 import CodingQuestionInterface from "./Questions/CodeEditor";
 import ChatComponent from "../../Chat/ChatCoursesRoute";
@@ -79,31 +78,11 @@ interface QuizeData {
 function CoursePurchasedCourseDetailsDetails() {
   
   const [tutorData, setTutorData ] = useState<TutorData | null>(null);
-  const [reviews, setReviews] = useState([]);
   const navigate = useNavigate()
   const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
   const [quizData, setQuizData] = useState<QuizeData | null>(null)
   // Function to render stars based on rating
-  const renderStars = (rating: any) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
 
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<FaStar key={`star-${i}`} className="text-yellow-400" />);
-    }
-
-    if (hasHalfStar) {
-      stars.push(<BsStarHalf key="half-star" className="text-yellow-400" />);
-    }
-
-    const remainingStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < remainingStars; i++) {
-      stars.push(<FaStar key={`empty-star-${i}`} className="text-gray-300" />);
-    }
-
-    return stars;
-  };
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
@@ -219,8 +198,22 @@ const [quizVisible, setQuizVisible]  = useState(false)
     };
     trig();
   }, [codeQuestion]);
+
+
+  useEffect(() => {
+    const trig = () => {
+      console.log(quizData, ",.......//////////////////////////////////");
+      if (quizData) {
+        setIsVisibleCode(true);
+      }else setIsVisibleCode(false)
+    };
+    trig();
+  }, [quizData]);
+
+  
   console.log(modules, ' these are modules again and again')
   console.log(codeQuestion, 'this is code question ');
+  console.log(quizData, 'this  is quiz question.')
 
   return (
     <motion.div
@@ -248,11 +241,12 @@ const [quizVisible, setQuizVisible]  = useState(false)
         </button>
 
         {codeQuestion&& <CodingQuestionInterface {...(codeQuestion)} />}
+        {quizData && <QuizChallenge quizData={quizData}/>}
       </div>
 
       <div
         className={`fixed top-0 w-full h-full bg-accent shadow-lg transition-transform transform ${
-          isVisibleCode ? "translate-x-0" : "-translate-x-full"
+          quizVisible ? "translate-x-0" : "-translate-x-full"
         } z-50`}
       >
         <button

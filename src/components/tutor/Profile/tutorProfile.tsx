@@ -37,8 +37,6 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   const [showMessage, setShowMessage] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const certificateInputRef = useRef<HTMLInputElement>(null);
-  const [pdfFileNames, setPdfFileNames] = useState<string[]>([]);//
-  const [pdfFileLoading, setPdfFileLoading] = useState<boolean[]>([]);//
 
   const [formData, setFormData] = useState<TutorData>({
     tutorId: "",

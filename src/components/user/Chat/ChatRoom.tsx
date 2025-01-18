@@ -22,7 +22,6 @@ const ChatPopup: React.FC<ChatPopupProps> = ({ token, courses, isOpen, onClose }
   const [currentCourse, setCurrentCourse] = useState<{ courseId: string; courseTitle: string } | null>( null );
   const [messages, setMessages] = useState<string[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [socket, setSocket] = useState<any>(null);
 
   
 

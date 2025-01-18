@@ -42,7 +42,7 @@ adminAxios.interceptors.request.use(
                 removeCookie('adminRefreshToken');
                 removeCookie('adminId');
                 store.dispatch(setTutorLogout())
-                window.location.href = '/login/admin';
+                window.location.href = '/admin/auth/login';
                 return Promise.reject(refreshError);
             }
         }
@@ -85,7 +85,7 @@ adminAxios.interceptors.response.use(
                 removeCookie('adminAccessToken');
                 removeCookie('adminRefreshToken');
                 removeCookie('adminId');
-                window.location.href = '/login/admin';  // Redirect to login if refresh fails
+                window.location.href = '/admin/auth/login';  // Redirect to login if refresh fails
                 return Promise.reject(refreshError);
             }
         }

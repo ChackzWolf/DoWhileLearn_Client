@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import * as monaco from 'monaco-editor';
 import { 
   PlayCircle, 
-  LightbulbIcon, 
-  Trophy, 
   Book, 
   Code2, 
   TestTube,

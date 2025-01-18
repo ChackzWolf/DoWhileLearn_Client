@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { data, content } from "../Data/navData";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
@@ -43,7 +43,7 @@ function SideNav() {
         <div
           className={
             location.pathname === "/admin"
-              ? "transition-all flex bg-[#7C24F0] p-2  text-white text-sm font-semibold w-full rounded-lg"
+              ? "transition-all flex bg-[#7C24F0] text-white text-sm font-semibold w-full rounded-lg"
               : "transition-all flex bg-white  hover:bg-[#7c24f018] text-sm font-semibold w-full rounded-lg"
           }
         >

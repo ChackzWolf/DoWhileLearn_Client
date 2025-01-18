@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from 'react-icons/rx'
 import CourseBadge from '../../user/Layout/CourseBadge';
 

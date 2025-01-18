@@ -6,7 +6,6 @@ import Loader from "../../../common/icons/loader";
 import { SiTicktick } from "react-icons/si";
 import { RxCrossCircled } from "react-icons/rx";
 import { ROUTES } from "../../../../routes/Routes";
-import CourseDetails from "../CourseDetails";
 
 const SuccessPage = () => {
     const location = useLocation();

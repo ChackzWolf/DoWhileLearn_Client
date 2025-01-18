@@ -18,7 +18,7 @@ interface UserData {
   purchasedCourses?: string[];
 }
 
-const StudentDetails = ({ user, role }: { user: any, role:string }) => {
+const StudentDetails = ({ user }: { user: any}) => {
   console.log(user, " user user user");
   const navigate = useNavigate()
   const [formData, setFormData] = useState<UserData>({

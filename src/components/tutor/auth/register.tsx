@@ -267,7 +267,7 @@ function RegisterTutor() {
 
                                 <div className="flex w-full">
                                     <h1>Already have an account?  </h1>
-                                    <NavLink to="/login/tutor">
+                                    <NavLink to="/tutor/auth/login">
                                         <h1 className="pl-2 text-sky-700"> Login</h1>
                                     </NavLink>
                                 </div>

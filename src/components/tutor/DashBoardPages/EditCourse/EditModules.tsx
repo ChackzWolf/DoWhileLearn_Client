@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Formik,
   Field,
@@ -31,7 +31,6 @@ import CircularLoader from "../UploadingStatus/RoundedProgressBar";
 import Spinner from "../../../common/icons/Spinner";
 import VideoInput from "./EditModuleComponets/VideoInput";
 import { toast, ToastContainer  } from "react-toastify";
-import { validate } from "uuid";
 export const validationSchema = Yup.object().shape({
   Modules: Yup.array()
     .of(
@@ -200,9 +199,6 @@ const AddLesson = () => {
     return initialPreviewUrls;
   });
 
-  const [isVideoLoading, setIsVideoLoading] = useState<
-    [number | null, number | null][]
-  >([[null, null]]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   // const [previewUrls, setPreviewUrls] = useState<{
@@ -226,7 +222,6 @@ const AddLesson = () => {
     [moduleIndex: number]: number | null;
   }>({});
 
-  const [quizData, setQuizData] = useState<any[]>([]);
   const uploadDetails = useSelector(
     (state: RootState) => state.uploadSlice.uploads
   );
@@ -401,8 +396,6 @@ const AddLesson = () => {
         quiz: any[], // Type this as per your `Question` type
         setFieldValue: (field: string, value: unknown) => void
       ) => {
-        // Update your form values with the quiz data
-        setQuizData(quiz);
         console.log(quiz, "question value");
         const error = validateQuizQuestions(quiz)
         if(error){
@@ -506,7 +499,7 @@ const AddLesson = () => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ setFieldValue, values, errors, handleSubmit, isSubmitting ,validateField}) => (
+          {({ values, errors, handleSubmit}) => (
             <Form
               onSubmit={(event) => {
                 event.preventDefault(); // Prevent default form submission
@@ -780,21 +773,9 @@ const AddLesson = () => {
                                                       </>
                                                     ) : (
                                                       <span className="absolute inset-0 flex items-center w-full justify-center text-gray-500">
-                                                        {isVideoLoading
-                                                          .slice(1)
-                                                          .some(
-                                                            (subArray) =>
-                                                              subArray.length ===
-                                                                2 &&
-                                                              subArray[0] ===
-                                                                moduleIndex &&
-                                                              subArray[1] ===
-                                                                lessonIndex
-                                                          ) ? (
-                                                          <Spinner />
-                                                        ) : (
-                                                          "Upload Video"
-                                                        )}
+                            
+                                                          Upload Video
+                                                  
                                                       </span>
                                                     )}
                                                     <div className="bg-gray-600 absolute bottom-0">

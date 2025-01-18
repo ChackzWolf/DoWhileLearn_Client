@@ -51,8 +51,7 @@ const CourseBadge: React.FC<CourseBadgeProps> = ({
   rating,
   price,
   discountPrice,
-  imageSrc,
-  color = 'bg-gray-100', // default color
+  imageSrc
 }) => {
   const navigate = useNavigate()
 

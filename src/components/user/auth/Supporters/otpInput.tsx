@@ -124,7 +124,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       const {message, success} = response.data;
       setMessage((msg)=> msg = message);
       if(success){
-          setOtpCountDown((n)=> n = 60);
+          setOtpCountDown((n:any)=> n = 60);
       }else{
         console.log(message)
       }

@@ -1,4 +1,3 @@
-import { GraduationCap } from "lucide-react";
 
 export const DashboardCard = ({ title, value, icon: Icon, discription }:{ title:string, value:any, icon:any, discription:string}) => (
   <div className="bg-gradient-to-br from-purple-500 to-[#6211cd] rounded-xl p-6 text-white transform transition-all hover:scale-105">

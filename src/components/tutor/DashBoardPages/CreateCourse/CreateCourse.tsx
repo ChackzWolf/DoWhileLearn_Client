@@ -4,7 +4,6 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
   setCreateCourse,
-  setCreateCourseEmpty,
   toNext,
 } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import {addVideoUpload} from '../../../../redux/uploadStatSlice'

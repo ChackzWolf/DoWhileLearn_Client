@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import StudentDetails from '../../../../components/common/StudentsDetails';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { userEndpoint } from '../../../../constraints/userEndpoints';
 import DashBoardLoader from '../../../../components/common/icons/DashboardLoader';
 import tutorAxios from '../../../../utils/axios/tutorAxios.config';
 
 
-const userData = {
-    userId: 'string',
-    firstName: 'thankachan',
-    lastName: 'philip',
-    profilePicture: 'thenga',
-    email: 'atgmaildotcom',
-    phoneNumber: '3838883'
-}
 
 
 interface UserData {

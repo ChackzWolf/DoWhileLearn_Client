@@ -4,7 +4,6 @@ import { removeCookie } from '../../../../src/utils/cookieManager';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setTutorDataEmpty } from '../../../redux/tutorSlice/tutorSlice';
-import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
 import { ROUTES } from '../../../routes/Routes';

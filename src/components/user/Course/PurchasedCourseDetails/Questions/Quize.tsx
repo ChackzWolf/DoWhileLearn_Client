@@ -15,17 +15,6 @@ const QuizChallenge: React.FC<QuizChallengeProps> = ({ quizData }) => {
   const [selectedOption, setSelectedOption] = useState<number |null>(null);
   const [showResult, setShowResult] = useState(false);
 
-  const uizData:QuizeData = {
-    question: "What is the difference between 'let' and 'const'?",
-    options: [
-      "'let' is magical; 'const' is cursed",
-      "'let' can change, 'const' cannot.",
-      "No difference—they're twins!",
-      "'const' throws tantrums if you change it."
-    ],
-    correctAnswer: 1
-  };
-
   const handleOptionClick = (index:number) => {
     setSelectedOption(index);
     setShowResult(true);
@@ -34,7 +23,7 @@ const QuizChallenge: React.FC<QuizChallengeProps> = ({ quizData }) => {
   const isCorrect = selectedOption === quizData?.correctAnswer;
 
   return quizData && (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-lg">
+    <div className="max-w-2xl min-h-screen mx-auto p-6 bg-white rounded-xl shadow-lg flex flex-col justify-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

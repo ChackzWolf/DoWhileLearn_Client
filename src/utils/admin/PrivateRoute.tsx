@@ -27,7 +27,7 @@ export const AdminPrivateRoute = ({ children, roles }: { children: JSX.Element; 
           removeCookie('adminAccessToken');
           removeCookie('adminRefreshToken');
           removeCookie('adminId');
-          window.location.href = '/login/admin';
+          window.location.href = '/admin/auth/login';
           return;
         }
       }

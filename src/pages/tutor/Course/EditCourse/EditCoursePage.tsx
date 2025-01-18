@@ -1,5 +1,3 @@
-import Header from "../../../../components/tutor/Layout/Header";
-import SideNav from "../../../../components/tutor/Layout/SideNav";
 import EditProgressBar from "../../../../components/tutor/Supporters/EditProgressBar";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";

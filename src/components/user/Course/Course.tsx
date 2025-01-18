@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import CourseBadge from "../Layout/CourseBadge";
-import CourseSkeleton from "./Skeletons/CourseSkeleton"; // Adjust path as necessary
 import axios from "axios";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
@@ -119,7 +118,10 @@ function CoursesList() {
     <>
       {/* Display SkeletonLoader while loading */}
       {loading ? (
+        <div  className="min-h-screen">
         <Loader />
+
+        </div>
       ) : (
         <>
 
@@ -137,20 +139,20 @@ function CoursesList() {
 
 
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-gray-700 flex items-center gap-2">
+                  <h2 className="text-xl font-semibold text-accent flex items-center gap-2">
                     <FaFilter /> Filters
                   </h2>
                 </div>
                 {/* Category Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-accent mb-1">
                     Category
                   </label>
                   <select
                     value={selectedCategory}
                     name="courseCategory"
                     onChange={handleCategoryChange}
-                    className="w-full h-10 rounded-md text-sm bg-gray-50 px-4 py-2 text-gray-700 border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#7C24F0] cursor-pointer hover:bg-gray-100"
+                    className="w-full h-10 rounded-md text-sm bg-gray-50 px-4 py-2 text-purple-950 border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#7C24F0] cursor-pointer hover:bg-gray-100"
                   >
                     <option value="">Select Category</option>
                     <option value="JavaScript">JavaScript</option>
@@ -168,14 +170,14 @@ function CoursesList() {
 
                 {/* Price Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-accent mb-1">
                     Price
                   </label>
                   <select
                     value={selectedPrice}
                     name="Price"
                     onChange={handlePriceChange}
-                    className="w-full h-10 rounded-md text-sm bg-gray-50 px-4 py-2 text-gray-700 border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#7C24F0] cursor-pointer"
+                    className="w-full h-10 rounded-md text-sm bg-gray-50 px-4 py-2 text-purple-950 border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#7C24F0] cursor-pointer"
                   >
                     <option value="">Select Price</option>
                     <option value="low">Low to High</option>
@@ -185,14 +187,14 @@ function CoursesList() {
 
                 {/* Rating Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-accent mb-1">
                     Rating
                   </label>
                   <select
                     value={selectedRating}
                     name="Rating"
                     onChange={handleRatingChange}
-                    className="w-full h-10 rounded-md text-sm bg-gray-50 px-4 py-2 text-gray-700 border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#7C24F0] cursor-pointer"
+                    className="w-full h-10 rounded-md text-sm bg-gray-50 px-4 py-2 text-purple-950 border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#7C24F0] cursor-pointer"
                   >
                     <option value="">Select Rating</option>
                     <option value="low">
@@ -206,7 +208,7 @@ function CoursesList() {
                 <div>
                   <button
                     onClick={clearFilters}
-                    className="transition-all flex items-center gap-2 text-white bg-[#7C24F0] hover:bg-[#6211cd] rounded-lg p-1 px-2 shadow-lg cursor-pointer"
+                    className="transition-all flex items-center gap-2 text-white bg-accent hover:bg-[#6211cd] rounded-lg p-1 px-2 shadow-lg cursor-pointer"
                   >
                     Clear Filters
                   </button>

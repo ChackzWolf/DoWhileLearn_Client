@@ -1,9 +1,3 @@
-import HeaderNav from "../../user/Layout/headerComponents/Nav/UserHeaderNav";
-// import { useEffect } from "react";
-// import { useDispatch } from "react-redux";
-// import { setTutorLogout, setTutorLogin } from "../../../redux/authSlice/authSlice";
-// import { getCookie } from "../../../utils/cookieManager";
-// import { useNavigate } from "react-router-dom";
 import HeaderDropdown from "../Supporters/HeaderDropDown";
 
 
@@ -27,13 +21,8 @@ const Header = () =>{
                         <div>
                             <HeaderDropdown/>
                         </div>
-
-
                     </div>    
-
                 </div>
-    
-       
           </div>
         
       );

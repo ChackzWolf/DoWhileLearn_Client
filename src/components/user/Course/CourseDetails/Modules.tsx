@@ -115,7 +115,7 @@ const LessonAccordion: React.FC<{
   isOpen: boolean;
   onToggle: () => void;
   moduleIndex: number;
-}> = ({ index, lesson, isOpen, onToggle, moduleIndex }) => {
+}> = ({ index, lesson, isOpen, onToggle}) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
