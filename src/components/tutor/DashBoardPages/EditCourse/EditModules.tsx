@@ -28,7 +28,6 @@ import { generateRandomCode } from "../../../../utils/common.utils";
 import { addVideoUpload } from "../../../../redux/uploadStatSlice";
 import VideoPlayer from "../CreateCourse/AddLessonsComponents/VideoPlayer";
 import CircularLoader from "../UploadingStatus/RoundedProgressBar";
-import Spinner from "../../../common/icons/Spinner";
 import VideoInput from "./EditModuleComponets/VideoInput";
 import { toast, ToastContainer  } from "react-toastify";
 export const validationSchema = Yup.object().shape({

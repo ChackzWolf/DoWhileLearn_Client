@@ -33,7 +33,6 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isImageUploading, setImageUploading] = useState(false);
-  const [isCertificateUploading, setCertificateUploading] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const certificateInputRef = useRef<HTMLInputElement>(null);
@@ -78,10 +77,8 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   };
 
   const handlePDFUpload = async (file: File) => {
-
     const formData = new FormData();
-    formData.append("pdf", file); // Adjust the key to 'pdf' for the PDF file
-
+    formData.append("pdf", file);
     console.log(formData,'form data data data')
     try {
       const response = await tutorAxios.post(tutorEndpoint.uploadPDF, formData, {
@@ -89,9 +86,7 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
           "Content-Type": "multipart/form-data",
         },
       });
-  
       console.log("PDF upload completed", response.data);
-  
       // Use the returned URL to update the state or handle accordingly
       if (response.data.s3Url) {
 
@@ -122,8 +117,6 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
     formData.append(type, file);
     try {
       if (type === 'image') setImageUploading(true);
-      if (type === 'certificate') setCertificateUploading(true);
-
       const response = await tutorAxios.post(courseEndpoint.uploadImage, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -140,7 +133,6 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
       console.error(`Error uploading ${type}:`, error);
     } finally {
       if (type === 'image') setImageUploading(false);
-      if (type === 'certificate') setCertificateUploading(false);
     }
   };
 

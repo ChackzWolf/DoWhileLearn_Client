@@ -2,7 +2,7 @@ import { AppDispatch, RootState } from "../redux/store/store"; // Adjust the imp
 import { setCreateCourse } from "../redux/tutorSlice/CourseSlice/createCourseData"; // Update the path if necessary
 import { CreateCourseState, ICreateCourse1 } from "../components/Interfaces/CourseInterface/ICreateCourse";
 
-export const updateDemoURL = (demoURL: string,id:string) => {
+export const updateDemoURL = (demoURL: string,_id:string) => {
   console.log('trigered here ')
   return (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();

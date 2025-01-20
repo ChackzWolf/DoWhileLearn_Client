@@ -122,9 +122,9 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       const response = await axios.post(userEndpoint.resendOTP, data);
       console.log('resp', response)
       const {message, success} = response.data;
-      setMessage((msg)=> msg = message);
+      setMessage(message);
       if(success){
-          setOtpCountDown((n:any)=> n = 60);
+          setOtpCountDown(60);
       }else{
         console.log(message)
       }

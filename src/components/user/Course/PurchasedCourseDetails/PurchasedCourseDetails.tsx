@@ -76,46 +76,33 @@ interface QuizeData {
   correctAnswer :number;
 }
 function CoursePurchasedCourseDetailsDetails() {
-  
+  const dispatch = useDispatch();
   const [tutorData, setTutorData ] = useState<TutorData | null>(null);
   const navigate = useNavigate()
   const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
   const [quizData, setQuizData] = useState<QuizeData | null>(null)
-  // Function to render stars based on rating
-
   const [activeTab, setActiveTab] = useState("overview");
-  const [isLoading, setIsLoading] = useState(false);
   const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
-  const [tutorId, setTutorId] = useState();
-  // const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
-  const dispatch = useDispatch();
-  const [benefits_prerequisites, setbenefits_prerequisites] =
-    useState<ICreateCourse2 | null>(null);
-  // const benifits_prerequisites = useSelector((state: RootState) => state.createCourseData.createCourse2);
+  const [benefits_prerequisites, setbenefits_prerequisites] = useState<ICreateCourse2 | null>(null);
   const [totalLessons, setTotalLessons] = useState();
-  const [modules, setModules] =
-    useState<CreateCourseState>(initialModulesState);
-  // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
+  const [modules, setModules] = useState<CreateCourseState>(initialModulesState);
   const [isVisibleCode, setIsVisibleCode] = useState(false);
-const [quizVisible, setQuizVisible]  = useState(false)
-  const toggleCodeVisibility = () => {
-    setIsVisibleCode(!isVisibleCode);
-    // setCodeQuestion(null);
-  };
-  const toggleQuestionVisibility = () => {
-    setQuizVisible(!quizVisible)
-  }
+  const [quizVisible, setQuizVisible]  = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
+  const [selectedLessonLength, setSelectedLessonLength] = useState(0)
+  const [selectedVideoDescription, setSelectedVideoDescription] = useState<string | null>(null);
+
+
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (id) {
       const fetchCourseDetails = async () => {
         try {
-          setIsLoading(true);
           const userId = getCookie("userId");
           console.log();
           const response = await userAxios.get(userEndpoint.fetchCourseDetails,{  params: { id, userId }} );
-          setTutorId(response.data.courseData.tutorId);
  
           console.log(response.data.courseData, "course ");
 
@@ -155,7 +142,6 @@ const [quizVisible, setQuizVisible]  = useState(false)
               })),
             })),
           };
-          const modulesLength = response.data.courseData.Modules.length;
           const totalLessonsCount = response.data.courseData.Modules.reduce(
             (acc: any, module: any) => {
               return acc + module.lessons.length;
@@ -167,10 +153,8 @@ const [quizVisible, setQuizVisible]  = useState(false)
           setModules(createCourseState);
           setTotalLessons(totalLessonsCount);
 
-          setIsLoading(false);
         } catch (error) {
           console.error("Error fetching course details:", error);
-          setIsLoading(false);
         }
       };
 
@@ -182,12 +166,6 @@ const [quizVisible, setQuizVisible]  = useState(false)
     }
   }, [id, dispatch]);
 
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
-  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
-  const [selectedLessonLength, setSelectedLessonLength] = useState(0)
-  const [selectedVideoDescription, setSelectedVideoDescription] = useState<
-    string | null
-  >(null);
 
   useEffect(() => {
     const trig = () => {
@@ -210,10 +188,15 @@ const [quizVisible, setQuizVisible]  = useState(false)
     trig();
   }, [quizData]);
 
-  
+  const closeQuestion = ()=>{
+    setIsVisibleCode(false);
+    setQuizVisible(false);
+    setCodeQuestion(null);
+    setQuizData(null)
+  }
   console.log(modules, ' these are modules again and again')
   console.log(codeQuestion, 'this is code question ');
-  console.log(quizData, 'this  is quiz question.')
+  console.log(quizData, selectedLessonLength, 'this  is quiz question.')
 
   return (
     <motion.div
@@ -234,7 +217,7 @@ const [quizVisible, setQuizVisible]  = useState(false)
         } z-50`}
       >
         <button
-          onClick={toggleCodeVisibility}
+          onClick={closeQuestion}
           className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
         >
           Close
@@ -250,7 +233,7 @@ const [quizVisible, setQuizVisible]  = useState(false)
         } z-50`}
       >
         <button
-          onClick={toggleQuestionVisibility}
+          onClick={closeQuestion}
           className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
         >
           Close

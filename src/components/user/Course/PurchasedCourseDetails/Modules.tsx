@@ -30,18 +30,18 @@ const Modules: React.FC<{
   onCodeSelect:(questions:any)=>void;
 }> = ({ modules, onVideoSelect, onSelectDescription, onCodeSelect,setVideoIndex,onQuizSelect, videoIndex, totalLesson }) => {
   const [openModuleIndex, setOpenModuleIndex] = useState<number | null>(0);
-  const [openLessonIndex, setOpenLessonIndex] = useState<{ [key: number]: number | null }>({});
+  // const [openLessonIndex, setOpenLessonIndex] = useState<{ [key: number]: number | null }>({});
 
   const toggleModule = (index: number) => {
     setOpenModuleIndex(openModuleIndex === index ? null : index);
-    setOpenLessonIndex({});
+    // setOpenLessonIndex({});
   };
 
-  const toggleLesson = (moduleIndex: number, lessonIndex: number, videoUrl: string, description:string, totalLessons:number) => {
-    setOpenLessonIndex((prev) => ({
-      ...prev,
-      [moduleIndex]: prev[moduleIndex] === lessonIndex ? null : lessonIndex,
-    }));
+  const toggleLesson = (_moduleIndex: number, lessonIndex: number, videoUrl: string, description:string, totalLessons:number) => {
+    // setOpenLessonIndex((prev) => ({
+    //   ...prev,
+    //   [moduleIndex]: prev[moduleIndex] === lessonIndex ? null : lessonIndex,
+    // }));
     onVideoSelect(videoUrl); // Pass the video URL to the parent component
     onSelectDescription(description)
     setVideoIndex(lessonIndex)
@@ -171,7 +171,7 @@ const getLessonVideo = (
                      >
                       
                       {question.type === 'QUIZ'? (
-                            <div className="flex gap-3"
+                            <div className="flex gap-3 w-full h-full"
                             onClick={()=>openQuiz(question)}>
                             <MdOutlineQuiz  className="text-purple-600 text-xl flex-shrink-0"/>
                             <span className="text-left text-gray-700 text-sm">
@@ -180,7 +180,7 @@ const getLessonVideo = (
                             </div>
                             )
                             :(
-                            <div className="flex gap-3"
+                            <div className="flex gap-3 w-full h-full"
                                   onClick={() => {
                                    
                                       openCode(question)

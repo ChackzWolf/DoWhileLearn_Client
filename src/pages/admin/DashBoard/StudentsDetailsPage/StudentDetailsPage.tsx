@@ -39,7 +39,7 @@ function StudentDetailsPage() {
         }
         fetchUserData()
     },[])
-  return <StudentDetails user={userData} role={'ADMIN'}/>
+  return <StudentDetails user={userData}/>
 }
 
 export default StudentDetailsPage

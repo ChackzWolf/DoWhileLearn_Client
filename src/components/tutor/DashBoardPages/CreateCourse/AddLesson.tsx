@@ -30,6 +30,7 @@ import VideoPlayer from "./AddLessonsComponents/VideoPlayer";
 import CircularLoader from "../UploadingStatus/RoundedProgressBar";
 import { ToastContainer, toast } from "react-toastify";
 import tutorAxios from "../../../../utils/axios/tutorAxios.config";
+import { IoIosArrowDown } from "react-icons/io";
 
 export const validationSchema = Yup.object().shape({
   Modules: Yup.array()
@@ -222,7 +223,6 @@ const AddLesson = () => {
   const [expandedLessonIndex, setExpandedLessonIndex] = useState<{
     [moduleIndex: number]: number | null;
   }>({});
-  const [quizData, setQuizData] = useState<any[]>([]);
   const uploadDetails = useSelector(
     (state: RootState) => state.uploadSlice.uploads
   );
@@ -359,7 +359,7 @@ const AddLesson = () => {
     setFieldValue: (field: string, value: unknown) => void
   ) => {
     // Update your form values with the quiz data
-    setQuizData(quiz);
+    // setQuizData(quiz);
     console.log(quiz, "question value");
     const error = validateQuizQuestions(quiz)
     if(error){
@@ -527,11 +527,8 @@ const AddLesson = () => {
                             className="p-2 rounded-full bg-white text-[#7C24F0] hover:bg-gray-100 transition"
                             onClick={() => toggleModule(moduleIndex)}
                           >
-                            {expandedModuleIndex === moduleIndex ? (
-                              <FiX size={20} />
-                            ) : (
-                              <FiPlus size={20} />
-                            )}
+
+                              <IoIosArrowDown size={20} className={`transition-all duration-300 ${expandedModuleIndex === moduleIndex ?"rotate-180":""}`}/>
                           </button>
                         </div>
 
@@ -551,7 +548,7 @@ const AddLesson = () => {
                                 <Field
                                   name={`Modules.${moduleIndex}.name`}
                                   type="text"
-                                  className="w-full h-12 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                                  className="w-full h-12 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-purple-500"
                                   placeholder="Enter Module Name"
                                 />
                                 <ErrorMessage
@@ -569,7 +566,7 @@ const AddLesson = () => {
                                   as="textarea"
                                   name={`Modules.${moduleIndex}.description`}
                                   rows={3}
-                                  className="w-full rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                                  className="w-full rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-purple-500"
                                   placeholder="Enter Module Description"
                                 />
                                 <ErrorMessage
@@ -607,24 +604,13 @@ const AddLesson = () => {
                                                 )
                                               }
                                             >
-                                              {expandedLessonIndex[
-                                                moduleIndex
-                                              ] === lessonIndex ? (
-                                                <FiX size={20} />
-                                              ) : (
-                                                <FiPlus size={20} />
-                                              )}
+                                                <IoIosArrowDown size={20} className={` transition-all duration-300 ${expandedLessonIndex[  moduleIndex] === lessonIndex ? 'rotate-180' : ''}`}/>
+                              
                                             </button>
                                           </div>
 
                                           <div
-                                            className={`duration-300 transition-all  ease-in-out ${
-                                              expandedLessonIndex[
-                                                moduleIndex
-                                              ] === lessonIndex
-                                                ? "opacity-100"
-                                                : "max-h-0 opacity-0 overflow-hidden"
-                                            }`}
+                                            className={` transition-all duration-1000 ${expandedLessonIndex[  moduleIndex] === lessonIndex  ? "opacity-100"  : "max-h-0 opacity-0 overflow-hidden"}`}
                                           >
                                             <div className="flex flex-col gap-2 mt-4">
                                               <div className="flex flex-col lg:flex-row justify-between">
@@ -636,7 +622,7 @@ const AddLesson = () => {
                                                     <Field
                                                       name={`Modules.${moduleIndex}.lessons.${lessonIndex}.title`}
                                                       type="text"
-                                                      className="w-full h-12 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                                                      className="w-full h-12 rounded-md text-sm bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-purple-500"
                                                       placeholder="Enter Lesson Title"
                                                     />
                                                     <ErrorMessage
@@ -654,7 +640,7 @@ const AddLesson = () => {
                                                       as="textarea"
                                                       name={`Modules.${moduleIndex}.lessons.${lessonIndex}.description`}
                                                       rows={3}
-                                                      className="w-full rounded-md text-sm h-24 bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                                                      className="w-full rounded-md text-sm h-24 bg-gray-100 px-4 py-2 text-gray-700 border border-gray-300 focus:ring-2 focus:ring-purple-500"
                                                       placeholder="Enter Lesson Description"
                                                     />
                                                     <ErrorMessage

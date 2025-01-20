@@ -12,7 +12,6 @@ export const setCookie = (name: string, value: string, days: number) => {
     document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Strict; Secure`;
 };
 
-
 export const getCookie= (name:string)=> {
     // Create a regular expression to match the cookie name and value
     const nameEQ = name + "=";
@@ -30,9 +29,6 @@ export const getCookie= (name:string)=> {
     // Return null if the cookie is not found
     return null;
 }
-
-
-
 
 export const removeCookie = (name: string) => {
     console.log(`removing token ${name}`);

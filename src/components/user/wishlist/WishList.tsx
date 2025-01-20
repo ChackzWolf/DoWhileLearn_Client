@@ -39,7 +39,6 @@ export interface Course {
 
 function WishList() {
     const [courses,setCourses] = useState<Course[]>([])
-    const [totalPrice, setTotalPrice] = useState(0)
     const navigate = useNavigate()
     useEffect(()=> {
         const fetchCart = async() => {
@@ -62,16 +61,6 @@ function WishList() {
 
     },[])
 
-    useEffect(()=> {
-        const totalPrice = ()=> {
-            const total = courses.reduce((total, course) => {
-                return total + parseFloat(course.discountPrice);
-              }, 0);
-    
-            setTotalPrice(total);
-        }
-        totalPrice()
-    },[courses])
 
     const handleCourseDetails = (_id:string)=> {
         navigate(ROUTES.common.courseDetails(_id))

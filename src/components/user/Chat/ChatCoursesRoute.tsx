@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store/store';
 import  Picker ,{EmojiClickData, EmojiStyle } from 'emoji-picker-react';
 import { BsEmojiSunglasses } from 'react-icons/bs';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 // Course interface
 interface ChatRoom {
   courseId: string;
@@ -44,6 +44,7 @@ const CourseListAndChat: React.FC = () => {
   const [viewChat, setViewChat] = useState<boolean>(false);
   const [chatRoomsList, setChatRoomsList] = useState<ChatRoom[]>([])
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null); // Reference to dropdown container
 
 
   const [isVisible, setIsVisible] = useState(false);
@@ -110,12 +111,33 @@ const CourseListAndChat: React.FC = () => {
     };
   }, []);
 
+
+     useEffect(() => {
+          const handleClickOutside = (event: MouseEvent) => {
+              if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setViewChat(false); // Close the dropdown
+              }
+          };
+  
+          // Add the event listener when the dropdown is open
+          if (viewChat) {
+              document.addEventListener('mousedown', handleClickOutside);
+          } else {
+              document.removeEventListener('mousedown', handleClickOutside);
+          }
+  
+          // Clean up the event listener when the component unmounts
+          return () => {
+              document.removeEventListener('mousedown', handleClickOutside);
+          };
+      }, [viewChat]);
+
   const toggleChat = ()=> {
     setViewChat(!viewChat);
   }
   // Join course chat room
   const joinCourseChat = (courseId: string) => {
-    socket?.emit('join_course_room', { courseId,userId });
+    socket?.emit('join_course_room', { courseId, userId });
   };
 
   useEffect(() => {
@@ -177,44 +199,59 @@ console.log(viewChat, 'view chat')
     
     }
 
-  
       {/* Course List Section */}
-      {!selectedCourse? (
-        <div 
-          className={`pointer-events-auto fixed w-96 h-96 right-5 bottom-5 bg-purple-100 p-4 overflow-y-auto rounded-lg shadow-lg transition-all duration-300 ease-in-out transform ${
+
+
+      {!selectedCourse ? (
+              
+        <div>
+          <AnimatePresence>
+          {viewChat && (
+
+         
+
+        <motion.div
+        initial={{ opacity: 0, y: 110,x:130, scale: 0 }}  
+        animate={{ opacity: 1, y:0,x:0, scale: 1 }} 
+        exit={{ opacity: 0, y: 110,x:230, scale: 0 }}   
+        transition={{    
+          duration: 0.06, // Extremely fast duration (50ms)   
+        ease: 'easeOut',      
+      }}
+          className={`pointer-events-auto fixed w-96 h-96 right-5 bottom-5 bg-accent p-4 overflow-y-auto rounded-lg shadow-lg transition-all duration-300 ease-in-out transform ${
             viewChat ? "opacity-100 scale-100" : "opacity-0 scale-0 pointer-events-none"
           }`}
         >
           <div className='flex justify-between'>
-            <h2 className="text-xl font-bold mb-4">Descussions</h2>
+            <h2 className="text-xl font-bold mb-4">Discussions</h2>
             <button onClick={()=>{toggleChat()}} className='text-2xl mb-4'> 
             <RiArrowDownSLine />
             </button>
           </div>
 
-      {chatRoomsList.map(course => (
-        <div 
-          key={course._id} 
-          onClick={() => handleSelectCourse(course)}
-          className="flex items-center gap-3 cursor-pointer bg-white shadow-md rounded-lg px-4 py-2 mb-4 hover:bg-purple-100 transition duration-300"
-        > 
-          <div className='rounded-full h-10 w-10 transition-all duration-300 hover:scale-110 overflow-hidden'>
-            <img src={course.thumbnail} alt="" className='h-full w-full object-cover'/>
-          </div>
-          
-          <div className='flex flex-col w-full '>
-              <h3 className=" font-semibold">{course.name}</h3>
-              <h1 className='text-xs m-1'>{`${course.lastMessage?.userId=== userId ? "You" : course.lastMessage?.username} : ${course.lastMessage?.content}`}</h1>
-              <h1 className='text-right text-xs'>{new Date(course.updatedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</h1>
-          </div>
-
+          {chatRoomsList.map(course => (
+                <div key={course._id} onClick={() => handleSelectCourse(course)} className="flex items-center gap-4 cursor-pointer bg-accent border-b px-4 py-1  hover:bg-purple-100 transition duration-300"> 
+                  <div className='rounded-full h-10 w-10 transition-all duration-300 hover:scale-110 overflow-hidden'>
+                    <img src={course.thumbnail} alt="" className='h-full w-full object-cover'/>
+                  </div>
+                  <div className='flex flex-col w-full justify-center '>
+                      <h3 className=" font-semibold ">{course.name}</h3>
+                      <h1 className='text-xs m-1'>{`${course.lastMessage?.userId=== userId ? "You" : course.lastMessage?.username} : ${course.lastMessage?.content}`}</h1>
+                      <h1 className='text-right text-xs'>{new Date(course.updatedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</h1>
+                  </div>
+                </div>
+              )
+            )
+          }
+        </motion.div>
+         )}
+          </AnimatePresence>
         </div>
-      ))}
-    </div>
-      ):
-        <>
-
-              {/* Chat Section */}
+        
+      )
+      :
+      <>
+      {/* Chat Section */}
       <div className=" pointer-events-auto fixed w-96 h-96 right-5 bottom-5 duration-300 ease-in-out bg-white p-4 flex flex-col rounded-lg">
       {selectedCourse ? (
         <>

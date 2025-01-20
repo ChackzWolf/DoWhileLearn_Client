@@ -5,7 +5,6 @@ import AuthChoice from '../../common/AuthChoice';
 import CoursesListPage from '../../../pages/user/Courses/CoursesListPage';
 import Header from '../../user/Layout/Header';
 import CourseDetailsPage from '../../../pages/user/Courses/CourseDetailsPage';
-import LandingPage from '../../user/LandingPage';
 import { ScrollButton } from '../../common/ScrollUp';
 import CourseListAndChat from '../../user/Chat/ChatCoursesRoute';
 import { Footer } from '../../user/Layout/Footer';
@@ -20,7 +19,6 @@ const CommonRoutes = ()=>{
                 <Header/>
                 <Routes>
                     <Route path='/' element= {<UserHome/>}/>
-                    <Route path='/home' element= {<LandingPage/>}/>
                     <Route path='/AuthChoice' element= {<AuthChoice/>}/>
                     <Route path ='/courses' element = {<CoursesListPage/>}/>
                     <Route path="/course/:id" element={<CourseDetailsPage/>} />
@@ -31,5 +29,5 @@ const CommonRoutes = ()=>{
         </div>
     )
 }
-
+ 
 export default CommonRoutes

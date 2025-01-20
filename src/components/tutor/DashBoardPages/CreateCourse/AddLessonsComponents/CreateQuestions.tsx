@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Trash2, Code, ListChecks, Save, PlusCircle } from "lucide-react";
 import { useFormikContext } from "formik";
 import ReactQuill from "react-quill";
@@ -107,20 +107,20 @@ const QuizEditor: React.FC<{
 
     setQuestions([...questions, newQuestion]);
   };
-
   const deleteQuestion = (e: React.MouseEvent, id: number) => {
     e.preventDefault();
-    setQuestions(questions.filter((q:any) => {
-      q.id !== id
-    console.log(q.type, 'to delete')
-    if(q.type === 'QUIZ'){
-      const count = noOfQuizes -1;
-      setNumberOfQuizes(count)
-    }else{
-      const count = noOfCodes - 1;
-      setNoOfCodes(count);
-    }}));
+    console.log(id, 'to delete')
+    const updatedQuestion = questions.filter((q:any) =>  q.id !== id )
+    console.log(updateQuestion, 'updated')
+    setQuestions(updatedQuestion);
   };
+
+  useEffect(()=>{
+    const quizCount = questions.filter((q) => q.type === "QUIZ").length;
+    const codeCount = questions.filter((q) => q.type === "CODING").length;
+    setNoOfCodes(codeCount);
+    setNumberOfQuizes(quizCount)
+  },[questions])
 
   const addOption = (e: React.MouseEvent, questionId: number) => {
     e.preventDefault();
@@ -255,6 +255,7 @@ const QuizEditor: React.FC<{
     onQuizChange(moduleIndex, lessonIndex, questions, setFieldValue);
     
   };
+  console.log(questions,'questions')
 
   return (
     <div className="p-8">

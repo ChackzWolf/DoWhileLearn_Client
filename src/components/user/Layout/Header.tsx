@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import HeaderNav from "./headerComponents/Nav/UserHeaderNav";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
@@ -9,7 +9,7 @@ import { ROUTES } from "../../../routes/Routes";
 
 const Header = () => {
     const isLogin = useSelector((state: RootState) => state.userAuth.isLogin);
-
+    const navigate = useNavigate()
  
 
 
@@ -17,9 +17,9 @@ const Header = () => {
 
         <div className="bg-transparent top-0 z-50 items-center w-full mx-auto p-1 ">
             <div className="justify-between flex  items-center">
-                <div className="col-span-1 h-full flex items-center">
+                <button className="col-span-1 h-full flex items-center" onClick={()=>navigate('/')}>
                     <h1 className="text-2xl font-extrabold text-white flex items-center  px-5">DoWhile{' { Learn } '}</h1>
-                </div>
+                </button>
 
 
 
