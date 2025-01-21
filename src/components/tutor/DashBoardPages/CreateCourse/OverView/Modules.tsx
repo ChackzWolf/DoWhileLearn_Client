@@ -74,16 +74,16 @@ const LessonAccordion: React.FC<{ lesson: CreateCourseState['Modules'][number]['
                         <source src={lesson.video} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
-                    ) : lesson.video instanceof File ? (
-                      <p>File type videos are not supported for previewing in this example.</p>
-                    ) : (
+                    ) :  (
                       <p>No video available</p>
                     )}
             </div>
 
            {/* Render questions if they exist */}
 
-
+           {/* lesson.video instanceof File ? (
+                      <p>File type videos are not supported for previewing in this example.</p>
+                    ) : */}
 
             
           </div>

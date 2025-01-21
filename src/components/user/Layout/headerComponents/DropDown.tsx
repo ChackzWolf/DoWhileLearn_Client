@@ -78,9 +78,9 @@ const HeaderDropdown: React.FC = () => {
                     {/* <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'} `}/> */}
                 </div>
                 :
-                <div className='hover:text-[#7C24F0] flex items-center gap-2'>
-                    <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/>
+                <div className='text-accent flex items-center gap-2'>
                     <FaUserCircle size={39} />
+                    <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/>
                 </div>
                 }
             </button>

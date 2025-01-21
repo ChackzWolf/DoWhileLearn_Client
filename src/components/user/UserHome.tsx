@@ -70,10 +70,7 @@ const UserHome= () => {
             <LayerCourseList courses={topRatedCourses} title={"Top rated courses"}/>
             <LayerCourseList courses={latestCourses} title={"Latest courses"}/>
             <Features/>
-            {/* <Featuress/> */}
             <PopularQA/>
-
-            <Footer/>
         </div>
     )
 }

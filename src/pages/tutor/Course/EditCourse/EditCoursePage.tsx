@@ -17,12 +17,6 @@ import { useDispatch } from "react-redux";
 const EditCoursePage = () => {
   const step = useSelector((state: RootState) => state.editCourseData.step) as number;
   const dispatch = useDispatch()
-  // const courseData = useSelector((state: RootState) => state.editCourseData.editCourse);
-  // const benifits_prerequisites = useSelector((state: RootState) => state.editCourseData.editCourse2);
-  // const modules = useSelector((state:RootState) => state.editCourseData.editLessons);
-  // console.log(courseData, '11111111111111111111111111111111111111111');
-  // console.log(benifits_prerequisites, '2222222222222222222222222222222222222');
-  // console.log(modules, '33333333333333333333333333333333333333');
 
   useEffect(() => {
     const initializeSocket = async()=> {

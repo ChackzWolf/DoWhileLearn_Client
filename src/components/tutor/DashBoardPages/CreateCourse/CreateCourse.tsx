@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
   setCreateCourse,
+  setCreateCourseEmpty,
   toNext,
 } from "../../../../redux/tutorSlice/CourseSlice/createCourseData";
 import {addVideoUpload} from '../../../../redux/uploadStatSlice'
@@ -502,14 +503,24 @@ const AddCourse = () => {
                 </div>
 
                 {/* Submit Button */}
-                <div className="w-full flex justify-end mt-6 px-4">
-                  <button
-                    type="submit"
-                    className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"
-                  >
-                    Next
-                  </button>
-                </div>
+              <div className="w-full flex justify-between mt-6">
+                <button
+                  className="py-2 px-8 bg-white text-white font-semibold rounded-md hover:bg-white transition"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    dispatch(setCreateCourseEmpty());
+                  }}
+                >
+                  {" "}
+                  Clear all
+                </button>
+                <button
+                  type="submit"
+                  className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"
+                >
+                  Next
+                </button>
+              </div>
               </section>
             </Form>
           )}}

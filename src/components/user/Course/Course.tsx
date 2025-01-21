@@ -208,7 +208,7 @@ function CoursesList() {
                 <div>
                   <button
                     onClick={clearFilters}
-                    className="transition-all flex items-center gap-2 text-white bg-accent hover:bg-[#6211cd] rounded-lg p-1 px-2 shadow-lg cursor-pointer"
+                    className="transition-all flex items-center gap-2 text-primary bg-accent hover:opacity-90 rounded-lg p-1 px-2 shadow-lg cursor-pointer"
                   >
                     Clear Filters
                   </button>

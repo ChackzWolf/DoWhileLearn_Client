@@ -19,6 +19,7 @@ import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
 import DashBoardLoader from "../../../common/icons/DashboardLoader";
 import { ROUTES } from "../../../../routes/Routes";
 import tutorAxios from "../../../../utils/axios/tutorAxios.config";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 interface Module {
   name: string;
@@ -169,24 +170,29 @@ function OverView() {
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px- lg:min-w-7xl 8 py-8"
         >
           
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
+              
               {/* Course Header */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="bg-white rounded-xl p-6 shadow-sm"
+                className="bg-white pb-1 rounded-xl shadow-sm"
               >
-              <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
+                  <button onClick={()=> navigate(-1)} className="transition mt-4 ml-4 text-primary hover:-translate-x-1">
+                        <IoMdArrowRoundBack />
+                  </button>
+              <h1 className="text-4xl font-bold  mx-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-600">
                 {courseData?.courseTitle}
               </h1>
-                <p className="text-gray-600 m-2 mb-6">
+                <p className="text-gray-600 m-8 mb-6">
                   {courseData?.courseDescription}
                 </p>
                 
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                <div className="flex flex-wrap gap-4 text-sm m-3 text-gray-600">
                   <div className="flex items-center gap-2">
                     <FiAward className="text-purple-600" />
                     <span>{courseData?.courseLevel} Level</span>
@@ -333,7 +339,7 @@ function OverView() {
         </motion.div>
 
 
-      <div className="flex justify-between mx-20">
+      <div className="flex justify-between mx-20 mb-8">
         <button
           className="bg-[#7C24F0] px-5 py-2 rounded-lg text-white font-bold hover:bg-[#6211cd]"
      

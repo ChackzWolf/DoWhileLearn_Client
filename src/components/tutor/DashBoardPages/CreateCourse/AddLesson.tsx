@@ -15,7 +15,6 @@ import {
   toPrev,
 } from "../../../../redux/tutorSlice/CourseSlice/createCourseData"; 
 import { CreateCourseState } from "../../../Interfaces/CourseInterface/ICreateCourse";
-import { FiPlus, FiX } from "react-icons/fi";
 import { courseEndpoint } from "../../../../constraints/courseEndpoints";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
@@ -223,14 +222,13 @@ const AddLesson = () => {
   const [expandedLessonIndex, setExpandedLessonIndex] = useState<{
     [moduleIndex: number]: number | null;
   }>({});
-  const uploadDetails = useSelector(
-    (state: RootState) => state.uploadSlice.uploads
-  );
+  const uploadDetails  = useSelector((state:RootState)=> state.uploadSlice.uploads);
 
   useEffect(() => {
     const updateUploadStatuses = () => {
       // Create a copy of current preview URLs to potentially update
       const updatedPreviewUrls = { ...previewUrls };
+      console.log(previewUrls, 'preview url')
       const updatedUploadStates: VideoUploadState = {};
 
       // Iterate through all preview URLs
@@ -282,10 +280,8 @@ const AddLesson = () => {
           }
         });
       });
-
-      // Update states if there are changes
+      console.log(updatedUploadStates, 'setting updated upload state')
       setVideoUploadStates(updatedUploadStates);
-      // setPreviewUrls(updatedPreviewUrls);
     };
 
     updateUploadStatuses();
@@ -415,7 +411,7 @@ const AddLesson = () => {
           console.log("started HandleFileChange");
           // Upload video and get the URL
           // removed await from id
-          const id = handleVideoUpload(file, moduleIndex, lessonIndex);
+          const id = await handleVideoUpload(file, moduleIndex, lessonIndex);
           const topreview = `Pending_${id}`;
           setPreviewUrls((prevUrls) => ({
             ...prevUrls,
@@ -489,7 +485,7 @@ const AddLesson = () => {
       setSubmitting(false);
     }
   };
-
+  console.log(videoUploadStates, 'this is console.log')
   return (
     <div className="flex items-center justify-center m-5 px-4 min-h-[600px]">
       {isLoading ? <Loader /> : ""}
@@ -677,16 +673,7 @@ const AddLesson = () => {
                                                             <>
                                                               {/* <ProgressBar progress={videoUploadStates[moduleIndex]?.[lessonIndex]?.uploadDetails?.progress as number || 0}/> */}
                                                               <CircularLoader
-                                                                progress={
-                                                                  (videoUploadStates[
-                                                                    moduleIndex
-                                                                  ]?.[
-                                                                    lessonIndex
-                                                                  ]
-                                                                    ?.uploadDetails
-                                                                    ?.progress as number) ||
-                                                                  0
-                                                                }
+                                                                progress={(videoUploadStates[moduleIndex ]?.[lessonIndex]?.uploadDetails?.progress as number) ||  0}
                                                               />
                                                               <h1>{`${
                                                                 videoUploadStates[

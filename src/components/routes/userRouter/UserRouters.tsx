@@ -6,6 +6,7 @@ import WishListPage from '../../../pages/user/Cart/WishListPage';
 import ProfilePage from '../../../pages/user/Profile/ProfilePage';
 import TutorDetailsPage from '../../../pages/user/TutorDetailsPage/TutorDetailsPage';
 import Header from '../../user/Layout/Header';
+import { Footer } from '../../user/Layout/Footer';
 
 const UserRoutes = ()=>{
     return(
@@ -19,6 +20,7 @@ const UserRoutes = ()=>{
                 <Route path = '/wishlist' element = {<WishListPage/>}/>
                 <Route path = '/tutor/profile/:id' element= {<TutorDetailsPage/>} />
             </Routes>
+            <Footer/>
         </div>
     )
 }

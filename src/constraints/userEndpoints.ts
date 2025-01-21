@@ -19,4 +19,5 @@ export const userEndpoint = {
     fetchPurchasedCourses:`${import.meta.env.VITE_API_GATEWAY_BASE_URL}/fetchPurchasedCourses`,
     fetchUserData: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/fetchUserData`,
     updateUserDetails: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateUserDetails`,
+    googleLogin: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/googleLogin`,
 } 

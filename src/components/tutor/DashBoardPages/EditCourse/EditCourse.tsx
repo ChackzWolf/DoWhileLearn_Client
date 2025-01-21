@@ -4,6 +4,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import {
   setEditCourse,
+  setEditCourseEmpty,
   toNext,
 } from "../../../../redux/tutorSlice/CourseSlice/editCourseData";
 import { useSelector } from "react-redux";
@@ -18,6 +19,7 @@ import { getCookie } from "../../../../utils/cookieManager";
 import VideoPlayer from "../CreateCourse/CreateCourse.compoents.ts/VideoPlayer";
 import ProgressBar from "../UploadingStatus/ProgressBar";
 import { addVideoUpload } from "../../../../redux/uploadStatSlice";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object({
   courseTitle: Yup.string().required("Course name is required"),
@@ -55,7 +57,7 @@ const AddCourse = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate()
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [previewVideo, setPreviewVideo] = useState<string | null>(editCourse?.demoURL ?? null);
   const [isImageUploading, setImageUploading] = useState(false);
@@ -480,14 +482,24 @@ const AddCourse = () => {
                 </div>
 
                 {/* Submit Button */}
-                <div className="w-full flex justify-end mt-6 px-4">
-                  <button
-                    type="submit"
-                    className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"
-                  >
-                    Next
-                  </button>
-                </div>
+              <div className="w-full flex justify-between mt-6">
+                <button
+                  className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"
+                  onClick={() => {
+                    dispatch(setEditCourseEmpty());
+                    navigate(`/tutor/courses/${editCourse?.courseId}`)
+                  }}
+                >
+                  {" "}
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="py-2 px-8 bg-[#7C24F0] text-white font-semibold rounded-md hover:bg-[#6211cd] transition"
+                >
+                  Next
+                </button>
+              </div>
               </section>
             </Form>
           )}

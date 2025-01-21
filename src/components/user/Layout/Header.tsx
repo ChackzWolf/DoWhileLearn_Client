@@ -40,8 +40,8 @@ const Header = () => {
                         :
                         <div
                             className="flex items-center  ">
-                            <NavLink to={ROUTES.user.signin}><button className=" p-1 my-2 pr-8 hover:scale-105 transition-all font-semibold" > Login</button></NavLink>
-                            <NavLink to={ROUTES.common.AuthChoice}><button className="bg-[#7C24F0] text-white font-semibold rounded-lg p-1 px-3 mr-3 hover:scale-105 transition-all" > Get started</button></NavLink>
+                            <NavLink to={ROUTES.user.signin}><button className=" p-1 my-2 pr-8 text-accent hover:scale-105 transition-all font-semibold" > Login</button></NavLink>
+                            <NavLink to={ROUTES.common.AuthChoice}><button className="bg-accent text-primary font-semibold rounded-lg p-1 px-3 mr-3 hover:scale-105 transition-all" > Get started</button></NavLink>
                         </div>
 
                     }

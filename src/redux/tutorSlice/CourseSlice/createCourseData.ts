@@ -28,6 +28,9 @@ const createCourseData = createSlice({
     toPrev: (state) => {
       state.step -= 1;
     },
+    setCreateCourseStep: (state, action: PayloadAction<number>)=>{
+      state.step = action.payload
+    },
     setCreateCourse: (state, action: PayloadAction<ICreateCourse1>) => {
       state.createCourse = action.payload;
     },
@@ -88,6 +91,6 @@ const createCourseData = createSlice({
   },
 });
 
-export const {setCreateCourse, setCreateCourse2,setAddLesson, setCreateCourseEmpty, updateSpecificLessonVideo, toNext, toPrev, setDemoUrl} = createCourseData.actions;
+export const {setCreateCourse, setCreateCourse2,setAddLesson, setCreateCourseEmpty, updateSpecificLessonVideo, toNext, toPrev, setDemoUrl,setCreateCourseStep} = createCourseData.actions;
 
 export default createCourseData.reducer;

@@ -31,7 +31,7 @@ import { CreateCourseState } from "../../../../Interfaces/CourseInterface/ICreat
   
   export interface Lesson {
     title: string;
-    video: string;
+    video: string | File;
     description: string;
   }
 
@@ -74,8 +74,6 @@ const LessonAccordion: React.FC<{ lesson: CreateCourseState['Modules'][number]['
                         <source src={lesson.video} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
-                    ) : lesson.video instanceof File ? (
-                      <p>File type videos are not supported for previewing in this example.</p>
                     ) : (
                       <p>No video available</p>
                     )}
@@ -83,7 +81,9 @@ const LessonAccordion: React.FC<{ lesson: CreateCourseState['Modules'][number]['
 
            {/* Render questions if they exist */}
 
-
+           {/* : lesson.video && typeof lesson.video === 'object' && lesson.video instanceof File ? (
+                      <p>File type videos are not supported for previewing in this example.</p>
+                    ) */}
 
             
           </div>

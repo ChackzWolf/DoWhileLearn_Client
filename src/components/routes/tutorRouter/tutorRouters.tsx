@@ -33,7 +33,7 @@ const TutorRoutes = ()=>{
             <Header/>
             <div className="flex w-full h-full">
                 <SideNav/>
-                    <Routes>
+                <Routes>
                     <Route path = '/complete-registration' element={<RegistrationPage/>}/>
                     <Route path= '/' element={<TutorDashBoard/>}/>
                     <Route path= '/users' element={<UsersPage/>}/>

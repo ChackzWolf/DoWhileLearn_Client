@@ -3,9 +3,11 @@ import FirstImg from "../../svgs/firstAnim"; // Use PascalCase for component nam
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../redux/store/store";
 import {motion} from 'framer-motion'
+import { useNavigate } from "react-router-dom";
 function LayerOne() {
 
   const isLoggedin = useSelector((state:RootState) => state.userAuth.isLogin);
+  const navigate = useNavigate()
 
   return (
     <div className="w-full  min-h-screen sm:h-96 flex flex-col sm:flex-row  overflow-hidden">
@@ -28,16 +30,14 @@ function LayerOne() {
             <div className="flex w-full">
             {!isLoggedin ? (
                 <button
-                  type="submit"
+                onClick={()=>navigate('/user/auth/login')}
                   className="bg-purple-200 hover:bg-purple-100 text-[#7C24F0] px-6 py-3 rounded-lg flex items-center gap-2 transition-all duration-300 hover:translate-x-1"
-                >
-                  Join Now
-                  <ArrowRight className="w-4 h-4" />
+                > Join Now  <ArrowRight className="w-4 h-4" />
                 </button>
 
                 ):(
                   <button
-                  type="submit"
+                  onClick={()=> navigate('/courses')}
                   className="bg-purple-200 hover:bg-purple-100 text-[#7C24F0] px-6 py-3 rounded-lg flex items-center gap-2 transition-all duration-300 hover:translate-x-1"
                 >
                   Explore

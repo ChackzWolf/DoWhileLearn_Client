@@ -15,6 +15,8 @@ import { toast } from 'react-toastify';
 import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ROUTES } from "../../../routes/Routes";
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
+import CustomGoogleLoginButton from "../../common/Auth/CustomGoogleLoginButton";
 
 function LoginUser() {
     const dispatch = useDispatch()
@@ -58,6 +60,45 @@ function LoginUser() {
       }
     }, [location]);
 
+
+    const handleGoogleLogin = async (CredentialResponse: CredentialResponse) => {
+        const { credential } = CredentialResponse;
+        try {
+          const response = await axios.post(userEndpoint.googleLogin, {
+            credential,
+          });
+          const {success, accessToken, refreshToken, userId, message, userData} = response.data;
+          if (success) {
+            setCookie('userAccessToken', JSON.stringify(accessToken),0.1);
+    
+            setCookie('userRefreshToken', JSON.stringify(refreshToken),10);
+    
+    
+            
+            setCookie('userId', userId, 10)
+            
+            console.log('Login result: id', userId);
+    
+    
+            dispatch(setUserLogin())
+            console.log(userData, 'this is user data')
+            if(userData.profilePicture){
+                console.log('setting profile picture to redux:', userData.profilePicture )
+                dispatch(setUserProfilePic(userData.profilePicture))
+            }
+            setIsLoading(false)
+            navigate(ROUTES.common.landingPage);
+          } else{
+            setIsLoading(false)
+            setMessage(message);
+        }
+
+        } catch (error) {
+          toast.error("Google login failed");
+          console.log(error, "Error in Google login");
+        }
+      };
+    
 
 
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
@@ -162,7 +203,11 @@ function LoginUser() {
                                         disabled={isSubmitting}
                                     >
                                         Login
-                                    </button>
+                                        </button>
+                                        <div className="flex justify-center mb-4">
+                                        <CustomGoogleLoginButton/>
+
+                                        </div>
 
                                     <button
                                         type="button" // Changed type to button for Google login

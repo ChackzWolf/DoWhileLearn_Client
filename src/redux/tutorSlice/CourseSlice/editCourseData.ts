@@ -27,6 +27,9 @@ const editCourseData = createSlice({
     toPrev: (state) => {
       state.step -= 1;
     },
+    setEditCourseStep:(state,action:PayloadAction<number>)=>{
+      state.step = action.payload;
+    },
     setEditCourse: (state, action: PayloadAction<ICreateCourse1 | null>) => {
       state.editCourse = action.payload;
     },
@@ -96,6 +99,6 @@ const editCourseData = createSlice({
 
 });
 
-export const {setEditCourse, setEditCourse2,setEditLesson, setEditCourseEmpty, toNext, toPrev,setEditDemoUrl, updateSpecificEditLessonVideo} = editCourseData.actions;
+export const {setEditCourse, setEditCourse2,setEditLesson, setEditCourseEmpty, toNext, toPrev,setEditDemoUrl, updateSpecificEditLessonVideo, setEditCourseStep} = editCourseData.actions;
 
 export default editCourseData.reducer;

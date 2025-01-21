@@ -106,7 +106,6 @@ const CodingQuestionInterface = ({
     const [showSolution, setShowSolution] = useState(false);
     const [activeTab, setActiveTab] = useState('question');
     const [testResults, setTestResults] = useState<{ passed: boolean; input: string; expected: string; actual: string }[] >([]);
-    const [editorInstance, setEditorInstance] = useState<any>(null);
 
     useEffect(() => {
         const container = document.getElementById('monaco-container');
@@ -130,7 +129,6 @@ const CodingQuestionInterface = ({
                 setCode(editor.getValue());
             });
 
-            setEditorInstance(editor);
             return () => editor.dispose();
         }
     }, [startingCode]);
@@ -305,6 +303,19 @@ const CodingQuestionInterface = ({
                                                 <span className="text-gray-600">: {param.dataType}</span>
                                             </div>
                                         ))}
+
+                                    </div>
+
+                                    <h4 className="text-sm font-medium text-gray-900 my-3">Expected output:</h4>
+                                    <div className="grid grid-cols-2 gap-3">
+                             
+                                            <div 
+                                                className="p-3 bg-gray-50 rounded-lg text-sm border">
+                                                <span className="font-mono text-blue-600">{expectedOutput.value}</span>
+                                                <span className="text-gray-600">: {expectedOutput.dataType}</span>
+                                            </div>
+                              
+                                        
                                     </div>
                                 </div>
                             </div>
