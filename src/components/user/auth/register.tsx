@@ -8,6 +8,9 @@ import { useState } from "react";
 import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
 import Header from "../Layout/Header";
 import { ROUTES } from "../../../routes/Routes";
+import OAuth from "../../common/Auth/CustomGoogleLoginButton";
+import {motion} from "framer-motion"
+import { Player } from "@lottiefiles/react-lottie-player";
 
 
 
@@ -102,21 +105,35 @@ function RegisterUser() {
 
 
     return (
-        <>
+        <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col overflow-hidden">
             <Header/>
 
         <div className="flex h-screen">
 
 
-            <div className="w-1/2 bg-purple-700">
+            <motion.div
+                    initial={{ opacity: 0, x: -150 }}
+                    whileInView={{ opacity: 1, x: 10 }}
+                    transition={{ duration: 0.5, delay: 0.15 }}
+                 className="w-full md:w-1/2 flex justify-center items-center"> 
+                    <Player
+                        autoplay
+                        loop
+                        src="https://lottie.host/2c1314ab-f84b-4779-8c97-d9c8ae4be53a/u6H6TpekA6.json"
+                        style={{ height: '70%', width: ' 70%'}}
+                        />
 
-            </div>
+            </motion.div>
 
 
 
-            <div className="bg-[#FCF6FF] p- shadow-lg w-1/2 justify-center">
+            <motion.div
+                    initial={{ opacity: 0, x: 150 }}
+                    whileInView={{ opacity: 1, x: -10 }}
+                    transition={{ duration: 0.5, delay: 0.15 }}  
+                    className="w-1/2 justify-center">
                 
-                <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Student Signup</h2>
+                <h2 className="text-3xl mb-5 mt-20 text-center font-bold text-accent">Student Signup</h2>
                 { emailExists?  <h2 className="text-center text-[#FF0000]">Email already exists.</h2> : <h1></h1>}
 
 
@@ -127,26 +144,26 @@ function RegisterUser() {
                     <Form>
                         <div className="justify-center mb-20 px-28">
 
-                            <div className="flex justify-between">
-                                <div>
-                                    <p className="text-base mb-2 font-normal">First-name</p>
+                            <div className="flex justify-between gap-6">
+                                <div className="w-1/2">
+                                    <p className="text-base mb-2 font-normal text-accent">First-name</p>
                                     <div className="mb-4 items-center">
                                         <Field
                                             type="name"
                                             name="firstName"
-                                            className="w-full h-10 p-2 px-7 shadow-lg rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                            className="w-full h-10 p-2 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                             placeholder=" Enter your first-name here."
                                         />
                                         <ErrorMessage name="firstName" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>
                                 </div>
                                 <div className="w-1/2">
-                                    <p className="text-base mb-2 font-normal">Last-name</p>
+                                    <p className="text-base mb-2 font-normal text-accent">Last-name</p>
                                     <div className="mb-4 items-center">
                                         <Field
                                             type="name"
                                             name="lastName"
-                                            className="w-full h-10 p-2 px-10 border shadow-lg rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                            className="w-full h-10 p-2 border shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                             placeholder=" Enter your last-name here."
                                         />
                                         <ErrorMessage name="lastName" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
@@ -156,12 +173,12 @@ function RegisterUser() {
                             </div>
 
 
-                            <p className="text-base mb-2 font-normal">Email</p>
+                            <p className="text-base mb-2 font-normal text-accent">Email</p>
                             <div className="mb-4 items-center">
                                 <Field
                                     type="email"
                                     name="email"
-                                    className="w-full h-10 p-2 px-4 shadow-lg rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                    className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                     placeholder=" Enter your email here."
                                 />
                                 <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
@@ -169,15 +186,15 @@ function RegisterUser() {
 
 
                             
-                            <div className="flex justify-between">
+                            <div className="flex justify-between gap-5">
                                 <div className="w-1/2">
-                                    <p className="text-base mb-2 font-normal">Create a password</p>
+                                    <p className="text-base mb-2 font-normal text-accent">Create a password</p>
                                     <div className="mb-4 items-center">
                                     <div className="relative w-full h-10 flex items-center right-1">
                                         <Field
                                             type={showPassword ? "text" : "password"}
                                             name="password"
-                                            className="abslolute  w-full h-10 shadow-lg p-3 rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                            className="abslolute  w-full h-10 shadow-lg p-3 rounded-lg transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                             placeholder="Enter your password here."
                                         />
                                         <EyeToggleButton  onClick={togglePasswordVisibility} />
@@ -186,13 +203,13 @@ function RegisterUser() {
                                     </div>
                                 </div>
                                 <div className="w-1/2">
-                                    <p className="text-base mb-2 font-normal">Confirm password</p>
+                                    <p className="text-base mb-2 font-normal text-accent">Confirm password</p>
                                     <div className="mb-4 items-center">
                                         <div className="relative w-full h-10 flex items-center ">
                                         <Field
                                             type={showConfirmPassword ? "text" : "password"}
                                             name="confirmPassword"
-                                            className="abslolute  w-full h-10 shadow-lg shadow-slate-300 p-3 rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                            className="abslolute  w-full h-10 p-3 rounded-lg transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                             placeholder="Enter your password here."
                                         />
                                         <EyeToggleButton  onClick={toggleConfirmPasswordVisibility} />
@@ -211,25 +228,19 @@ function RegisterUser() {
                             <div className="justify-center mb-6 ">
                                 <button
                                     type="submit"
-                                    className="w-full px-4 py-3 mb-4 text-white rounded-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#7C24F0] transition-all ease-in-out delay-50 duration-500         "
+                                    className="w-full px-4 py-3 mb-4 text-white rounded-lg font-PlusJakartaSans font-semibold  bg-[#7C24F0] transition-all ease-in-out delay-50 duration-500         "
                                     
                                 >
                                     {isSubmitting? 'Creating...': 'Create account'}
                                 </button>
 
-                                <button
-                                    type="submit"
-                                    className="w-full px-4 py-3 mb-4 rounded-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#DDB3FF] transition-all ease-in-out delay-50 duration-500         "
-                                    
-                                >
-                                    Signup with Google
-                                </button>
+                                <OAuth role="USER"/>
 
 
-                                <div className="flex w-full">
+                                <div className="flex w-full text-accent">
                                     <h1>Already have an account?  </h1>
                                     <NavLink to={ROUTES.user.signin}>
-                                        <h1 className="pl-2 text-sky-700"> Login</h1>
+                                        <h1 className="transition-all pl-2 text-accent underline hover:underline-offset-4"> Login</h1>
                                     </NavLink>
                                 </div>
 
@@ -241,10 +252,10 @@ function RegisterUser() {
 
                     )}
                 </Formik>
-            </div>
+            </motion.div>
 
         </div>
-        </>
+        </div>
     )
 }  
 

@@ -15,8 +15,9 @@ import { toast } from 'react-toastify';
 import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ROUTES } from "../../../routes/Routes";
-import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
-import CustomGoogleLoginButton from "../../common/Auth/CustomGoogleLoginButton";
+import OAuth from "../../common/Auth/CustomGoogleLoginButton";
+import { motion } from 'framer-motion';
+
 
 function LoginUser() {
     const dispatch = useDispatch()
@@ -61,44 +62,7 @@ function LoginUser() {
     }, [location]);
 
 
-    const handleGoogleLogin = async (CredentialResponse: CredentialResponse) => {
-        const { credential } = CredentialResponse;
-        try {
-          const response = await axios.post(userEndpoint.googleLogin, {
-            credential,
-          });
-          const {success, accessToken, refreshToken, userId, message, userData} = response.data;
-          if (success) {
-            setCookie('userAccessToken', JSON.stringify(accessToken),0.1);
-    
-            setCookie('userRefreshToken', JSON.stringify(refreshToken),10);
-    
-    
-            
-            setCookie('userId', userId, 10)
-            
-            console.log('Login result: id', userId);
-    
-    
-            dispatch(setUserLogin())
-            console.log(userData, 'this is user data')
-            if(userData.profilePicture){
-                console.log('setting profile picture to redux:', userData.profilePicture )
-                dispatch(setUserProfilePic(userData.profilePicture))
-            }
-            setIsLoading(false)
-            navigate(ROUTES.common.landingPage);
-          } else{
-            setIsLoading(false)
-            setMessage(message);
-        }
 
-        } catch (error) {
-          toast.error("Google login failed");
-          console.log(error, "Error in Google login");
-        }
-      };
-    
 
 
     const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
@@ -144,94 +108,93 @@ function LoginUser() {
     }
 
     return (
-<>
-    {isLoading ? <Loader /> : ""}
-    <Header />
-
-    <div className="flex flex-col md:flex-row h-screen">
-        <div className="w-full md:w-1/2 bg-[#FCF6FF] flex justify-center items-center"> 
+        <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
+            <Header/>
+            {isLoading && <Loader/>}
+            <div className="flex flex-col md:flex-row h-screen">
+                <motion.div
+                                  initial={{ opacity: 0, x: -150 }}
+                                  whileInView={{ opacity: 1, x: 10 }}
+                                  transition={{ duration: 0.5, delay: 0.15 }} 
+                 className="w-full md:w-1/2 flex justify-center items-center"> 
                     <Player
-                    autoplay
-                    loop
-                    src="https://lottie.host/2c1314ab-f84b-4779-8c97-d9c8ae4be53a/u6H6TpekA6.json"
-                    style={{ height: '70%', width: ' 70%'}}
-                    />
-                    
-        </div>
+                        autoplay
+                        loop
+                        src="https://lottie.host/2c1314ab-f84b-4779-8c97-d9c8ae4be53a/u6H6TpekA6.json"
+                        style={{ height: '70%', width: ' 70%'}}
+                        />
 
-        <div className="bg-[#FCF6FF] p-6 md:p-16 w-full md:w-1/2 rounded-lg flex justify-center">
-            <div className="w-full max-w-md"> {/* Center the form container */}
-                <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Student Login</h2>
-                <h1 className="text-red-800 text-center">{message}</h1>
-                <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
-                    {({ isSubmitting }) => (
-                        <Form>
-                            <div className="justify-center mb-20 px-4 md:px-28 lg:px-16">
-                                <p className="text-base mb-2 font-normal">Email</p>
-                                <div className="mb-4 flex-col items-center">
-                                    <Field
-                                        type="email"
-                                        name="email"
-                                        className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
-                                        placeholder=" Enter your email here."
-                                    />
-                                    <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
-                                </div>
-                                <div className="flex w-full justify-between">
-                                    <p className="text-base mb-2 font-normal">Password</p>
-                                    {/* <p className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</p> */}
-                                    <a href={ROUTES.user.forgotPasswordEmailEntry} className="text-base mb-2 font-normal justify-end text-sky-700">Forgot ?</a>
-                                </div>
+                </motion.div>
 
-                                <div className="justify-center mb-6 ">
-                                    <div className="relative w-full h-10 flex items-center right-1 rounded-lg ">
+                <motion.div
+                    initial={{ opacity: 0, x: 150 }}
+                    whileInView={{ opacity: 1, x: -10 }}
+                    transition={{ duration: 0.5, delay: 0.15 }} 
+                    className="p-8 md:p-16 w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
+
+                    <h2 className="text-3xl mb-5 mt-10 text-center font-bold text-accent">Student Login</h2>
+
+                    <h1 className="text-red-800 text-center">{message}</h1>
+                    <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
+
+                        {({isSubmitting}) => (
+                            <Form>
+                                <div className="justify-center mb-20 px-4 md:px-28">
+                                    <p className="text-base mb-2 font-normal text-accent">Email</p>
+                                    <div className="mb-4 flex-col items-center">
                                         <Field
-                                            type={showPassword ? 'text' : 'password'} // Corrected type to 'text'
-                                            name="password"
+                                            type="email"
+                                            name="email"
                                             className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
-                                            placeholder="Enter your password here."
+                                            placeholder=" Enter your email here."
                                         />
-                                        <EyeCheckbox onClick={togglePasswordVisibility} />
+                                        <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>
-                                    <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
-                                </div>
-
-                                <div className="justify-center mb-6 ">
-                                    <button
-                                        type="submit"
-                                        className="w-full px-4 py-3 mb-4 text-white shadow-lg rounded-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#7C24F0] transition-all ease-in-out delay-50 duration-500"
-                                        disabled={isSubmitting}
-                                    >
-                                        Login
-                                        </button>
-                                        <div className="flex justify-center mb-4">
-                                        <CustomGoogleLoginButton/>
-
+                                    <div className="flex w-full justify-between items-center">
+                                        <p className="text-base mb-2 font-normal text-accent">Password</p>
+                                        <a href={ROUTES.user.forgotPasswordEmailEntry} className="mb-2 font-normal justify-end text-xs underline text-accent">Forgot ?</a>
+                                    </div>
+                        
+                                    <div className="justify-center mb-6 ">
+                                        <div className="relative w-full h-10 flex items-center right-1 rounded-lg ">
+                                            <Field
+                                                type={showPassword ? 'text' : 'password'}
+                                                name="password"
+                                                className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                                placeholder="Enter your password here."
+                                            />
+                                            <EyeCheckbox onClick={togglePasswordVisibility} />
                                         </div>
-
-                                    <button
-                                        type="button" // Changed type to button for Google login
-                                        className="w-full px-4 py-3 mb-4 rounded-lg shadow-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#DDB3FF] transition-all ease-in-out delay-50 duration-500"
-                                    >
-                                        Login with Google
-                                    </button>
-
-                                    <div className="flex w-full">
-                                        <h1>Don't have an account? </h1>
-                                        <NavLink to={ROUTES.user.signup} className="pl-2 text-sky-700">
-                                            Signup
-                                        </NavLink>
+                                        <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
+                                    </div>
+                        
+                                    <div className="justify-center mb-6 ">
+                                        <button
+                                            type="submit"
+                                            className="w-full px-4 py-3 mb-4 text-white shadow-lg hover:shadow-2xl rounded-lg font-PlusJakartaSans font-semibold  bg-primary transition-all ease-in-out delay-50 duration-500"
+                                            disabled={isSubmitting}
+                                        >
+                                            Login
+                                        </button>
+                                        <OAuth role="USER"/>
+                                        <div className="flex w-full text-accent">
+                                            <h1>Don't have an account?</h1>
+                                            <NavLink to={ROUTES.user.signup} className="pl-2 text-accent hover:underline">
+                                                Signup
+                                            </NavLink>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
+                            </Form>
+                        )}
+                    </Formik>
+                </motion.div>
             </div>
         </div>
-    </div>
-</>
     )
 }
 
 export default LoginUser
+
+
+

@@ -3,9 +3,10 @@ import Registeration1 from "../../../components/tutor/auth/TutorRegistration/Reg
 
 
 const RegistrationPage = () => {
+
   //DDB3FF
   return (
-    <div className="w-full h-min-screen bg-[#FCF6FF]">
+    <div className="w-full h-min-screen bg-accent">
       <div className="flex w-full h-full">       
         <div className="w-full flex-col bg-[#FCF6FF] h-full">
               <Registeration1/>

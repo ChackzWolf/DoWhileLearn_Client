@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { getCookie, removeCookie, setCookie } from '../cookieManager';  // Your cookie utility
 import { getRoleFromToken } from '../jwtUtils';
 import axios from 'axios';
+import { ROUTES } from '../../routes/Routes';
 
 export const TutorPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
   const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
@@ -27,7 +28,7 @@ export const TutorPrivateRoute = ({ children, roles }: { children: JSX.Element; 
           removeCookie('tutorAccessToken');
           removeCookie('tutorRefreshToken');
           removeCookie('tutorId');
-          window.location.href = '/login/tutor';
+          window.location.href = ROUTES.tutor.signin;
           return;
         }
       }

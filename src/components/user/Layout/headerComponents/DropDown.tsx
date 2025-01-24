@@ -18,9 +18,11 @@ import {AnimatePresence, motion} from 'framer-motion'
 const HeaderDropdown: React.FC = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const profilePicture = useSelector((state:RootState)=> state.userAuth.userProfilePic)
+    const picture = useSelector((state:RootState)=> state.userAuth.userProfilePic)
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null); // Reference to dropdown container
+    const [loaded, setLoaded] = useState<boolean>(false);
+    const [profilePicture, setProfilePicture]  =useState<string>('')
 
     // Handle logout logic
     const handleLogout = async () => {
@@ -40,7 +42,7 @@ const HeaderDropdown: React.FC = () => {
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
-    
+     
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -67,15 +69,43 @@ const HeaderDropdown: React.FC = () => {
     const toProfile =()=> {
         navigate(ROUTES.user.profile);
     }
-    return (
+
+
+
+    useEffect(() => {
+        if (picture) {
+            const img = new Image();
+            img.src = picture;
+
+            img.onload = () => {
+                setProfilePicture(picture); // Update to actual image after preload
+                setLoaded(true); // Mark as loaded
+            };
+
+            img.onerror = () => {
+                console.error("Failed to load image");
+                setLoaded(false); // Keep the placeholder
+            };
+        }
+    }, [picture]);
+
+
+
+    console.log(profilePicture, 'this is profile picture')
+    return ( 
         <div className="relative" ref={dropdownRef}>
             <button onClick={toggleDropdown} className="focus:outline-none flex gap-1 py-1 items-center">
-                {/* You can replace the FaUserCircle with an img tag if you're using a custom image */}
-                {profilePicture? 
+                {profilePicture?            
                 <div className='transition-all rounded-full hover:bg-opacity-65 p-1    hover:backdrop-blur-sm '>
-                    {/* <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/> */}
-                    <img src={profilePicture} className='h-8 w-8 rounded-full ' /> 
-                    {/* <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'} `}/> */}
+                    {/* <img src={profilePicture} className='h-8 w-8 rounded-full ' />  */}
+
+                    <img
+                        src={profilePicture}
+                        alt="Profile"
+                        className={`object-cover h-8 w-8 rounded-full ${
+                        !loaded ? "animate-pulse bg-gray-200" : ""
+                        }`}
+            />
                 </div>
                 :
                 <div className='text-accent flex items-center gap-2'>
@@ -87,20 +117,20 @@ const HeaderDropdown: React.FC = () => {
             <AnimatePresence>
             {isOpen && (
                 <motion.div
-                initial={{ opacity: 0, y: -60,x:60, scale: 0 }}  
-                animate={{ opacity: 1, y:0,x:0, scale: 1 }}  
-                exit={{ opacity: 0, y: -60,x:60, scale: 0 }}  
-                transition={{    
-                    duration: 0.06, // Extremely fast duration (50ms)   
-                  ease: 'easeOut',      
-                }}
-                 className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-[100] transform opacity-100 scale-100"
-                 >
-                    <ul>
-                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toWishList}> <FaRegHeart /> Wishlist</li>
-                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toProfile}> <RiAccountBoxLine /> Profile</li>
-                        <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={handleLogout}> <CiLogout /> Logout</li>
-                    </ul>
+                    initial={{ opacity: 0, y: -60,x:60, scale: 0 }}  
+                    animate={{ opacity: 1, y:0,x:0, scale: 1 }}  
+                    exit={{ opacity: 0, y: -60,x:60, scale: 0 }}  
+                    transition={{    
+                        duration: 0.06, // Extremely fast duration (50ms)   
+                      ease: 'easeOut',      
+                    }}
+                     className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-[100] transform opacity-100 scale-100"
+                     >
+                        <ul>
+                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toWishList}> <FaRegHeart /> Wishlist</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toProfile}> <RiAccountBoxLine /> Profile</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={handleLogout}> <CiLogout /> Logout</li>
+                        </ul>
                 </motion.div>
             )}
             </AnimatePresence>

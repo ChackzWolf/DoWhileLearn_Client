@@ -18,4 +18,5 @@ export const tutorEndpoint = {
     fetchOrdersOfTutor: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchOrdersOfTutor`,
     TranscodeVideo: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/TranscodeVideo`,
     FetchStudents:`${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/FetchStudents`,
+    googleAuth:`${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/googleAuth`,
 } 
