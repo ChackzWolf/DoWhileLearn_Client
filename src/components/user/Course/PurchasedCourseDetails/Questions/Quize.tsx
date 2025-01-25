@@ -23,17 +23,18 @@ const QuizChallenge: React.FC<QuizChallengeProps> = ({ quizData }) => {
   const isCorrect = selectedOption === quizData?.correctAnswer;
 
   return quizData && (
-    <div className="max-w-2xl min-h-screen mx-auto p-6 bg-white rounded-xl shadow-lg flex flex-col justify-center">
+    
+    <div className="max-w-2xl  p-6 m-6 items-center w-full h-full bg-white rounded-xl shadow-lg flex flex-col justify-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="space-y-6"
+        className="space-y-6 w-full"
       >
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Quiz Challenge</h2>
         
         <div 
-          className="prose max-w-none mb-6"
+          className="prose w-full mb-6"
           dangerouslySetInnerHTML={{ __html: quizData.question }}
         />
 
@@ -55,7 +56,7 @@ const QuizChallenge: React.FC<QuizChallengeProps> = ({ quizData }) => {
                     ? 'bg-red-100 border-2 border-red-500'
                     : 'bg-gray-100 hover:bg-gray-200 border-2 border-transparent'
                 } ${
-                  selectedOption === index ? 'ring-2 ring-blue-500' : ''
+                  selectedOption === index ? 'ring-2 ring-purple-500' : ''
                 }`}
               >
                 {option}

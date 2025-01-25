@@ -187,7 +187,7 @@ function LoginModal() {
     
                                     <div className="flex w-full text-accent">
                                         <h1>Don't have an account?</h1>
-                                        <NavLink to="/register/tutor" className="pl-2 text-accent hover:underline">
+                                        <NavLink to={ROUTES.tutor.signup} className="pl-2 text-accent hover:underline">
                                             Signup
                                         </NavLink>
                                     </div>

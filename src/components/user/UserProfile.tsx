@@ -10,6 +10,7 @@ import Courses from "../common/Courses/Courses";
 import { PiVideo } from "react-icons/pi";
 import { useDispatch } from "react-redux";
 import { setUserProfilePic } from "../../redux/authSlice/authSlice";
+import { toast } from "react-toastify";
 
 
 
@@ -113,6 +114,10 @@ const UserProfile = ({ user }: { user: any }) => {
   const handleSave = async () => {
     try {
       setIsLoading(true);
+      if(formData.phoneNumber && formData.phoneNumber.length !== 0){
+        toast.error("Please enter a valid number.")
+        return
+      }
       const response = await userAxios.post(userEndpoint.updateUserDetails, formData);
       dispatch(setUserProfilePic(formData.profilePicture));
       setMessage(response.data.message);

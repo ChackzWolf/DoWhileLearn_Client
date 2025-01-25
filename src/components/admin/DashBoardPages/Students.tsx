@@ -90,9 +90,9 @@ function Students() {
         <button
           className={`${
             row.isblocked
-              ? "bg-green-500"
-              : "bg-red-600"
-          } rounded-lg px-3 md:px-6 m-1 md:m-2 py-1 text-white`}
+              ? "bg-green-500 md:px-4"
+              : "bg-red-600  md:px-6"
+          } rounded-lg px-3  m-1 md:m-2 py-1 text-white`}
           onClick={() => handleToggleBlock(row._id)}
         >
           {row.isblocked ? "Unblock" : "Block"}

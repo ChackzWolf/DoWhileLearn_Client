@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { FaStar, FaUserCircle } from "react-icons/fa";
 import { BsStarHalf } from "react-icons/bs";
 import userAxios from "../../../utils/axios/userAxios.config";
@@ -23,8 +23,7 @@ const StudentReviews: React.FC<{
   courseId: string | undefined;
   isPurchased: boolean;
   averageRating: number | undefined;
-  totalRatings:number| undefined
-}> = ({ courseId, isPurchased ,averageRating ,totalRatings }) => {
+}> = ({ courseId, isPurchased ,averageRating }) => {
   // ... previous state declarations remain the same ...
 
   // Add new state for reviews
@@ -32,7 +31,8 @@ const StudentReviews: React.FC<{
   const [isUploadingReview, setIsUploadingReview] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [isReviewed, setIsReviewed] = useState(true);
+  const [currentReview, setCurrentReview] = useState<string>('')
+  const [isReviewed, setIsReviewed] = useState(false);
   const userId = getCookie("userId");
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const StudentReviews: React.FC<{
       setReviews(reviewData.data.reviewData);
     };
     fetchReviews();
-  }, []);
+  }, [currentReview]);
 
   useEffect(() => {
     const setupReview = () => {
@@ -67,6 +67,7 @@ const StudentReviews: React.FC<{
           setReviews(filteredUsers);
           setRating(review.rating);
           setComment(review.comment);
+          setCurrentReview(review.comment)
           setIsReviewed(userExists);
         }
       }
@@ -109,10 +110,10 @@ const StudentReviews: React.FC<{
       const response = await userAxios.post(userEndpoint.addUserReview, data);
       console.log(response);
       setIsReviewed(true);
-      //   setRating(0);
-      //   setComment("");
+      toast.success("Your review have been submited succesfully. Thankyou.")
     } else {
-      alert("Please provide a rating and comment.");
+      toast.error("Please provide rating and comment.")
+      // alert("Please provide a rating and comment.");
     }
     setIsUploadingReview(false);
   };
@@ -170,6 +171,7 @@ const StudentReviews: React.FC<{
                   Student Reviews
                 </h2>
                 {isPurchased && (
+                  /////////////////
                   isReviewed === true ? (
                     <motion.div
                       initial={{ scale: 0.95, opacity: 0 }}
@@ -188,7 +190,7 @@ const StudentReviews: React.FC<{
                         </div>
                         {/* <div className="text-gray-600 text-sm">Tap stars to rate</div> */}
                       </div>
-                      <div className="w-full bg-white border-gray-300 rounded-lg px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none">
+                      <div className="w-full bg-purple-50 border-gray-300 rounded-lg px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none">
                         {" "}
                         <h1>{comment}</h1>
                       </div>
@@ -197,7 +199,7 @@ const StudentReviews: React.FC<{
                           onClick={() => {
                             setIsReviewed(false);
                           }}
-                          className="mt-4 bg-white text-sm  text-purple-600 hover:underline font-semibold py-2 rounded-lg transition-all duration-300 text-right"
+                          className=" transition-all mt-4 bg-purple-50 text-sm  text-purple-600 hover:underline font-semibold py-2 rounded-lg duration-300 text-right"
                         >
                           Edit Review
                         </button>
@@ -238,7 +240,9 @@ const StudentReviews: React.FC<{
                       </button>
                     </motion.div>
                   )
-                ) }
+                ) 
+                /////
+                }
                 {/* Average Rating Card */}
                 <motion.div
                   initial={{ scale: 0.95, opacity: 0 }}
@@ -258,7 +262,7 @@ const StudentReviews: React.FC<{
                     </div>
                     <div className="text-right">
                       <div className="text-1xl font-semibold text-gray-800">
-                        {totalRatings || 'No reviews yet'}
+                        {reviews.length+1 || 'No reviews yet'}
                       </div>
                       <div className="text-gray-600 text-sm">
                         Total reviews
@@ -349,7 +353,7 @@ const StudentReviews: React.FC<{
         </div>
       ) : (
         <div className="w-full flex items-center justify-center flex-col">
-          {isPurchased ? (
+          {isPurchased && (
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -381,8 +385,6 @@ const StudentReviews: React.FC<{
                 {isUploadingReview ? <Spinner /> : "Submit Review"}{" "}
               </button>
             </motion.div>
-          ) : (
-            ""
           )}
 
           <h1 className="text-2xl font-bold text-gray-600  m-10">

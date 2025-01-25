@@ -71,6 +71,13 @@ const Table: React.FC<TableProps> = ({ columns, data, title}) => {
                       src={row[col.key] as string}
                       alt="Row image"
                       className="h-10 w-10 object-cover rounded"
+                      onError={(e) => {
+                        const imgElement = e.currentTarget;
+                        imgElement.src = 'https://imgs.search.brave.com/_0VWwdbTWtDK4_WOQ0u4OyPacKn0-URGcW2CuKbzgIM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzEwLzQ0LzY2LzAy/LzM2MF9GXzEwNDQ2/NjAyNjdfc0R6bWVG/Tjg3dkFzR3dEdVY1/bE9wZ0FLNjdpYVdp/SEEuanBn'; // Clear the source
+                        imgElement.alt = 'NA'; // Set alternative text
+                        imgElement.className = 'h-10 w-10 flex items-center justify-center bg-accent text-gray-500 rounded';
+                      
+                    }}
                     />
                   )
                   : row[col.key]}
@@ -82,7 +89,7 @@ const Table: React.FC<TableProps> = ({ columns, data, title}) => {
       </table>
 
       {data.length > itemsPerPage && (
-             <div className="flex justify-center space-x-4 mb-36">
+             <div className="flex justify-center space-x-4 mb-36 mt-5">
                    <button
                      disabled={currentPage === 1}
                      onClick={() => handlePageChange(currentPage - 1)}

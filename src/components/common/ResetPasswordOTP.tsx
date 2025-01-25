@@ -149,7 +149,7 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
     };
     if(role === "TUTOR"){
       const response = await axios.post(tutorEndpoint.resendOtpToEmail, data);
-      console.log(response, 'response for resent otp')
+      console.log(response, 'tutor response for resent otp')
       const {message, success} = response.data;
       setMessage(message);
       if(success){
@@ -161,7 +161,7 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
       setIsLoading(false)
     }else if (role === 'USER'){
       const response = await axios.post(userEndpoint.resendOtpToEmail, data);
-      console.log(response, 'response for resent otp')
+      console.log(response, 'user response for resent otp')
       const {message, success} = response.data;
       setMessage(message);
       if(success){
@@ -176,7 +176,7 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
 
       console.log(data, 'data')
       const response = await axios.post(adminEndpoint.resendOtpToEmail, data);
-      console.log(response, 'response for resent otp')
+      console.log(response, 'admin response for resent otp')
       const {message, success} = response.data;
       setMessage(message);
       if(success){
@@ -191,7 +191,7 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-slate-400 flex items-center justify-center">
+    <div className="min-h-screen w-full bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end flex items-center justify-center">
       {isLoading && <Loader/>}
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto">
         <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">

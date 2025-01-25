@@ -23,9 +23,9 @@ export const ROUTES = {
         signin:                   '/tutor/auth/login',
         signup:                   '/tutor/auth/register',
         signupOTP:                '/tutor/auth/register/otp',
-        forgotPasswordEmailEntry: '/user/auth/forgot-password',
-        forgotPasswordReset:      '/user/auth/forgot-password/reset',
-        forgotPasswordOTP:        '/user/auth/forgot-password/otp',
+        forgotPasswordEmailEntry: '/tutor/auth/forgot-password',
+        forgotPasswordReset:      '/tutor/auth/forgot-password/reset',
+        forgotPasswordOTP:        '/tutor/auth/forgot-password/otp',
         
         completeRegisteration:    '/tutor/complete-registration',
 

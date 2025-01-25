@@ -93,8 +93,8 @@ function VerifyEmail({role}:VarifyEmailProp) {
 <>
     {isLoading ? <Loader /> : ""}
 
-    <div className="flex flex-col md:flex-row h-screen">
-        <div className="w-full md:w-1/2 bg-[#FCF6FF] flex justify-center items-center"> 
+    <div className="flex flex-col md:flex-row h-screen bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end ">
+        <div className="w-full md:w-1/2  flex justify-center items-center"> 
                     <Player
                     autoplay
                     loop
@@ -104,15 +104,15 @@ function VerifyEmail({role}:VarifyEmailProp) {
                     
         </div>
 
-        <div className="bg-[#FCF6FF] p-6 md:p-16 w-full md:w-1/2 rounded-lg flex justify-center">
+        <div className=" p-6 md:p-16 w-full md:w-1/2 rounded-lg flex justify-center">
             <div className="w-full max-w-md flex flex-col justify-center items-center"> {/* Center the form container */}
-                <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Enter email to verify</h2>
+                <h2 className="text-3xl mb-5 mt-20 text-center font-bold text-accent">Enter email to verify</h2>
                 <h1 className="text-red-500 text-center">{message}</h1>
                 <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
                     {({ isSubmitting }) => (
                         <Form>
                             <div className="justify-center mb-20 px-4 md:px-28 lg:px-16">
-                                <p className="text-base mb-2 font-normal">Email</p>
+                                <p className="text-base mb-2 font-normal text-accent">Email</p>
                                 <div className="mb-4 flex-col items-center">
                                     <Field
                                         type="email"
@@ -127,7 +127,7 @@ function VerifyEmail({role}:VarifyEmailProp) {
                                 <div className="justify-center mb-6 ">
                                     <button
                                         type="submit"
-                                        className="w-full px-4 py-3 mb-4 text-white shadow-lg rounded-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#7C24F0] transition-all ease-in-out delay-50 duration-500"
+                                        className="w-full px-4 py-3 mb-4 text-white shadow-lg rounded-lg font-PlusJakartaSans font-semibold bg-primary hover:shadow-2xl transition-all ease-in-out delay-50 duration-500"
                                         disabled={isSubmitting}
                                     >
                                         Verify

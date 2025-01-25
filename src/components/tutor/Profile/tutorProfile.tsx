@@ -7,6 +7,7 @@ import { getCookie } from "../../../utils/cookieManager";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import { setTutorProfilePic } from "../../../redux/authSlice/authSlice";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 interface Qualification {
   qualification: string;
@@ -194,13 +195,19 @@ const TutorProfile = ({ tutor }: { tutor: any }) => {
   const handleSave = async () => {
     try {
       setIsLoading(true);
+      if(formData.phoneNumber && formData.phoneNumber.length !== 10){
+        toast.error("Please enter a valid number.");
+        return;
+      }
       const response = await tutorAxios.post(tutorEndpoint.updateTutorDetails, formData);
       dispatch(setTutorProfilePic(formData.profilePicture))
       setMessage(response.data.message);
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 3000);
       setIsEditing(false);
+      toast.success("Profile updated succesfully")
     } catch (error) {
+      toast.error("Error updating profile")
       setMessage("Error updating profile");
       setShowMessage(true);
     } finally {

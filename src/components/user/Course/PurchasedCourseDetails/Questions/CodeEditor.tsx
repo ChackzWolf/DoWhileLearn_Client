@@ -245,7 +245,7 @@ const CodingQuestionInterface = ({
     };
     console.log('test result ', testResults)
     return (
-        <div className="max-w-6xl h-screen mx-auto p-4 bg-white overflow-auto">
+        <div className="w-full h-full mx-11 p-4 bg-white rounded-lg overflow-auto">
             {/* Header */}
             <div className="mb-6">
                 <div className="flex justify-between items-center mb-4">

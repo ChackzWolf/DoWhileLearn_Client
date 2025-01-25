@@ -1,10 +1,10 @@
-import  { useState } from "react";
+import { useState } from "react";
 import Modules from "./Modules"; // Import the Modules component
 import { ToastContainer } from "react-toastify";
 import {
-  CreateCourseState,
-  ICreateCourse1,
-  ICreateCourse2,
+    CreateCourseState,
+    ICreateCourse1,
+    ICreateCourse2,
 } from "../../../../components/Interfaces/CourseInterface/ICreateCourse";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { motion } from "framer-motion";
@@ -26,26 +26,26 @@ import { ROUTES } from "../../../../routes/Routes";
 import QuizChallenge from "./Questions/Quize";
 
 interface Module {
-  name: string;
-  description: string;
-  lessons: Array<Lesson>;
+    name: string;
+    description: string;
+    lessons: Array<Lesson>;
 }
 
 interface Lesson {
-  title: string;
-  video: File | null | string;
-  description: string;
-  questions?: questions;
+    title: string;
+    video: File | null | string;
+    description: string;
+    questions?: questions;
 }
 
 interface questions {
-  questionText: string;
-  options: string[];
-  correctAnswer: string;
+    questionText: string;
+    options: string[];
+    correctAnswer: string;
 }
 
 const initialModulesState: CreateCourseState = {
-  Modules: [],
+    Modules: [],
 };
 
 
@@ -62,408 +62,386 @@ const initialModulesState: CreateCourseState = {
 
 
 interface TutorData {
-  firstName:string;
-  lastName:string;
-  expertise:string[];
-  profilePicture:string;
-  _id:string;
+    firstName: string;
+    lastName: string;
+    expertise: string[];
+    profilePicture: string;
+    _id: string;
 }
 
 
 interface QuizeData {
-  question:string,
-  options:string[],
-  correctAnswer :number;
+    question: string,
+    options: string[],
+    correctAnswer: number;
 }
-function CoursePurchasedCourseDetailsDetails() {
-  const dispatch = useDispatch();
-  const [tutorData, setTutorData ] = useState<TutorData | null>(null);
-  const navigate = useNavigate()
-  const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
-  const [quizData, setQuizData] = useState<QuizeData | null>(null)
-  const [activeTab, setActiveTab] = useState("overview");
-  const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
-  const [benefits_prerequisites, setbenefits_prerequisites] = useState<ICreateCourse2 | null>(null);
-  const [totalLessons, setTotalLessons] = useState();
-  const [modules, setModules] = useState<CreateCourseState>(initialModulesState);
-  const [isVisibleCode, setIsVisibleCode] = useState(false);
-  const [quizVisible, setQuizVisible]  = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
-  const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
-  const [selectedLessonLength, setSelectedLessonLength] = useState(0)
-  const [selectedVideoDescription, setSelectedVideoDescription] = useState<string | null>(null);
+function PurchasedCourseDetails() {
+    const dispatch = useDispatch();
+    const [tutorData, setTutorData] = useState<TutorData | null>(null);
+    const navigate = useNavigate()
+    const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
+    const [quizData, setQuizData] = useState<QuizeData | null>(null)
+    const [activeTab, setActiveTab] = useState("overview");
+    const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
+    const [benefits_prerequisites, setbenefits_prerequisites] = useState<ICreateCourse2 | null>(null);
+    const [totalLessons, setTotalLessons] = useState();
+    const [modules, setModules] = useState<CreateCourseState>(initialModulesState);
+    const [isVisibleCode, setIsVisibleCode] = useState(false);
+    const [quizVisible, setQuizVisible] = useState(false);
+    const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
+    const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
+    const [selectedLessonLength, setSelectedLessonLength] = useState(0)
+    const [selectedVideoDescription, setSelectedVideoDescription] = useState<string | null>(null);
 
 
-  const { id } = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string }>();
 
-  useEffect(() => {
-    if (id) {
-      const fetchCourseDetails = async () => {
-        try {
-          const userId = getCookie("userId");
-          console.log();
-          const response = await userAxios.get(userEndpoint.fetchCourseDetails,{  params: { id, userId }} );
- 
-          console.log(response.data.courseData, "course ");
+    useEffect(() => {
+        if (id) {
+            const fetchCourseDetails = async () => {
+                try {
+                    const userId = getCookie("userId");
+                    console.log();
+                    const response = await userAxios.get(userEndpoint.fetchCourseDetails, { params: { id, userId } });
 
-          const theCourseData: ICreateCourse1 = {
-            thumbnail: response.data.courseData.thumbnail,
-            courseTitle: response.data.courseData.courseTitle,
-            courseDescription: response.data.courseData.courseDescription,
-            coursePrice: response.data.courseData.coursePrice,
-            discountPrice: response.data.courseData.discountPrice,
-            courseCategory: response.data.courseData.courseCategory,
-            courseLevel: response.data.courseData.courseLevel,
-            demoURL: response.data.courseData.demoURL,
-            courseId: response.data.courseData._id,
-            averageRating:response.data.courseData.averageRating,
-            ratingCount: response.data.courseData.ratingCount,
+                    console.log(response.data.courseData, "course ");
 
-          };
-          console.log(response.data)
-          setTutorData(response.data.tutorData)
-          setCourseData(theCourseData);
+                    const theCourseData: ICreateCourse1 = {
+                        thumbnail: response.data.courseData.thumbnail,
+                        courseTitle: response.data.courseData.courseTitle,
+                        courseDescription: response.data.courseData.courseDescription,
+                        coursePrice: response.data.courseData.coursePrice,
+                        discountPrice: response.data.courseData.discountPrice,
+                        courseCategory: response.data.courseData.courseCategory,
+                        courseLevel: response.data.courseData.courseLevel,
+                        demoURL: response.data.courseData.demoURL,
+                        courseId: response.data.courseData._id,
+                        averageRating: response.data.courseData.averageRating,
+                        ratingCount: response.data.courseData.ratingCount,
 
-          const courseDetails: ICreateCourse2 = {
-            prerequisites:
-              response.data.courseData.benefits_prerequisites.prerequisites,
-            benefits: response.data.courseData.benefits_prerequisites.benefits,
-          };
-          setbenefits_prerequisites(courseDetails);
-          const createCourseState: CreateCourseState = {
-            Modules: response.data.courseData.Modules.map((module: Module) => ({
-              name: module.name,
-              description: module.description,
-              lessons: module.lessons.map((lesson) => ({
-                title: lesson.title,
-                video: lesson.video, // Video can be a File, null, or URL string
-                description: lesson.description,
-                questions: lesson.questions, // Include questions if they exist
-              })),
-            })),
-          };
-          const totalLessonsCount = response.data.courseData.Modules.reduce(
-            (acc: any, module: any) => {
-              return acc + module.lessons.length;
-            },
-            0
-          ); // Initialize accumulator as 0
-          console.log(response.data, "courseData");
+                    };
+                    console.log(response.data)
+                    setTutorData(response.data.tutorData)
+                    setCourseData(theCourseData);
 
-          setModules(createCourseState);
-          setTotalLessons(totalLessonsCount);
+                    const courseDetails: ICreateCourse2 = {
+                        prerequisites:
+                            response.data.courseData.benefits_prerequisites.prerequisites,
+                        benefits: response.data.courseData.benefits_prerequisites.benefits,
+                    };
+                    setbenefits_prerequisites(courseDetails);
+                    const createCourseState: CreateCourseState = {
+                        Modules: response.data.courseData.Modules.map((module: Module) => ({
+                            name: module.name,
+                            description: module.description,
+                            lessons: module.lessons.map((lesson) => ({
+                                title: lesson.title,
+                                video: lesson.video, // Video can be a File, null, or URL string
+                                description: lesson.description,
+                                questions: lesson.questions, // Include questions if they exist
+                            })),
+                        })),
+                    };
+                    const totalLessonsCount = response.data.courseData.Modules.reduce(
+                        (acc: any, module: any) => {
+                            return acc + module.lessons.length;
+                        },
+                        0
+                    ); // Initialize accumulator as 0
+                    console.log(response.data, "courseData");
 
-        } catch (error) {
-          console.error("Error fetching course details:", error);
+                    setModules(createCourseState);
+                    setTotalLessons(totalLessonsCount);
+
+                } catch (error) {
+                    console.error("Error fetching course details:", error);
+                }
+            };
+
+            console.log(modules, "modules");
+
+            fetchCourseDetails();
         }
-      };
+    }, [id, dispatch]);
 
-      console.log(modules, "modules");
-      // const totalLessons = response.data.courseData.Modules.reduce((count,Modules) => count + Modules.Lessons.length,0)
-      // const totalLessons = response.data.courseData.sections.reduce((count,section)=>count +section.lessons.length,0);
 
-      fetchCourseDetails();
+    useEffect(() => {
+        const trig = () => {
+            console.log(codeQuestion, ",.......//////////////////////////////////");
+            if (codeQuestion) {
+                setIsVisibleCode(true);
+            }
+        };
+        trig();
+    }, [codeQuestion]);
+
+
+    useEffect(() => {
+        const trig = () => {
+            console.log(quizData, ",.......//////////////////////////////////");
+            if (quizData) {
+                setIsVisibleCode(true);
+            } else setIsVisibleCode(false)
+        };
+        trig();
+    }, [quizData]);
+
+    const closeQuestion = () => {
+        setIsVisibleCode(false);
+        setQuizVisible(false);
+        setCodeQuestion(null);
+        setQuizData(null)
     }
-  }, [id, dispatch]);
+    console.log(modules, ' these are modules again and again')
+    console.log(codeQuestion, 'this is code question ');
+    console.log(quizData, selectedLessonLength, 'this  is quiz question.')
 
-
-  useEffect(() => {
-    const trig = () => {
-      console.log(codeQuestion, ",.......//////////////////////////////////");
-      if (codeQuestion) {
-        setIsVisibleCode(true);
-      }
-    };
-    trig();
-  }, [codeQuestion]);
-
-
-  useEffect(() => {
-    const trig = () => {
-      console.log(quizData, ",.......//////////////////////////////////");
-      if (quizData) {
-        setIsVisibleCode(true);
-      }else setIsVisibleCode(false)
-    };
-    trig();
-  }, [quizData]);
-
-  const closeQuestion = ()=>{
-    setIsVisibleCode(false);
-    setQuizVisible(false);
-    setCodeQuestion(null);
-    setQuizData(null)
-  }
-  console.log(modules, ' these are modules again and again')
-  console.log(codeQuestion, 'this is code question ');
-  console.log(quizData, selectedLessonLength, 'this  is quiz question.')
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="min-h-screen"
-    >
-      {/* <button
-        onClick={toggleCodeVisibility}
-        className="mt-8 px-4 py-2 bg-blue-600 text-accent rounded-lg shadow hover:bg-blue-700"
-      >
-        Toggle Question
-      </button> */}
-
-      <div
-        className={`fixed top-0 w-full h-full bg-accent shadow-lg transition-transform transform ${
-          isVisibleCode ? "translate-x-0" : "-translate-x-full"
-        } z-50`}
-      >
-        <button
-          onClick={closeQuestion}
-          className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
-        >
-          Close
-        </button>
-
-        {codeQuestion&& <CodingQuestionInterface {...(codeQuestion)} />}
-        {quizData && <QuizChallenge quizData={quizData}/>}
-      </div>
-
-      <div
-        className={`fixed top-0 w-full h-full bg-accent shadow-lg transition-transform transform ${
-          quizVisible ? "translate-x-0" : "-translate-x-full"
-        } z-50`}
-      >
-        <button
-          onClick={closeQuestion}
-          className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
-        >
-          Close
-        </button>
-
-        {quizData && <QuizChallenge quizData={quizData}/>}
-      </div>
-      <div className="max-w-7xl mx-auto py-8">
+    return (
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="min-h-screen"
         >
-          {/* Main Content Column */}
-          <div className="lg:col-span-2 space-y-6">
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="bg-accent rounded-2xl shadow-lg p-6"
+            <div
+                className={`fixed top-0 w-full h-full bg-accent shadow-lg transition-transform transform ${isVisibleCode ? "translate-x-0" : "-translate-x-full"
+                    } z-50`}
             >
-              <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600">
-                {courseData?.courseTitle}
-              </h1>
-              <p className="mt-4 text-gray-600 leading-relaxed m-2 mb-6">
-                {courseData?.courseDescription}
-              </p>
-
-              <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <FiAward className="text-purple-600" />
-                    <span>{courseData?.courseLevel} Level</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FiBook className="text-purple-600" />
-                    <span>{totalLessons} Lessons</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FiClock className="text-purple-600" />
-                    <span>{modules.Modules.length} Modules</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FiStar className="text-purple-600" />
-                    <span>{courseData?.averageRating} Rating</span>
-                  </div>
+                <button
+                    onClick={closeQuestion}
+                    className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
+                >
+                    Close
+                </button>
+                <div className="flex justify-center items-center min-h-screen min-w-screen p-6 px-20 bg-gray-300">
+                     {codeQuestion && <CodingQuestionInterface {...(codeQuestion)} />}
+                     {quizData && <QuizChallenge quizData={quizData} />}
                 </div>
-            </motion.div>
 
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="relative rounded-2xl overflow-hidden shadow-lg bg-violet-950"
-            >
-              {selectedVideo ? (
-                // <video
-                //   src={selectedVideo}
-                //   controls
-                //   className="w-full aspect-video object-cover"
-                // />
-                
-                < VideoPlayer
-                videoUrl = {selectedVideo || ''}
-                subtitleUrl = {''}
-                lessonLength = {totalLessons}
-                currentLessonIndex = {selectedVideoIndex}
-                setCurrentLessonIndex = {setSelectedVideoIndex}
-                />
-              ) : (
-
-               < VideoPlayer
-                videoUrl = {courseData?.demoURL || ''}
-                subtitleUrl = {''}
-               />
-                // <video
-                //   src={courseData?.demoURL}
-                //   controls
-                //   className="w-full aspect-video object-cover"
-                // />
-              )}
-            </motion.div>
-            {selectedVideo && (
-              <div className="bg-accent rounded-xl p-1">
-                <div className="border-b border-gray-200 m-5">
-                  <h1 className="text-gray-600">Description:</h1>
-                  <h1 className="text-gray-600 m-2">
-                    {selectedVideoDescription}
-                  </h1>
-                </div>
-              </div>
-            )}
-            {/* Tabs */}
-            <div className="bg-accent rounded-xl shadow-sm">
-              <div className="border-b border-gray-200">
-                <nav className="flex -mb-px">
-                  {["overview", "reviews"].map((tab) => (
-                    <button
-                      key={tab}
-                      onClick={() => setActiveTab(tab)}
-                      className={`px-6 py-4 text-sm font-medium capitalize ${
-                        activeTab === tab
-                          ? "border-b-2 border-purple-600 text-purple-600"
-                          : "text-gray-500 hover:text-gray-700"
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
-                </nav>
-              </div>
-
-              <div className="p-6">
-                {activeTab === "overview" && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="space-y-6"
-                  >
-                    <div>
-                      <h2 className="text-xl text-purple-600  font-semibold mb-4">
-                        What you'll learn
-                      </h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {benefits_prerequisites?.benefits.map(
-                          (benefit, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.1 }}
-                              className="flex items-start gap-3"
-                            >
-                              <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
-                              <span className="text-gray-600">{benefit}</span>
-                            </motion.div>
-                          )
-                        )}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h2 className="text-xl text-purple-600  font-semibold mb-4">
-                        Prerequisites
-                      </h2>
-                      <div className="space-y-3">
-                        {benefits_prerequisites?.prerequisites.map(
-                          (prerequisite, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.1 }}
-                              className="flex items-start gap-3"
-                            >
-                              <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
-                              <span className="text-gray-600">
-                                {prerequisite}
-                              </span>
-                            </motion.div>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-                {activeTab === "reviews" && (
-                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                    <StudentReviews
-                      courseId={courseData?.courseId}
-                      isPurchased={true}
-                      averageRating={courseData?.averageRating} 
-                      totalRatings={courseData?.ratingCount}
-                    />
-                  </motion.div>
-                )}
-              </div>
             </div>
-          </div>
 
-          {/* Modules Sidebar */} 
-          <div className="w-full bg-accent rounded-2xl shadow-lg sticky top-16 h-full">
-            <Modules
-              modules={modules}
-              onVideoSelect={setSelectedVideo}
-              totalLesson = {setSelectedLessonLength}
-              setVideoIndex = {setSelectedVideoIndex}
-              onCodeSelect={setCodeQuestion}
-              onQuizSelect = {setQuizData}
-              onSelectDescription={setSelectedVideoDescription}
-              videoIndex ={selectedVideoIndex}
-            />
+            <div
+                className={`fixed top-0 w-full h-full bg-accent shadow-lg transition-transform transform ${quizVisible ? "translate-x-0" : "-translate-x-full"
+                    } z-50`}
+            >
+                <button
+                    onClick={closeQuestion}
+                    className="absolute top-4 left-4 text-gray-500 hover:text-gray-700"
+                >
+                    Close
+                </button>
 
+                {quizData && <QuizChallenge quizData={quizData} />}
+            </div>
+            <div className="max-w-7xl mx-auto py-8">
+                <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+                >
+                    {/* Main Content Column */}
+                    <div className="lg:col-span-2 space-y-6">
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                            className="bg-accent rounded-2xl shadow-lg p-6"
+                        >
+                            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
+                                {courseData?.courseTitle}
+                            </h1>
+                            <p className="mt-4 text-gray-600 leading-relaxed m-2 mb-6">
+                                {courseData?.courseDescription}
+                            </p>
 
-                                    {tutorData &&
-                                    (
-                                      <div className="m-5 bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
-                                        <div className="flex items-center gap-2">
-                                          <div className="mx-2">
-                                              {tutorData.profilePicture ? (
-                                              <img src={tutorData.profilePicture} alt="" className="h-10 w-10 rounded-full" />
-            
-                                              ): <FaUserCircle size={40} />}
-                                          </div>
-                                          <button className=" mx-1 text-lg font-semibold hover:text-[#7C24F0]" onClick={()=> {navigate(ROUTES.user.tutorDetails(tutorData._id))}}>
-                                              { `${tutorData.firstName} ${tutorData.lastName}` }
-                                          </button>
-            
+                            <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+                                <div className="flex items-center gap-2">
+                                    <FiAward className="text-purple-600" />
+                                    <span>{courseData?.courseLevel} Level</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <FiBook className="text-purple-600" />
+                                    <span>{totalLessons} Lessons</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <FiClock className="text-purple-600" />
+                                    <span>{modules.Modules.length} Modules</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <FiStar className="text-purple-600" />
+                                    <span>{courseData?.averageRating} Rating</span>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="relative rounded-2xl overflow-hidden shadow-lg bg-violet-950"
+                        >
+                            {selectedVideo ? (
+                                < VideoPlayer
+                                    videoUrl={selectedVideo || ''}
+                                    subtitleUrl={''}
+                                    lessonLength={totalLessons}
+                                    currentLessonIndex={selectedVideoIndex}
+                                    setCurrentLessonIndex={setSelectedVideoIndex}
+                                />
+                            ) : (
+
+                                < VideoPlayer
+                                    videoUrl={courseData?.demoURL || ''}
+                                    subtitleUrl={''}
+                                />
+                            )}
+                        </motion.div>
+                        {selectedVideo && (
+                            <div className="bg-accent rounded-xl p-1">
+                                <div className="border-b border-gray-200 m-5">
+                                    <h1 className="text-gray-600">Description:</h1>
+                                    <h1 className="text-gray-600 m-2">
+                                        {selectedVideoDescription}
+                                    </h1>
+                                </div>
+                            </div>
+                        )}
+                        {/* Tabs */}
+                        <div className="bg-accent rounded-xl shadow-sm">
+                            <div className="border-b border-gray-200">
+                                <nav className="flex -mb-px">
+                                    {["overview", "reviews"].map((tab) => (
+                                        <button
+                                            key={tab}
+                                            onClick={() => setActiveTab(tab)}
+                                            className={`px-6 py-4 text-sm font-medium capitalize ${activeTab === tab
+                                                    ? "border-b-2 border-purple-600 text-purple-600"
+                                                    : "text-gray-500 hover:text-gray-700"
+                                                }`}
+                                        >
+                                            {tab}
+                                        </button>
+                                    ))}
+                                </nav>
+                            </div>
+
+                            <div className="p-6">
+                                {activeTab === "overview" && (
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        className="space-y-6"
+                                    >
+                                        <div>
+                                            <h2 className="text-xl text-purple-600  font-semibold mb-4">
+                                                What you'll learn
+                                            </h2>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {benefits_prerequisites?.benefits.map(
+                                                    (benefit, index) => (
+                                                        <motion.div
+                                                            key={index}
+                                                            initial={{ opacity: 0, x: -20 }}
+                                                            animate={{ opacity: 1, x: 0 }}
+                                                            transition={{ delay: index * 0.1 }}
+                                                            className="flex items-start gap-3"
+                                                        >
+                                                            <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
+                                                            <span className="text-gray-600">{benefit}</span>
+                                                        </motion.div>
+                                                    )
+                                                )}
+                                            </div>
                                         </div>
-            
-            
-                                        <div className="flex m-2">
-                                          <h1 className="m-1 font-semibold">Expertise:</h1>
-                                          {Array.isArray(tutorData.expertise) && tutorData.expertise.length > 0 ? (
+
+                                        <div>
+                                            <h2 className="text-xl text-purple-600  font-semibold mb-4">
+                                                Prerequisites
+                                            </h2>
+                                            <div className="space-y-3">
+                                                {benefits_prerequisites?.prerequisites.map(
+                                                    (prerequisite, index) => (
+                                                        <motion.div
+                                                            key={index}
+                                                            initial={{ opacity: 0, x: -20 }}
+                                                            animate={{ opacity: 1, x: 0 }}
+                                                            transition={{ delay: index * 0.1 }}
+                                                            className="flex items-start gap-3"
+                                                        >
+                                                            <IoCheckmarkDoneOutline className="text-purple-600 text-xl flex-shrink-0 mt-1" />
+                                                            <span className="text-gray-600">
+                                                                {prerequisite}
+                                                            </span>
+                                                        </motion.div>
+                                                    )
+                                                )}
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                                {activeTab === "reviews" && (
+                                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                                        <StudentReviews
+                                            courseId={courseData?.courseId}
+                                            isPurchased={true}
+                                            averageRating={courseData?.averageRating}
+                                        />
+                                    </motion.div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Modules Sidebar */}
+                    <div className="w-full bg-accent rounded-2xl shadow-lg sticky top-16 h-full">
+                        <Modules
+                            modules={modules}
+                            onVideoSelect={setSelectedVideo}
+                            totalLesson={setSelectedLessonLength}
+                            setVideoIndex={setSelectedVideoIndex}
+                            onCodeSelect={setCodeQuestion}
+                            onQuizSelect={setQuizData}
+                            onSelectDescription={setSelectedVideoDescription}
+                            videoIndex={selectedVideoIndex}
+                        />
+
+
+                        {tutorData &&
+                            (
+                                <div className="m-5 bg-white rounded-lg border border-gray-100 p-4 shadow-sm">
+                                    <div className="flex items-center gap-2">
+                                        <div className="mx-2">
+                                            {tutorData.profilePicture ? (
+                                                <img src={tutorData.profilePicture} alt="" className="h-10 w-10 rounded-full" />
+
+                                            ) : <FaUserCircle size={40} />}
+                                        </div>
+                                        <button className=" mx-1 text-lg font-semibold hover:text-[#7C24F0]" onClick={() => { navigate(ROUTES.user.tutorDetails(tutorData._id)) }}>
+                                            {`${tutorData.firstName} ${tutorData.lastName}`}
+                                        </button>
+
+                                    </div>
+
+
+                                    <div className="flex m-2">
+                                        <h1 className="m-1 font-semibold">Expertise:</h1>
+                                        {Array.isArray(tutorData.expertise) && tutorData.expertise.length > 0 ? (
                                             tutorData.expertise.map((expert: string) => {
-                                              return <h1 key={expert} className=" m-1">{expert || ""}</h1>;
+                                                return <h1 key={expert} className=" m-1">{expert || ""}</h1>;
                                             })
-                                          ) : (
+                                        ) : (
                                             <h1>No expertise listed</h1> // Display a fallback message when no expertise is available
-                                          )}
-                                        </div>
-                                      </div>
-                                    )}
-          </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                    </div>
+                </motion.div>
+            </div>
+            <ToastContainer />
+            <ChatComponent />
         </motion.div>
-      </div>
-      <ToastContainer />
-      <ChatComponent />
-    </motion.div>
-  );
+    );
 }
 
-export default CoursePurchasedCourseDetailsDetails;
+export default PurchasedCourseDetails;
