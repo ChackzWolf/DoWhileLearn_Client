@@ -13,7 +13,7 @@ function AuthChoice() {
     };
     return (
         <div className="flex justify-center items-center w-full h-screen">
-            <div className="flex h-1/2 mx-14 gap-10">
+            <div className="flex flex-col-reverse md:flex-row mx-14 gap-10">
                 <motion.div
                     initial={{ opacity: 0, x: -100 }}
                     whileInView={{ opacity: 1, x: 0 }}

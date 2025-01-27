@@ -20,7 +20,6 @@ import { getCookie, removeCookie } from "../../../utils/cookieManager";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { userEndpoint } from "../../../constraints/userEndpoints";
 import { Module } from "module";
-import PurchasedCourseDetails from "./PurchasedCourseDetails/PurchasedCourseDetails";
 import CourseDetailSkeleton from "./Skeletons/CourseDetailsSkeleton";
 import { handleBlockedUser } from "../../../utils/handleErrors/handleBlocked";
 import userAxios from "../../../utils/axios/userAxios.config";
@@ -68,7 +67,6 @@ function CourseDetails() {
     const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
     const [tutorData, setTutorData] = useState<TutorData | null>(null);
     const [inCart, setInCart] = useState(false);
-    const [isPurchased, setIsPurchased] = useState(false);
     const [tutorId, setTutorId] = useState();
     // const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
     const dispatch = useDispatch();
@@ -98,7 +96,6 @@ function CourseDetails() {
 
                     console.log(response.data.courseData, "course ");
                     setInCart(response.data.courseStatus.inCart);
-                    setIsPurchased(response.data.courseStatus.inPurchase);
 
                     const theCourseData: ICreateCourse1 = {
                         thumbnail: response.data.courseData.thumbnail,

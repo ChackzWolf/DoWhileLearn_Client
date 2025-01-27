@@ -32,7 +32,7 @@ export function PopularQA() {
       {/* FAQ Section with accordion */}
       <div className="py-20 px-6">
         <div className="container mx-auto max-w-3xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 text-accent">
+          <h2 className="text-2xl md:text-4xl font-bold text-center mb-5 md:mb-16 text-accent">
             Frequently Asked Questions
           </h2>
           <div className="space-y-4">
@@ -46,7 +46,7 @@ export function PopularQA() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.15 }}
               
-                className="border border-purple-200 rounded-lg overflow-hidden"
+                className="border border-accent rounded-lg overflow-hidden"
               >
                 <button
                   className="w-full px-6 py-4 text-left flex items-center justify-between bg-accent hover:bg-purple-50 transition-colors duration-300"
@@ -54,9 +54,9 @@ export function PopularQA() {
                 >
                   <span className="font-semibold text-gray-900 ">{faq.question}</span>
                   {activeFaq === index ? (
-                    <ChevronUp className="transition-all duration-150 w-5 h-5 text-purple-600" />
+                    <ChevronUp className="transition-all duration-150 w-5 h-5 text-primary" />
                   ) : (
-                    <ChevronUp className="transition-all duration-150 w-5 h-5 text-purple-600  rotate-180" />
+                    <ChevronUp className="transition-all duration-150 w-5 h-5 text-primary  rotate-180" />
                   )}
                 </button>
                 <div

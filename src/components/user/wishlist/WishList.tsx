@@ -141,7 +141,7 @@ function WishList() {
   ):
     (
       <div className='flex justify-center items-center h-full m-28'>
-          <h1 className='text-5xl text-accent font-bold text-center'>Your wishlist is empty</h1>
+          <h1 className='md:text-5xl text-xl text-accent font-bold text-center'>Your wishlist is empty</h1>
       </div>
       
     )

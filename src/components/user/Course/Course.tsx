@@ -125,21 +125,21 @@ function CoursesList() {
       ) : (
         <>
 
-          <div className="flex flex-col justify-self-center w-full gap-5 m-20 p-5  ">
+          <div className="flex flex-col justify-self-center w-full gap-5 md:m-20 p-5  ">
 
 
 
             {/* Filter Options */}
-            <div className="flex gap-10 justify-center">
+            <div className="flex flex-col md:flex-row gap-10 justify-center">
             <motion.div
                   initial={{ opacity: 0, x: -100 }}
-                  whileInView={{ opacity: 1, x: 10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: 0.15 }} 
                   className="flex flex-col gap-4 min-w-48 ">
 
 
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-xl font-semibold text-accent flex items-center gap-2">
+                <div className="flex items-center justify-between md:mb-4">
+                  <h2 className="md:text-xl font-semibold text-accent flex items-center gap-2">
                     <FaFilter /> Filters
                   </h2>
                 </div>
@@ -217,8 +217,8 @@ function CoursesList() {
               </motion.div>
 
               {/* Content Placeholder */}
-              <div className="flex-1  rounded-lg max-w-6xl">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
+              <div className="flex-1 rounded-lg max-w-6xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto place-items-center">
                   {currentCourses.map((course, index) => (
                     <motion.div
                       key={course._id}

@@ -218,7 +218,7 @@ console.log(viewChat, 'view chat')
           duration: 0.06, // Extremely fast duration (50ms)   
         ease: 'easeOut',      
       }}
-          className={`pointer-events-auto fixed w-96 h-96 right-5 bottom-5 bg-accent p-4 overflow-y-auto rounded-lg shadow-lg transition-all duration-300 ease-in-out transform ${
+          className={`pointer-events-auto fixed md:w-96 md:h-96 w-80 right-5 bottom-5 bg-accent p-4 overflow-y-auto rounded-lg shadow-lg transition-all duration-300 ease-in-out transform ${
             viewChat ? "opacity-100 scale-100" : "opacity-0 scale-0 pointer-events-none"
           }`}
         >
@@ -252,7 +252,7 @@ console.log(viewChat, 'view chat')
       :
       <>
       {/* Chat Section */}
-      <div className=" pointer-events-auto fixed w-96 h-96 right-5 bottom-5 duration-300 ease-in-out bg-white p-4 flex flex-col rounded-lg">
+      <div className=" pointer-events-auto fixed md:w-96 md:h-96 w-80 right-5 bottom-5 duration-300 ease-in-out bg-white p-4 flex flex-col rounded-lg">
       {selectedCourse ? (
         <>
         <div className='flex items-center mb-4 gap-2 duration-300 ease-in-out'>

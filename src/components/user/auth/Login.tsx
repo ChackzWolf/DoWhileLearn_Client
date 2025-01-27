@@ -108,13 +108,13 @@ function LoginUser() {
     }
 
     return (
-        <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
+        <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen h-full flex flex-col">
             <Header/>
             {isLoading && <Loader/>}
-            <div className="flex flex-col md:flex-row h-screen">
+            <div className="flex flex-col md:flex-row h-full">
                 <motion.div
                                   initial={{ opacity: 0, x: -150 }}
-                                  whileInView={{ opacity: 1, x: 10 }}
+                                  whileInView={{ opacity: 1, x: 0 }}
                                   transition={{ duration: 0.5, delay: 0.15 }} 
                  className="w-full md:w-1/2 flex justify-center items-center"> 
                     <Player
@@ -128,9 +128,9 @@ function LoginUser() {
 
                 <motion.div
                     initial={{ opacity: 0, x: 150 }}
-                    whileInView={{ opacity: 1, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.15 }} 
-                    className="p-8 md:p-16 w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
+                    className="px-8 md:p-16 w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
 
                     <h2 className="text-3xl mb-5 mt-10 text-center font-bold text-accent">Student Login</h2>
 

@@ -67,7 +67,7 @@ let itemsToShow
   <h1 className="text-4xl font-bold m-8 text-accent text-center">
     {title}
   </h1>
-  <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${itemsToShow} lg:grid-cols-5 gap-5 px-3 md:px-10 lg:px-max-40 justify-center items-center">
+  <div className="w-full flex flex-col md:flex-row gap-5 px-3 md:px-10 lg:px-max-40 justify-center items-center">
 
   
   {coursesToShow === null

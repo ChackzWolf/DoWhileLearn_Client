@@ -133,7 +133,7 @@ const UserProfile = ({ user }: { user: any }) => {
   };
 
   return (
-    <div className="min-h-screen  py-8">
+    <div className="min-h-screen  md:py-8">
       
       {showMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-500">
@@ -145,7 +145,7 @@ const UserProfile = ({ user }: { user: any }) => {
   
         <div className="p-8">
           {/* Profile Header */}
-          <div className="flex items-center gap-8 mb-11">
+          <div className="flex flex-col md:flex-row items-center gap-8 mb-11">
             <div className="relative w-32 h-32">
               {isEditing ? (
                 <div
@@ -185,23 +185,23 @@ const UserProfile = ({ user }: { user: any }) => {
               />
             </div>
 
-            <div className="flex-1">
-              <div className="flex justify-between items-center mb-4">
-                <h1 className="text-3xl font-bold text-gray-800">
+            <div className="flex-1 ">
+              <div className="flex justify-between flex-col md:flex-row items-center mb-4 ">
+                <h1 className="md:text-3xl text-xl font-bold text-gray-800">
                   {formData.firstName} {formData.lastName}
                 </h1>
                 <button
                   onClick={() => setIsEditing(!isEditing)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors duration-200
+                  className={`flex items-center gap-2 md:px-4 px-2 py-1 md:py-2 rounded-lg transition-colors duration-200
                     ${isEditing ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-purple-100 text-purple-600 hover:bg-purple-200'}`}
                 >
                   {isEditing ? (
                     <>
-                      <MdClose className="text-xl" /> Cancel
+                      <MdClose className="md:text-xl" /> Cancel
                     </>
                   ) : (
                     <>
-                      <MdEdit className="text-xl" /> Edit Profile
+                      <MdEdit className="md:text-xl" /> Edit Profile
                     </>
                   )}
                 </button>
@@ -284,10 +284,10 @@ const UserProfile = ({ user }: { user: any }) => {
   {courses.length > 0 &&
     <>
       <div className="flex items-center gap-3 mt-14">
-      <PiVideo className="text-gray-400 text-xl" />
-      <h2 className="text-xl font-semibold text-gray-800">
-        Enrolled courses
-      </h2>
+        <PiVideo className="text-gray-400 text-xl" />
+        <h2 className="text-xl font-semibold text-gray-800">
+          Enrolled courses
+        </h2>
       </div>
 
       <Courses courses={courses} />

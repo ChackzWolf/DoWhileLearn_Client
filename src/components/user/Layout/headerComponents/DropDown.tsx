@@ -11,7 +11,6 @@ import { CiLogout } from "react-icons/ci";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store/store';
 import { ROUTES } from '../../../../routes/Routes';
-import { FaAngleDown } from 'react-icons/fa6';
 import {AnimatePresence, motion} from 'framer-motion'
 
 
@@ -102,15 +101,15 @@ const HeaderDropdown: React.FC = () => {
                     <img
                         src={profilePicture}
                         alt="Profile"
-                        className={`object-cover h-8 w-8 rounded-full ${
+                        className={`flex object-cover md:h-8 lg:h-8 lg-w-8 md:w-8 w-7 h-7 rounded-full ${
                         !loaded ? "animate-pulse bg-gray-200" : ""
                         }`}
             />
                 </div>
                 :
                 <div className='text-accent flex items-center gap-2'>
-                    <FaUserCircle size={39} />
-                    <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/>
+                    <FaUserCircle className="text-2xl sm:text-3xl md:text-4xl"/>
+                    {/* <FaAngleDown className={`transform transition-transform duration-300 ${isOpen && 'rotate-180'}`}/> */}
                 </div>
                 }
             </button>
@@ -124,12 +123,12 @@ const HeaderDropdown: React.FC = () => {
                         duration: 0.06, // Extremely fast duration (50ms)   
                       ease: 'easeOut',      
                     }}
-                     className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-[100] transform opacity-100 scale-100"
+                     className="absolute right-0 mt-2 md:w-48 lg:w-48 w-40 bg-white border rounded shadow-lg z-[100] transform opacity-100 scale-100"
                      >
                         <ul>
-                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toWishList}> <FaRegHeart /> Wishlist</li>
-                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={toProfile}> <RiAccountBoxLine /> Profile</li>
-                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] cursor-pointer flex items-center gap-3" onClick={handleLogout}> <CiLogout /> Logout</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] text-sm md:text-base lg:text-base cursor-pointer flex items-center gap-3" onClick={toWishList}> <FaRegHeart /> Wishlist</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] text-sm md:text-base lg:text-base cursor-pointer flex items-center gap-3" onClick={toProfile}> <RiAccountBoxLine /> Profile</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] text-sm md:text-base lg:text-base cursor-pointer flex items-center gap-3" onClick={handleLogout}> <CiLogout /> Logout</li>
                         </ul>
                 </motion.div>
             )}

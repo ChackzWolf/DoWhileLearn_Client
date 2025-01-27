@@ -4,7 +4,7 @@ import { firstNav } from '../../../data/HeaderNavData';
 const HeaderNav = () => {
 
     return (
-        <div className={`flex mr-10 gap-10 items-center self-center font-semibold h-8 px-5  `}>
+        <div className={`flex md:mr-10 md:gap-10 lg:gap-10 gap-2 md:text-base text-sm  items-center self-center font-semibold h-8 md:px-5 lg:px-5 pr-2`}>
             {firstNav.map((link) => (
                 <NavLink
                     key={link.path}

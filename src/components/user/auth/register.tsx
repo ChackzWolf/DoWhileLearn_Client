@@ -108,12 +108,12 @@ function RegisterUser() {
         <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col overflow-hidden">
             <Header/>
 
-        <div className="flex h-screen">
+        <div className="flex flex-col md:flex-row h-full">
 
 
             <motion.div
                     initial={{ opacity: 0, x: -150 }}
-                    whileInView={{ opacity: 1, x: 10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.15 }}
                  className="w-full md:w-1/2 flex justify-center items-center"> 
                     <Player
@@ -129,11 +129,11 @@ function RegisterUser() {
 
             <motion.div
                     initial={{ opacity: 0, x: 150 }}
-                    whileInView={{ opacity: 1, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.15 }}  
-                    className="w-1/2 justify-center">
+                    className="md:w-1/2 justify-center">
                 
-                <h2 className="text-3xl mb-5 mt-20 text-center font-bold text-accent">Student Signup</h2>
+                <h2 className="text-3xl mb-5 md:mt-20 text-center font-bold text-accent">Student Signup</h2>
                 { emailExists?  <h2 className="text-center text-[#FF0000]">Email already exists.</h2> : <h1></h1>}
 
 
@@ -142,10 +142,10 @@ function RegisterUser() {
 
                     
                     <Form>
-                        <div className="justify-center mb-20 px-28">
+                        <div className="justify-center mb-20 md:px-28 px-10">
 
-                            <div className="flex justify-between gap-6">
-                                <div className="w-1/2">
+                            <div className="flex flex-col md:flex-row justify-between gap-6">
+                                <div className="md:w-1/2 w-full">
                                     <p className="text-base mb-2 font-normal text-accent">First-name</p>
                                     <div className="mb-4 items-center">
                                         <Field
@@ -157,7 +157,7 @@ function RegisterUser() {
                                         <ErrorMessage name="firstName" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>
                                 </div>
-                                <div className="w-1/2">
+                                <div className="md:w-1/2 w-full">
                                     <p className="text-base mb-2 font-normal text-accent">Last-name</p>
                                     <div className="mb-4 items-center">
                                         <Field
@@ -186,10 +186,10 @@ function RegisterUser() {
 
 
                             
-                            <div className="flex justify-between gap-5">
-                                <div className="w-1/2">
+                            <div className="flex flex-col md:flex-row justify-between gap-5 mb-5">
+                                <div className="md:w-1/2">
                                     <p className="text-base mb-2 font-normal text-accent">Create a password</p>
-                                    <div className="mb-4 items-center">
+                                    <div className="md:mb-4 items-center">
                                     <div className="relative w-full h-10 flex items-center right-1">
                                         <Field
                                             type={showPassword ? "text" : "password"}
@@ -202,7 +202,7 @@ function RegisterUser() {
                                         <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>
                                 </div>
-                                <div className="w-1/2">
+                                <div className="md:w-1/2">
                                     <p className="text-base mb-2 font-normal text-accent">Confirm password</p>
                                     <div className="mb-4 items-center">
                                         <div className="relative w-full h-10 flex items-center ">

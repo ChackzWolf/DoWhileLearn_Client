@@ -289,7 +289,7 @@ function OverView() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
-                      <StudentReviews courseId= {courseData?.courseId} isPurchased={false} averageRating={courseData?.averageRating} totalRatings={courseData?.ratingCount}/>
+                      <StudentReviews courseId= {courseData?.courseId} isPurchased={false} averageRating={courseData?.averageRating}/>
                     </motion.div>
                   )}
                 </div>

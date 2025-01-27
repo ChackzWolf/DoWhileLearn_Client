@@ -5,7 +5,6 @@ import { courseEndpoint } from "../../constraints/courseEndpoints";
 import LayerCourseList from "./Layout/HomePageLayer/LayerCourseList";
 import ChatComponent from "./Chat/ChatCoursesRoute";
 import { PopularQA } from "./Layout/HomePageLayer/PopularQA";
-import { Footer } from "./Layout/Footer";
 import { Features } from "./Layout/HomePageLayer/Features";
 
 export interface Course {
