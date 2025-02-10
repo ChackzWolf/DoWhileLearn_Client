@@ -70,12 +70,12 @@ let itemsToShow
   <div className="w-full flex flex-col md:flex-row gap-5 px-3 md:px-10 lg:px-max-40 justify-center items-center">
 
   
-  {coursesToShow === null || coursesToShow === undefined
+  {coursesToShow === null || courses === undefined
     ? // Show skeletons while loading
       Array.from({ length: itemsToShow }).map((_, index) => (
         <CourseBadgeSkeleton key={index} />
       ))
-    : courses
+    : (Array.isArray(courses) ? courses : [])
         .slice() // Copy the array to avoid mutating the original
         .reverse() // Reverse the array
         .slice(0, itemsToShow) // Take the first 5 items from the reversed array
