@@ -31,6 +31,13 @@ jobs:
       env:
         CI: true
         VITE_SKIP_TYPE_CHECK: true
+        VITE_API_GATEWAY_BASE_URL_AUTH: 'https://dowhilelearn.space/auth'
+        VITE_API_GATEWAY_BASE_URL_ADMIN: 'https://dowhilelearn.space/admin'
+        VITE_API_GATEWAY_BASE_URL_CHAT: 'https://dowhilelearn.space/chat'
+        VITE_API_GATEWAY_BASE_URL_COURSE: 'https://dowhilelearn.space/course'
+        VITE_API_GATEWAY_BASE_URL_ORDER: 'https://dowhilelearn.space/order'
+        VITE_GATEWAY_BASE_URL_TUTOR: 'https://dowhilelearn.space/tutor'
+        VITE_API_GATEWAY_BASE_URL: 'https://dowhilelearn.space'
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -45,4 +52,4 @@ jobs:
       
     - name: Invalidate CloudFront cache
       run: |
-        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*" 
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
