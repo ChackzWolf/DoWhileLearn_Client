@@ -13,7 +13,7 @@ import { Footer } from '../../user/Layout/Footer';
 const CommonRoutes = ()=>{
     return( 
         <div
-        className='bg-gradient-to-br from-purple-100 to-lavender-start via-primary to-purple-to-lavender-end h-full'
+        className='bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end h-full'
         >
             <ToastContainer/>
                 <Header/>
