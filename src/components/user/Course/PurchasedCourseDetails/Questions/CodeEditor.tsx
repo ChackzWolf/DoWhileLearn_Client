@@ -165,36 +165,6 @@ const CodingQuestionInterface = ({
                 return ${functionName}(${parameters.map(p => p.value).join(', ')});
             `)
             
-            // console.log('Generated Function:', userFunction.toString());
-            // console.log(parameters, expectedOutput, ' these are expected oupt and value')
-
-            // const result = userFunction(...parameters.map(p => {
-
-            //     console.log(p, 'tptpttt')
-            //     // Parse the input values based on their data type
-            //     switch (p.dataType.toLowerCase()) {
-            //         case 'number': return Number(p.value);
-            //         case 'boolean': return p.value === 'true';
-            //         case 'string': return p.value;
-            //         default: return p.value;
-            //     }
-            // }));
-            // console.log(result, 'result///////')
-            // const resultString = result?.toString() || '';
-            // console.log('result', result)
-
-            // if(resultString !== expectedOutput.value){
-
-            //     setTestResults(result);
-            //     setIsCorrect(false);
-            //     setOutput(`Expected  -${expectedOutput.value}-   but got  -${resultString}- `);
-            //     return {
-            //         passed: resultString === expectedOutput.value,
-            //         input: parameters.map(p => p.value).join(', '),
-            //         expected: expectedOutput.value,
-            //         actual: resultString
-            //     };
-            // }
 
             
 

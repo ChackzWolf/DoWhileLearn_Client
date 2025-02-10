@@ -123,7 +123,7 @@ const AddCourse = () => {
   };
 
   const handleVideoUpload = (videoFile: File) => {
-    const socketService = SocketService.getInstance('http://localhost:5000');
+    const socketService = SocketService.getInstance('http://localhost:3183');
     const id= generateRandomCode(8)
     const formData = new FormData();
     const tutorId = getCookie('tutorId') || ''

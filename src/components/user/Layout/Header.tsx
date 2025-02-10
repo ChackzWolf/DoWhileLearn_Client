@@ -18,7 +18,7 @@ const Header = () => {
         <div className="bg-transparent top-0 z-50 items-center w-full mx-auto p-1 ">
             <div className="justify-between flex  items-center">
                 <button className="col-span-1 h-6 w-auto flex items-center justify-center md:gap-4 lg:gap-4 gap-2 md:mx-4 lg:mx-4 mx-1" onClick={()=>navigate('/')}>
-                    <img src="/brainWhite.svg" alt="Brain Bright Icon" className="h-8 w-auto mt-2" />
+                    <img src="/logos/brainWhite.svg" alt="Brain Bright Icon" className="h-8 w-auto mt-2" />
                     <h1 className="flex md:text-2xl lg:2xl font-extrabold text-accent">DoWhile{' { Learn } '}</h1>
                 </button>
 

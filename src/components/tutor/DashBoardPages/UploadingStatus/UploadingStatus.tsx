@@ -33,7 +33,7 @@ const UploadDetails: React.FC<{
   useEffect(()=>{
     const tutorId = getCookie('tutorId');
     const init = ()=>{
-      const socketService = SocketService.getInstance('http://localhost:5000');
+      const socketService = SocketService.getInstance('http://localhost:3183');
       socketService.trackUpload(tutorId||'');
     }
     init()

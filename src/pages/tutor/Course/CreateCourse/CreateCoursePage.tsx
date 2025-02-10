@@ -34,7 +34,7 @@ const CreateCoursePage = () => {
 
   useEffect(() => {
     const initializeSocket = async()=> {
-        const socketService = SocketService.getInstance('http://localhost:5000');
+        const socketService = SocketService.getInstance('http://localhost:3183');
 
         // Connect to the server
         socketService.connect()

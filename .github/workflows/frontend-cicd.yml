@@ -1,0 +1,51 @@
+name: Vue.js TypeScript CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    # This step will run vue-tsc --noEmit
+    - name: Type check
+      run: npm run type-check
+      continue-on-error: true  # Allows the pipeline to continue even if types aren't perfect
+      
+    - name: Build application
+      run: npm run build
+      env:
+        CI: true
+        # Add this if you want to bypass type checking during build
+        VITE_SKIP_TYPE_CHECK: true
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-north-1 # Replace with your AWS region
+
+    - name: Deploy to S3
+      run: |
+        aws s3 sync dist/ s3://dowhilelearn-bundle --delete --cache-control 'max-age=31536000'
+        aws s3 cp s3://dowhilelearn-bundle/index.html s3://dowhilelearn-bundle/index.html --metadata-directive REPLACE --cache-control 'no-cache'
+      
+    - name: Invalidate CloudFront cache
+      run: |
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

@@ -294,7 +294,7 @@ const AddLesson = () => {
     moduleIndex: number,
     lessonIndex: number
   ) => {
-    const socketService = SocketService.getInstance("http://localhost:5000");
+    const socketService = SocketService.getInstance("http://localhost:3183");
 
     console.log("moduleIndex", moduleIndex);
     console.log("lessonIndex", lessonIndex);

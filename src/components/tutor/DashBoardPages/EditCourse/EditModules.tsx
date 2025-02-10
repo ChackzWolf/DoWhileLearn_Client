@@ -294,7 +294,7 @@ const AddLesson = () => {
     moduleIndex: number,
     lessonIndex: number
   ) => {
-    const socketService = SocketService.getInstance("http://localhost:5000");
+    const socketService = SocketService.getInstance("http://localhost:3183");
     const tutorId = getCookie("tutorId") || "";
     socketService.trackUpload(tutorId);
     const id = generateRandomCode(8);

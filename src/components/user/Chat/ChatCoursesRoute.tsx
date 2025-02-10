@@ -79,7 +79,7 @@ const CourseListAndChat: React.FC = () => {
   // Socket connection effect
   useEffect(() => {
 
-    const newSocket = io('http://localhost:5000', {
+    const newSocket = io('http://localhost:3183', {
       transports: ['websocket', 'polling'],
       auth: {
         token: getCookie('userRefreshToken') 
