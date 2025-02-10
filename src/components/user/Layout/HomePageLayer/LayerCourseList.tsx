@@ -70,7 +70,7 @@ let itemsToShow
   <div className="w-full flex flex-col md:flex-row gap-5 px-3 md:px-10 lg:px-max-40 justify-center items-center">
 
   
-  {coursesToShow === null
+  {coursesToShow === null || coursesToShow === undefined
     ? // Show skeletons while loading
       Array.from({ length: itemsToShow }).map((_, index) => (
         <CourseBadgeSkeleton key={index} />
