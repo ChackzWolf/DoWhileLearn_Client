@@ -42,6 +42,14 @@ const UserHome= () => {
   const [topRatedCourses, setTopRatedCourses] = useState<Course[]>([]);
     useEffect(() => {
       const fetchCourses = async () => {
+
+
+        console.log('Environment Variables:', {
+          course: import.meta.env.VITE_API_GATEWAY_BASE_URL_COURSE,
+          auth: import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH,
+          base: import.meta.env.VITE_API_GATEWAY_BASE_URL
+        });
+        
         try {
           const response = await axios.get(courseEndpoint.fetchCourseData);
           if (response.data) {
