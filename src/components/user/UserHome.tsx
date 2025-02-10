@@ -44,7 +44,7 @@ const UserHome= () => {
       const fetchCourses = async () => {
         try {
           const response = await axios.get(courseEndpoint.fetchCourseData);
-    
+          console.log(response.data, ' this is response . data')
           // Set latest courses directly from the API response
           setLatestCourses(response.data.courses);
     
