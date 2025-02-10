@@ -42,8 +42,9 @@ const UserHome= () => {
   const [topRatedCourses, setTopRatedCourses] = useState<Course[]>([]);
     useEffect(() => {
       const fetchCourses = async () => {
-        // try {
+        try {
           const response = await axios.get(courseEndpoint.fetchCourseData);
+          if (response.data) {
           console.log(response.data, ' this is response . data')
           // Set latest courses directly from the API response
           setLatestCourses(response.data.courses);
@@ -55,10 +56,13 @@ const UserHome= () => {
     
           // Set top-rated courses
           setTopRatedCourses(sortedCourses);
-        // } 
-        // catch (error) {
-        //   console.error("Error fetching course data:", error);
-        // }
+        } else {
+          console.error('Invalid response format:', response.data);
+        }
+        } 
+        catch (error) {
+          console.error("Error fetching course data:", error);
+        }
       };
     
       fetchCourses();
