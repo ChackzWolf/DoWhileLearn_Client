@@ -10,8 +10,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import UserAuthRoutes from './components/routes/authRouter/UserAuthRouters';
 import RegistrationPage from './pages/tutor/Registration/RegistrationFirstPage';
 import CommonRoutes from './components/routes/commonRouter/CommonRouters';
-import TutorAuthRoutes from './components/routes/authRouter/TutorAuthRouters';
+// import TutorAuthRoutes from './components/routes/authRouter/TutorAuthRouters';
 import AdminAuthRoutes from './components/routes/authRouter/AdminRoutes';
+import LoginModal from './components/tutor/auth/Login';
+import RegisterTutor from './components/tutor/auth/register';
 
 
 function App() {
@@ -22,9 +24,17 @@ function App() {
           <Routes>
             <Route path = '/*' element = {<CommonRoutes/>}/>
 
+
+            <Route path = '/tutor/auth/login' element = {<LoginModal />}/>
+            <Route path = '/tutor/auth/login' element = {<RegisterTutor />}/>
+
+
+            
+
+
             {/* User auth */}
             <Route path = 'user/auth/*' element={<UserAuthRoutes/>} />
-            <Route path = 'tutor/auth/*' element={<TutorAuthRoutes/>} />
+            {/* <Route path = 'tutor/auth/*' element={<TutorAuthRoutes/>} /> */}
             <Route path = 'admin/auth/*' element={<AdminAuthRoutes/>} />
 
             <Route path = '/tutor/complete-registration' element={<RegistrationPage/>}/>
