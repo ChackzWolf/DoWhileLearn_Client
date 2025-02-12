@@ -25,8 +25,8 @@ function App() {
             <Route path = '/*' element = {<CommonRoutes/>}/>
 
 
-            <Route path = '/tutor/auth/login' element = {<LoginModal />}/>
-            <Route path = '/tutor/auth/register' element = {<RegisterTutor />}/>
+            <Route path = '/tutor/auth/logi' element = {<LoginModal />}/>
+            <Route path = '/tutor/auth/registe' element = {<RegisterTutor />}/>
 
 
             {/* User auth */}

@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { getCookie } from "../../../utils/cookieManager";
 import PublicRoute from "./publicRoute";
 // import LoginModal from "../../tutor/auth/Login";
-import RegisterUser from "../../tutor/auth/register";
+// import RegisterUser from "../../tutor/auth/register";
 import VerifyEmail from "../../common/EmailVerification";
 import ResetPassword from "../../common/ResetPassword";
 import ResetPasswordOTP from "../../common/ResetPasswordOTP";
@@ -22,14 +22,14 @@ const TutorAuthRoutes = () => {
         // </PublicRoute>
       }
     /> */}
-    <Route
+    {/* <Route
       path="register"
       element={
         // <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
           <RegisterUser />
         // </PublicRoute>
       }
-    />
+    /> */}
 
     <Route path = '/register/otp' 
       element={
