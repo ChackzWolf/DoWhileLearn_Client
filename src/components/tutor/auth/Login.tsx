@@ -1,26 +1,26 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from 'yup';
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
-import {  setCookie } from "../../../utils/cookieManager";
-import { setTutorLogin, setTutorProfilePic } from "../../../redux/authSlice/authSlice";
+import { NavLink, useLocation } from "react-router-dom";
+// import axios from "axios";
+// import {  setCookie } from "../../../utils/cookieManager";
+// import { setTutorLogin, setTutorProfilePic } from "../../../redux/authSlice/authSlice";
 import { useState, useEffect } from "react";
 import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
-import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
+// import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
 import { toast } from 'react-toastify';
 import Loader from "../../common/icons/loader";
-// import { Player } from "@lottiefiles/react-lottie-player";
-import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
-import { useSelector,useDispatch  } from "react-redux";
+// // import { Player } from "@lottiefiles/react-lottie-player";
+// import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
+import { useSelector, } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { ROUTES } from "../../../routes/Routes";
 import OAuth from "../../common/Auth/CustomGoogleLoginButton";
 
 function LoginModal() {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const [message, setMessage] = useState('')
+    // const dispatch = useDispatch()
+    // const navigate = useNavigate()
+    // const [message, setMessage] = useState('')
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
     const togglePasswordVisibility = () => {
@@ -56,47 +56,50 @@ function LoginModal() {
     };
 
 
-    const handleSubmit = async(value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
+    const handleSubmit = async(_value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
         try {
-            setIsLoading(true)
-            const response = await axios.post(tutorEndpoint.loginTutor, value);
-            console.log(response.data,'Response')
-            const success= response.data.success;
-                if(success){
-                const { status ,tutorId, tutorData} = response.data;
-                console.log(status)
-                const data = {
-                  _id: tutorId,
-                  firstName: tutorData.firstName,
-                  lastName: tutorData.lastName,
-                  email: tutorData.email,
-                  bio: tutorData.bio,
-                  expertise: tutorData.expertise,
-                  qualifications: tutorData.qualifications,
-                  profilePicture: tutorData.profilePicture,
-                  cv: tutorData.cv,
-                  isblocked: tutorData.isblocked,
-                };
-                dispatch(setTutorData(data));
-              
-            //   console.log("Tutor after dispatch:", useSelector((state: RootState) => state.tutorData));
 
-            console.log(data,'data')
+            console.log('handle submit clicked')
+
+            // setIsLoading(true)
+            // const response = await axios.post(tutorEndpoint.loginTutor, value);
+            // console.log(response.data,'Response')
+            // const success= response.data.success;
+            //     if(success){
+            //     const { status ,tutorId, tutorData} = response.data;
+            //     console.log(status)
+            //     const data = {
+            //       _id: tutorId,
+            //       firstName: tutorData.firstName,
+            //       lastName: tutorData.lastName,
+            //       email: tutorData.email,
+            //       bio: tutorData.bio,
+            //       expertise: tutorData.expertise,
+            //       qualifications: tutorData.qualifications,
+            //       profilePicture: tutorData.profilePicture,
+            //       cv: tutorData.cv,
+            //       isblocked: tutorData.isblocked,
+            //     };
+            //     dispatch(setTutorData(data));
+              
+            // //   console.log("Tutor after dispatch:", useSelector((state: RootState) => state.tutorData));
+
+            //     console.log(data,'data')
             
-                console.log(tutorData)
-                // setCookie('tutorAccessToken', accessToken, 0.01);
-                // console.log("setCookie")
-                // setCookie('tutorRefreshToken', refreshToken, 7);
-                // console.log("setRefreshCookie");
-                setCookie('tutorId',tutorId, 7)
-                dispatch(setTutorData(data))
-                dispatch(setTutorLogin())
-                dispatch(setTutorProfilePic(tutorData.profilePicture))
-                navigate(ROUTES.tutor.dashBoard);
-            }else{
-                console.log(response.data.message,'reached eher')
-                setMessage(response.data.message);
-            }
+            //     console.log(tutorData)
+            //     // setCookie('tutorAccessToken', accessToken, 0.01);
+            //     // console.log("setCookie")
+            //     // setCookie('tutorRefreshToken', refreshToken, 7);
+            //     // console.log("setRefreshCookie");
+            //     setCookie('tutorId',tutorId, 7)
+            //     dispatch(setTutorData(data))
+            //     dispatch(setTutorLogin())
+            //     dispatch(setTutorProfilePic(tutorData.profilePicture))
+            //     navigate(ROUTES.tutor.dashBoard);
+            // }else{
+            //     console.log(response.data.message,'reached eher')
+            //     setMessage(response.data.message);
+            // }
         } catch (error:any) {
            // Catch and handle the error
            if(handleBlockedTutor(error)){
@@ -141,7 +144,7 @@ function LoginModal() {
     
                 <h2 className="text-3xl mb-5 mt-10 text-center font-bold text-accent">Tutor Login</h2>
     
-                <h1 className="text-red-800 text-center">{message}</h1>
+                <h1 className="text-red-800 text-center">{'message'}</h1>
                 <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
     
                     {({isSubmitting}) => (
