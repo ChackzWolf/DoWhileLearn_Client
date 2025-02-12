@@ -26,10 +26,7 @@ function App() {
 
 
             <Route path = '/tutor/auth/login' element = {<LoginModal />}/>
-            <Route path = '/tutor/auth/login' element = {<RegisterTutor />}/>
-
-
-            
+            <Route path = '/tutor/auth/register' element = {<RegisterTutor />}/>
 
 
             {/* User auth */}

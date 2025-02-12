@@ -1,18 +1,18 @@
 // import { ErrorMessage, Field, Form, Formik } from "formik";
 // import * as Yup from 'yup';
-import { useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 // import axios from "axios";
 // import {  setCookie } from "../../../utils/cookieManager";
 // import { setTutorLogin, setTutorProfilePic } from "../../../redux/authSlice/authSlice";
-import {  useEffect } from "react";
+// import {  useEffect } from "react";
 // import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 // import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 // import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 // // import { Player } from "@lottiefiles/react-lottie-player";
 // import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
-import { useSelector, } from "react-redux";
-import { RootState } from "../../../redux/store/store";
+// import { useSelector, } from "react-redux";
+// import { RootState } from "../../../redux/store/store";
 // import { ROUTES } from "../../../routes/Routes";
 // import OAuth from "../../common/Auth/CustomGoogleLoginButton";
 
@@ -25,22 +25,22 @@ function LoginModal() {
     // const togglePasswordVisibility = () => {
     //   setShowPassword(!showPassword);
     // };
-    const location = useLocation();
+    // const location = useLocation();
 
-    useEffect(() => {
-        console.log("Location object on mount:", location);
-      }, [location]);
+    // useEffect(() => {
+    //     console.log("Location object on mount:", location);
+    //   }, [location]);
 
-    useEffect(() => {
-      const queryParams = new URLSearchParams(location.search);
-      const message = queryParams.get('message');
+    // useEffect(() => {
+    //   const queryParams = new URLSearchParams(location.search);
+    //   const message = queryParams.get('message');
   
-      if (message === 'blocked') {
-        toast.error('You have been blocked! Please contact admin to resolve the issue.');
-      }else if(message === 'passwordUpdated'){
-        toast.success('Your password has been updated. Please login with your new password.')
-      }
-    }, [location]);
+    //   if (message === 'blocked') {
+    //     toast.error('You have been blocked! Please contact admin to resolve the issue.');
+    //   }else if(message === 'passwordUpdated'){
+    //     toast.success('Your password has been updated. Please login with your new password.')
+    //   }
+    // }, [location]);
 
     // const validationSchema = Yup.object({
     //     email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -125,15 +125,15 @@ function LoginModal() {
     // }
 
     // dispatch(setTutorDataEmpty())
-    const tutor = useSelector((state: RootState) => state.tutorData.tutorData);   
+    // const tutor = useSelector((state: RootState) => state.tutorData.tutorData);   
     
     
-    useEffect(() => {
-        console.log("Tutor after dispatch:", tutor);
-    }, [tutor]);
+    // useEffect(() => {
+    //     console.log("Tutor after dispatch:", tutor);
+    // }, [tutor]);
 
 
-    console.log(tutor, "dta form redux")
+    // console.log(tutor, "dta form redux")
     return (<>Login page</>
         // <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
         // {isLoading && <Loader/>}
