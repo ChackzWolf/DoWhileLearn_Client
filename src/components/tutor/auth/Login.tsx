@@ -63,7 +63,7 @@ function LoginModal() {
             console.log(response.data,'Response')
             const success= response.data.success;
                 if(success){
-                const { status ,tutorId, tutorData} = response.data;
+                const { accessToken, refreshToken ,status ,tutorId, tutorData} = response.data;
                 console.log(status)
                 const data = {
                   _id: tutorId,
@@ -84,9 +84,9 @@ function LoginModal() {
             console.log(data,'data')
             
                 console.log(tutorData)
-                // setCookie('tutorAccessToken', accessToken, 0.01);
-                // console.log("setCookie")
-                // setCookie('tutorRefreshToken', refreshToken, 7);
+                setCookie('tutorAccessToken', accessToken, 0.01);
+                console.log("setCookie")
+                setCookie('tutorRefreshToken', refreshToken, 7);
                 console.log("setRefreshCookie");
                 setCookie('tutorId',tutorId, 7)
                 dispatch(setTutorData(data))
