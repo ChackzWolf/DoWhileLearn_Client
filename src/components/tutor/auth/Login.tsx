@@ -133,90 +133,90 @@ function LoginModal() {
         console.log("Tutor after dispatch:", tutor);
     }, [tutor]);
 
-    
+
     console.log(tutor, "dta form redux")
-    return (
-        <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
-        {isLoading && <Loader/>}
-        <div className="flex flex-col md:flex-row h-screen">
-            {/* <div className="w-full md:w-1/2 flex justify-center items-center"> 
-                <Player
-                    autoplay
-                    loop
-                    src="https://lottie.host/192e27ba-19d6-4ae4-b946-9c846d281dcd/qPihaW7Eqq.json"
-                    style={{ height: '90%', width: ' 90%'}}
-                    />
+    return (<>Login page</>
+        // <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
+        // {isLoading && <Loader/>}
+        // <div className="flex flex-col md:flex-row h-screen">
+        //     {/* <div className="w-full md:w-1/2 flex justify-center items-center"> 
+        //         <Player
+        //             autoplay
+        //             loop
+        //             src="https://lottie.host/192e27ba-19d6-4ae4-b946-9c846d281dcd/qPihaW7Eqq.json"
+        //             style={{ height: '90%', width: ' 90%'}}
+        //             />
                     
-            </div> */}
+        //     </div> */}
     
-            <div className="p-8 md:p-16 w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
+        //     <div className="p-8 md:p-16 w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
     
-                <h2 className="text-3xl mb-5 mt-10 text-center font-bold text-accent">Tutor Login</h2>
+        //         <h2 className="text-3xl mb-5 mt-10 text-center font-bold text-accent">Tutor Login</h2>
     
-                <h1 className="text-red-800 text-center">{'message'}</h1>
-                <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
+        //         <h1 className="text-red-800 text-center">{'message'}</h1>
+        //         <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>
     
-                    {({isSubmitting}) => (
-                        <Form>
-                            <div className="justify-center mb-20 px-4 md:px-28">
-                                <p className="text-base mb-2 font-normal text-accent">Email</p>
-                                <div className="mb-4 flex-col items-center">
-                                    <Field
-                                        type="email"
-                                        name="email"
-                                        className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
-                                        placeholder=" Enter your email here."
-                                    />
-                                    <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
-                                </div>
-                                <div className="flex w-full justify-between items-center">
-                                    <p className="text-base mb-2 font-normal text-accent">Password</p>
-                                    <a href="/tutor/auth/forgot-password" className="mb-2 font-normal justify-end text-xs underline text-accent">Forgot ?</a>
-                                </div>
+        //             {({isSubmitting}) => (
+        //                 <Form>
+        //                     <div className="justify-center mb-20 px-4 md:px-28">
+        //                         <p className="text-base mb-2 font-normal text-accent">Email</p>
+        //                         <div className="mb-4 flex-col items-center">
+        //                             <Field
+        //                                 type="email"
+        //                                 name="email"
+        //                                 className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+        //                                 placeholder=" Enter your email here."
+        //                             />
+        //                             <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
+        //                         </div>
+        //                         <div className="flex w-full justify-between items-center">
+        //                             <p className="text-base mb-2 font-normal text-accent">Password</p>
+        //                             <a href="/tutor/auth/forgot-password" className="mb-2 font-normal justify-end text-xs underline text-accent">Forgot ?</a>
+        //                         </div>
     
-                                <div className="justify-center mb-6 ">
-                                    <div className="relative w-full h-10 flex items-center right-1 rounded-lg ">
-                                        <Field
-                                            type={showPassword ? 'text' : 'password'}
-                                            name="password"
-                                            className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
-                                            placeholder="Enter your password here."
-                                        />
-                                        <EyeCheckbox onClick={togglePasswordVisibility} />
-                                    </div>
-                                    <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
-                                </div>
+        //                         <div className="justify-center mb-6 ">
+        //                             <div className="relative w-full h-10 flex items-center right-1 rounded-lg ">
+        //                                 <Field
+        //                                     type={showPassword ? 'text' : 'password'}
+        //                                     name="password"
+        //                                     className="w-full h-10 p-2 px-4 shadow-lg rounded-lg transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+        //                                     placeholder="Enter your password here."
+        //                                 />
+        //                                 <EyeCheckbox onClick={togglePasswordVisibility} />
+        //                             </div>
+        //                             <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
+        //                         </div>
     
-                                <div className="justify-center mb-6 ">
-                                    <button
-                                        type="submit"
-                                        className="w-full px-4 py-3 mb-4 text-white shadow-lg hover:shadow-2xl rounded-lg font-PlusJakartaSans font-semibold  bg-primary transition-all ease-in-out delay-50 duration-500"
-                                        disabled={isSubmitting}
-                                    >
-                                        Login
-                                    </button>
-                                    <OAuth role="TUTOR"/>
+        //                         <div className="justify-center mb-6 ">
+        //                             <button
+        //                                 type="submit"
+        //                                 className="w-full px-4 py-3 mb-4 text-white shadow-lg hover:shadow-2xl rounded-lg font-PlusJakartaSans font-semibold  bg-primary transition-all ease-in-out delay-50 duration-500"
+        //                                 disabled={isSubmitting}
+        //                             >
+        //                                 Login
+        //                             </button>
+        //                             <OAuth role="TUTOR"/>
     
-                                    <div className="flex w-full text-accent">
-                                        <h1>Don't have an account?</h1>
-                                        <NavLink to={ROUTES.tutor.signup} className="pl-2 text-accent hover:underline">
-                                            Signup
-                                        </NavLink>
-                                    </div>
-                                    <div className="flex w-full text-accent">
-                                        <h1>Are you a student?  </h1>
-                                        <NavLink to={ROUTES.user.signup} className="pl-2 text-accent hover:underline">
-                                            Login
-                                        </NavLink>
-                                    </div>
-                                </div>
-                            </div>
-                        </Form>
-                    )}
-                </Formik>
-            </div>
-        </div>
-        </div>
+        //                             <div className="flex w-full text-accent">
+        //                                 <h1>Don't have an account?</h1>
+        //                                 <NavLink to={ROUTES.tutor.signup} className="pl-2 text-accent hover:underline">
+        //                                     Signup
+        //                                 </NavLink>
+        //                             </div>
+        //                             <div className="flex w-full text-accent">
+        //                                 <h1>Are you a student?  </h1>
+        //                                 <NavLink to={ROUTES.user.signup} className="pl-2 text-accent hover:underline">
+        //                                     Login
+        //                                 </NavLink>
+        //                             </div>
+        //                         </div>
+        //                     </div>
+        //                 </Form>
+        //             )}
+        //         </Formik>
+        //     </div>
+        // </div>
+        // </div>
     )
 }
 

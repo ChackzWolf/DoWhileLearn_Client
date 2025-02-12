@@ -1,125 +1,125 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from 'yup';
-import axios from "axios";
-import { NavLink } from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
-import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
-import Loader from "../../common/icons/loader";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
-import { ROUTES } from "../../../routes/Routes";
-import OAuth from "../../common/Auth/CustomGoogleLoginButton";
+// import { ErrorMessage, Field, Form, Formik } from "formik";
+// import * as Yup from 'yup';
+// import axios from "axios";
+// import { NavLink } from "react-router-dom";
+// import { useNavigate, useLocation } from "react-router-dom";
+// import { useState, useEffect } from "react";
+// import EyeToggleButton from "../../common/icons/eyeToggleButton/eyeToggleButton";
+// import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
+// import Loader from "../../common/icons/loader";
+// import { toast } from "react-toastify";
+// import { useDispatch } from "react-redux";
+// import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
+// import { ROUTES } from "../../../routes/Routes";
+// import OAuth from "../../common/Auth/CustomGoogleLoginButton";
 
 
 
 function RegisterTutor() {
     
-    const navigate = useNavigate();
-    const location = useLocation()
-    const dispatch = useDispatch()
-    const [isLoading,setIsLoading] = useState(false);
-    const [emailExists,setEmailExists] = useState(false)
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const togglePasswordVisibility = () => {
-      setShowPassword(!showPassword);
-    };
+    // const navigate = useNavigate();
+    // const location = useLocation()
+    // const dispatch = useDispatch()
+    // const [isLoading,setIsLoading] = useState(false);
+    // const [emailExists,setEmailExists] = useState(false)
+    // const [showPassword, setShowPassword] = useState(false);
+    // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    // const togglePasswordVisibility = () => {
+    //   setShowPassword(!showPassword);
+    // };
   
-    const toggleConfirmPasswordVisibility = () => {
+    // const toggleConfirmPasswordVisibility = () => {
  
-        console.log('treggg')
-      setShowConfirmPassword(!showConfirmPassword);
-      console.log(showConfirmPassword)
-    };
+    //     console.log('treggg')
+    //   setShowConfirmPassword(!showConfirmPassword);
+    //   console.log(showConfirmPassword)
+    // };
 
-    const validationSchema = Yup.object({
-        email: Yup.string().email('Invalid email address').required('Email is required'),
-        phoneNumber: Yup.string()
-            .required('Phone number is required')
-            .matches(/^[6-9][0-9]{9}$/, 'Enter a valid number.'),
-        firstName: Yup.string()
-            .required('First name is required')
-            .matches(/^[A-Za-z]+$/, 'First name can only contain letters')
-            .min(1, 'First name must be at least 1 characters long')
-            .max(50, 'First name cannot be longer than 50 characters'),
+    // const validationSchema = Yup.object({
+    //     email: Yup.string().email('Invalid email address').required('Email is required'),
+    //     phoneNumber: Yup.string()
+    //         .required('Phone number is required')
+    //         .matches(/^[6-9][0-9]{9}$/, 'Enter a valid number.'),
+    //     firstName: Yup.string()
+    //         .required('First name is required')
+    //         .matches(/^[A-Za-z]+$/, 'First name can only contain letters')
+    //         .min(1, 'First name must be at least 1 characters long')
+    //         .max(50, 'First name cannot be longer than 50 characters'),
       
-        lastName: Yup.string()
-            .required('Last name is required')
-            .matches(/^[A-Za-z]+$/, 'Last name can only contain letters')
-            .min(1, 'Last name must be at least 1 characters long')
-            .max(50, 'Last name cannot be longer than 50 characters'),
-        password: Yup.string()
-            .required('Password is required')
-            .min(8, 'Password must be at least 8 characters long')
-            .max(20, 'Password cannot be longer than 20 characters')
-            .matches(
-              /[a-z]/,
-              'Password must contain at least one lowercase letter'
-            )
-            .matches(
-              /[A-Z]/,
-              'Password must contain at least one uppercase letter'
-            )
-            .matches(
-              /[0-9]/,
-              'Password must contain at least one number'
-            )
-            .matches(
-              /[@$!%*?&#]/,
-              'Password must contain at least one special character'
-            ),
-        confirmPassword: Yup.string()
-            .oneOf([Yup.ref('password'),''], 'Passwords must match')
-            .required('Confirm password is required'),
-    });
-    const initialValues = {
-        firstName:'',
-        lastName:'',
-        email: '',
-        phoneNumber:'',
-        password: '',
-        confirmPassword:''
-    };
-    useEffect(() => {
-        const queryParams = new URLSearchParams(location.search);
-        const message = queryParams.get('message');
+    //     lastName: Yup.string()
+    //         .required('Last name is required')
+    //         .matches(/^[A-Za-z]+$/, 'Last name can only contain letters')
+    //         .min(1, 'Last name must be at least 1 characters long')
+    //         .max(50, 'Last name cannot be longer than 50 characters'),
+    //     password: Yup.string()
+    //         .required('Password is required')
+    //         .min(8, 'Password must be at least 8 characters long')
+    //         .max(20, 'Password cannot be longer than 20 characters')
+    //         .matches(
+    //           /[a-z]/,
+    //           'Password must contain at least one lowercase letter'
+    //         )
+    //         .matches(
+    //           /[A-Z]/,
+    //           'Password must contain at least one uppercase letter'
+    //         )
+    //         .matches(
+    //           /[0-9]/,
+    //           'Password must contain at least one number'
+    //         )
+    //         .matches(
+    //           /[@$!%*?&#]/,
+    //           'Password must contain at least one special character'
+    //         ),
+    //     confirmPassword: Yup.string()
+    //         .oneOf([Yup.ref('password'),''], 'Passwords must match')
+    //         .required('Confirm password is required'),
+    // });
+    // const initialValues = {
+    //     firstName:'',
+    //     lastName:'',
+    //     email: '',
+    //     phoneNumber:'',
+    //     password: '',
+    //     confirmPassword:''
+    // };
+    // useEffect(() => {
+    //     const queryParams = new URLSearchParams(location.search);
+    //     const message = queryParams.get('message');
     
-        if (message === 'registrationTimeOut') {
-          toast.error('Regestration session has been expired. Try registering again.');
-        }else if(message === 'passwordUpdated'){
-          toast.success('Your password has been updated. Please login with your new password.')
-        }
-      }, [location]);
+    //     if (message === 'registrationTimeOut') {
+    //       toast.error('Regestration session has been expired. Try registering again.');
+    //     }else if(message === 'passwordUpdated'){
+    //       toast.success('Your password has been updated. Please login with your new password.')
+    //     }
+    //   }, [location]);
 
-    const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
+    // const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
 
-        setIsLoading(true);
-        try{
+    //     setIsLoading(true);
+    //     try{
 
-            const response = await axios.post(tutorEndpoint.register, value);
+    //         const response = await axios.post(tutorEndpoint.register, value);
             
-            console.log('register data send succesfully', response);
-            localStorage.removeItem('otpCountDown');
-            if(response.data.success){
-                dispatch(setTutorData(response.data.tutorData))
-                navigate('/register/tutor/otp',{state: response.data});
-                console.log('success' , response.data)
-            }else{
-                console.log(response.data)
-                setEmailExists(true)
-                console.log('failed')
-            }
-        }catch(err){
-            console.log(err, "registeration error ");
+    //         console.log('register data send succesfully', response);
+    //         localStorage.removeItem('otpCountDown');
+    //         if(response.data.success){
+    //             dispatch(setTutorData(response.data.tutorData))
+    //             navigate('/register/tutor/otp',{state: response.data});
+    //             console.log('success' , response.data)
+    //         }else{
+    //             console.log(response.data)
+    //             setEmailExists(true)
+    //             console.log('failed')
+    //         }
+    //     }catch(err){
+    //         console.log(err, "registeration error ");
 
-        }finally {
-            setIsLoading(false);
-            setSubmitting(false);
-        }
-    }
+    //     }finally {
+    //         setIsLoading(false);
+    //         setSubmitting(false);
+    //     }
+    // }
 
 
 
@@ -127,7 +127,10 @@ function RegisterTutor() {
 
     return (
         <>
-        {isLoading && <Loader/>}
+
+
+        this is login page
+        {/* {isLoading && <Loader/>}
         <div className="flex bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end  h-screen">
 
 
@@ -283,7 +286,7 @@ function RegisterTutor() {
                 </Formik>
             </div>
 
-        </div>
+        </div> */}
         </>
     )
 }
