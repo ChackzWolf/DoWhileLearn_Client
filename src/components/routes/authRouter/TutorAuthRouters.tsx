@@ -7,6 +7,8 @@ import VerifyEmail from "../../common/EmailVerification";
 import ResetPassword from "../../common/ResetPassword";
 import ResetPasswordOTP from "../../common/ResetPasswordOTP";
 import OtpVarification from "../../tutor/auth/OtpVarification";
+import LoginUser from "../../user/auth/Login";
+import RegisterUser from "../../user/auth/register";
 
 
 const TutorAuthRoutes = () => {
@@ -14,22 +16,22 @@ const TutorAuthRoutes = () => {
   console.log(isAuthenticated, ' is authenticated')
   return (
     <Routes>
-    {/* <Route
+    <Route
       path="login"
       element={
-        // <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
-          <LoginModal />
-        // </PublicRoute>
+        <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
+          <LoginUser />
+        </PublicRoute>
       }
-    /> */}
-    {/* <Route
+    />
+    <Route
       path="register"
       element={
-        // <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
+        <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
           <RegisterUser />
-        // </PublicRoute>
+        </PublicRoute>
       }
-    /> */}
+    />
 
     <Route path = '/register/otp' 
       element={
