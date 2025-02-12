@@ -1,31 +1,30 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from 'yup';
-import { NavLink, useLocation } from "react-router-dom";
+// import { ErrorMessage, Field, Form, Formik } from "formik";
+// import * as Yup from 'yup';
+import { useLocation } from "react-router-dom";
 // import axios from "axios";
 // import {  setCookie } from "../../../utils/cookieManager";
 // import { setTutorLogin, setTutorProfilePic } from "../../../redux/authSlice/authSlice";
-import { useState, useEffect } from "react";
-import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
+import {  useEffect } from "react";
+// import EyeCheckbox from "../../common/icons/eyeToggleButton/eyeToggleButton";
 // import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
-import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
+// import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
 import { toast } from 'react-toastify';
-import Loader from "../../common/icons/loader";
 // // import { Player } from "@lottiefiles/react-lottie-player";
 // import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
 import { useSelector, } from "react-redux";
 import { RootState } from "../../../redux/store/store";
-import { ROUTES } from "../../../routes/Routes";
-import OAuth from "../../common/Auth/CustomGoogleLoginButton";
+// import { ROUTES } from "../../../routes/Routes";
+// import OAuth from "../../common/Auth/CustomGoogleLoginButton";
 
 function LoginModal() {
     // const dispatch = useDispatch()
     // const navigate = useNavigate()
     // const [message, setMessage] = useState('')
-    const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
-    const togglePasswordVisibility = () => {
-      setShowPassword(!showPassword);
-    };
+    // const [showPassword, setShowPassword] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false)
+    // const togglePasswordVisibility = () => {
+    //   setShowPassword(!showPassword);
+    // };
     const location = useLocation();
 
     useEffect(() => {
@@ -43,27 +42,27 @@ function LoginModal() {
       }
     }, [location]);
 
-    const validationSchema = Yup.object({
-        email: Yup.string().email('Invalid email address').required('Email is required'),
-        password: Yup.string()
-            .required('Password is required')
-            .min(8, 'Password must be at least 8 characters long')
-            .max(20, 'Password cannot be longer than 20 characters')
-            .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-            .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-            .matches(/[0-9]/, 'Password must contain at least one number')
-            .matches(/[@$!%*?&#]/, 'Password must contain at least one special character'),
-    });
-    const initialValue = {
-        email: '',
-        password:''
-    };
+    // const validationSchema = Yup.object({
+    //     email: Yup.string().email('Invalid email address').required('Email is required'),
+    //     password: Yup.string()
+    //         .required('Password is required')
+    //         .min(8, 'Password must be at least 8 characters long')
+    //         .max(20, 'Password cannot be longer than 20 characters')
+    //         .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    //         .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    //         .matches(/[0-9]/, 'Password must contain at least one number')
+    //         .matches(/[@$!%*?&#]/, 'Password must contain at least one special character'),
+    // });
+    // const initialValue = {
+    //     email: '',
+    //     password:''
+    // };
 
 
-    const handleSubmit = async(_value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
-        try {
+    // const handleSubmit = async(_value : typeof initialValue , {setSubmitting} : {setSubmitting: (isSubmitting: boolean) =>  void} ) => {
+        // try {
 
-            console.log('handle submit clicked')
+            // console.log('handle submit clicked')
 
             // setIsLoading(true)
             // const response = await axios.post(tutorEndpoint.loginTutor, value);
@@ -104,26 +103,26 @@ function LoginModal() {
             //     console.log(response.data.message,'reached eher')
             //     setMessage(response.data.message);
             // }
-        } catch (error:any) {
-           // Catch and handle the error
-           if(handleBlockedTutor(error)){
-            console.log('unhandled error')
-            // Network or unexpected error
-            handleBlockedTutor(error)
-          }
-            else if (error.response) {
-                // Server-side error, extract message and status
-                const { status, data } = error.response;
-                console.log('unhandled')
-                throw new Error(`Login failed! Status: ${status}, Message: ${data.message || error.message}`);
-              } else throw new Error(`Something went wrong: ${error.message}`);
-        } finally {
-            // Reset the form submitting state
-            setSubmitting(false);
-            setIsLoading(false)
-        }
+    //     } catch (error:any) {
+    //        // Catch and handle the error
+    //        if(handleBlockedTutor(error)){
+    //         console.log('unhandled error')
+    //         // Network or unexpected error
+    //         handleBlockedTutor(error)
+    //       }
+    //         else if (error.response) {
+    //             // Server-side error, extract message and status
+    //             const { status, data } = error.response;
+    //             console.log('unhandled')
+    //             throw new Error(`Login failed! Status: ${status}, Message: ${data.message || error.message}`);
+    //           } else throw new Error(`Something went wrong: ${error.message}`);
+    //     } finally {
+    //         // Reset the form submitting state
+    //         setSubmitting(false);
+    //         setIsLoading(false)
+    //     }
   
-    }
+    // }
 
     // dispatch(setTutorDataEmpty())
     const tutor = useSelector((state: RootState) => state.tutorData.tutorData);   
