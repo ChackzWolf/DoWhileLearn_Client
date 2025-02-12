@@ -123,7 +123,7 @@ const AddCourse = () => {
   };
 
   const handleVideoUpload = (videoFile: File) => {
-    const socketService = SocketService.getInstance('http://localhost:3183');
+    const socketService = SocketService.getInstance('http://dowhilelearn.space');
     const id= generateRandomCode(8)
     const formData = new FormData();
     const tutorId = getCookie('tutorId') || ''

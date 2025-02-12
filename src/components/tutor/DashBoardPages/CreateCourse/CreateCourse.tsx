@@ -131,7 +131,7 @@ const AddCourse = () => {
     }
   };
   const handleVideoUpload = async (videoFile: File) => {
-    const socketService = SocketService.getInstance('http://localhost:3183');
+    const socketService = SocketService.getInstance('http://do');
     const id= generateRandomCode(8)
     const formData = new FormData();
     const tutorId = getCookie('tutorId') || ''

@@ -32,7 +32,7 @@ class SocketService {
   private baseUrl: string;
   private token: string;
 
-  private constructor(baseUrl: string = 'http://localhost:3183') {
+  private constructor(baseUrl: string = 'http://dowhilelearn.space') {
     this.baseUrl = baseUrl;
     this.token = this.getCookie('tutorRefreshToken');
   }

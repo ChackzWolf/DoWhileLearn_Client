@@ -33,7 +33,7 @@ const UploadDetails: React.FC<{
   useEffect(()=>{
     const tutorId = getCookie('tutorId');
     const init = ()=>{
-      const socketService = SocketService.getInstance('http://localhost:3183');
+      const socketService = SocketService.getInstance('http://dowhilelearn.space');
       socketService.trackUpload(tutorId||'');
     }
     init()

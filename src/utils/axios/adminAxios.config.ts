@@ -3,8 +3,6 @@ import { getCookie, setCookie, removeCookie } from '../cookieManager';
 import { isTokenExpired } from '../jwtUtils';
 import { setTutorLogout } from '../../redux/authSlice/authSlice';
 import store from '../../redux/store/store';
-// import store from '../../redux/store/store';
-// import { setTutorLogout } from '../../redux/authSlice/authSlice';
 
 const adminAxios = axios.create({
     baseURL: import.meta.env.VITE_API_GATEWAY_BASE_URL,

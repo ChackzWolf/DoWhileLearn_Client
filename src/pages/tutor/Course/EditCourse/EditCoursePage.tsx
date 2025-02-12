@@ -20,7 +20,7 @@ const EditCoursePage = () => {
 
   useEffect(() => {
     const initializeSocket = async()=> {
-        const socketService = SocketService.getInstance('http://localhost:3183');
+        const socketService = SocketService.getInstance('http://dowhilelearn.space');
 
         // Connect to the server
         socketService.connect()

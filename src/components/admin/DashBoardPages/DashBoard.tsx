@@ -20,6 +20,8 @@ import TopCoursesChart from './DashBoardComponents/CourseGraph';
 const COLORS = [ '#7C24F0', '#a332ff', '#DDB3FF'];
 
 const AdminDashboard = () => {
+
+  
     const [courses, setCourses] = useState<any[]>([]);
     const [topRatedCourses,setTopRatedCourses]= useState<any[]>([])
     const [totalStudents, setTotalStudents] = useState(0);
