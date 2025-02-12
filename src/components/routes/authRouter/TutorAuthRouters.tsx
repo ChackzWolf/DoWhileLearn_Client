@@ -17,17 +17,17 @@ const TutorAuthRoutes = () => {
     <Route
       path="login"
       element={
-        <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
+        // <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
           <LoginModal />
-        </PublicRoute>
+        // </PublicRoute>
       }
     />
     <Route
       path="register"
       element={
-        <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
+        // <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
           <RegisterUser />
-        </PublicRoute>
+        // </PublicRoute>
       }
     />
 
