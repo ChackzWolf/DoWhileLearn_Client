@@ -63,7 +63,7 @@ function LoginModal() {
             console.log(response.data,'Response')
             const success= response.data.success;
                 if(success){
-                const { accessToken, refreshToken ,status ,tutorId, tutorData} = response.data;
+                const { status ,tutorId, tutorData} = response.data;
                 console.log(status)
                 const data = {
                   _id: tutorId,
