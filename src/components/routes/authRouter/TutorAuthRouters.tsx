@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { getCookie } from "../../../utils/cookieManager";
+// import { getCookie } from "../../../utils/cookieManager";
 import PublicRoute from "./publicRoute";
 // import LoginModal from "../../tutor/auth/Login";
 // import RegisterUser from "../../tutor/auth/register";
