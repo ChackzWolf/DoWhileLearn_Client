@@ -1,18 +1,16 @@
 import { Route, Routes } from "react-router-dom";
-// import { getCookie } from "../../../utils/cookieManager";
+import { getCookie } from "../../../utils/cookieManager";
 import PublicRoute from "./publicRoute";
-// import LoginModal from "../../tutor/auth/Login";
-// import RegisterUser from "../../tutor/auth/register";
+import LoginModal from "../../tutor/auth/Login";
+import RegisterUser from "../../tutor/auth/register";
 import VerifyEmail from "../../common/EmailVerification";
 import ResetPassword from "../../common/ResetPassword";
 import ResetPasswordOTP from "../../common/ResetPasswordOTP";
 import OtpVarification from "../../tutor/auth/OtpVarification";
-import LoginUser from "../../user/auth/Login";
-import RegisterUser from "../../user/auth/register";
 
 
 const TutorAuthRoutes = () => {
-  const isAuthenticated = false//!!getCookie('tutorId'); // Replace with your logic
+  const isAuthenticated = !!getCookie('tutorId'); // Replace with your logic
   console.log(isAuthenticated, ' is authenticated')
   return (
     <Routes>
@@ -20,7 +18,7 @@ const TutorAuthRoutes = () => {
       path="login"
       element={
         <PublicRoute isAuthenticated={isAuthenticated} redirectPath="/tutor">
-          <LoginUser />
+          <LoginModal />
         </PublicRoute>
       }
     />
