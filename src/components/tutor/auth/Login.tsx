@@ -27,7 +27,11 @@ function LoginModal() {
       setShowPassword(!showPassword);
     };
     const location = useLocation();
-   
+
+    useEffect(() => {
+        console.log("Location object on mount:", location);
+      }, [location]);
+
     useEffect(() => {
       const queryParams = new URLSearchParams(location.search);
       const message = queryParams.get('message');
@@ -122,9 +126,14 @@ function LoginModal() {
     }
 
     // dispatch(setTutorDataEmpty())
-    const tutor = useSelector((state: RootState) => state.tutorData.tutorData);    useEffect(() => {
+    const tutor = useSelector((state: RootState) => state.tutorData.tutorData);   
+    
+    
+    useEffect(() => {
         console.log("Tutor after dispatch:", tutor);
     }, [tutor]);
+
+    
     console.log(tutor, "dta form redux")
     return (
         <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
