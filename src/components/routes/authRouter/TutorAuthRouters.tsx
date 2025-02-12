@@ -12,7 +12,7 @@ import RegisterUser from "../../user/auth/register";
 
 
 const TutorAuthRoutes = () => {
-  const isAuthenticated = !!getCookie('tutorId'); // Replace with your logic
+  const isAuthenticated = false//!!getCookie('tutorId'); // Replace with your logic
   console.log(isAuthenticated, ' is authenticated')
   return (
     <Routes>
