@@ -10,7 +10,7 @@ import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
 import { toast } from 'react-toastify';
 import Loader from "../../common/icons/loader";
-import { Player } from "@lottiefiles/react-lottie-player";
+// import { Player } from "@lottiefiles/react-lottie-player";
 import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
 import { useSelector,useDispatch  } from "react-redux";
 import { RootState } from "../../../redux/store/store";
@@ -127,7 +127,7 @@ function LoginModal() {
         <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
         {isLoading && <Loader/>}
         <div className="flex flex-col md:flex-row h-screen">
-            <div className="w-full md:w-1/2 flex justify-center items-center"> 
+            {/* <div className="w-full md:w-1/2 flex justify-center items-center"> 
                 <Player
                     autoplay
                     loop
@@ -135,7 +135,7 @@ function LoginModal() {
                     style={{ height: '90%', width: ' 90%'}}
                     />
                     
-            </div>
+            </div> */}
     
             <div className="p-8 md:p-16 w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
     
