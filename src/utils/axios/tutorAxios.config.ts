@@ -29,10 +29,10 @@ tutorAxios.interceptors.request.use(  /////to add JWT token from cookie
 
 tutorAxios.interceptors.request.use(
     async (config) => {
-        let token = getCookie('tutorAccessToken');
-        console.log(token, 'accessToken in request');
-
-        if (!token || isTokenExpired(token)) {
+        let accessToken = getCookie('tutorAccessToken');
+        console.log(accessToken, 'accessToken in request');
+        let tutorId = getCookie('tutorId');
+        if (!accessToken || isTokenExpired(accessToken)) {
             // If access token is null, attempt to refresh token
             try {
                 console.log('trig refresh token')
@@ -46,7 +46,7 @@ tutorAxios.interceptors.request.use(
                 setCookie('tutorAccessToken', newToken, 0.01);
                 setCookie('tutorRefreshToken', refreshToken, 10);
                 // Set token to the new one
-                token = newToken;
+                accessToken = newToken;
             } catch (refreshError) {
                 console.error('Token refresh failed:', refreshError);
                 removeCookie('tutorAccessToken');
@@ -60,10 +60,16 @@ tutorAxios.interceptors.request.use(
             }
         }
 
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
 
+
+
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`; // Send access token
+        }
+        if (tutorId) {
+            config.headers['X-Tutor-Id'] = tutorId; // Send tutorId separately
+        }
+        
         return config;
     },
     (error) => Promise.reject(error)
