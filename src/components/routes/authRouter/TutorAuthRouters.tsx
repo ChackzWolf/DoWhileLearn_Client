@@ -10,7 +10,7 @@ import OtpVarification from "../../tutor/auth/OtpVarification";
 
 
 const TutorAuthRoutes = () => {
-  const isAuthenticated = !!getCookie('tutorId'); // Replace with your logic
+  const isAuthenticated = !!getCookie('tutorId'); 
   console.log(isAuthenticated, ' is authenticated')
   return (
     <Routes>
