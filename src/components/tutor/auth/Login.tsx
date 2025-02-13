@@ -84,10 +84,10 @@ function LoginModal() {
             console.log(data,'data')
             
                 console.log(tutorData)
-                setCookie('tutorAccessToken', accessToken, 0.01);
-                console.log("setCookie")
-                setCookie('tutorRefreshToken', refreshToken, 7);
-                console.log("setRefreshCookie");
+                // setCookie('tutorAccessToken', accessToken, 0.01);
+                // console.log("setCookie")
+                // setCookie('tutorRefreshToken', refreshToken, 7);
+                // console.log("setRefreshCookie");
                 setCookie('tutorId',tutorId, 7)
                 dispatch(setTutorData(data))
                 dispatch(setTutorLogin())
@@ -124,7 +124,7 @@ function LoginModal() {
     }, [tutor]);
     console.log(tutor, "dta form redux")
     return (
-        <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
+        <div className="bg-gradient-to-br from-purple-900 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
         {isLoading && <Loader/>}
         <div className="flex flex-col md:flex-row h-screen">
             <div className="w-full md:w-1/2 flex justify-center items-center"> 
