@@ -35,7 +35,8 @@ tutorAxios.interceptors.request.use(
             // If access token is null, attempt to refresh token
             try {
                 console.log('trig refresh token')
-                const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/tutor-refresh-token`, {}, { withCredentials: true });
+                const tutorRefreshToken = getCookie('tutorRefreshToken');
+                const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/tutor-refresh-token`, {tutorRefreshToken}, { withCredentials: true });
                 const newToken = response.data.accessToken;
                 const refreshToken = response.data.refreshToken;
                 console.log(newToken, 'new token is here ')
@@ -51,8 +52,6 @@ tutorAxios.interceptors.request.use(
                 removeCookie('tutorRefreshToken');
                 removeCookie('tutorId');
                 console.log(2)
-                // store.dispatch(setTutorLogout())
-                // Optionally, redirect to login
                 window.location.href = '';
                 return Promise.reject(refreshError);
             }

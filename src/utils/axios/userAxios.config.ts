@@ -38,7 +38,8 @@ userAxios.interceptors.request.use(
             // If access token is null, attempt to refresh token
             try {
                 console.log('trig refresh token')
-                const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/user-refresh-token`, {}, { withCredentials: true });
+                const userRefreshToken = getCookie('userRefreshToken');
+                const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/user-refresh-token`, {userRefreshToken}, { withCredentials: true });
                 const newToken = response.data.accessToken;
                 const refreshToken = response.data.refreshToken;
 

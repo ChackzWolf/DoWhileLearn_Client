@@ -17,13 +17,13 @@ const adminAxios = axios.create({
 adminAxios.interceptors.request.use(
     async (config) => {
         let accessToken = getCookie('adminAccessToken');
-        let refreshToken = getCookie('adminRefreshToken');
+        let adminRefreshToken = getCookie('adminRefreshToken');
 
-        if (!accessToken || isTokenExpired(accessToken)) {
+        if (!accessToken || isTokenExpired(accessToken) ) {
             // If access token is null, attempt to refresh token
             try {
-                console.log('trig refresh token')
-                const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/admin-refresh-token`, {}, { withCredentials: true });
+                
+                const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/admin-refresh-token`, {adminRefreshToken}, { withCredentials: true });
                 const newToken = response.data.accessToken;
                 const refreshToken = response.data.refreshToken;
 
@@ -49,8 +49,8 @@ adminAxios.interceptors.request.use(
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`; // Send access token
         }
-        if (refreshToken) {
-            config.headers['X-Refresh-Token'] = refreshToken;
+        if (adminRefreshToken) {
+            config.headers['X-Refresh-Token'] = adminRefreshToken;
         }
 
         return config;

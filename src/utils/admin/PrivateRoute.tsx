@@ -14,7 +14,8 @@ export const AdminPrivateRoute = ({ children, roles }: { children: JSX.Element; 
       if (!token) {
         // If access token is null, attempt to refresh token
         try {
-          const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/admin-refresh-token`, {}, { withCredentials: true });
+          const adminRefreshToken = getCookie('adminRefreshToken');
+          const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/admin-refresh-token`, { adminRefreshToken }, { withCredentials: true });
           const newToken = response.data.accessToken;
           const refreshToken = response.data.refreshToken;
           console.log(response.data, 'response form refreshing')

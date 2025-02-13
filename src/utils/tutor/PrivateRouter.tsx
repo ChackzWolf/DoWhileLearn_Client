@@ -15,7 +15,8 @@ export const TutorPrivateRoute = ({ children, roles }: { children: JSX.Element; 
       if (!token) {
         // If access token is null, attempt to refresh token
         try {
-          const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/tutor-refresh-token`, {}, { withCredentials: true });
+          const tutorRefreshToken = getCookie('tutorRefreshToken');
+          const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/tutor-refresh-token`, {tutorRefreshToken}, { withCredentials: true });
           const newToken = response.data.accessToken;
           const refreshToken = response.data.refreshToken;
           console.log(response.data, 'response form refreshing')
