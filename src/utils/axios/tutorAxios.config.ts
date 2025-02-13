@@ -30,7 +30,6 @@ tutorAxios.interceptors.request.use(  /////to add JWT token from cookie
 tutorAxios.interceptors.request.use(
     async (config) => {
         let accessToken = getCookie('tutorAccessToken');
-        console.log(accessToken, 'accessToken in request');
         let tutorId = getCookie('tutorId');
         if (!accessToken || isTokenExpired(accessToken)) {
             // If access token is null, attempt to refresh token
@@ -39,7 +38,6 @@ tutorAxios.interceptors.request.use(
                 const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/tutor-refresh-token`, {}, { withCredentials: true });
                 const newToken = response.data.accessToken;
                 const refreshToken = response.data.refreshToken;
-
                 console.log(newToken, 'new token is here ')
                 
                 // Set new access token in cookies
@@ -69,7 +67,7 @@ tutorAxios.interceptors.request.use(
         if (tutorId) {
             config.headers['X-Tutor-Id'] = tutorId; // Send tutorId separately
         }
-        
+
         return config;
     },
     (error) => Promise.reject(error)

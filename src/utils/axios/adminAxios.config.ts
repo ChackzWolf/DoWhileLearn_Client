@@ -16,10 +16,11 @@ const adminAxios = axios.create({
 
 adminAxios.interceptors.request.use(
     async (config) => {
-        let token = getCookie('adminAccessToken');
-        console.log(token, 'accessToken in request');
+        let accessToken = getCookie('adminAccessToken');
+        let adminId = getCookie('adminId');
 
-        if (!token || isTokenExpired(token)) {
+
+        if (!accessToken || isTokenExpired(accessToken)) {
             // If access token is null, attempt to refresh token
             try {
                 console.log('trig refresh token')
@@ -33,7 +34,7 @@ adminAxios.interceptors.request.use(
                 setCookie('adminAccessToken', newToken, 0.01);
                 setCookie('adminRefreshToken', refreshToken, 10);
                 // Set token to the new one
-                token = newToken;
+                accessToken = newToken;
             } catch (refreshError) {
                 console.error('Token refresh failed:', refreshError);
                 removeCookie('adminAccessToken');
@@ -45,8 +46,12 @@ adminAxios.interceptors.request.use(
             }
         }
 
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+
+        if (accessToken) {
+            config.headers.Authorization = `Bearer ${accessToken}`; // Send access token
+        }
+        if (adminId) {
+            config.headers['X-Tutor-Id'] = adminId; // Send tutorId separately
         }
 
         return config;
