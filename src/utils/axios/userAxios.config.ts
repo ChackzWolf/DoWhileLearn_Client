@@ -68,7 +68,7 @@ userAxios.interceptors.request.use(
             config.headers.Authorization = `Bearer ${accessToken}`; // Send access token
         }
         if (userId) {
-            config.headers['X-Tutor-Id'] = userId; // Send tutorId separately
+            config.headers['X-User-Id'] = userId; // Send tutorId separately
         }
 
         return config;

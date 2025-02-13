@@ -17,8 +17,7 @@ const adminAxios = axios.create({
 adminAxios.interceptors.request.use(
     async (config) => {
         let accessToken = getCookie('adminAccessToken');
-        let adminId = getCookie('adminId');
-
+        let refreshToken = getCookie('adminRefreshToken');
 
         if (!accessToken || isTokenExpired(accessToken)) {
             // If access token is null, attempt to refresh token
@@ -50,8 +49,8 @@ adminAxios.interceptors.request.use(
         if (accessToken) {
             config.headers.Authorization = `Bearer ${accessToken}`; // Send access token
         }
-        if (adminId) {
-            config.headers['X-Tutor-Id'] = adminId; // Send tutorId separately
+        if (refreshToken) {
+            config.headers['X-Refresh-Token'] = refreshToken;
         }
 
         return config;
