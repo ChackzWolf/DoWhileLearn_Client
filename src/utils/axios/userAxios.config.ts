@@ -55,10 +55,7 @@ userAxios.interceptors.request.use(
                 removeCookie('userAccessToken');
                 removeCookie('userRefreshToken');
                 removeCookie('userId');
-
                 store.dispatch(setUserLogout())
-
-                // Optionally, redirect to login
                 window.location.href = ROUTES.user.signin
                 return Promise.reject(refreshError);
             }

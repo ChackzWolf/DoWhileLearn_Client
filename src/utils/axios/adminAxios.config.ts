@@ -19,6 +19,9 @@ adminAxios.interceptors.request.use(
         let accessToken = getCookie('adminAccessToken');
         let adminRefreshToken = getCookie('adminRefreshToken');
 
+        console.log(accessToken, 'adminAccessToken');
+        console.log(adminRefreshToken, 'adminRefreshToken');
+
         if (!accessToken || isTokenExpired(accessToken) ) {
             // If access token is null, attempt to refresh token
             try {
@@ -47,7 +50,7 @@ adminAxios.interceptors.request.use(
 
 
         if (accessToken) {
-            config.headers.Authorization = `Bearer ${accessToken}`; // Send access token
+            config.headers.Authorization = `Bearer ${accessToken}`; 
         }
         if (adminRefreshToken) {
             config.headers['X-Refresh-Token'] = adminRefreshToken;

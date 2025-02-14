@@ -5,11 +5,12 @@ import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import { getCookie } from "../../../utils/cookieManager";
 import { useParams } from "react-router-dom";
 import PurchasedCourseDetails from "../../../components/user/Course/PurchasedCourseDetails/PurchasedCourseDetails";
+import CourseDetailSkeleton from "../../../components/user/Course/Skeletons/CourseDetailsSkeleton";
 
 
 function CourseDetailsPage() {
     const { id } = useParams<{ id: string }>();
-    const [isPurchased, setIsPurchased] = useState(false);
+    const [isPurchased, setIsPurchased] = useState<boolean | null>(null);
   
   const userId = getCookie('userId');
   useEffect(()=>{
@@ -22,6 +23,7 @@ function CourseDetailsPage() {
     checkIsPurchased();
   },[])
   if(isPurchased) return <PurchasedCourseDetails />
+  else if(isPurchased === null) return <CourseDetailSkeleton />
   else return <CourseDetails/>
 }
 
