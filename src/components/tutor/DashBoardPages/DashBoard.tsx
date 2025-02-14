@@ -118,43 +118,43 @@ const TutorDashboard = () => {
         <h3 className="text-xl font-semibold mb-4">Top Performing Courses</h3>
           { courses === null ? (
                   <div className="space-y-4">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg animate-pulse"
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 rounded-full bg-gray-200"></div>
-                        <div>
-                          <div className="w-32 h-4 bg-gray-200 rounded-md mb-2"></div>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-4 bg-gray-50 rounded-lg animate-pulse"
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                          <div>
+                            <div className="w-32 h-4 bg-gray-200 rounded-md mb-2"></div>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-4 h-4 bg-gray-200 rounded"></div>
+                          <div className="w-6 h-4 bg-gray-200 rounded"></div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 bg-gray-200 rounded"></div>
-                        <div className="w-6 h-4 bg-gray-200 rounded"></div>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
           ):(
             <div className="space-y-4">
-            {courses.map((course, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-150">
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-[#e7d1f9] flex items-center justify-center">
-                    <BookOpen className="w-6 h-6 text-[#7C24F0]" />
+              {courses.map((course, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-150">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-10 h-10 rounded-full bg-[#e7d1f9] flex items-center justify-center">
+                      <BookOpen className="w-6 h-6 text-[#7C24F0]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">{course.courseTitle}</h4>
+                      {/* <p className="text-sm text-gray-500">{course.students} students enrolled</p> */}
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold">{course.courseTitle}</h4>
-                    {/* <p className="text-sm text-gray-500">{course.students} students enrolled</p> */}
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[#7C24F0]">★</span>
+                    <span className="font-semibold">{course.averageRating}</span>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-[#7C24F0]">★</span>
-                  <span className="font-semibold">{course.averageRating}</span>
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
           )}
 

@@ -13,8 +13,10 @@ const filterOrders = (orders:any, year:any) => {
 
 const OrdersChart = ({orders}:{orders:any}) => {
   const [year, setYear] = useState<number | null>(null);
-
-  const years = [...new Set(orders.map((order:any) => new Date(order.createdAt).getFullYear()))];
+  let years:any[] = []
+  if(orders !== null){
+    years = [...new Set(orders.map((order:any) => new Date(order.createdAt).getFullYear()))];
+  }
 
   // Filtered data
   const filteredOrders = filterOrders(orders, year);
