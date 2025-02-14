@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { getCookie } from '../cookieManager';  // Your cookie utility
 import { getRoleFromToken } from '../jwtUtils';
+import { Loader } from 'lucide-react';
 
 export const TutorAuthRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
   const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
@@ -34,7 +35,7 @@ export const TutorAuthRoute = ({ children, roles }: { children: JSX.Element; rol
   }, [roles]);
 
   if (loading) {
-    return <div>Loading...</div>; // Render a loading spinner or message
+    return <Loader/>; // Render a loading spinner or message
   }
 
   if (!isAuthenticated) {

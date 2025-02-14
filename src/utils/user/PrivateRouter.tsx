@@ -6,6 +6,7 @@ import axios from 'axios';
 import { ROUTES } from '../../routes/Routes';
 import store from '../../redux/store/store';
 import { setUserLogout } from '../../redux/authSlice/authSlice';
+import { Loader } from 'lucide-react';
 
 export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
   const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
@@ -17,24 +18,24 @@ export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; r
       if (!token) {
         // If access token is null, attempt to refresh token
         try {
-          const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/user-refresh-token`, {}, { withCredentials: true });
-          const newToken = response.data.accessToken;
-          const refreshToken = response.data.refreshToken;
-          console.log(response.data, 'response form refreshing')
-          // Set new access token in cookies
-          setCookie('userAccessToken', newToken, 0.01);
-          setCookie('userRefreshToken', refreshToken, 10);
-          token = newToken; // Set token to the new one
+            const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/user-refresh-token`, {}, { withCredentials: true });
+            const newToken = response.data.accessToken;
+            const refreshToken = response.data.refreshToken;
+            console.log(response.data, 'response form refreshing')
+            // Set new access token in cookies
+            setCookie('userAccessToken', newToken, 0.01);
+            setCookie('userRefreshToken', refreshToken, 10);
+            token = newToken; // Set token to the new one
         } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
-          removeCookie('userAccessToken');
-          removeCookie('userRefreshToken');
-          removeCookie('userId');
+            console.error('Token refresh failed:', refreshError);
+            removeCookie('userAccessToken');
+            removeCookie('userRefreshToken');
+            removeCookie('userId');
 
-          console.log('user is logged out')
-          store.dispatch(setUserLogout())
-          window.location.href = ROUTES.user.signin;
-          return;
+            console.log('user is logged out')
+            store.dispatch(setUserLogout())
+            window.location.href = ROUTES.user.signin;
+            return;
         }
       }
 
@@ -57,7 +58,7 @@ export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; r
   }, [roles]);
 
   if (loading) {
-    return <div>Loading...</div>; // Render a loading spinner or message
+    return <Loader/>; // Render a loading spinner or message
   }
 
   if (!isAuthenticated) {

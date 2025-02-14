@@ -4,6 +4,7 @@ import { getCookie, removeCookie, setCookie } from '../cookieManager';  // Your 
 import { getRoleFromToken } from '../jwtUtils';
 import axios from 'axios';
 import { ROUTES } from '../../routes/Routes';
+import { Loader } from 'lucide-react';
 
 export const TutorPrivateRoute = ({ children, roles }: { children: JSX.Element; roles: string[] }) => {
   const [loading, setLoading] = useState(true); // To show a loading state while fetching the token
@@ -53,7 +54,7 @@ export const TutorPrivateRoute = ({ children, roles }: { children: JSX.Element; 
   }, [roles]);
 
   if (loading) {
-    return <div>Loading...</div>; // Render a loading spinner or message
+    return <Loader/>; // Render a loading spinner or message
   }
 
   if (!isAuthenticated) {

@@ -73,7 +73,14 @@ let itemsToShow
   {coursesToShow === null || courses === undefined
     ? // Show skeletons while loading
       Array.from({ length: itemsToShow }).map((_, index) => (
-        <CourseBadgeSkeleton key={index} />
+        <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.15 }}
+        >
+          <CourseBadgeSkeleton key={index} />
+        </motion.div>
       ))
     : (Array.isArray(courses) ? courses : [])
         .slice() // Copy the array to avoid mutating the original
