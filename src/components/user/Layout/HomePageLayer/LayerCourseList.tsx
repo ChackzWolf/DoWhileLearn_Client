@@ -36,7 +36,7 @@ export interface Lesson {
   description: string;
 }
 
-const LayerCourseList = ({courses,title}:{courses:Course[],title:string}) => {
+const LayerCourseList = ({courses,title}:{courses:Course[] | null,title:string}) => {
   const [coursesToShow , setCourseToShow] = useState<Course[] | null> (null)
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   useEffect(() => {

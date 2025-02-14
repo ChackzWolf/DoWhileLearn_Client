@@ -38,8 +38,8 @@ export interface Lesson {
 }
 
 const UserHome= () => {
-  const [latestCourses, setLatestCourses] = useState<Course[]>([]);
-  const [topRatedCourses, setTopRatedCourses] = useState<Course[]>([]);
+  const [latestCourses, setLatestCourses] = useState<Course[] | null>(null);
+  const [topRatedCourses, setTopRatedCourses] = useState<Course[] | null>(null);
     useEffect(() => {
       const fetchCourses = async () => {
 
