@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
-import DashBoardLoader from "../../common/icons/DashboardLoader";
 import Table from "../../common/Layouts/Table";
+import { ListShadowLoader } from "../../admin/DashBoardPages/Shadoloader/ListShadowLoader";
 
 function Payouts() {
   const [payouts, setPayouts] = useState<any[]>([]);
@@ -59,7 +59,7 @@ function Payouts() {
       fetchPayouts();
     }, []);
 
-  return isLoading ? <DashBoardLoader/> : (
+  return isLoading ? <ListShadowLoader/> : (
     <Table columns={columns} data={payouts} title= {'Payouts'}/>
   )
 }
