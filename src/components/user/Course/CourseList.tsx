@@ -214,20 +214,21 @@ function CoursesList() {
                 {loading ?(
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto place-items-center">
                         {Array.from({ length: 12 }).map((_, index) => (
-                          <CourseBadgeSkeleton key={index} />
+                          <motion.div
+                              key={index}
+                              initial={{ opacity: 0, y: 50 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.5, delay: index * 0.15 }}>
+                                  <CourseBadgeSkeleton key={index} />
+                          </motion.div>
                         ))}
                   </div>
                 ):(
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto place-items-center">
-                  {currentCourses.map((course, index) => (
-                    <motion.div
-                      key={course._id}
-                      initial={{ opacity: 0, y: 50 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.15 }}>
-                      <CourseBadge
+                  {currentCourses.map((course, _index) => (
 
+                      <CourseBadge
                         key={course._id}
                         title={course.courseTitle}
                         description={course.courseDescription}
@@ -238,7 +239,6 @@ function CoursesList() {
                         color={""}
                         _id={course._id}
                       />
-                    </motion.div>
                   ))}
                 </div>
 
