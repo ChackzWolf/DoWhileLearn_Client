@@ -22,9 +22,12 @@ function CourseDetailsPage() {
     }
     checkIsPurchased();
   },[])
-  if(isPurchased) return <PurchasedCourseDetails />
+
+  console.log(isPurchased, 'isPurchased')
+
+  if(isPurchased === true) return <PurchasedCourseDetails />
   else if(isPurchased === null) return <CourseDetailSkeleton />
-  else return <CourseDetails/>
+  else if(isPurchased === false) return <CourseDetails/>
 }
 
 export default CourseDetailsPage
