@@ -18,9 +18,6 @@ type Course = {
   discountPrice: number;
 };
 
-type TopCoursesChartProps = {
-  courses: Course[];
-};
 
 
 
