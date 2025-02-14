@@ -63,21 +63,16 @@ interface TutorData {
     _id: string;
 }
 function CourseDetails() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
     const [tutorData, setTutorData] = useState<TutorData | null>(null);
     const [inCart, setInCart] = useState(false);
     const [tutorId, setTutorId] = useState();
-    // const courseData = useSelector((state: RootState) => state.createCourseData.createCourse);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [benefits_prerequisites, setbenefits_prerequisites] =
-        useState<ICreateCourse2 | null>(null);
-    // const benifits_prerequisites = useSelector((state: RootState) => state.createCourseData.createCourse2);
+    const [benefits_prerequisites, setbenefits_prerequisites] = useState<ICreateCourse2 | null>(null);
     const [totalLessons, setTotalLessons] = useState();
-    const [modules, setModules] =
-        useState<CreateCourseState>(initialModulesState);
-    // const modules :CreateCourseState | null = useSelector((state:RootState) => state.createCourseData.addLessons);
+    const [modules, setModules] = useState<CreateCourseState>(initialModulesState);
     const [activeTab, setActiveTab] = useState('overview');
 
     const { id } = useParams<{ id: string }>();
@@ -160,8 +155,10 @@ function CourseDetails() {
 
     console.log(tutorId, "tutorid");
     const handlePayement = async () => {
+        console.log(import.meta.env.VITE_STRIPE_PUBLIC_KEY, 'stripe key////////////////')
         try {
             setIsLoading(true);
+            
             const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
             const userId = getCookie("userId");
             if (!userId) {

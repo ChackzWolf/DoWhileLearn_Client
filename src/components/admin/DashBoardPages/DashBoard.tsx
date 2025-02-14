@@ -100,7 +100,7 @@ const AdminDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-pink-100">Total Courses</p>
-                {totalCourses ? <Spinner/>: <h3 className="text-3xl font-bold">{totalCourses}</h3>}
+                {totalCourses === null? <Spinner/>: <h3 className="text-3xl font-bold">{totalCourses}</h3>}
               </div>
               <BookOpen className="w-12 h-12 opacity-80" />
             </div>
@@ -113,7 +113,7 @@ const AdminDashboard = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-amber-100">Platform Rating</p>
-                {averageRating ?  <Spinner/> : <h3 className="text-3xl font-bold">{averageRating}</h3>}
+                {averageRating === null ?  <Spinner/> : <h3 className="text-3xl font-bold">{averageRating}</h3>}
               </div>
               <Star className="w-12 h-12 opacity-80" />
             </div>

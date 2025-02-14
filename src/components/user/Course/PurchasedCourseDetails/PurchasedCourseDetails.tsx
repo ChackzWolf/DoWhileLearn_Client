@@ -167,7 +167,6 @@ function PurchasedCourseDetails() {
 
     useEffect(() => {
         const trig = () => {
-            console.log(codeQuestion, ",.......//////////////////////////////////");
             if (codeQuestion) {
                 setIsVisibleCode(true);
             }
