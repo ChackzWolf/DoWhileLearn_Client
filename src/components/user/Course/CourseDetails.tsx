@@ -156,7 +156,7 @@ function CourseDetails() {
     console.log(tutorId, "tutorid");
     const handlePayement = async () => {
         console.log('triggered enrol button')
-        console.log(import.meta.env.VITE_STRIPE_PUBLIC_KEY, 'stripe key////////////////')
+        console.log(import.meta.env.VITE_STRIPE_PUBLIC_KEY, 'stripe key//////////////////////////////////////////////////')
         try {
             setIsLoading(true);
             
