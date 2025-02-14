@@ -95,7 +95,7 @@ const TutorDashboard = () => {
         />
         <DashboardCard 
           title="Average rating" 
-          value={`${averageRating}`} 
+          value={averageRating} 
           icon={Star}
           discription='Average student satisfaction'
         />
