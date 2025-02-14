@@ -38,6 +38,13 @@ jobs:
         VITE_API_GATEWAY_BASE_URL_ORDER: 'https://dowhilelearn.space/order'
         VITE_GATEWAY_BASE_URL_TUTOR: 'https://dowhilelearn.space/tutor'
         VITE_API_GATEWAY_BASE_URL: 'https://dowhilelearn.space'
+        VITE_STRIPE_PUBLIC_KEY: 'pk_test_51Q2uOlLl31dHADyACFbnfsrWa9GXtrdi9VDHHnhuFcY5472cCEiaDkSjpHHKPoxVIsVZOpRYpsaFBPGMzSMgiM3Y00JmjWWt2T'
+        VITE_FIREBASE_API_KEY: 'AIzaSyBkgc7YRB9OWLgi1qUeCKgvuItCKsX-sh8'
+        VITE_FIREBASE_AUTH_DOMAIN: 'dowhilelearn-68ee7.firebaseapp.com'
+        VITE_FIREBASE_PROJECT_ID: 'dowhilelearn-68ee7'
+        VITE_FIREBASE_STORAGE_BUCKET: 'dowhilelearn-68ee7.firebasestorage.app'
+        VITE_FIREBASE_MESSAGING_SENDER_ID: '183388973728'
+        VITE_FIREBASE_APP_ID: '1:183388973728:web:aeb3d835b84e4e5b7ab7c5'
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
