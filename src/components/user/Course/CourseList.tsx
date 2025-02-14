@@ -212,9 +212,11 @@ function CoursesList() {
               {/* Content Placeholder */}
               <div className="flex-1 rounded-lg max-w-6xl">
                 {loading ?(
-                        Array.from({ length: 12 }).map((_, index) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto place-items-center">
+                        {Array.from({ length: 12 }).map((_, index) => (
                           <CourseBadgeSkeleton key={index} />
-                        ))
+                        ))}
+                  </div>
                 ):(
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto place-items-center">
