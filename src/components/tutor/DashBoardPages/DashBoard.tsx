@@ -20,10 +20,10 @@ const TutorDashboard = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [orders, setOrders] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
-  const [courseCount, setCourseCount] = useState(0);
-  const [totalRevenue, setTotalRevenue] = useState(0);
-  const [totalStudents, setTotalStudents] = useState(0);
-  const [averageRating, setAverageRating] = useState(0);
+  const [courseCount, setCourseCount] = useState<number | null>(null);
+  const [totalRevenue, setTotalRevenue] = useState<number | null>(null);
+  const [totalStudents, setTotalStudents] = useState<number | null>(null);
+  const [averageRating, setAverageRating] = useState<number | null>(null);
 
   useEffect(()=> {
     
@@ -52,7 +52,7 @@ const TutorDashboard = () => {
         setCourseCount(coursesDataResponse.data.courses.length);
   
         const totalEarnings = ordersResponse.data.orderData.reduce((acc:any, order:any) => acc + Number(order.tutorShare), 0);
-        setTotalRevenue(totalEarnings);
+        setTotalRevenue(Math.floor(totalEarnings));
       }
       fetchData()
     } catch (error) {
@@ -89,7 +89,7 @@ const TutorDashboard = () => {
         />
         <DashboardCard 
           title="Total Revenue" 
-          value={`${Math.floor(totalRevenue)}`}
+          value={totalRevenue}
           icon={PiCurrencyInrBold}
           discription='All courses created'
         />
