@@ -11,25 +11,29 @@ const filterOrders = (orders:any, year:any) => {
   });
 };
 
-const OrdersChart = ({orders}:{orders:any}) => {
+const OrdersChart = ({orders}:{orders:any | null}) => {
   const [year, setYear] = useState<number | null>(null);
+
   let years:any[] = []
+  let filteredOrders 
+  let transformedData
+  
   if(orders !== null){
     years = [...new Set(orders.map((order:any) => new Date(order.createdAt).getFullYear()))];
+    filteredOrders = filterOrders(orders, year);
+    transformedData = Object.values(
+      filteredOrders.reduce((acc:any, order:any) => {
+        const date = new Date(order.createdAt).toLocaleDateString(); // Format date
+        if (!acc[date]) {
+          acc[date] = { name: date, count: 0 };
+        }
+        acc[date].count += 1;
+        return acc;
+      }, {})
+    );
   }
 
-  // Filtered data
-  const filteredOrders = filterOrders(orders, year);
-  const transformedData = Object.values(
-    filteredOrders.reduce((acc:any, order:any) => {
-      const date = new Date(order.createdAt).toLocaleDateString(); // Format date
-      if (!acc[date]) {
-        acc[date] = { name: date, count: 0 };
-      }
-      acc[date].count += 1;
-      return acc;
-    }, {})
-  );
+
 
   return(
     <div className="bg-white rounded-xl shadow-lg p-6 h-[450px]">
