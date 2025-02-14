@@ -6,6 +6,7 @@ import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import { FaFilter, FaStar } from "react-icons/fa6";
 import { motion } from 'framer-motion';
 import Loader from "../../common/icons/loader";
+import CourseBadgeSkeleton from "./Skeletons/CourseBadgeSkeleton";
 
 // Define the interfaces for the fetched course data
 export interface ResponseFetchCourseList {
@@ -116,14 +117,7 @@ function CoursesList() {
 
   return (
     <>
-      {/* Display SkeletonLoader while loading */}
-      {loading ? (
-        <div  className="min-h-screen">
-        <Loader />
 
-        </div>
-      ) : (
-        <>
 
           <div className="flex flex-col justify-self-center w-full gap-5 md:m-20 p-5  ">
 
@@ -218,7 +212,13 @@ function CoursesList() {
 
               {/* Content Placeholder */}
               <div className="flex-1 rounded-lg max-w-6xl">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto place-items-center">
+                {loading ?(
+                        Array.from({ length: 12 }).map((_, index) => (
+                          <CourseBadgeSkeleton key={index} />
+                        ))
+                ):(
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto place-items-center">
                   {currentCourses.map((course, index) => (
                     <motion.div
                       key={course._id}
@@ -240,6 +240,9 @@ function CoursesList() {
                     </motion.div>
                   ))}
                 </div>
+
+                )}
+
 
                 {/* Pagination Controls */}
                 {courses.length > itemsPerPage &&
@@ -283,8 +286,6 @@ function CoursesList() {
           </div>
 
 
-        </>
-      )}
     </>
   );
 }

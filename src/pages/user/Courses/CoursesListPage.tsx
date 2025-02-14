@@ -1,6 +1,6 @@
-import Course from "../../../components/user/Course/Course"
+import CoursesList from "../../../components/user/Course/CourseList"
 function CoursesListPage() {
-  return  <Course/>
+  return  <CoursesList/>
  
 }
 
