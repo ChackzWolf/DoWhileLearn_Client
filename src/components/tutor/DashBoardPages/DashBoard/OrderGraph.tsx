@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import Spinner from "../../../common/icons/Spinner";
 
 // Helper function to filter orders by year, month, and day
 const filterOrders = (orders:any, year:any) => {
@@ -28,10 +29,13 @@ const OrdersChart = ({orders}:{orders:any}) => {
     }, {})
   );
 
-  return (
+  return(
     <div className="bg-white rounded-xl shadow-lg p-6 h-[450px]">
       <h3 className="text-xl font-semibold mb-4 text-gray-800">Orders by Date</h3>
+      {orders === null ? <Spinner/> : (
 
+
+      <>
       {/* Filters */}
       <div className="flex space-x-4 mb-6">
         {/* Year Filter */}
@@ -47,34 +51,6 @@ const OrdersChart = ({orders}:{orders:any}) => {
             </option>
           ))}
         </select>
-
-        {/* Month Filter */}
-        {/* <select
-          className="border rounded p-2"
-          value={month || ""}
-          onChange={(e) => setMonth(e.target.value ? parseInt(e.target.value) : null)}
-        >
-          <option value="">All Months</option>
-          {months.map((month) => (
-            <option key={month} value={month}>
-              {month}
-            </option>
-          ))}
-        </select> */}
-
-        {/* Day Filter */}
-        {/* <select
-          className="border rounded p-2"
-          value={day || ""}
-          onChange={(e) => setDay(e.target.value ? parseInt(e.target.value) : null)}
-        >
-          <option value="">All Days</option>
-          {days.map((day) => (
-            <option key={day} value={day}>
-              {day}
-            </option>
-          ))}
-        </select> */}
       </div>
 
       {/* Chart */}
@@ -89,6 +65,8 @@ const OrdersChart = ({orders}:{orders:any}) => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+      </>
+      )}
     </div>
   );
 };
