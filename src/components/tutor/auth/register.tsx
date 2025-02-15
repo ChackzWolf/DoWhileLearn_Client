@@ -95,17 +95,17 @@ function RegisterTutor() {
       }, [location]);
 
     const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
-        console.log('trig submit');
+
         setIsLoading(true);
         try{
-            
+
             const response = await axios.post(tutorEndpoint.register, value);
             
             console.log('register data send succesfully', response);
             localStorage.removeItem('otpCountDown');
             if(response.data.success){
                 dispatch(setTutorData(response.data.tutorData))
-                navigate(ROUTES.tutor.signupOTP,{state: response.data});
+                navigate('/register/tutor/otp',{state: response.data});
                 console.log('success' , response.data)
             }else{
                 console.log(response.data)
