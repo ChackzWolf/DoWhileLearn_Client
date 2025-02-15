@@ -294,7 +294,7 @@ const AddLesson = () => {
     moduleIndex: number,
     lessonIndex: number
   ) => {
-    const socketService = SocketService.getInstance("http://dowhilelearn.space");
+    const socketService = SocketService.getInstance("https://dowhilelearn.space");
     const tutorId = getCookie("tutorId") || "";
     socketService.trackUpload(tutorId);
     const id = generateRandomCode(8);

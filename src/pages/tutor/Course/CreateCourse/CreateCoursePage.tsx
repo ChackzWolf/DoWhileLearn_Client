@@ -34,7 +34,7 @@ const CreateCoursePage = () => {
 
   useEffect(() => {
     const initializeSocket = async()=> {
-        const socketService = SocketService.getInstance('http://dowhilelearn.space');
+        const socketService = SocketService.getInstance('https://dowhilelearn.space');
 
         // Connect to the server
         socketService.connect()
