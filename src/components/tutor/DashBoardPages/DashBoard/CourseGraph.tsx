@@ -39,7 +39,9 @@ const TopCoursesChart: React.FC<TopCoursesChartProps > = ({ courses }) => {
         <div className="bg-white p-6 rounded-xl shadow-lg h-[450px]">
           <h3 className="text-xl font-semibold mb-4 text-gray-800">Top Performing Courses</h3>
 
-          {courses === null ? <Spinner/>:(
+          {courses === null ? <Spinner/>:
+          
+          courses.length > 0 ? (
             <div className="h-[500px]">
               <ResponsiveContainer width="100%" height="70%">
               <BarChart
@@ -65,7 +67,8 @@ const TopCoursesChart: React.FC<TopCoursesChartProps > = ({ courses }) => {
               </BarChart>
               </ResponsiveContainer>
             </div>
-          )}
+
+          ): (<p>No courses yet</p>)}
 
         </div>
       );
