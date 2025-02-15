@@ -94,34 +94,41 @@ function RegisterTutor() {
         }
       }, [location]);
 
-    const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
-
+      const handleSubmit = async (
+        values: typeof initialValues, 
+        { setSubmitting, setErrors }: { 
+            setSubmitting: (isSubmitting: boolean) => void,
+            setErrors: (errors: Record<string, string>) => void 
+        }
+    ) => {
+        console.log('Submit handler called with values:', values);
         setIsLoading(true);
-        try{
-
-            const response = await axios.post(tutorEndpoint.register, value);
+        
+        try {
+            const response = await axios.post(tutorEndpoint.register, values);
+            console.log('API Response:', response);
             
-            console.log('register data send succesfully', response);
             localStorage.removeItem('otpCountDown');
-            if(response.data.success){
-                dispatch(setTutorData(response.data.tutorData))
-                navigate('/register/tutor/otp',{state: response.data});
-                console.log('success' , response.data)
-            }else{
-                console.log(response.data)
-                setEmailExists(true)
-                console.log('failed')
+            
+            if (response.data.success) {
+                dispatch(setTutorData(response.data.tutorData));
+                navigate(ROUTES.tutor.signupOTP, { state: response.data });
+                console.log('Registration successful');
+            } else {
+                setEmailExists(true);
+                setErrors({ email: 'Email already exists' });
+                console.log('Registration failed:', response.data);
             }
-        }catch(err){
-            console.log(err, "registeration error ");
-
-        }finally {
+        } catch (err) {
+            console.error('Registration error:', err);
+            toast.error('Registration failed. Please try again.');
+            // Set form-level error
+            setErrors({ submit: 'Registration failed. Please try again.' });
+        } finally {
             setIsLoading(false);
             setSubmitting(false);
         }
-    }
-
-
+    };
 
 
 
@@ -143,11 +150,13 @@ function RegisterTutor() {
                 { emailExists?  <h2 className="text-center text-[#FF0000]">Email already exists.</h2> : <h1></h1>}
 
 
-                <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
-                    {({isSubmitting})=>(
+                <Formik initialValues={initialValues} 
+                        validationSchema={validationSchema} 
+                        onSubmit={handleSubmit}>
+                        {({isSubmitting, errors, touched, values})=>(
 
                     
-                    <Form>
+                    <Form noValidate>
                         <div className="justify-center mb-20 px-28">
 
                             <div className="flex justify-between">
@@ -200,7 +209,8 @@ function RegisterTutor() {
                                             className="w-full h-10 p-2 px-10 border shadow-lg rounded-lg  transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                             placeholder=" Enter your contact number here."
                                         />
-                                        <ErrorMessage name="email" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
+                                        <ErrorMessage name="phoneNumber" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
+
                                     </div>
 
                                 </div>
@@ -249,6 +259,9 @@ function RegisterTutor() {
 
 
                             <div className="justify-center mb-6 ">
+                            <div style={{ display: 'none' }}>
+                                <pre>{JSON.stringify({ values, errors, touched }, null, 2)}</pre>
+                            </div>
                                 <button
                                     type="submit"
                                     className="w-full px-4 py-3 mb-4 text-accent rounded-lg font-PlusJakartaSans font-semibold  bg-[#7C24F0] transition-all ease-in-out delay-50 duration-500         "
