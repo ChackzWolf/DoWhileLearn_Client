@@ -95,10 +95,10 @@ function RegisterTutor() {
       }, [location]);
 
     const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
-
+        console.log('trig submit');
         setIsLoading(true);
         try{
-
+            
             const response = await axios.post(tutorEndpoint.register, value);
             
             console.log('register data send succesfully', response);
