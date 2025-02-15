@@ -105,7 +105,7 @@ function RegisterTutor() {
             localStorage.removeItem('otpCountDown');
             if(response.data.success){
                 dispatch(setTutorData(response.data.tutorData))
-                navigate(ROUTES.tutor.signupOTP,{state: response.data});
+                navigate('/tutor/auth/register/otp',{state: response.data});
                 console.log('success' , response.data)
             }else{
                 console.log(response.data)
