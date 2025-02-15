@@ -156,8 +156,6 @@ function CourseDetails() {
     console.log(tutorId, "tutorid");
     const handlePayement = async () => {
         console.log('triggered enrol button')
-        console.log(import.meta.env.VITE_STRIPE_PUBLIC_KEY, 'stripe key//////////////////////////////////////////////////')
-        console.log(import.meta.env.VITE_API_GATEWAY_BASE_URL, 'api gateway url//////////////////////////////////////////////////')
         
         try {
             setIsLoading(true);

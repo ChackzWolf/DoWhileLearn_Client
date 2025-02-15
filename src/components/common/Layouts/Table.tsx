@@ -38,7 +38,14 @@ const Table: React.FC<TableProps> = ({ columns, data, title}) => {
     <div className="overflow-x-auto w-full m-10 rounded-lg">
 
        <h1 className="text-3xl font-bold m-5 ">{title}</h1>
+      {data.length === 0 ? (
+        <div className="flex items-center justify-center h-96">
+          <p className="text-2xl text-gray-500">{`No ${title} yet.`}</p>
+        </div>
+      ):(
 
+      <>
+   
       <table className="table-auto border-separate border-spacing-0 border border-[#7c24f018] rounded-lg w-full overflow-hidden">
         {/* Table Head */}
         <thead className="bg-[#7c24f018] rounded-lg">
@@ -87,6 +94,8 @@ const Table: React.FC<TableProps> = ({ columns, data, title}) => {
           ))}
         </tbody>
       </table>
+      </>      
+    )}
 
       {data.length > itemsPerPage && (
              <div className="flex justify-center space-x-4 mb-36 mt-5">
@@ -118,7 +127,8 @@ const Table: React.FC<TableProps> = ({ columns, data, title}) => {
                    >
                      <RxDoubleArrowRight className="text-2xl hover:scale-110 transition-all text-[#7C24F0]" />
                    </button>
-               </div>)}
+               </div>
+      )}
     </div>
   );
 };

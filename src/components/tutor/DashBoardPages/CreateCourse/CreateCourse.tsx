@@ -131,7 +131,7 @@ const AddCourse = () => {
     }
   };
   const handleVideoUpload = async (videoFile: File) => {
-    const socketService = SocketService.getInstance('https://do');
+    const socketService = SocketService.getInstance('https://dowhilelearn.space');
     const id= generateRandomCode(8)
     const formData = new FormData();
     const tutorId = getCookie('tutorId') || ''
