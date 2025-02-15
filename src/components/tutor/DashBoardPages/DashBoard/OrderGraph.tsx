@@ -11,7 +11,7 @@ const filterOrders = (orders:any, year:any) => {
   });
 };
 
-const OrdersChart = ({orders}:{orders:any | null}) => {
+const OrdersChart = ({orders}:{orders:any[] | null}) => {
   const [year, setYear] = useState<number | null>(null);
 
   let years:any[] = []
@@ -38,7 +38,10 @@ const OrdersChart = ({orders}:{orders:any | null}) => {
   return(
     <div className="bg-white rounded-xl shadow-lg p-6 h-[450px]">
       <h3 className="text-xl font-semibold mb-4 text-gray-800">Orders by Date</h3>
-      {orders === null ? <Spinner/> : (
+      {orders === null ? <Spinner/> :
+      
+      
+      orders.length > 0  ? (
 
 
       <>
@@ -72,7 +75,7 @@ const OrdersChart = ({orders}:{orders:any | null}) => {
         </ResponsiveContainer>
       </div>
       </>
-      )}
+      ): <p>No orders yet</p>}
     </div>
   );
 };
