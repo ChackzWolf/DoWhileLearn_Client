@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import { tutorEndpoint } from "../../../constraints/tutorEndpoint";
 import { getCookie } from "../../../utils/cookieManager";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import tutorAxios from "../../../utils/axios/tutorAxios.config";
 import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
 import { ROUTES } from "../../../routes/Routes";
-import Table from "../../common/Layouts/Table";
-import { ListShadowLoader } from "../../admin/DashBoardPages/Shadoloader/ListShadowLoader";
+import SearchBar from "../../common/Layouts/SearchBar";
+import Table from "../../common/Layouts/FilteredTable";
+import { ListShadowLoader } from "../../common/Skeleton/FilteredTableSkeleton";
 
 
 export interface ResponseFetchCourseList {
@@ -45,7 +46,9 @@ function Course() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [courses, setCourses] = useState<Course[] >([]);
-
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+  // Calculate total pages based on courses length
   const columns = [
     {
       header: '',
@@ -89,7 +92,7 @@ function Course() {
           console.log('trig')
           const tutorId:string | null = await getCookie('tutorId')
           if(tutorId){
-            const response = await tutorAxios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId }, withCredentials:true });
+            const response = await tutorAxios.get(tutorEndpoint.fetchTutorCourse, {params: { tutorId, search:searchQuery }, withCredentials:true });
             console.log(response,'fetched course')
             setCourses(response.data.courses);
           }
@@ -103,9 +106,17 @@ function Course() {
       };
   
       fetchCourses();
-    }, []);
-  console.log(courses,'courses form outside')
-  return !isLoading ? <Table columns={columns} data={courses} title={'Courses'}/> : <ListShadowLoader/>
+    }, [searchQuery]);
+
+  return (
+      <div className = "flex flex-col m-10 w-full">
+        <div className="flex justify-between items-center m-5">
+          <h1 className="text-3xl font-bold  ">Courses</h1> 
+          <SearchBar path={'/tutor/courses'}/>
+        </div>
+        {!isLoading ? <Table columns={columns} data={courses} title={'Courses'}/> :  <ListShadowLoader/>}
+      </div>
+  )
 }
 
 export default Course

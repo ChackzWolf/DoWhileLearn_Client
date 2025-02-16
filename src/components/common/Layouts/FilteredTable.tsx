@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
-import SearchBar from "./SearchBar";
 
 type Column = {
   header: string; // Column header
@@ -13,10 +12,9 @@ interface TableProps {
     columns: Column[];
     data: any[];
     title: string;
-    path?: string;
   }
 
-const Table: React.FC<TableProps> = ({ columns, data, title, path = null}) => {
+const Table: React.FC<TableProps> = ({ columns, data, title}) => {
 
     const itemsPerPage = 6;
     const [currentPage, setCurrentPage] = useState(1);
@@ -37,11 +35,7 @@ const Table: React.FC<TableProps> = ({ columns, data, title, path = null}) => {
 
 
   return (
-    <div className="overflow-x-auto w-full m-10 rounded-lg">
-
-       <div className="flex justify-between items-center m-5">
-        <h1 className="text-3xl font-bold  ">{title}</h1> {path !== null && <SearchBar path={'/tutor/courses'}/>}
-      </div>
+    <div className="rounded-lg m-5">
           {data.length === 0 ? (
         <div className="flex items-center justify-center h-96">
           <p className="text-2xl text-gray-500">{`No ${title} yet.`}</p>

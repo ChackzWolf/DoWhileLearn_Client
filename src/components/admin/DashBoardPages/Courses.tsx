@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react"
-import { getCookie } from "../../../utils/cookieManager";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { handleBlockedTutor } from "../../../utils/handleErrors/handleBlocked";
 import { courseEndpoint } from "../../../constraints/courseEndpoints";
-import { ListShadowLoader } from "./Shadoloader/ListShadowLoader";
-import Table from "../../common/Layouts/Table";
 import { ROUTES } from "../../../routes/Routes";
 import adminAxios from "../../../utils/axios/adminAxios.config";
+import SearchBar from "../../common/Layouts/SearchBar";
+import Table from "../../common/Layouts/FilteredTable";
+import { ListShadowLoader } from "../../common/Skeleton/FilteredTableSkeleton";
 
 
 export interface ResponseFetchCourseList {
@@ -45,18 +45,24 @@ function Course() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [courses, setCourses] = useState<Course[] >([]);
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
 
   useEffect(() => {
       const fetchCourses = async () => {
         try {
           setIsLoading(true)
           console.log('trig')
-          const tutorId:string | null = await getCookie('tutorId')
-          if(tutorId){
-            const response = await adminAxios.get(courseEndpoint.fetchCourseData);
+          const filters = {
+            search: searchQuery || null,
+          };
+          
+            console.log(filters,'filters')
+            const response = await adminAxios.get(courseEndpoint.fetchCourseData, {params: filters});
+
             console.log(response,'fetched course')
             setCourses(response.data.courses);
-          }
+          
 
         } catch (error) {
           if(!handleBlockedTutor(error)) console.error("Error fetching course data:", error);
@@ -67,7 +73,7 @@ function Course() {
       };
   
       fetchCourses();
-    }, []);
+    }, [searchQuery]);
     
     const columns = [
     {
@@ -108,7 +114,15 @@ function Course() {
     navigate(ROUTES.tutor.courseDetails(id));
   };
 
-  return isLoading ? <ListShadowLoader/> : <Table columns={columns} data = {courses} title={'Course list'}/> 
+  return (
+    <div className = "flex flex-col m-10 w-full">
+    <div className="flex justify-between items-center m-5">
+      <h1 className="text-3xl font-bold  ">Courses</h1> 
+      <SearchBar path={'/admin/courses'}/>
+    </div>
+    {!isLoading ? <Table columns={columns} data={courses} title={'Courses'}/> :  <ListShadowLoader/>}
+  </div>
+  )
 }
 
 export default Course

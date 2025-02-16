@@ -57,7 +57,6 @@ function CoursesList() {
   const searchQuery = searchParams.get("search") || "";
   // Calculate total pages based on courses length
   const totalPages = Math.ceil(courses.length / itemsPerPage);
-console.log(searchQuery, 'searchQuery')
   // Fetch courses on component mount
   useEffect(() => {
     const fetchCourses = async () => {
