@@ -441,8 +441,9 @@ function CourseDetails() {
                                             </div>
 
 
-                                            <div className="flex m-2">
-                                                <h1 className="m-1 font-semibold">Expertise:</h1>
+                                            <div className="flex flex-col justify-center items-center my-2">
+                                                <h1 className="m-1 font-semibold">Expertise</h1>
+                                                <div className="w-full flex flex-wrap justify-center">
                                                 {Array.isArray(tutorData.expertise) && tutorData.expertise.length > 0 ? (
                                                     tutorData.expertise.map((expert: string) => {
                                                         return <h1 key={expert} className=" m-1">{expert || ""}</h1>;
@@ -450,6 +451,9 @@ function CourseDetails() {
                                                 ) : (
                                                     <h1>No expertise listed</h1> // Display a fallback message when no expertise is available
                                                 )}
+ 
+                                                </div>
+
                                             </div>
                                         </div>
                                     )}

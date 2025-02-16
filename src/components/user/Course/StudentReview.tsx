@@ -352,7 +352,7 @@ const StudentReviews: React.FC<{
           </motion.div>
         </div>
       ) : (
-        <div className="w-full flex items-center justify-center flex-col">
+        <div className="w-full flex items-center justify-center bg-accent flex-col">
           {isPurchased && (
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
