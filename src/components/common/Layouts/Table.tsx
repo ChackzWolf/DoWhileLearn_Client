@@ -39,7 +39,7 @@ const Table: React.FC<TableProps> = ({ columns, data, title, path = null}) => {
   return (
     <div className="overflow-x-auto w-full m-10 rounded-lg">
 
-       <div className="flex justify-between items-center m-5">
+       <div className="flex justify-between items-center my-10">
         <h1 className="text-3xl font-bold  ">{title}</h1> {path !== null && <SearchBar path={'/tutor/courses'}/>}
       </div>
           {data.length === 0 ? (

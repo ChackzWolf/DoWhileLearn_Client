@@ -12,6 +12,9 @@ import { useDispatch } from "react-redux";
 import { setTutorData } from "../../../redux/tutorSlice/tutorSlice";
 import { ROUTES } from "../../../routes/Routes";
 import OAuth from "../../common/Auth/CustomGoogleLoginButton";
+import { Player } from "@lottiefiles/react-lottie-player";
+import Header from "../../user/Layout/Header";
+import {motion} from "framer-motion"
 
 
 
@@ -134,17 +137,34 @@ function RegisterTutor() {
 
     return (
         <>
+        
+        <div className="bg-gradient-to-br from-purple-900 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col overflow-hidden">
+        <Header/>
         {isLoading && <Loader/>}
-        <div className="flex bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end  h-screen">
+        <div className="flex flex-col md:flex-row h-screen justify-center items-center">
+            {/* <div className="w-1/2"> */}
+            <motion.div
+                    initial={{ opacity: 0, x: -150 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.15 }}
+                 className="w-full md:w-1/2 flex justify-center items-center"> 
+                <Player
+                    autoplay
+                    loop
+                    src="https://lottie.host/192e27ba-19d6-4ae4-b946-9c846d281dcd/qPihaW7Eqq.json"
+                    style={{ height: '90%', width: ' 90%'}}
+                    />
+                    
+            </motion.div>
+            {/* </div> */}
 
 
-            <div className="w-1/2">
 
-            </div>
-
-
-
-            <div className="w-1/2 justify-center">
+            <motion.div
+                    initial={{ opacity: 0, x: 150 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.15 }}  
+                    className="md:w-1/2 justify-center">
                 
                 <h2 className="text-3xl mb-5 mt-20 text-center font-bold text-accent">Tutor Signup</h2>
                 { emailExists?  <h2 className="text-center text-[#FF0000]">Email already exists.</h2> : <h1></h1>}
@@ -294,8 +314,8 @@ function RegisterTutor() {
 
                     )}
                 </Formik>
-            </div>
-
+            </motion.div>
+        </div>
         </div>
         </>
     )

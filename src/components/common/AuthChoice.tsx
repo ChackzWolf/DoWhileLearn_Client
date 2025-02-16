@@ -12,8 +12,8 @@ function AuthChoice() {
         navigate(ROUTES.user.signin);
     };
     return (
-        <div className="flex justify-center items-center w-full h-screen">
-            <div className="flex flex-col-reverse md:flex-row mx-14 gap-10">
+        <div className="flex justify-center items-center w-full h-screen overflow-hidden">
+            <div className="flex flex-col-reverse md:flex-row mx-14 gap-10 ">
                 <motion.div
                     initial={{ opacity: 0, x: -100 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -50,7 +50,7 @@ function AuthChoice() {
                         <div className=" ">
                             <h1 className="font-bold mx-5 pt-4 text-primary">I'm a Student</h1>
                             <h1 className=" p-5 text-primary">
-                                Countinue being an alien. Explore never ending journey of learning
+                                Continue being an alien. Explore never ending journey of learning
                             </h1>
                         </div>
                         <Player

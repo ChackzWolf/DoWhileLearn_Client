@@ -1,14 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import { Search, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function SearchBar() {
     const [isOpen, setIsOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [debouncedQuery, setDebouncedQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState<null | string>(null);
+    const [debouncedQuery, setDebouncedQuery] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const navigate = useNavigate();
-
+    const location = useLocation();
+    const ingnorePaths = ['/tutor/auth/register','/tutor/auth/login','/user/auth/register','/user/auth/login'];
+    console.log("Current Path:", location.pathname);
     // Debounce search input
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -20,14 +22,17 @@ export default function SearchBar() {
     
       // Redirect when debouncedQuery updates
       useEffect(() => {
-        if (debouncedQuery.trim()) {
-          navigate(`/courses?search=${debouncedQuery}`);
-        }else{
-          navigate('/courses')
-        }
-      }, [debouncedQuery]);
+        if(debouncedQuery !== null){
+          if (debouncedQuery.trim()) {
+            navigate(`/courses?search=${debouncedQuery}`);
+          }else{
+            navigate('/courses')
+          }
+        } 
+      } , [debouncedQuery]);
 
-  return (
+  return !ingnorePaths.includes(location.pathname)  && (
+    
     <div className="flex items-center gap-2">
 
 
@@ -41,7 +46,7 @@ export default function SearchBar() {
           ref={inputRef}
           type="text"
           placeholder="Search..."
-          value={searchQuery}
+          value={searchQuery||""}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full pl-4 pr-4 py-1 rounded-full opacity-30 text-gray-700 focus:outline-none transition"
         />

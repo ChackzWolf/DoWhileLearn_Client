@@ -16,6 +16,8 @@ import { useSelector,useDispatch  } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import { ROUTES } from "../../../routes/Routes";
 import OAuth from "../../common/Auth/CustomGoogleLoginButton";
+import Header from "../../user/Layout/Header";
+import { motion } from 'framer-motion';
 
 function LoginModal() {
     const dispatch = useDispatch()
@@ -124,10 +126,15 @@ function LoginModal() {
     }, [tutor]);
     console.log(tutor, "dta form redux")
     return (
-        <div className="bg-gradient-to-br from-purple-900 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col">
+        <div className="bg-gradient-to-br from-purple-900 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col overflow-hidden">
         {isLoading && <Loader/>}
-        <div className="flex flex-col md:flex-row h-screen">
-            <div className="w-full md:w-1/2 flex justify-center items-center"> 
+        <Header/>
+        <div className="flex flex-col md:flex-row h-screen justify-center items-center">
+            <motion.div
+                                  initial={{ opacity: 0, x: -150 }}
+                                  whileInView={{ opacity: 1, x: 0 }}
+                                  transition={{ duration: 0.5, delay: 0.15 }} 
+                 className="w-full md:w-1/2 flex md:mb-10 justify-center items-center"> 
                 <Player
                     autoplay
                     loop
@@ -135,9 +142,13 @@ function LoginModal() {
                     style={{ height: '90%', width: ' 90%'}}
                     />
                     
-            </div>
+            </motion.div>
     
-            <div className="p-8 md:p-16 w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
+            <motion.div
+                    initial={{ opacity: 0, x: 150 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.15 }} 
+                    className="px-8 md:p-16 w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
     
                 <h2 className="text-3xl mb-5 mt-10 text-center font-bold text-accent">Tutor Login</h2>
     
@@ -202,7 +213,7 @@ function LoginModal() {
                         </Form>
                     )}
                 </Formik>
-            </div>
+            </motion.div>
         </div>
         </div>
     )

@@ -13,7 +13,7 @@ export default function SearchBar({path}:{path:string}) {
     useEffect(() => {
         const handler = setTimeout(() => {
           setDebouncedQuery(searchQuery);
-        }, 300);
+        }, 900);
     
         return () => clearTimeout(handler);
       }, [searchQuery]);
@@ -49,7 +49,7 @@ export default function SearchBar({path}:{path:string}) {
             {/* Search Button */}
             <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 text-gray-900 rounded-full bg-gray-400 bg-opacity-0 hover:bg-opacity-30 transition"
+        className="p-2 text-gray-900 rounded-full hover:bg-[#7c24f018] bg-opacity-0 hover:bg-opacity-30 transition"
       >
         {isOpen ? <X size={20} /> : <Search size={20} />}
       </button>

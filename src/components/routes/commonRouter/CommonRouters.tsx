@@ -21,7 +21,7 @@ const CommonRoutes = ()=>{
                     <Route path='/' element= {<UserHome/>}/>
                     <Route path='/AuthChoice' element= {<AuthChoice/>}/>
                     <Route path ='/courses' element = {<CoursesListPage/>}/>
-                    <Route path="/course/:id" element={<CourseDetailsPage/>} />
+                    <Route path="/course/:id" element={<CourseDetailsPage/>}/>
                 </Routes>
                 <CourseListAndChat/>
                 <ScrollButton/>
