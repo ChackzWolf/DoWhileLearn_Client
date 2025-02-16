@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store/store";
 import HeaderDropdown from "./headerComponents/DropDown";
 import { ROUTES } from "../../../routes/Routes";
+import SearchBar from "./headerComponents/SearchBar";
 
 
 
@@ -24,11 +25,16 @@ const Header = () => {
 
 
 
+
                 {/* bg-white rounded-full z-[10] bg-white/40 backdrop-blur-md */}
 
                 <div 
                     className=" relative  justify-end flex md:px-5 lg:px-5  md:mx-8 lg:mx-8"
                 >
+                    <div className=" h-0 w-0 opacity-0 flex justify-end md:h-auto md:w-auto md:opacity-100 overflow-hidden ">
+                        <SearchBar/>
+                    </div>  
+
                     <HeaderNav />
 
                     {isLogin ?
@@ -44,10 +50,11 @@ const Header = () => {
 
                     }
                 </div>
+            </div>
+            <div className="w-full md:w-0 md:h-0 overflow-hidden flex justify-end">
+            <SearchBar/>
 
             </div>
-
-
         </div>
 
     );

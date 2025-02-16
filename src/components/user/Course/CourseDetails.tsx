@@ -250,7 +250,7 @@ function CourseDetails() {
 
 
     return courseData ? (
-        <div className="min-h-screen ">
+        <div className="min-h-screen">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -258,9 +258,9 @@ function CourseDetails() {
             >
                 {isLoading && <Loader />}
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3  [grid-auto-flow:row-dense]">
                     {/* Main Content */}
-                    <div className="lg:col-span-2 space-y-3">
+                    <div className="lg:col-span-2 space-y-3 ">
                         {/* Course Header */}
                         <motion.div
                             initial={{ opacity: 0 }}

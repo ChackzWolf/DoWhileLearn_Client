@@ -49,18 +49,15 @@ const UserHome= () => {
         
         try {
           const response = await axios.get(courseEndpoint.fetchCourseData);
-          if (response.data) {
-          console.log(response.data, ' this is response . data')
-          // Set latest courses directly from the API response
-          setLatestCourses(response.data.courses);
-    
-          // Create a shallow copy before sorting
-          const sortedCourses = [...response.data.courses].sort(
-            (a: any, b: any) => b.averageRating - a.averageRating // Descending order
+          const highRatingOrder = await axios.get(
+            courseEndpoint.fetchCourseData,
+            {
+              params: {ratingOrder:'high'},
+            }
           );
-    
-          // Set top-rated courses
-          setTopRatedCourses(sortedCourses);
+          if (response.data) {
+          setLatestCourses(response.data.courses);
+          setTopRatedCourses(highRatingOrder.data.courses);
         } else {
           console.error('Invalid response format:', response.data);
         }

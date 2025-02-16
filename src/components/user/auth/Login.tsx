@@ -111,7 +111,7 @@ function LoginUser() {
         <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen h-full flex flex-col">
             <Header/>
             {isLoading && <Loader/>}
-            <div className="flex flex-col md:flex-row h-full">
+            <div className="flex flex-col md:flex-row h-full overflow-hidden">
                 <motion.div
                                   initial={{ opacity: 0, x: -150 }}
                                   whileInView={{ opacity: 1, x: 0 }}

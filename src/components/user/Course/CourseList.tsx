@@ -6,6 +6,7 @@ import { RxDoubleArrowLeft, RxDoubleArrowRight } from "react-icons/rx";
 import { FaFilter, FaStar } from "react-icons/fa6";
 import { motion } from 'framer-motion';
 import CourseBadgeSkeleton from "./Skeletons/CourseBadgeSkeleton";
+import { useSearchParams } from "react-router-dom";
 
 // Define the interfaces for the fetched course data
 export interface ResponseFetchCourseList {
@@ -52,10 +53,11 @@ function CoursesList() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<string>("");
   const [selectedRating, setSelectedRating] = useState<string>("");
-
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
   // Calculate total pages based on courses length
   const totalPages = Math.ceil(courses.length / itemsPerPage);
-
+console.log(searchQuery, 'searchQuery')
   // Fetch courses on component mount
   useEffect(() => {
     const fetchCourses = async () => {
@@ -64,6 +66,7 @@ function CoursesList() {
           category: selectedCategory || null,
           priceOrder: selectedPrice || null,
           ratingOrder: selectedRating || null,
+          search: searchQuery || null,
         };
         const response = await axios.get<ResponseFetchCourseList>(
           courseEndpoint.fetchCourseData,
@@ -80,7 +83,7 @@ function CoursesList() {
     };
 
     fetchCourses();
-  }, [selectedCategory, selectedPrice, selectedRating]);
+  }, [selectedCategory, selectedPrice, selectedRating, searchQuery]);
 
   // Get the courses for the current page
   const currentCourses = courses.slice(
