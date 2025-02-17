@@ -48,7 +48,7 @@ export default function SearchBar() {
           placeholder="Search..."
           value={searchQuery||""}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-4 pr-4 py-1 rounded-full opacity-30 text-gray-700 focus:outline-none transition"
+          className="w-full pl-4 pr-4 py-1 rounded-full bg-gray-100  bg-opacity-30 text-white placeholder-gray-300 focus:outline-none transition"
         />
       </div>
             {/* Search Button */}
