@@ -36,7 +36,7 @@ const TutorRoutes = ()=>{
                     <SideNav/>
                 </div>
            
-                <div className='h-full md:w-9/12 w-full'>
+                <div className='h-full md:w-10/12 w-full md:px-5'>
                     <Routes>
                         <Route path = '/complete-registration' element={<RegistrationPage/>}/>
                         <Route path= '/' element={<TutorDashBoard/>}/>

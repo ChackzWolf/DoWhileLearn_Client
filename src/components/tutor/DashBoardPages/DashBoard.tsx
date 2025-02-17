@@ -73,7 +73,7 @@ const TutorDashboard = () => {
   console.log(orders)
   console.log(courses)
   return isLoading ? < DashBoardLoader/> : (
-    <div className="min-h-screen h-auto w-10/12 bg-accent md:p-8 py-11">
+    <div className="min-h-screen h-auto w-full bg-accent md:py-8  py-11">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Tutor Dashboard</h1>
