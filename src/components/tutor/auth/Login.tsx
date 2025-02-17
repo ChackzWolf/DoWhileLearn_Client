@@ -217,7 +217,7 @@ function LoginModal() {
                                         <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>
 
-                                    <div className="justify-center mb-6 ">
+                                    <div className="justify-center mb-6 items-center">
                                         <button
                                             type="submit"
                                             className="w-full px-4 py-3 mb-4 text-white shadow-lg hover:shadow-2xl rounded-lg font-PlusJakartaSans font-semibold  bg-primary transition-all ease-in-out delay-50 duration-500"
@@ -227,24 +227,24 @@ function LoginModal() {
                                         </button>
                                         <OAuth role="TUTOR" />
                                         <div className="flex flex-col gap-2 mt-5 justify-center items-center">
-                                            <div className="flex w-full text-accent justify-between">
+                                            <div className="flex w-full text-accent justify-center">
                                                 <div className="flex w-auto text-accent">
                                                     <h1>Don't have an account?</h1>
                                                     <NavLink to={ROUTES.tutor.signup} className="pl-2 text-accent hover:underline">
                                                         Signup
                                                     </NavLink>
                                                 </div>
-                                                <button className=" transition-all md:block hidden text-sm text-lavender hover:text-accent underline " onClick={() => { setCredentialVisible(true) }}>Don't click here</button>
+                                                {/* <button className=" transition-all md:block hidden text-sm text-lavender hover:text-accent underline " onClick={() => { setCredentialVisible(true) }}>Don't click here</button> */}
                                             </div>
 
-                                            <div className="flex w-full text-accent ">
+                                            <div className="flex w-full text-accent items-center justify-center">
                                                 <h1>Are you a student?  </h1>
                                                 <NavLink to={ROUTES.user.signup} className="pl-2 text-accent hover:underline">
                                                     Log in
                                                 </NavLink>
-                                                
+
                                             </div>
-                                            <button className=" transition-all md:hidden text-sm text-lavender hover:text-accent underline " onClick={() => { setCredentialVisible(true) }}>Don't click here</button>
+                                            <button className=" transition-all text-sm text-lavender hover:text-accent underline " onClick={() => { setCredentialVisible(true) }}>Don't click here</button>
                                         </div>
                                     </div>
                                 </div>
