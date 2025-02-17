@@ -17,6 +17,7 @@ import { ToastContainer } from 'react-toastify';
 import Header from '../../tutor/Layout/Header';
 import SideNav from '../../tutor/Layout/SideNav';
 import RegistrationPage from '../../../pages/tutor/Registration/RegistrationFirstPage';
+import { Footer } from '../../user/Layout/Footer';
 
 
 const TutorRoutes = ()=>{
@@ -28,7 +29,7 @@ const TutorRoutes = ()=>{
         setViewUploads(false)
     }
     return(
-        <div className='bg-accent min-h-full'>
+        <div className='bg-accent min-h-screen'>
             <ToastContainer/>
             <Header/>
             <div className=" flex w-full h-full bg-accent">
@@ -53,7 +54,6 @@ const TutorRoutes = ()=>{
                 </div>
 
             </div>
-
             {uploads.length > 0 && 
                 (     
                     <div>

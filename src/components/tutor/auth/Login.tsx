@@ -243,8 +243,6 @@ function LoginModal() {
                                                 </div>
                                                 {/* <button className=" transition-all md:block hidden text-sm text-lavender hover:text-accent underline " onClick={() => { setCredentialVisible(true) }}>Don't click here</button> */}
                                             </div>
-
-
                                             <button className=" transition-all text-sm text-lavender hover:text-accent underline " onClick={() => { setCredentialVisible(true) }}>Don't click here</button>
                                         </div>
                                     </div>
