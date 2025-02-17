@@ -45,7 +45,7 @@ const TopCoursesChart: React.FC<TopCoursesChartProps > = ({ courses }) => {
             <div className="h-[500px]">
               <ResponsiveContainer width="100%" height="70%">
               <BarChart
-                width={500}
+                width={800}
                 height={300}
                 data={transformedData}
                 margin={{

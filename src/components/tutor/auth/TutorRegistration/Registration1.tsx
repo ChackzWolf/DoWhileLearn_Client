@@ -242,11 +242,11 @@ function Registeration1() {
     return (
         <>
             {isLoading && <Loader />}
-            <div className="flex h-full bg-[#FCF6FF]">
+            <div className="flex flex-col md:flex-row h-full bg-[#FCF6FF]">
 
-                <div className="w-2/5 h-full bg-purple-700"></div>
+                <div className="md:w-2/5 h-full bg-purple-700"></div>
 
-                <div className="bg-[#FCF6FF] w-3/5 justify-center h-full">
+                <div className="bg-[#FCF6FF] md:w-3/5 justify-center h-full">
                     <h2 className="text-3xl mb-5 mt-20 text-center font-bold">
                         Complete your profile
                     </h2>
@@ -262,10 +262,10 @@ function Registeration1() {
 
 
 
-                                <div className="justify-center mb-20 px-28">
+                                <div className="flex flex-col justify-center items-center mb-20 md:px-28 px-10 w-full">
                                     {/* Bio Field */}
-                                    <div className="flex justify-between">
-                                        <div className="w-2/3">
+                                    <div className="flex flex-col-reverse md:flex-row justify-between w-full">
+                                        <div className="w-full md:w-2/3 ">
                                             <p className="text-base mb-2 font-normal w-full">Bio</p>
                                             <div className="mb-4 items-center">
                                                 <Field
@@ -286,8 +286,6 @@ function Registeration1() {
                                             className="w-full md:w-1/2 mt-4 md:mt-0 flex items-center justify-center rounded-full"
                                             onClick={handleImageUploadClick}
                                         >
-                                            {/* || createCourse?.thumbnail  */}
-                                            {/* || createCourse?.thumbnail */}
                                             <div className="relative h-48 w-48 md:h-40 md:w-40 lg:h-48 lg:w-48 bg-gray-100 border-2 border-dashed border-gray-300 transition-all duration-300 hover:bg-gray-200 cursor-pointer flex items-center justify-center rounded-full">
 
                                                 {imageLoading ?
@@ -393,7 +391,7 @@ function Registeration1() {
                                     </div>
 
                                     {/* Expertise (dynamic array) */}
-                                    <div className="mb-4">
+                                    <div className="mb-4 w-full">
                                         <p className="text-base mb-2 font-normal">Expertise</p>
                                         {values.expertise &&
                                             values.expertise.map((_, index) => (
@@ -439,20 +437,41 @@ function Registeration1() {
                                     </div>
 
                                     {/* Qualification (dynamic array with certificate upload) */}
-                                    <div className="mb-4">
+                                    <div className="mb-4 w-full">
                                         <p className="text-base mb-2 font-normal">Qualifications</p>
                                         {values.qualifications &&
                                             values.qualifications.map((_, index) => (
-                                                <div key={index} className="mb-2 flex justify-between">
+                                                <div key={index} className="mb-2 flex justify-between items-center">
                                                     <div className="w-full">
+                                                        <div className="flex mb-2">
                                                         <Field
                                                             name={`qualifications.${index}.qualification`}
                                                             className="w-full h-10 p-2 shadow-lg rounded-lg bg-gradient-to-r transition-all ease-in-out delay-100 duration-100 focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                                             placeholder={`Qualification ${index + 1}`}
                                                         />
 
+                                                            <button
+                                                                type="button"
+                                                                className="ml-2 text-2xl  text-red-500 px-4 py-2 rounded transition-all duration-500 hover:-rotate-45 hover:scale-110"
+                                                                onClick={() => {
+                                                                    setFieldValue(
+                                                                        "qualifications",
+                                                                        values.qualifications.filter(
+                                                                            (_, i) => i !== index
+                                                                        )
+                                                                    )
+                                                                    let updatedFileNames = [...pdfFileNames];
+                                                                    console.log(updatedFileNames, 'before')
 
-
+                                                                    updatedFileNames.splice(index, 1);
+                                                                    console.log(updatedFileNames, 'after')
+                                                                    setPdfFileNames(updatedFileNames)
+                                                                }
+                                                                }
+                                                            >
+                                                                <MdOutlineDelete />
+                                                            </button>
+                                                        </div>
 
 
 
@@ -495,10 +514,6 @@ function Registeration1() {
                                                                     }
                                                                 }}
                                                             />
-
-                                                            {/* {error && (
-                                        <p className="mt-2 text-red-600">{error}</p>
-                                      )} */}
                                                         </div>
 
 
@@ -517,29 +532,10 @@ function Registeration1() {
 
 
                                                     </div>
-                                                    <button
-                                                        type="button"
-                                                        className="ml-2 text-2xl  text-red-500 px-4 py-2 rounded transition-all duration-500 hover:-rotate-45 hover:scale-110"
-                                                        onClick={() => {
-                                                            setFieldValue(
-                                                                "qualifications",
-                                                                values.qualifications.filter(
-                                                                    (_, i) => i !== index
-                                                                )
-                                                            )
-                                                            let updatedFileNames = [...pdfFileNames];
-                                                            console.log(updatedFileNames, 'before')
 
-                                                            updatedFileNames.splice(index, 1);
-                                                            console.log(updatedFileNames, 'after')
-                                                            setPdfFileNames(updatedFileNames)
-                                                        }
-                                                        }
-                                                    >
-                                                        <MdOutlineDelete />
-                                                    </button>
                                                 </div>
                                             ))}
+
                                         <button
                                             type="button"
                                             className="px-4 py-3 mb-4 text-[#7C24F0] text-3xl transition-all duration-500 hover:rotate-90 rounded-lg hover:scale-125"
@@ -573,7 +569,7 @@ function Registeration1() {
 
 
                                     {/* Submit Button */}
-                                    <div className="w-full flex justify-end mb-6 ">
+                                    <div className="w-full flex justify-center md:justify-end mb-6 ">
                                         <button
                                             type="submit"
                                             className="px-4 py-3 mb-4 text-white rounded-lg font-PlusJakartaSans font-semibold bg-gradient-to-r bg-[#7C24F0]  transition-all duration-300 hover:bg-[#6211cd] hover:scale-105"

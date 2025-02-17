@@ -73,7 +73,7 @@ const TutorDashboard = () => {
   console.log(orders)
   console.log(courses)
   return isLoading ? < DashBoardLoader/> : (
-    <div className="min-h-screen w-10/12 bg-gray-50 p-8">
+    <div className="min-h-screen h-auto w-10/12 bg-accent md:p-8 py-11">
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">Tutor Dashboard</h1>
@@ -108,7 +108,7 @@ const TutorDashboard = () => {
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 h-[420px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 md:h-[420px]">
         <OrdersChart orders={orders}/>
         <TopCoursesChart courses={courses}/>
       </div>

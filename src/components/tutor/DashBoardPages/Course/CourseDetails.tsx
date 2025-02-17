@@ -158,7 +158,7 @@ function OverView() {
   };
 
   return !isLoading ? (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-accent">
 
 
 
@@ -171,10 +171,10 @@ function OverView() {
         >
           
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 p-5">
             
             {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-8 h-full">
               
               {/* Course Header */}
               <motion.div 
@@ -232,7 +232,7 @@ function OverView() {
                   </nav>
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 rounded-lg">
                   {activeTab === 'overview' && (
                     <motion.div 
                       initial={{ opacity: 0 }}
@@ -297,11 +297,11 @@ function OverView() {
             </div>
 
             {/* Sidebar */}
-            <div className="lg:col-span-1 m-8">
+            <div className="lg:col-span-1 h-full">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className=" top-24 bg-white rounded-xl shadow-sm overflow-hidden"
+                className=" top-24 bg-white rounded-xl shadow-sm overflow-hidden h-full"
               >
                 {/* Video Preview */}
                 <div className="aspect-video relative">

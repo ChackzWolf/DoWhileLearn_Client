@@ -109,7 +109,7 @@ const CreateCoursePage = () => {
 
   return (
 
-        <div className="w-10/12 flex-col">
+        <div className=" flex-col">
 
             <div className="">
               <ProgressBar  />

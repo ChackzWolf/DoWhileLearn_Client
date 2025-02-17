@@ -24,7 +24,7 @@ function SideNav() {
   return (
     <>
       {/* Hamburger Icon for Mobile */}
-      <div className="lg:hidden p-4">
+      <div className="md:hidden pl-4 pt-4">
         <FaBars onClick={toggleNav} className="text-2xl cursor-pointer" />
       </div>
 
@@ -38,11 +38,11 @@ function SideNav() {
 
       {/* SideNav */}
       <div
-        className={`fixed top-0 left-0 h-full bg-white p-6 transition-transform duration-300 z-50 transform ${
+        className={`fixed top-0 left-0 h-full bg-accent p-6 transition-transform duration-300 z-50 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:sticky lg:w-2/12 fixed`}
+        } lg:translate-x-0 lg:sticky  fixed`}
       >
-        <div className="sticky">
+        <div className="sticky h-full">
           {/* Close Icon for Mobile */}
           <div className="lg:hidden flex justify-end mb-4">
             <FaTimes onClick={toggleNav} className="text-2xl cursor-pointer" />
@@ -53,12 +53,15 @@ function SideNav() {
             className={
               currentPath === "/tutor"
                 ? "flex transition-all bg-[#7C24F0] text-white text-sm font-semibold w-full rounded-lg "
-                : "flex transition-all bg-white hover:bg-[#7c24f018]  text-sm font-semibold w-full rounded-lg "
+                : "flex transition-all bg-accent hover:bg-[#7c24f018]  text-sm font-semibold w-full rounded-lg "
             }
           >
             <button
               key="/tutor"
-              onClick={() => handleNavigate(ROUTES.tutor.dashBoard)}
+              onClick={() => {
+                setIsOpen(false)
+                handleNavigate(ROUTES.tutor.dashBoard)
+              }}
               className="flex items-center h-full w-full p-2 "
             >
               <RxDashboard className="m-2" />
@@ -78,7 +81,10 @@ function SideNav() {
                 }
               >
                 <button
-                  onClick={() => handleNavigate(links.path)}
+                  onClick={() => {
+                    setIsOpen(false)
+                    handleNavigate(links.path)
+                  }}
                   className="flex items-center w-full h-full p-2"
                 >
                   {<links.icon className="mx-3 my-1 text-xl" />}
@@ -100,7 +106,9 @@ function SideNav() {
                 }
               >
                 <button
-                  onClick={() => handleNavigate(links.path)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleNavigate(links.path)}}
                   className="flex items-center w-full h-full p-2"
                 >
                   {<links.icon className="mx-3 my-1 text-xl" />}

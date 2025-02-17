@@ -1,6 +1,6 @@
 export function ListShadowLoader() {
     return (
-      <div className="w-full min-h-screen bg-white p-4 md:p-8">
+      <div className="w-full min-h-screen bg-accent p-4 md:p-8">
         <table className="w-full border-collapse border border-gray-300 rounded-lg overflow-hidden">
           <thead>
             <tr>

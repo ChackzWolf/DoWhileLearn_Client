@@ -16,7 +16,7 @@ function SideNav() {
   return (
     <>
       {/* Hamburger Icon for Mobile */}
-      <div className="lg:hidden p-4">
+      <div className="lg:hidden pt-4 pl-4">
         <FaBars onClick={toggleNav} className="text-2xl cursor-pointer" />
       </div>
 
@@ -47,7 +47,10 @@ function SideNav() {
               : "transition-all flex bg-white  hover:bg-[#7c24f018] text-sm font-semibold w-full rounded-lg"
           }
         >
-          <button key="/admin" onClick={()=> navigate(ROUTES.admin.dashBoard)} className="flex items-center h-full w-full p-2">
+          <button key="/admin" onClick={()=> {
+            setIsOpen(false)
+            navigate(ROUTES.admin.dashBoard)
+          }} className="flex items-center h-full w-full p-2">
             <RxDashboard className="m-2" />
             Dashboard
           </button>
@@ -65,7 +68,10 @@ function SideNav() {
                   : "transition-all flex   hover:bg-[#7c24f018] text-center text-sm font-semibold w-full rounded-lg"
               }
             >
-              <button onClick={()=> navigate(links.path)} className="flex items-center w-full h-full p-2">
+              <button onClick={()=> {
+                setIsOpen(false)
+                navigate(links.path)
+              }} className="flex items-center w-full h-full p-2">
                 {<links.icon className="mx-3 my-1 text-xl" />}
                 {links.name}
               </button>
@@ -85,7 +91,10 @@ function SideNav() {
                   : "transition-all flex  hover:bg-[#7c24f018] text-center text-sm font-semibold w-full rounded-lg"
               }
             >
-              <button onClick={()=>navigate(links.path)} className="flex items-center w-full h-full p-2">
+              <button onClick={()=>{
+                setIsOpen(false)
+                navigate(links.path)
+                }} className="flex items-center w-full h-full p-2">
                 {<links.icon className="mx-3 my-1 text-xl" />}
                   {links.name}
               </button>

@@ -89,11 +89,11 @@ function LoginAdmin () {
     return (
         <>
         {isLoading && <Loader />}
-        <div className="flex flex-col lg:flex-row h-screen">
-            <div className="w-full lg:w-1/2 bg-purple-700"> 
+        <div className="flex flex-col md:flex-row min-h-screen h-full">
+            <div className="md:w-1/2 bg-purple-700 h-1/3 md:h-full"> 
             </div>
     
-            <div className="bg-[#FCF6FF] p-8 sm:p-16 shadow-lg w-full lg:w-1/2 rounded-lg flex flex-col justify-center">
+            <div className="bg-[#FCF6FF] p-16 shadow-lg w-full md:w-1/2 rounded-lg flex flex-col justify-center">
                 <h2 className="text-3xl mb-5 mt-20 text-center font-bold">Admin Login</h2>
                 <h1 className="text-red-800 text-center">{message}</h1>
                 <Formik initialValues={initialValue} validationSchema={validationSchema} onSubmit={handleSubmit}>

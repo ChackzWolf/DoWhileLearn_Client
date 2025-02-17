@@ -28,37 +28,43 @@ const TutorRoutes = ()=>{
         setViewUploads(false)
     }
     return(
-        <>
+        <div className='bg-accent min-h-full'>
             <ToastContainer/>
             <Header/>
-            <div className="flex w-full h-full">
-                <SideNav/>
-                <Routes>
-                    <Route path = '/complete-registration' element={<RegistrationPage/>}/>
-                    <Route path= '/' element={<TutorDashBoard/>}/>
-                    <Route path= '/users' element={<UsersPage/>}/>
-                    <Route path= '/payouts' element={<PayoutsPage/>}/>
-                    <Route path= '/createCourse' element={<CreateCoursePage/>}/>
-                    <Route path = '/courses' element = {<CoursesPage/>}/>
-                    <Route path="/courses/:id" element={<CourseDetailsPage />} />
-                    <Route path = "/courses/edit-course" element = {<EditCoursePage/>}/>
-                    <Route path = "/complete-registration"   />
-                    <Route path='/profile' element ={<TutorProfilePage/>}/>
-                    <Route path= '/user/details/:id' element={<UserDetailsPage/>}/>
-                </Routes>
+            <div className=" flex w-full h-full bg-accent">
+                <div className='h-full md:w-2/12'>
+                    <SideNav/>
+                </div>
+           
+                <div className='h-full md:w-9/12 w-full'>
+                    <Routes>
+                        <Route path = '/complete-registration' element={<RegistrationPage/>}/>
+                        <Route path= '/' element={<TutorDashBoard/>}/>
+                        <Route path= '/users' element={<UsersPage/>}/>
+                        <Route path= '/payouts' element={<PayoutsPage/>}/>
+                        <Route path= '/createCourse' element={<CreateCoursePage/>}/>
+                        <Route path = '/courses' element = {<CoursesPage/>}/>
+                        <Route path="/courses/:id" element={<CourseDetailsPage />} />
+                        <Route path = "/courses/edit-course" element = {<EditCoursePage/>}/>
+                        <Route path = "/complete-registration"   />
+                        <Route path='/profile' element ={<TutorProfilePage/>}/>
+                        <Route path= '/user/details/:id' element={<UserDetailsPage/>}/>
+                    </Routes>
+                </div>
+
             </div>
 
             {uploads.length > 0 && 
                 (     
                     <div>
-                        <button onClick={()=> setViewUploads(true)} className='fixed right-0 text-purple rounded-lg shadow bottom-0 text-4xl justify-between m-7 hover:scale-105 hover:text-purple-600'>
+                        <button onClick={()=> setViewUploads(true)} className='fixed right-0 text-purple  bottom-0 text-4xl justify-between m-7 hover:scale-105 hover:text-purple-600'>
                             <UploadSpinner count={uploads.length}/>
                         </button>
                     </div>
                 )
             }
             <UploadDetails viewUploads={viewUploads} closeUploads={viewUploadCallback} />
-        </>
+        </div>
     )
 }
 

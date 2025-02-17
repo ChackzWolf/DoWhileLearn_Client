@@ -66,7 +66,7 @@ const AdminDashboard = () => {
   },[courses])
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen bg-accent md:p-6 py-12 pr-9">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Main Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

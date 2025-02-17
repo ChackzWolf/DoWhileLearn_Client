@@ -28,6 +28,7 @@ const StudentReviews: React.FC<{
 
   // Add new state for reviews
   const [reviews, setReviews] = useState<Reviews[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [isUploadingReview, setIsUploadingReview] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -37,14 +38,21 @@ const StudentReviews: React.FC<{
 
   useEffect(() => {
     const fetchReviews = async () => {
-      const reviewData = await axios.get(userEndpoint.fetchReviewsOfCourse, {
-        params: { courseId },
-      });
-      console.log(
-        reviewData.data,
-        "///////////////////////////////////////////////////"
-      );
-      setReviews(reviewData.data.reviewData);
+      try {
+        setIsLoading(true);
+        const reviewData = await axios.get(userEndpoint.fetchReviewsOfCourse, {
+          params: { courseId },
+        });
+        console.log(
+          reviewData.data,
+        );
+        setReviews(reviewData.data.reviewData);
+      } catch (error) {
+        
+      }finally{
+        setIsLoading(false);
+      }
+
     };
     fetchReviews();
   }, [currentReview]);
@@ -145,10 +153,10 @@ const StudentReviews: React.FC<{
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="h-full bg-gradient-to-br"
+      className="h-full rounded-lg"
     >
       {reviews.length > 0  || isReviewed? (
-        <div className="max-w-7xl mx-auto bg-accent">
+        <div className="max-w-7xl mx-auto bg-accent rounded-lg">
           {/* Previous content remains the same until the end of the modules section */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
@@ -157,7 +165,7 @@ const StudentReviews: React.FC<{
             className="grid grid-cols-1 lg:grid-cols-2 gap-8"
           >
             {/* Main Content Column */}
-            <div className="lg:col-span-2 bg-accent ">
+            <div className="lg:col-span-2 bg-accent rounded-lg">
               {/* ... Previous content remains the same ... */}
 
               {/* Reviews Section */}
@@ -165,7 +173,7 @@ const StudentReviews: React.FC<{
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="bg-accent px-6 h-full"
+                className="bg-accent rounded-lg py-5 px-6 h-full"
               >
                 <h2 className="text-2xl font-bold text-purple-600 mb-6">
                   Student Reviews
@@ -340,19 +348,19 @@ const StudentReviews: React.FC<{
                 </div>
 
                 {/* Load More Button */}
-                <motion.button
+                {/* <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full mt-6 py-3 bg-purple-100 text-purple-600 rounded-xl hover:bg-purple-200 transition-colors font-medium"
                 >
                   {averageRating ? "Load More Reviews": "No reviews yet"}
-                </motion.button>
+                </motion.button> */}
               </motion.section>
             </div>
           </motion.div>
         </div>
       ) : (
-        <div className="w-full flex items-center justify-center bg-accent flex-col">
+        <div className="w-full flex items-center justify-center bg-accent flex-col rounded-lg">
           {isPurchased && (
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
@@ -386,10 +394,12 @@ const StudentReviews: React.FC<{
               </button>
             </motion.div>
           )}
+            {isLoading ? <Spinner /> : (
+                        <h1 className="text-2xl font-bold text-gray-600  m-10">
+                        No reviews yet.
+             </h1>
+            )}  
 
-          <h1 className="text-2xl font-bold text-gray-600  m-10">
-            No reviews yet.
-          </h1>
         </div>
       )}
       <ToastContainer />

@@ -14,7 +14,7 @@ import SideNav from '../../admin/Layout/SideNav';
 
 const AdminRoutes = ()=>{
     return(
-        <>
+        <div className='h-full bg-accent'>
         <ToastContainer/>
         <Header/>
             <div className='flex h-full w-full'>
@@ -32,7 +32,7 @@ const AdminRoutes = ()=>{
             </div>
 
 
-        </>
+        </div>
     )
 }
 

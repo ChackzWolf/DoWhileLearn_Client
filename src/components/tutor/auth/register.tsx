@@ -138,10 +138,10 @@ function RegisterTutor() {
     return (
         <>
         
-        <div className="bg-gradient-to-br from-purple-900 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col overflow-hidden">
+        <div className="bg-gradient-to-br from-purple-900 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen h-auto min-w-screen flex flex-col overflow-hidden">
         <Header/>
         {isLoading && <Loader/>}
-        <div className="flex flex-col md:flex-row h-screen justify-center items-center">
+        <div className="flex flex-col md:flex-row min-h-screen justify-center items-center">
             {/* <div className="w-1/2"> */}
             <motion.div
                     initial={{ opacity: 0, x: -150 }}
@@ -164,9 +164,9 @@ function RegisterTutor() {
                     initial={{ opacity: 0, x: 150 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.15 }}  
-                    className="md:w-1/2 justify-center">
+                    className="md:w-1/2 justify-center w-full">
                 
-                <h2 className="text-3xl mb-5 mt-20 text-center font-bold text-accent">Tutor Signup</h2>
+                <h2 className="text-3xl mb-5 md:mt-20 text-center font-bold text-accent">Tutor Signup</h2>
                 { emailExists?  <h2 className="text-center text-[#FF0000]">Email already exists.</h2> : <h1></h1>}
 
 
@@ -177,10 +177,10 @@ function RegisterTutor() {
 
                     
                     <Form noValidate>
-                        <div className="justify-center mb-20 px-28">
+                        <div className="justify-center mb-20 md:px-28 px-10">
 
-                            <div className="flex justify-between">
-                                <div className="w-1/2 mr-6">
+                            <div className="flex flex-col md:flex-row justify-between">
+                                <div className="md:w-1/2 w-full md:mr-6">
                                     <p className="text-base mb-2 font-normal text-accent">First-name</p>
                                     <div className="mb-4 items-center">
                                         <Field
@@ -192,7 +192,7 @@ function RegisterTutor() {
                                         <ErrorMessage name="firstName" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>
                                 </div>
-                                <div className="w-1/2 ">
+                                <div className="md:w-1/2 ">
                                     <p className="text-base mb-2 font-normal text-accent">Last-name</p>
                                     <div className="mb-4 items-center">
                                         <Field
@@ -206,8 +206,8 @@ function RegisterTutor() {
                                 </div>
 
                             </div>
-                            <div className="flex justify-between">
-                                <div className="w-1/2 mr-6">
+                            <div className="flex flex-col md:flex-row justify-between">
+                                <div className="w-full md:w-1/2 mr-6">
                                     <p className="text-base mb-2 font-normal text-accent">Email</p>
                                     <div className="mb-4 items-center">
                                         <Field
@@ -220,7 +220,7 @@ function RegisterTutor() {
                                     </div>
                                 </div>
 
-                                <div className="w-1/2">
+                                <div className="md:w-1/2">
                                     <p className="text-base mb-2 font-normal text-accent">Phone</p>
                                     <div className="mb-4 items-center">
                                         <Field
@@ -239,8 +239,8 @@ function RegisterTutor() {
 
 
                             
-                            <div className="flex justify-between">
-                                <div className="w-1/2 mr-5">
+                            <div className="flex flex-col md:flex-row justify-between mb-5">
+                                <div className="md:w-1/2 md:mr-5">
                                     <p className="text-base mb-2 font-normal text-accent">Create a password</p>
                                     <div className="mb-4 items-center">
                                         <div className="relative w-full h-10 flex items-center right-1">
@@ -255,14 +255,14 @@ function RegisterTutor() {
                                         <ErrorMessage name="password" component="div" className="w-4/5 text-red-500 text-xs mt-1" />
                                     </div>
                                 </div>
-                                <div className="w-1/2">
+                                <div className="md:w-1/2">
                                     <p className="text-base mb-2 font-normal text-accent">Confirm password</p>
                                     <div className="mb-4 items-center">
                                         <div className="relative w-full h-10 flex items-center ">
                                         <Field
                                             type={showConfirmPassword ? "text" : "password"}
                                             name="confirmPassword"
-                                            className="abslolute  w-full h-10 shadow-lg shadow-slate-300 p-3 rounded-lg  transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
+                                            className="abslolute  w-full h-10 shadow-lg p-3 rounded-lg  transition-all ease-in-out delay-100 duration-100  focus-visible:outline-none hover:border-4 hover:border-[#DDB3FF] focus:border-[#DDB3FF] focus:border-4"
                                             placeholder="Enter your password here."
                                         />
                                         <EyeToggleButton  onClick={toggleConfirmPasswordVisibility} />
