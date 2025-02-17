@@ -147,7 +147,7 @@ function LoginModal() {
                         <h1 className="text-3xl font-bold text-primary">Credential</h1>
                         <p className="text-lg text-primary">Email: emil@gmail.com</p>
                         <p className="text-lg text-primary">Password: Jacks@123</p>
-                        <button className="p-2 bg-primary text-white rounded" onClick={(e) => {
+                        <button className="p-2 bg-primary text-white rounded" onClick={(_e) => {
                             // e.stopPropagation(); // Prevent click from closing modal
                             setCredentialVisible(false);
                         }}>
