@@ -201,11 +201,11 @@ function LoginModal() {
                                     </div>
                                     <div className="flex w-full justify-between items-center">
                                         <p className="text-base mb-2 font-normal text-accent">Password</p>
-                                        <a href="/tutor/auth/forgot-password" className="mb-2 font-normal justify-end text-xs underline text-accent">Forgot ?</a>
+                                        <a href="/tutor/auth/forgot-password" className="mb-2 font-normal justify-end text-xs underline text-accent mx-2">Forgot ?</a>
                                     </div>
 
-                                    <div className="justify-center mb-6 ">
-                                        <div className="relative w-full h-10 flex items-center right-1 rounded-lg ">
+                                    <div className="justify-center mb-6">
+                                        <div className="relative w-full h-10 flex items-center rounded-lg ">
                                             <Field
                                                 type={showPassword ? 'text' : 'password'}
                                                 name="password"
