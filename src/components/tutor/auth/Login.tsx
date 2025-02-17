@@ -230,8 +230,8 @@ function LoginModal() {
                                             <div className="flex w-full text-accent justify-center">
                                                 <div className="flex w-auto text-accent">
                                                     <h1>Don't have an account?</h1>
-                                                    <NavLink to={ROUTES.tutor.signup} className="pl-2 text-accent hover:underline">
-                                                        Signup
+                                                    <NavLink to={ROUTES.tutor.signup} className="pl-2 text-accent underline font-semibold hover:underline-offset-0 ">
+                                                        Sign up
                                                     </NavLink>
                                                 </div>
                                                 {/* <button className=" transition-all md:block hidden text-sm text-lavender hover:text-accent underline " onClick={() => { setCredentialVisible(true) }}>Don't click here</button> */}
@@ -239,7 +239,7 @@ function LoginModal() {
 
                                             <div className="flex w-full text-accent items-center justify-center">
                                                 <h1>Are you a student?  </h1>
-                                                <NavLink to={ROUTES.user.signup} className="pl-2 text-accent hover:underline">
+                                                <NavLink to={ROUTES.user.signup} className="pl-2 text-accent underline">
                                                     Log in
                                                 </NavLink>
 
