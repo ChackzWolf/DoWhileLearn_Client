@@ -233,11 +233,16 @@ function RegisterUser() {
                                 >
                                     {isSubmitting? 'Creating...': 'Create account'}
                                 </button>
+<div className="flex items-center mb-5">
+  <div className="flex-grow border-t border-softPeach"></div>
+  <span className="px-2 text-softPeach text-sm">or</span>
+  <div className="flex-grow border-t border-softPeach"></div>
+</div>
 
                                 <OAuth role="USER"/>
 
 
-                                <div className="flex w-full text-accent">
+                                <div className="flex w-full text-accent justify-center my-5">
                                     <h1>Already have an account?  </h1>
                                     <NavLink to={ROUTES.user.signin}>
                                         <h1 className="transition-all pl-2 text-accent underline hover:underline-offset-4"> Login</h1>

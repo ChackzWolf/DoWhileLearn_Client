@@ -109,8 +109,8 @@ function Course() {
     }, [searchQuery]);
 
   return (
-      <div className = "flex flex-col m-10 w-auto overflow-auto h-full bg-accent">
-        <div className="flex justify-between items-center m-5">
+      <div className = "flex flex-col  mx-10 w-auto overflow-auto h-full bg-accent">
+        <div className="flex justify-between items-center my-5 mx-10">
           <h1 className="text-3xl font-bold  ">Courses</h1> 
           <SearchBar path={'/tutor/courses'}/>
         </div>

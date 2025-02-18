@@ -289,17 +289,22 @@ function RegisterTutor() {
                                 >
                                     {isSubmitting? 'Creating...': 'Create account'}
                                 </button>
+<div className="flex items-center mb-6">
+  <div className="flex-grow border-t border-softPeach"></div>
+  <span className="px-2 text-softPeach text-sm">or</span>
+  <div className="flex-grow border-t border-softPeach"></div>
+</div>
 
                                 <OAuth role="TUTOR"/>
 
 
-                                <div className="flex w-full text-accent">
+                                <div className="flex w-full text-accent justify-center mt-3">
                                     <h1>Already have an account?  </h1>
                                     <NavLink to="/tutor/auth/login">
                                         <h1 className="pl-2 text-accent text-sm underline"> Login</h1>
                                     </NavLink>
                                 </div>
-                                <div className="flex w-full text-accent">
+                                <div className="flex w-full text-accent justify-center my-3">
                                     <h1>Are you a student?  </h1>
                                     <NavLink to={ROUTES.user.signin}>
                                         <h1 className="pl-2 text-accent text-sm underline">Click here</h1>

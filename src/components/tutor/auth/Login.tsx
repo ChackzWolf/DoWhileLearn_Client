@@ -225,13 +225,19 @@ function LoginModal() {
                                         >
                                             Login
                                         </button>
-                                        <div className="flex w-full text-accent items-center mb-10 justify-center">
+                                        <div className="flex w-full text-accent items-center mb-5 justify-center">
                                                 <h1>Are you a student?  </h1>
                                                 <NavLink to={ROUTES.user.signup} className="pl-2 text-accent underline">
                                                     Log in
                                                 </NavLink>
+                                        </div>
 
-                                            </div>
+<div className="flex items-center mb-6">
+  <div className="flex-grow border-t border-softPeach"></div>
+  <span className="px-2 text-softPeach text-sm">or</span>
+  <div className="flex-grow border-t border-softPeach"></div>
+</div>
+
                                         <OAuth role="TUTOR" />
                                         <div className="flex flex-col gap-2 mt-2 justify-center items-center">
                                             <div className="flex w-full text-accent justify-center">

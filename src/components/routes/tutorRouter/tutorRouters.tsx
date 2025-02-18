@@ -17,7 +17,6 @@ import { ToastContainer } from 'react-toastify';
 import Header from '../../tutor/Layout/Header';
 import SideNav from '../../tutor/Layout/SideNav';
 import RegistrationPage from '../../../pages/tutor/Registration/RegistrationFirstPage';
-import { Footer } from '../../user/Layout/Footer';
 
 
 const TutorRoutes = ()=>{
@@ -29,15 +28,15 @@ const TutorRoutes = ()=>{
         setViewUploads(false)
     }
     return(
-        <div className='bg-accent min-h-screen'>
+        <div className='h-full min-h-screen bg-accent max-w-screen'>
             <ToastContainer/>
             <Header/>
-            <div className=" flex w-full h-full bg-accent">
+            <div className=" flex w-full h-full bg-accent overflow-hidden">
                 <div className='h-full md:w-2/12'>
                     <SideNav/>
                 </div>
            
-                <div className='h-full md:w-10/12 w-full md:px-5'>
+                <div className='h-full md:w-10/12 w-full md:mx-10'>
                     <Routes>
                         <Route path = '/complete-registration' element={<RegistrationPage/>}/>
                         <Route path= '/' element={<TutorDashBoard/>}/>

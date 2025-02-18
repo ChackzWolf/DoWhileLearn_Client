@@ -176,8 +176,13 @@ function LoginUser() {
                                         >
                                             Login
                                         </button>
+<div className="flex items-center mb-6">
+  <div className="flex-grow border-t border-softPeach"></div>
+  <span className="px-2 text-softPeach text-sm">or</span>
+  <div className="flex-grow border-t border-softPeach"></div>
+</div>
                                         <OAuth role="USER"/>
-                                        <div className="flex w-full text-accent">
+                                        <div className="flex w-full text-accent justify-center my-3">
                                             <h1>Don't have an account?</h1>
                                             <NavLink to={ROUTES.user.signup} className="pl-2 text-accent hover:underline">
                                                 Signup

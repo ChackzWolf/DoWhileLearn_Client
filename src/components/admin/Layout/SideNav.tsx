@@ -30,7 +30,7 @@ function SideNav() {
 
       {/* SideNav */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-white p-6 transition-transform duration-300 z-50 transform ${
+        className={`fixed top-0 left-0 h-full w-64 bg-accent p-6 transition-transform duration-300 z-50 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 lg:relative lg:w-1/5`} 
       >
@@ -44,7 +44,7 @@ function SideNav() {
           className={
             location.pathname === "/admin"
               ? "transition-all flex bg-[#7C24F0] text-white text-sm font-semibold w-full rounded-lg"
-              : "transition-all flex bg-white  hover:bg-[#7c24f018] text-sm font-semibold w-full rounded-lg"
+              : "transition-all flex bg-accent  hover:bg-[#7c24f018] text-sm font-semibold w-full rounded-lg"
           }
         >
           <button key="/admin" onClick={()=> {
