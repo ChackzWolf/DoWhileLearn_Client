@@ -2,8 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import Hls from 'hls.js';
 import '@vime/core/themes/default.css';
 import { MdSkipNext, MdSkipPrevious, MdPlayArrow, MdPause } from 'react-icons/md';
+import { useCourse } from '../PurchasedCourseDetails/CourseContext';
+import { getCookie } from '../../../../utils/cookieManager';
+import { useParams } from 'react-router-dom';
+import userAxios from '../../../../utils/axios/userAxios.config';
+import { userEndpoint } from '../../../../constraints/userEndpoints';
 
 type Props = {
+  courseName?:string;
+  tutorName? :string;
   videoUrl: string;
   subtitleUrl?: string;
   lessonLength?: number | null;
@@ -15,6 +22,8 @@ type Props = {
 };
 
 const VideoPlayer: React.FC<Props> = ({
+  courseName,
+  tutorName,
   videoUrl,
   subtitleUrl,
   currentLessonIndex = null,
@@ -26,6 +35,7 @@ const VideoPlayer: React.FC<Props> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
+  const { id } = useParams<{ id: string }>();
   const [qualityLevels, setQualityLevels] = useState<any[]>([]);
   const [currentQuality, setCurrentQuality] = useState<number>(-1); // -1 means auto
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -35,6 +45,7 @@ const VideoPlayer: React.FC<Props> = ({
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [savedTime, setSavedTime] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { setCurrentLesson ,selectedVideoDetails, setCourseStatus} = useCourse();
 
   // Load video and HLS setup
   useEffect(() => {
@@ -244,6 +255,7 @@ const VideoPlayer: React.FC<Props> = ({
   const goToNextLesson = () => {
     if (setCurrentLessonIndex && currentLessonIndex !== null && lessonLength !== null) {
       if (currentLessonIndex < lessonLength - 1) {
+        setCurrentLesson(currentLessonIndex + 1)
         setCurrentLessonIndex(currentLessonIndex + 1);
       }
     }
@@ -252,12 +264,38 @@ const VideoPlayer: React.FC<Props> = ({
   const goToPreviousLesson = () => {
     if (setCurrentLessonIndex && currentLessonIndex !== null) {
       if (currentLessonIndex > 0) {
+        setCurrentLesson(currentLessonIndex - 1)
         setCurrentLessonIndex(currentLessonIndex - 1);
       }
     }
   };
 
+  useEffect(()=> {
+    const userId = getCookie('userId')
+    const updateCourseStatus = async()=> {
+      console.log(selectedVideoDetails?.moduleIndex,selectedVideoDetails?.moduleIndex, 'jsut to know ///////////////////')
+      const data = {
+        userId,
+        courseId: id,
+        courseName,
+        tutorName,
+        totalLessons:lessonLength,
+        moduleIndex: selectedVideoDetails?.moduleIndex || 0,
+        lessonIndex: selectedVideoDetails?.lessonIndex || 0,
+        
+      }
+      const response = await userAxios.post(userEndpoint.updateCompletedLesson, data)
+      console.log(response,' response after updating completed course ///////////////////////////////////////');
+      setCourseStatus(response.data.data);
+    }
 
+    const percent = (currentTime / duration) * 100
+    if(percent > 95){
+      updateCourseStatus()
+    }
+  },[currentTime])
+
+  // console.log(selectedVideoDetails, 'selected video details')
   return (
     <div 
       ref={containerRef}

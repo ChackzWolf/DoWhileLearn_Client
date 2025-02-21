@@ -21,9 +21,13 @@ import StudentReviews from "../StudentReview";
 import CodingQuestionInterface from "./Questions/CodeEditor";
 import ChatComponent from "../../Chat/ChatCoursesRoute";
 import { FiAward, FiBook, FiClock, FiStar } from "react-icons/fi";
-import VideoPlayer from "../../../common/VideoPlayer";
 import { ROUTES } from "../../../../routes/Routes";
 import QuizChallenge from "./Questions/Quize";
+import { PiCertificateThin } from "react-icons/pi";
+import { useCourse } from "./CourseContext";
+import CirclePercentage from "../../../common/CirclePercentage";
+import VideoPlayer from "./VideoPlayer";
+
 
 interface Module {
     name: string;
@@ -77,8 +81,9 @@ interface QuizeData {
 }
 function PurchasedCourseDetails() {
     const dispatch = useDispatch();
-    const [tutorData, setTutorData] = useState<TutorData | null>(null);
     const navigate = useNavigate()
+
+    const [tutorData, setTutorData] = useState<TutorData | null>(null);
     const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
     const [quizData, setQuizData] = useState<QuizeData | null>(null)
     const [activeTab, setActiveTab] = useState("overview");
@@ -88,14 +93,14 @@ function PurchasedCourseDetails() {
     const [modules, setModules] = useState<CreateCourseState>(initialModulesState);
     const [isVisibleCode, setIsVisibleCode] = useState(false);
     const [quizVisible, setQuizVisible] = useState(false);
-    const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Store selected video URL
+    const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
     const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
-    const [selectedLessonLength, setSelectedLessonLength] = useState(0)
+    const [_selectedLessonLength, setSelectedLessonLength] = useState(0)
     const [selectedVideoDescription, setSelectedVideoDescription] = useState<string | null>(null);
+    const { courseStatus } = useCourse();
 
 
     const { id } = useParams<{ id: string }>();
-
     useEffect(() => {
         if (id) {
             const fetchCourseDetails = async () => {
@@ -142,6 +147,7 @@ function PurchasedCourseDetails() {
                             })),
                         })),
                     };
+
                     const totalLessonsCount = response.data.courseData.Modules.reduce(
                         (acc: any, module: any) => {
                             return acc + module.lessons.length;
@@ -177,7 +183,6 @@ function PurchasedCourseDetails() {
 
     useEffect(() => {
         const trig = () => {
-            console.log(quizData, ",.......//////////////////////////////////");
             if (quizData) {
                 setIsVisibleCode(true);
             } else setIsVisibleCode(false)
@@ -191,10 +196,7 @@ function PurchasedCourseDetails() {
         setCodeQuestion(null);
         setQuizData(null)
     }
-    console.log(modules, ' these are modules again and again')
-    console.log(codeQuestion, 'this is code question ');
-    console.log(quizData, selectedLessonLength, 'this  is quiz question.')
-
+    console.log(courseStatus,'course stateus from parnt//////////////////////////////////////////////////////////////')
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -238,6 +240,7 @@ function PurchasedCourseDetails() {
                     transition={{ duration: 0.5 }}
                     className="grid grid-cols-1 lg:grid-cols-3 gap-8"
                 >
+                    {/* <CourseProvider> */}
                     {/* Main Content Column */}
                     <div className="lg:col-span-2 space-y-6">
                         <motion.div
@@ -246,9 +249,24 @@ function PurchasedCourseDetails() {
                             transition={{ delay: 0.2 }}
                             className="bg-accent rounded-2xl shadow-lg p-6"
                         >
+                            <div className="flex justify-between items-center">
                             <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
                                 {courseData?.courseTitle}
                             </h1>
+                            {courseStatus !== undefined && courseStatus.completed && (
+                                <button className=" flex  justify-center items-center gap-1 text-4xl text-primary ">
+                                    <h1 className="text-xs text-gray-300">Completed:</h1>
+                                    <PiCertificateThin className="transition-all hover:scale-105"/>
+                                </button>
+                            )}
+
+                            {courseStatus !== undefined && courseStatus.progress < 100 && (
+                                <CirclePercentage percentage={courseStatus.progress}/>
+                            )}
+ 
+
+                            </div>
+
                             <p className="mt-4 text-gray-600 leading-relaxed m-2 mb-6">
                                 {courseData?.courseDescription}
                             </p>
@@ -281,6 +299,8 @@ function PurchasedCourseDetails() {
                         >
                             {selectedVideo ? (
                                 < VideoPlayer
+                                    courseName={courseData?.courseTitle}
+                                    tutorName={`${tutorData?.firstName} ${tutorData?.lastName}`}
                                     videoUrl={selectedVideo || ''}
                                     subtitleUrl={''}
                                     lessonLength={totalLessons}
@@ -422,19 +442,23 @@ function PurchasedCourseDetails() {
                                     </div>
 
 
-                                    <div className="flex m-2">
-                                        <h1 className="m-1 font-semibold">Expertise:</h1>
-                                        {Array.isArray(tutorData.expertise) && tutorData.expertise.length > 0 ? (
-                                            tutorData.expertise.map((expert: string) => {
-                                                return <h1 key={expert} className=" m-1">{expert || ""}</h1>;
-                                            })
-                                        ) : (
-                                            <h1>No expertise listed</h1> // Display a fallback message when no expertise is available
-                                        )}
+                                    <div className="flex flex-col justify-center items-center my-2">
+                                                <h1 className="m-1 text-sm underline text-gray-500">Expertise</h1>
+                                                <div className="w-full flex flex-wrap justify-center">
+                                                {Array.isArray(tutorData.expertise) && tutorData.expertise.length > 0 ? (
+                                                    tutorData.expertise.map((expert: string) => {
+                                                        return <h1 key={expert} className=" m-1">{expert || ""}</h1>;
+                                                    })
+                                                ) : (
+                                                    <h1>No expertise listed</h1> // Display a fallback message when no expertise is available
+                                                )}
+ 
+                                                </div>
                                     </div>
                                 </div>
                             )}
                     </div>
+                    {/* </CourseProvider> */}
                 </motion.div>
             </div>
             <ToastContainer />

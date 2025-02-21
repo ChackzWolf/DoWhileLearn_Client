@@ -5,6 +5,13 @@ import { GoVideo } from "react-icons/go";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaCode } from "react-icons/fa6";
 import { MdOutlineQuiz } from "react-icons/md";
+import userAxios from "../../../../utils/axios/userAxios.config";
+import { userEndpoint } from "../../../../constraints/userEndpoints";
+import { useParams } from "react-router-dom";
+import { getCookie } from "../../../../utils/cookieManager";
+import Spinner from "../../../common/icons/Spinner";
+import { useCourse } from "./CourseContext";
+import { CiBookmarkCheck } from "react-icons/ci";
 
 
 // export interface Module {
@@ -19,6 +26,8 @@ import { MdOutlineQuiz } from "react-icons/md";
 //   description: string;
 // }
 
+
+
 const Modules: React.FC<{
   modules: CreateCourseState 
   videoIndex: number
@@ -30,27 +39,82 @@ const Modules: React.FC<{
   onCodeSelect:(questions:any)=>void;
 }> = ({ modules, onVideoSelect, onSelectDescription, onCodeSelect,setVideoIndex,onQuizSelect, videoIndex, totalLesson }) => {
   const [openModuleIndex, setOpenModuleIndex] = useState<number | null>(0);
-  // const [openLessonIndex, setOpenLessonIndex] = useState<{ [key: number]: number | null }>({});
-
+  const { setSelectedVideoDetails, selectedVideoDetails, currentLesson, courseStatus } = useCourse();
+  const { id } = useParams<{ id: string }>();
+  const userId = getCookie('userId')
+  const [isLoading, setIsLoading ] = useState<number[] | null>(null)
   const toggleModule = (index: number) => {
     setOpenModuleIndex(openModuleIndex === index ? null : index);
     // setOpenLessonIndex({});
   };
+  const toggleLesson = async(moduleIndex: number, lessonIndex: number, videoUrl: string, description:string, totalLessons:number) => {
+    setIsLoading([moduleIndex,lessonIndex])
+    try {
+      
 
-  const toggleLesson = (_moduleIndex: number, lessonIndex: number, videoUrl: string, description:string, totalLessons:number) => {
-    // setOpenLessonIndex((prev) => ({
-    //   ...prev,
-    //   [moduleIndex]: prev[moduleIndex] === lessonIndex ? null : lessonIndex,
-    // }));
+    console.log('trig toggle lesson')
+    
+    const data = {
+      userId,
+      courseId:id,
+      moduleIndex: moduleIndex,
+      lessonIndex: lessonIndex,
+    }
+    const video = {
+      moduleIndex,
+      lessonIndex,
+      videoUrl,
+      description,
+    }
+    setSelectedVideoDetails(video)
+    const response = await userAxios.post(userEndpoint.updateCurrentLesson ,data );
+
+
+
+
+
+    console.log(response.data, 'udpated current course.');
     onVideoSelect(videoUrl); // Pass the video URL to the parent component
     onSelectDescription(description)
-    setVideoIndex(lessonIndex)
+    setVideoIndex(response.data.lesson  - 1)
     totalLesson(totalLessons)
+  } catch (error) {
+      
+  }finally{
+    setIsLoading(null)
+
+  }
   };
+
+  useEffect(()=> {
+    const handleIndexChange=()=>{
+      const data = getLessonVideo(modules,selectedVideoDetails?.moduleIndex || 0, videoIndex);
+      if(data?.videoUrl){
+
+
+        console.log('currentModuleIndex',selectedVideoDetails?.moduleIndex)
+        console.log('current lesson Index',currentLesson)
+        const video = {
+          moduleIndex: selectedVideoDetails?.moduleIndex || 0,
+          lessonIndex: currentLesson || 0,
+          videoUrl: data.videoUrl,
+          description: data.description,
+        }
+        setSelectedVideoDetails(video)
+      }
+    }
+    handleIndexChange()
+  },[currentLesson])
+
+
+
+
+
 useEffect(()=> {
   const handleIndexChange=()=>{
     const data = getLessonVideo(modules,openModuleIndex || 0, videoIndex);
     if(data?.videoUrl){
+      
       onVideoSelect(data.videoUrl); // Pass the video URL to the parent component
       onSelectDescription(data.description)
     }
@@ -85,6 +149,7 @@ const getLessonVideo = (
     }
   }
 
+
   // Return undefined if indices are invalid or video is not found
   return undefined;
 };
@@ -97,6 +162,21 @@ const getLessonVideo = (
     console.log('trig quiz',question)
     onQuizSelect(question)
   }
+  const isLessonComplete = (currentLessonIndex: number, currentModuleIndex: number) => {
+    if (!courseStatus || !courseStatus.completedLessons) {
+        console.error("courseStatus is undefined or has no completedLessons");
+        return false;
+    }
+    return courseStatus.completedLessons.some(
+        (lesson: any) => {
+            console.log("Comparing with:", lesson);
+            return lesson.module === currentModuleIndex && lesson.lesson === currentLessonIndex;
+        }
+    );
+};
+  
+  console.log(courseStatus,'///////////////////// course status now //////////////////////')
+  console.log(selectedVideoDetails, '/////////////////////////////// selecteed video details')
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -149,24 +229,28 @@ const getLessonVideo = (
                             toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description, module.lessons.length);
                           }
                         }}
-                        className={`w-full flex items-center gap-3 p-3 rounded-lg bg-accent ${lessonIndex === videoIndex ? "bg-purple-200":"bg-accent"}  hover:bg-gray-100 transition-colors`}
-                      >
-                        <GoVideo className="text-purple-600 text-xl flex-shrink-0" />
-                        <span className="text-left text-gray-700 text-sm">
-                          {lesson.title}
-                        </span>
-                        
+                        className={`w-full flex items-center justify-between gap-3 p-3 rounded-lg bg-accent ${lessonIndex === selectedVideoDetails?.lessonIndex && selectedVideoDetails.moduleIndex === moduleIndex ? "bg-purple-200":"bg-accent"} transition-colors`}
+                      > 
+                      
+                        <div className="flex gap-3">
+                          <GoVideo className="text-purple-600 text-xl flex-shrink-0" />
+                          <span className="text-left text-gray-700 text-sm">
+                            {lesson.title}
+                          </span>
+                        </div>
+
+                        <div className="flex justify-end">
+                        {isLoading !== null && isLoading[0] === moduleIndex && isLoading[1] === lessonIndex ? <Spinner/>  : ''}
+                        {isLessonComplete(lessonIndex+1, moduleIndex+1) && <CiBookmarkCheck />}
+                        {}
+
+                        </div>
                       </motion.button>
                       {lesson.questions ? lesson.questions.map((question,questionIndex)=>(
                        <motion.button
                        key={questionIndex}
                        whileHover={{ scale: 1.02 }}
                        whileTap={{ scale: 0.98 }}
-                      //  onClick={() => {
-                      //    if (typeof lesson.video === "string") {
-                      //      toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description);
-                      //    }
-                      //  }}
                        className="w-full flex items-center gap-3 p-3 rounded-lg bg-accent hover:bg-gray-100 transition-colors"
                      >
                       

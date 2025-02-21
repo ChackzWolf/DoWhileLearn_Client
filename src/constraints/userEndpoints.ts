@@ -20,4 +20,6 @@ export const userEndpoint = {
     fetchUserData: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/fetchUserData`,
     updateUserDetails: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateUserDetails`,
     googleAuth: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/googleAuth`,
+    updateCurrentLesson: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateCurrentLesson`,
+    updateCompletedLesson: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateCompletedLesson`,
 } 
