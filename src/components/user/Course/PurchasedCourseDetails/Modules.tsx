@@ -9,9 +9,9 @@ import userAxios from "../../../../utils/axios/userAxios.config";
 import { userEndpoint } from "../../../../constraints/userEndpoints";
 import { useParams } from "react-router-dom";
 import { getCookie } from "../../../../utils/cookieManager";
-import Spinner from "../../../common/icons/Spinner";
 import { useCourse } from "./CourseContext";
 import { CiBookmarkCheck } from "react-icons/ci";
+import Spinner from "../../../common/icons/SpinnerSmall";
 
 
 // export interface Module {
@@ -47,6 +47,7 @@ const Modules: React.FC<{
     setOpenModuleIndex(openModuleIndex === index ? null : index);
     // setOpenLessonIndex({});
   };
+
   const toggleLesson = async(moduleIndex: number, lessonIndex: number, videoUrl: string, description:string, totalLessons:number) => {
     setIsLoading([moduleIndex,lessonIndex])
     try {
@@ -199,7 +200,7 @@ const getLessonVideo = (
               onClick={() => toggleModule(moduleIndex)}
               className="w-full flex justify-between items-center p-4 bg-accent"
             >
-              <span className="font-medium text-gray-800">{module.name}</span>
+              <span className="font-medium text-gray-800 text-start">{module.name}</span>
               <motion.span
                 animate={{ rotate: openModuleIndex === moduleIndex ? 180 : 0 }}
                 transition={{ duration: 0.3 }}
@@ -229,20 +230,23 @@ const getLessonVideo = (
                             toggleLesson(moduleIndex, lessonIndex, lesson.video, lesson.description, module.lessons.length);
                           }
                         }}
-                        className={`w-full flex items-center justify-between gap-3 p-3 rounded-lg bg-accent ${lessonIndex === selectedVideoDetails?.lessonIndex && selectedVideoDetails.moduleIndex === moduleIndex ? "bg-purple-200":"bg-accent"} transition-colors`}
+                        className={`w-full flex items-center justify-between gap-3 rounded-lg bg-accent ${lessonIndex === selectedVideoDetails?.lessonIndex && selectedVideoDetails.moduleIndex === moduleIndex ? "bg-purple-200":"bg-accent"} transition-colors`}
                       > 
                       
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 m-3">
                           <GoVideo className="text-purple-600 text-xl flex-shrink-0" />
                           <span className="text-left text-gray-700 text-sm">
                             {lesson.title}
                           </span>
                         </div>
 
-                        <div className="flex justify-end">
-                        {isLoading !== null && isLoading[0] === moduleIndex && isLoading[1] === lessonIndex ? <Spinner/>  : ''}
-                        {isLessonComplete(lessonIndex+1, moduleIndex+1) && <CiBookmarkCheck />}
-                        {}
+                        <div className="flex justify-end  mr-3">
+                        {isLoading !== null && isLoading[0] === moduleIndex && isLoading[1] === lessonIndex ? <Spinner/> 
+                         :  (        
+                               isLessonComplete(lessonIndex+1, moduleIndex+1) && <CiBookmarkCheck className="text-2xl text-primary "/>
+                            )
+                        }
+                       
 
                         </div>
                       </motion.button>

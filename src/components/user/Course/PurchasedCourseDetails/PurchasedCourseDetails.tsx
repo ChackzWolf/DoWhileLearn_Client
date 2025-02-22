@@ -27,7 +27,7 @@ import { PiCertificateThin } from "react-icons/pi";
 import { useCourse } from "./CourseContext";
 import CirclePercentage from "../../../common/CirclePercentage";
 import VideoPlayer from "./VideoPlayer";
-
+import Spinner from "../../../common/icons/SpinnerSmall";
 
 interface Module {
     name: string;
@@ -52,19 +52,6 @@ const initialModulesState: CreateCourseState = {
     Modules: [],
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 interface TutorData {
     firstName: string;
     lastName: string;
@@ -73,13 +60,13 @@ interface TutorData {
     _id: string;
 }
 
-
 interface QuizeData {
     question: string,
     options: string[],
     correctAnswer: number;
 }
-function PurchasedCourseDetails() {
+
+function PurchasedCourseDetails({intitialCourseStatus}:{intitialCourseStatus:any}) {
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
@@ -97,12 +84,13 @@ function PurchasedCourseDetails() {
     const [selectedVideoIndex, setSelectedVideoIndex] = useState(0);
     const [_selectedLessonLength, setSelectedLessonLength] = useState(0)
     const [selectedVideoDescription, setSelectedVideoDescription] = useState<string | null>(null);
-    const { courseStatus } = useCourse();
-
-
+    const [certificate, setCertificate] = useState<string | null>(null)
+    const { courseStatus, setCourseStatus} = useCourse();
     const { id } = useParams<{ id: string }>();
+
     useEffect(() => {
         if (id) {
+            setCourseStatus(intitialCourseStatus);
             const fetchCourseDetails = async () => {
                 try {
                     const userId = getCookie("userId");
@@ -155,7 +143,7 @@ function PurchasedCourseDetails() {
                         0
                     ); // Initialize accumulator as 0
                     console.log(response.data, "courseData");
-
+                    setCourseStatus(response.data.courseStatus.purchasedCourseStatus)
                     setModules(createCourseState);
                     setTotalLessons(totalLessonsCount);
 
@@ -196,7 +184,28 @@ function PurchasedCourseDetails() {
         setCodeQuestion(null);
         setQuizData(null)
     }
+
+    useEffect(()=> {
+        const getCertificate = async()=> {
+            const userId = getCookie('userId')
+
+            const response = await userAxios.get(userEndpoint.getCertificate , { params: { id, userId } })
+            console.log(response.data,'/////////////////////////////////dddd')
+            if(response.data.success){
+                setCertificate(response.data.certificate.certificateUrl);
+            }
+        }
+        if(courseStatus !== null ){
+            if( certificate === null && courseStatus.completed){
+                getCertificate()
+            }
+        }
+
+    },[courseStatus])
+
+
     console.log(courseStatus,'course stateus from parnt//////////////////////////////////////////////////////////////')
+    console.log(certificate,'certificate url')
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -253,14 +262,17 @@ function PurchasedCourseDetails() {
                             <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600">
                                 {courseData?.courseTitle}
                             </h1>
-                            {courseStatus !== undefined && courseStatus.completed && (
-                                <button className=" flex  justify-center items-center gap-1 text-4xl text-primary ">
+                            {courseStatus !== null && courseStatus.completed && (
+                                <div className=" flex  justify-center items-center gap-1 text-4xl text-primary ">
                                     <h1 className="text-xs text-gray-300">Completed:</h1>
-                                    <PiCertificateThin className="transition-all hover:scale-105"/>
-                                </button>
+                                    {certificate === null ? <Spinner/>:(
+                                        <a href={certificate}>
+                                        <PiCertificateThin className="transition-all hover:scale-105"/>
+                                    </a>)}
+                                </div>
                             )}
 
-                            {courseStatus !== undefined && courseStatus.progress < 100 && (
+                            {courseStatus !== null && courseStatus.progress < 100 && (
                                 <CirclePercentage percentage={courseStatus.progress}/>
                             )}
  

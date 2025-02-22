@@ -12,7 +12,7 @@ import { CourseProvider } from "../../../components/user/Course/PurchasedCourseD
 function CourseDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const [isPurchased, setIsPurchased] = useState<boolean | null>(null);
-
+  const [courseStatus, setCourseStatus] = useState<any|null>(null)
 
   
   const userId = getCookie('userId');
@@ -23,7 +23,7 @@ function CourseDetailsPage() {
       });
       console.log("///////////////////////////////////////////////////////////",response.data.courseStatus,'////////////////////////////////////////////////')
       setIsPurchased(response.data.courseStatus.inPurchase);
-
+      setCourseStatus(response.data.courseStatus.purchasedCourseStatus)
     }
     checkIsPurchased();
   },[])
@@ -32,7 +32,7 @@ function CourseDetailsPage() {
 
   if(isPurchased === true) return (
     <CourseProvider>
-      <PurchasedCourseDetails/>
+      <PurchasedCourseDetails intitialCourseStatus={courseStatus}/>
     </CourseProvider>
   )
   else if(isPurchased === null) return <CourseDetailSkeleton />

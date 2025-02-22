@@ -22,4 +22,5 @@ export const userEndpoint = {
     googleAuth: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/googleAuth`,
     updateCurrentLesson: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateCurrentLesson`,
     updateCompletedLesson: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateCompletedLesson`,
+    getCertificate: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/getCertificate`,
 } 

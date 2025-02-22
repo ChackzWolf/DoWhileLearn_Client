@@ -33,7 +33,7 @@ export const CourseProvider = ({ children }: CourseProviderProps) => {
   const userId = getCookie('userId')
   const [selectedVideoDetails, setSelectedVideoDetails] = useState<SelectedVideoDetails | null>(null);
   const [currentLesson, setCurrentLesson] = useState<number | null>(null);
-  const [courseStatus, setCourseStatus] = useState();
+  const [courseStatus, setCourseStatus] = useState<any|null>(null);
 
 
   useEffect(()=>{
@@ -41,7 +41,6 @@ export const CourseProvider = ({ children }: CourseProviderProps) => {
       const response = await userAxios.get(courseEndpoint.fetchCourseDetails, {
         params: { id, userId }, withCredentials:true
       });
-      console.log("///////////////////////////////////////////////////////////",response.data.courseStatus.purchasedCourseStatus,'////////////////////////////////////////////////')
       setCourseStatus(response.data.courseStatus.purchasedCourseStatus);
     }
     checkIsPurchased();

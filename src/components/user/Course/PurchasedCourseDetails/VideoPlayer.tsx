@@ -7,6 +7,7 @@ import { getCookie } from '../../../../utils/cookieManager';
 import { useParams } from 'react-router-dom';
 import userAxios from '../../../../utils/axios/userAxios.config';
 import { userEndpoint } from '../../../../constraints/userEndpoints';
+import { debounce } from 'lodash';
 
 type Props = {
   courseName?:string;
@@ -33,6 +34,7 @@ const VideoPlayer: React.FC<Props> = ({
   onEnded,
   autoAdvance = false,
 }) => {
+  const userId = getCookie('userId')
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const { id } = useParams<{ id: string }>();
@@ -46,6 +48,9 @@ const VideoPlayer: React.FC<Props> = ({
   const [savedTime, setSavedTime] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { setCurrentLesson ,selectedVideoDetails, setCourseStatus} = useCourse();
+  const [hasMarkedComplete, setHasMarkedComplete] = useState(false);
+
+
 
   // Load video and HLS setup
   useEffect(() => {
@@ -162,7 +167,13 @@ const VideoPlayer: React.FC<Props> = ({
   const handleTimeUpdate = () => {
     if (videoRef.current) {
       const currentTime = videoRef.current.currentTime;
+      const progress = (currentTime / videoRef.current.duration) * 100;
+      if (progress >= 95 && !hasMarkedComplete) {
+        setHasMarkedComplete(true);
+        debouncedMarkComplete()
+      }
       setCurrentTime(currentTime);
+
       
       // Save progress every 5 seconds
       if (Math.floor(currentTime) % 5 === 0) {
@@ -176,6 +187,47 @@ const VideoPlayer: React.FC<Props> = ({
       }
     }
   };
+
+  const debouncedMarkComplete = debounce(async() => {
+
+
+    console.log(selectedVideoDetails?.moduleIndex,selectedVideoDetails?.moduleIndex, 'just to know //////////////////////////////')
+    const data = {
+      userId,
+      courseId: id,
+      courseName,
+      tutorName,
+      totalLessons:lessonLength,
+      moduleIndex: selectedVideoDetails?.moduleIndex || 0,
+      lessonIndex: selectedVideoDetails?.lessonIndex || 0,
+      
+    }
+    const response = await userAxios.post(userEndpoint.updateCompletedLesson, data)
+    console.log(response,' response after updating completed course ///////////////////////////////////////');
+    setCourseStatus(response.data.data);
+    setHasMarkedComplete(false)
+
+
+  }, 3000); // 1 second delay
+
+
+    // const updateCourseStatus = async()=> {
+      
+    //   console.log(selectedVideoDetails?.moduleIndex,selectedVideoDetails?.moduleIndex, 'just to know //////////////////////////////')
+    //   const data = {
+    //     userId,
+    //     courseId: id,
+    //     courseName,
+    //     tutorName,
+    //     totalLessons:lessonLength,
+    //     moduleIndex: selectedVideoDetails?.moduleIndex || 0,
+    //     lessonIndex: selectedVideoDetails?.lessonIndex || 0,
+        
+    //   }
+    //   const response = await userAxios.post(userEndpoint.updateCompletedLesson, data)
+    //   console.log(response,' response after updating completed course ///////////////////////////////////////');
+    //   setCourseStatus(response.data.data);
+    // }
 
   const handleVideoEnded = () => {
     // Clear saved progress when video completes
@@ -270,30 +322,6 @@ const VideoPlayer: React.FC<Props> = ({
     }
   };
 
-  useEffect(()=> {
-    const userId = getCookie('userId')
-    const updateCourseStatus = async()=> {
-      console.log(selectedVideoDetails?.moduleIndex,selectedVideoDetails?.moduleIndex, 'jsut to know ///////////////////')
-      const data = {
-        userId,
-        courseId: id,
-        courseName,
-        tutorName,
-        totalLessons:lessonLength,
-        moduleIndex: selectedVideoDetails?.moduleIndex || 0,
-        lessonIndex: selectedVideoDetails?.lessonIndex || 0,
-        
-      }
-      const response = await userAxios.post(userEndpoint.updateCompletedLesson, data)
-      console.log(response,' response after updating completed course ///////////////////////////////////////');
-      setCourseStatus(response.data.data);
-    }
-
-    const percent = (currentTime / duration) * 100
-    if(percent > 95){
-      updateCourseStatus()
-    }
-  },[currentTime])
 
   // console.log(selectedVideoDetails, 'selected video details')
   return (
