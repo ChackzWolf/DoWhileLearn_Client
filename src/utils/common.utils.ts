@@ -83,3 +83,99 @@ export const updateLessonVideo = (
     const averageRating = totalRating / ratedCourses.length
     return parseFloat(averageRating.toFixed(1));
   }
+
+
+  interface Course {
+    _id: string;
+    courseTitle: string;
+    courseDescription: string;
+    averageRating: number;
+    thumbnail?: string;
+    courseLevel: string;
+    courseCategory: string;
+    // Add other necessary properties
+  }
+  
+  interface PurchasedCourse {
+    courseId: string;
+    progress: number;
+    completed: boolean;
+    completedLessons: any[];
+    currentLesson: {
+      module: number;
+      lesson: number;
+    };
+    lastAccessed: string;
+  }
+  
+  interface CombinedCourse {
+    _id: string;
+    title: string;
+    description: string;
+    rating: number;
+    progress: number;
+    status: 'not-started' | 'in-progress' | 'completed';
+    imageSrc?: string;
+    level: string;
+    category: string;
+    lastAccessed?: string;
+    currentLesson?: {
+      module: number;
+      lesson: number;
+    };
+  }
+  
+  export function combineCoursesWithPurchaseStatus(courses: Course[], purchasedCourses: PurchasedCourse[]): CombinedCourse[] {
+    // Create a map of purchased courses for quick lookup
+    const purchasedCoursesMap: Record<string, PurchasedCourse> = {};
+    
+    purchasedCourses.forEach(purchasedCourse => {
+      purchasedCoursesMap[purchasedCourse.courseId] = purchasedCourse;
+    });
+    
+    // Combine the data
+    return courses.map(course => {
+      const purchaseStatus = purchasedCoursesMap[course._id];
+      
+      // If not purchased, return basic info
+      if (!purchaseStatus) {
+        return {
+          _id: course._id,
+          title: course.courseTitle,
+          description: course.courseDescription,
+          rating: course.averageRating || 0,
+          progress: 0,
+          status: 'not-started' as const,
+          imageSrc: course.thumbnail,
+          level: course.courseLevel,
+          category: course.courseCategory
+        };
+      }
+      
+      // Determine course status with proper type safety
+      let status: 'not-started' | 'in-progress' | 'completed' = 'not-started';
+      
+      if (purchaseStatus.completed) {
+        status = 'completed';
+      } else if (purchaseStatus.completedLessons && purchaseStatus.completedLessons.length > 0) {
+        status = 'in-progress';
+      }
+      
+      // For courses showing 0 progress but marked as completed, set progress to 100
+      const progress = (purchaseStatus.completed && purchaseStatus.progress === 0) ? 100 : purchaseStatus.progress;
+      
+      return {
+        _id: course._id,
+        title: course.courseTitle,
+        description: course.courseDescription,
+        rating: course.averageRating || 0,
+        progress: progress,
+        status: status,
+        imageSrc: course.thumbnail,
+        level: course.courseLevel,
+        category: course.courseCategory,
+        lastAccessed: purchaseStatus.lastAccessed,
+        currentLesson: purchaseStatus.currentLesson
+      };
+    });
+  }
