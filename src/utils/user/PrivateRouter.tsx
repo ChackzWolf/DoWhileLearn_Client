@@ -15,10 +15,11 @@ export const UserPrivateRoute = ({ children, roles }: { children: JSX.Element; r
   useEffect(() => {
     const checkAuthentication = async () => {
       let token = getCookie('userAccessToken'); // Fetch the JWT from cookies
+      let userRefreshToken = getCookie('userRefreshToken')
       if (!token) {
         // If access token is null, attempt to refresh token
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/user-refresh-token`, {}, { withCredentials: true });
+            const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/user-refresh-token`, {userRefreshToken}, { withCredentials: true });
             const newToken = response.data.accessToken;
             const refreshToken = response.data.refreshToken;
             console.log(response.data, 'response form refreshing')

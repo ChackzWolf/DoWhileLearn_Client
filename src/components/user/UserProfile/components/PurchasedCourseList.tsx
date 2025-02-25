@@ -25,7 +25,7 @@ function Courses({courses}:{courses:any}) {
 
     <div>
         <div className="flex-1  rounded-lg">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 h-auto">
+            <div className="flex gap-4 justify-center">
                 {currentCourses.map((course:any) => (
                     <CourseBadge
                       _id={course._id}

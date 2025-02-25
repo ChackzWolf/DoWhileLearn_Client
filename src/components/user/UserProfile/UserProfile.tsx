@@ -126,7 +126,7 @@ const UserProfile = ({ user }: { user: UserData }) => {
     bio: '',
     socialLinks,
   });
-  const [courses, setCourses] = useState<CombinedCourse[]|null>(null)
+  const [courses, setCourses] = useState<CombinedCourse[] | null>(null)
 
   useEffect(() => {
     if (user) {
@@ -147,18 +147,18 @@ const UserProfile = ({ user }: { user: UserData }) => {
 
       const fetchPurchasedCourses = async () => {
         if (user.purchasedCourses) {
-          console.log(user.purchasedCourses,'//////////////////////////  user.purchasedCourses')
+          console.log(user.purchasedCourses, '//////////////////////////  user.purchasedCourses')
 
-          const purchasedCourseIds = user.purchasedCourses.map((course:any)=> course.courseId)
-          console.log(purchasedCourseIds,'//////////////////////////  purchasedCourseIds')
+          const purchasedCourseIds = user.purchasedCourses.map((course: any) => course.courseId)
+          console.log(purchasedCourseIds, '//////////////////////////  purchasedCourseIds')
           const response = await axios.get(
             courseEndpoint.fetchCoursesByIds,
             { params: { ids: purchasedCourseIds } }
           );
           console.log(response, "fetched courses by ids");
-          
+
           const coursesList = combineCoursesWithPurchaseStatus(response.data.courses, user.purchasedCourses)
-          if(coursesList){
+          if (coursesList) {
             setCourses(coursesList);
           }
         }
@@ -271,7 +271,7 @@ const UserProfile = ({ user }: { user: UserData }) => {
                   className="w-full h-full rounded-full cursor-pointer overflow-hidden relative group"
                 >
                   <img
-                    src={formData.profilePicture || "/default-avatar.png"}
+                    src={formData.profilePicture || "/assets/profileImageHolder.jpg"}
                     alt="Profile"
                     className="w-full h-full object-cover"
                   />
@@ -286,7 +286,7 @@ const UserProfile = ({ user }: { user: UserData }) => {
                 </div>
               ) : (
                 <img
-                  src={formData.profilePicture || "/assets/studentProfilePic.jpg"}
+                  src={formData.profilePicture || "/assets/profileImageHolder.jpg"}
                   alt="Profile"
                   className="w-full h-full rounded-full object-cover"
                 />
@@ -379,14 +379,19 @@ const UserProfile = ({ user }: { user: UserData }) => {
                   </div>
                 </div>
               </div>
-
               {user.certifications && !isEditing && <Certifications certifications={user.certifications} />}
             </div>
-            <div className="flex flex-col my-8 ">
+
+            <div className="flex gap-10 my-8">
+              <div className="w-1/2 border border-gray-200"></div>
+              <div className="w-1/2 border border-gray-200"></div>
+            </div>
+
+            <div className="flex flex-col ">
 
               {/** Social media links */}
-              <div className={` gap-3 items-center`}>
-                <div className="flex gap-3 items-center">
+              <div className={` gap-3 items-center justify-center w-full`}>
+                <div className="flex gap-3 items-center justify-center">
                   <FaLink className="text-gray-400 text-3xl" />
                   <p className="text-sm text-gray-500 my-5">Social media</p>
                 </div>
@@ -394,10 +399,10 @@ const UserProfile = ({ user }: { user: UserData }) => {
 
                 <div>
 
-                  <div className={`flex gap-8 m-1 ${isEditing ? 'flex-col' : 'flex-row flex-wrap justify-center md:justify-start'}`}>
+                  <div className={`flex gap-8 m-1 ${isEditing ? 'flex-col' : 'flex-row flex-wrap justify-center items-center '}`}>
 
                     {socialPlatforms.map(({ name, label, icon }) => (
-                      <div key={name} className="flex items-center gap-5 flex-wrap">
+                      <div key={name} className="flex items-center justify-center gap-5 flex-wrap">
                         <a
                           href={formData.socialLinks?.[name] || "#"}
                           target="_blank"
@@ -453,11 +458,13 @@ const UserProfile = ({ user }: { user: UserData }) => {
             </div>
           )}
 
+          <div className="border border-gray-200 mt-16"></div>
+
           {courses !== null && courses.length > 0 &&
             <>
-              <div className="flex items-center gap-3 mt-14">
-                <PiVideo className="text-gray-400 text-xl" />
-                <h2 className="text-xl font-semibold text-gray-800">
+              <div className="flex items-center gap-3 my-14 w-full justify-center">
+                <PiVideo className="text-gray-400 text-3xl" />
+                <h2 className="  text-gray-500">
                   Enrolled courses
                 </h2>
               </div>

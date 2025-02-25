@@ -19,7 +19,6 @@ userAxios.interceptors.request.use(  /////to add JWT token from cookie
         const token = getCookie('userAccessToken');
         console.log(token, 'token')
         if (token) {
-            
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
@@ -39,6 +38,8 @@ userAxios.interceptors.request.use(
             try {
                 console.log('trig refresh token')
                 const userRefreshToken = getCookie('userRefreshToken');
+
+                console.log(userRefreshToken,' this is user referxhtoken')
                 const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/user-refresh-token`, {userRefreshToken}, { withCredentials: true });
                 const newToken = response.data.accessToken;
                 const refreshToken = response.data.refreshToken;
