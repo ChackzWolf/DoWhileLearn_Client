@@ -7,6 +7,8 @@ import ProfilePage from '../../../pages/user/Profile/ProfilePage';
 import TutorDetailsPage from '../../../pages/user/TutorDetailsPage/TutorDetailsPage';
 import Header from '../../user/Layout/Header';
 import { Footer } from '../../user/Layout/Footer';
+import { CertificatesPage } from '../../../pages/user/Profile/CertificatesPage';
+import { OrdersPage } from '../../../pages/user/Profile/UserOrdersPage';
 
 const UserRoutes = ()=>{
     return(
@@ -14,6 +16,8 @@ const UserRoutes = ()=>{
             <Header/>
             <Routes>
                 <Route path = '/profile' element = {<ProfilePage/>}/>
+                <Route path = '/certificates' element = {<CertificatesPage/>}/>
+                <Route path = '/orders' element = {<OrdersPage/>}/>
                 <Route path ='/AuthChoice' element = {<AuthChoice/>}/>
                 <Route path = '/otp' element = {<OtpVarification/>}/>
                 <Route path = '/payment/success' element = {<PaymentSuccessPage/>}/>

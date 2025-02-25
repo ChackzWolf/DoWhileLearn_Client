@@ -249,7 +249,7 @@ console.log(messages, 'messages')
                   </div>
                   <div className='flex flex-col w-full justify-center '>
                       <h3 className=" font-semibold ">{course.name}</h3>
-                      <h1 className='text-xs m-1'>{`${course.lastMessage?.userId=== userId ? "You" : course.lastMessage?.username} : ${course.lastMessage?.content}`}</h1>
+                      <h1 className='text-xs m-1 truncate w-48 md:w-56 overflow-hidden '>{`${course.lastMessage?.userId=== userId ? "You" : course.lastMessage?.username} : ${course.lastMessage?.content}`}</h1>
                       <h1 className='text-right text-xs'>{new Date(course.updatedAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</h1>
                   </div>
                 </div>
@@ -291,9 +291,8 @@ console.log(messages, 'messages')
                 }}
               >
                 <div className={`flex gap-3 ${message.userId !== userId &&'justify-center'} `}>
-                {message.userId !== userId &&  <img src={!message.imageUrl  || message.imageUrl === "NaN"? '/assets/profileImageHolder.jpg': message.imageUrl} className='h-8 w-8 rounded-full' alt="" />}
-                  
-                  <div className=''>
+                  {message.userId !== userId &&  <img src={message.imageUrl === "NaN" ? '/assets/profileImageHolder.jpg': message.imageUrl} className='h-8 w-8 rounded-full' alt="" />}
+                  <div className='w-44 md:w-56 break-words'>
                     {message.userId !== userId && <strong > {message.username}</strong>}
                     <p className=''>{message.content}</p>
                   </div>

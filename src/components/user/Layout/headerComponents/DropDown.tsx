@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../../redux/store/store';
 import { ROUTES } from '../../../../routes/Routes';
 import {AnimatePresence, motion} from 'framer-motion'
+import { IoMdReorder } from 'react-icons/io';
 
 
 const HeaderDropdown: React.FC = () => {
@@ -45,28 +46,33 @@ const HeaderDropdown: React.FC = () => {
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsOpen(false); // Close the dropdown
+                setIsOpen(false);
             }
         };
 
-        // Add the event listener when the dropdown is open
         if (isOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         } else {
             document.removeEventListener('mousedown', handleClickOutside);
         }
 
-        // Clean up the event listener when the component unmounts
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [isOpen]);
 
     const toWishList =() => {
+        setIsOpen(false)
         navigate(ROUTES.user.wishlist)
     }
     const toProfile =()=> {
+        setIsOpen(false)
         navigate(ROUTES.user.profile);
+    }
+
+    const toOrders = () => {
+        setIsOpen(false)
+        navigate(ROUTES.user.orders)
     }
 
 
@@ -128,6 +134,7 @@ const HeaderDropdown: React.FC = () => {
                         <ul>
                             <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] text-sm md:text-base lg:text-base cursor-pointer flex items-center gap-3" onClick={toWishList}> <FaRegHeart /> Wishlist</li>
                             <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] text-sm md:text-base lg:text-base cursor-pointer flex items-center gap-3" onClick={toProfile}> <RiAccountBoxLine /> Profile</li>
+                            <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] text-sm md:text-base lg:text-base cursor-pointer flex items-center gap-3" onClick={toOrders}> <IoMdReorder /> Orders</li>
                             <li className="px-4 py-2 hover:bg-gray-100 hover:text-[#7C24F0] text-sm md:text-base lg:text-base cursor-pointer flex items-center gap-3" onClick={handleLogout}> <CiLogout /> Logout</li>
                         </ul>
                 </motion.div>

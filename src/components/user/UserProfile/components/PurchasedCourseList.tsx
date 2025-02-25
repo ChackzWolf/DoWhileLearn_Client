@@ -25,8 +25,10 @@ function Courses({courses}:{courses:any}) {
 
     <div>
         <div className="flex-1  rounded-lg">
+
             <div className="flex gap-4 justify-center">
-                {currentCourses.map((course:any) => (
+                {currentCourses.map((course:any,index:number) => (
+                  <div key={index}>
                     <CourseBadge
                       _id={course._id}
                       title={course.title}
@@ -36,6 +38,8 @@ function Courses({courses}:{courses:any}) {
                       imageSrc={course.imageSrc}
                       status={course.status}
                     />
+                  </div>
+
                 ))}
             </div>
 
@@ -75,7 +79,7 @@ function Courses({courses}:{courses:any}) {
           >
             <RxDoubleArrowRight className="text-2xl hover:scale-110 transition-all text-[#7C24F0]" />
           </button>
-      </div>
+        </div>
           }
 
         </div>

@@ -23,4 +23,6 @@ export const userEndpoint = {
     updateCurrentLesson: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateCurrentLesson`,
     updateCompletedLesson: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/updateCompletedLesson`,
     getCertificate: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/getCertificate`,
+    fetchOrdersOfUser: `${import.meta.env.VITE_API_GATEWAY_BASE_URL}/fetchOrdersOfUser`,
+
 } 

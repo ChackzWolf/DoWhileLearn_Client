@@ -14,8 +14,10 @@ export const ROUTES = {
         forgotPasswordOTP:        '/user/auth/forgot-password/otp',
 
         profile:  '/user/profile',
+        certificates: '/user/certificates',
         wishlist: '/user/wishlist',
         courses:  '/courses',
+        orders: '/user/orders',
         courseDetails: (id:string)=> `/course/${id}`,
         tutorDetails:(id:string) => `/user/tutor/profile/${id}`
     },
