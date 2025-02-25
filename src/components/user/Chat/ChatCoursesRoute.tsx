@@ -27,6 +27,7 @@ interface Message {
   id: string;
   userId: string;
   username: string;
+  imageUrl:string;
   content: string;
   timestamp: Date;
 }
@@ -170,6 +171,17 @@ const CourseListAndChat: React.FC = () => {
         console.log('message send response', response);
         if(response.success && selectedCourse.courseId === response.courseId){
           // setMessages(prevMessages => [...prevMessages, response.message]);
+
+          setMessages(prevMessages => {
+            const isDuplicate = prevMessages.some(msg => msg.id === response.message.id);
+            
+            if (!isDuplicate) {
+              return [...prevMessages, response.message];
+            }
+            
+            return prevMessages; // If duplicate, return the same state without changes
+          });
+          
         }
       });
 
@@ -187,6 +199,7 @@ const CourseListAndChat: React.FC = () => {
     setNewMessage(prev => prev + emojiObject.emoji);
   };
 console.log(viewChat, 'view chat')
+console.log(messages, 'messages')
   return (
     <div className="fixed inset-0 z-50 pointer-events-none ">
     {isLogin && 
@@ -277,9 +290,17 @@ console.log(viewChat, 'view chat')
                   wordWrap: 'break-word', // Ensure long text wraps within the bubble
                 }}
               >
-                {message.userId !== userId && <strong> {message.username}</strong>}
-                <p>{message.content}</p>
+                <div className={`flex gap-3 ${message.userId !== userId &&'justify-center'} `}>
+                {message.userId !== userId &&  <img src={!message.imageUrl  || message.imageUrl === "NaN"? '/assets/profileImageHolder.jpg': message.imageUrl} className='h-8 w-8 rounded-full' alt="" />}
+                  
+                  <div className=''>
+                    {message.userId !== userId && <strong > {message.username}</strong>}
+                    <p className=''>{message.content}</p>
+                  </div>
+                </div>
+                
                 <p className='text-xs text-right'>{new Date(message.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}</p>
+
               </div>
             ))}
             <div ref={messagesEndRef} />
