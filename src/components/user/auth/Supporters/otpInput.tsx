@@ -7,6 +7,7 @@ import { setUserLogin } from '../../../../redux/authSlice/authSlice';
 import { setCookie } from '../../../../utils/cookieManager';
 import { ROUTES } from '../../../../routes/Routes';
 import { toast } from 'react-toastify';
+import { Loader } from 'lucide-react';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -21,6 +22,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
   const [otp, setOtp] = useState(['', '', '', '']);
   const [otpCount, setOtpCount] = useState<number>(0)
   const [message, setMessage] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(false);
 
 
     const [otpCountDown, setOtpCountDown] = useState<number>(() => {
@@ -116,6 +118,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
   };
 
   const handleResend = async() => {
+      setIsLoading(true);
       const data = {
           email,
           tempId
@@ -125,14 +128,18 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       const {message, success} = response.data;
       setMessage(message);
       if(success){
-          setOtpCountDown(60);
+        setIsLoading(false)
+        setOtpCountDown(60);
       }else{
+        setIsLoading(false)
+        navigate(`${ROUTES.tutor.signup}${'?message=registrationTimeOut'}`)
         console.log(message)
       }
   }
 
   return (
     <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto justify-center items-center">
+      {isLoading&& <Loader/>}
       <h2 className="text-2xl font-semibold text-gray-800 text-center mb-4">OTP Verification</h2>
       <p className="text-gray-600 text-center mb-1">An OTP has send to {email}</p>
       <p className="text-gray-600 text-center mb-6">Enter the OTP sent to your email</p>
@@ -143,7 +150,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             <p className="text-[#7C24F0] text-center text-xs">{message}</p>
 
       }
-      <div className="flex justify-center space-x-4">
+      <div className="flex justify-center space-x-4 mt-5">
         {otp.map((digit, index) => (
           <input
             key={index}

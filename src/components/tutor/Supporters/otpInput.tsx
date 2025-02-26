@@ -64,7 +64,6 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       }
     }
   };
-  
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === 'Backspace') {
