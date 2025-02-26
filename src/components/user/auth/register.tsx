@@ -19,7 +19,7 @@ import Loader from "../../common/icons/loader";
 function RegisterUser() {
     
     const navigate = useNavigate();
-    const [isLoading, setIsLoading]
+    const [isLoading, setIsLoading] = useState(false);
     const [emailExists,setEmailExists] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
