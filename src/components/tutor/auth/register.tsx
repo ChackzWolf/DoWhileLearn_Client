@@ -120,6 +120,7 @@ function RegisterTutor() {
             } else {
                 setEmailExists(true);
                 setErrors({ email: 'Email already exists' });
+                toast.error("Email already exists")
                 console.log('Registration failed:', response.data);
             }
         } catch (err) {

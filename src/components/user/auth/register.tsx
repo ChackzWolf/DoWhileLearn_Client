@@ -11,6 +11,7 @@ import { ROUTES } from "../../../routes/Routes";
 import OAuth from "../../common/Auth/CustomGoogleLoginButton";
 import {motion} from "framer-motion"
 import { Player } from "@lottiefiles/react-lottie-player";
+import { toast } from "react-toastify";
 
 
 
@@ -90,6 +91,7 @@ function RegisterUser() {
             }else{
                 console.log(response.data)
                 setEmailExists(true)
+                toast.error('Email already exists.')
                 console.log('failed')
             }
         }catch(err){

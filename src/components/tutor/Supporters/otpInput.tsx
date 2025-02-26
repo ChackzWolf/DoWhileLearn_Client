@@ -123,7 +123,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             navigate(ROUTES.tutor.completeRegisteration);
 
         }else{
-          setIsLoading(false)
+            setIsLoading(false)
             console.log('failed response')
             toast.error(message)
             setMessage(message);
@@ -132,7 +132,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
         console.log('Entered OTP:', otpValue);
     }else{
       setIsLoading(false)
-        console.log('invalid OTP')
+      console.log('invalid OTP')
     }
     } catch (error) {
       console.log(error)
@@ -174,11 +174,9 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       {otpCountDown==0 ?
       
       <p className="text-[#7C24F0] text-center text-xs">OTP time out try resend otp again.</p> :
-
-            <p className="text-[#7C24F0] text-center text-xs">{message}</p>
-
+            <p className="text-[#7C24F0] text-center text-xs ">{message}</p>
       }
-      <div className="flex justify-center space-x-4">
+      <div className="flex justify-center space-x-4 mt-5">
         {otp.map((digit, index) => (
           <input
             key={index}
@@ -198,13 +196,13 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
 
       </div>
       <button
-  onClick={handleSubmit}
-  className={`w-full py-2 rounded-lg transition-colors duration-300 ${
-    otpCount < 4 || otpCountDown == 0
-      ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
-      : 'bg-[#7C24F0] text-white hover:bg-[#7434c7]'
-  }`}
-  disabled={otpCount < 4 || otpCountDown <  1}
+        onClick={handleSubmit}
+        className={`w-full py-2 rounded-lg transition-colors duration-300 ${
+        otpCount < 4 || otpCountDown == 0
+          ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+          : 'bg-[#7C24F0] text-white hover:bg-[#7434c7]'
+        }`}
+      disabled={otpCount < 4 || otpCountDown <  1}
 >
   Verify OTP
 </button>
