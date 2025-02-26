@@ -12,14 +12,12 @@ import OAuth from "../../common/Auth/CustomGoogleLoginButton";
 import {motion} from "framer-motion"
 import { Player } from "@lottiefiles/react-lottie-player";
 import { toast } from "react-toastify";
-import Loader from "../../common/icons/loader";
 
 
 
 function RegisterUser() {
     
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
     const [emailExists,setEmailExists] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -82,7 +80,7 @@ function RegisterUser() {
 
 
     const handleSubmit = async (value: typeof initialValues, {setSubmitting}: { setSubmitting: (isSubmiting: boolean)=> void} ) => {
-        try{setIsLoading(true)
+        try{
 
             const response = await axios.post(userEndpoint.register, value);
             console.log('register data send succesfully');
@@ -101,7 +99,6 @@ function RegisterUser() {
 
         }finally {
             setSubmitting(false);
-            setIsLoading(false)
         }
     }
 
@@ -112,7 +109,7 @@ function RegisterUser() {
     return (
         <div className="bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end min-h-screen min-w-screen flex flex-col overflow-hidden">
             <Header/>
-        {isLoading && <Loader/>}
+
         <div className="flex flex-col md:flex-row h-full overflow-hidden">
 
 

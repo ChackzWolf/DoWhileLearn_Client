@@ -6,6 +6,7 @@ import { userEndpoint } from '../../../../constraints/userEndpoints';
 import { setUserLogin } from '../../../../redux/authSlice/authSlice';
 import { setCookie } from '../../../../utils/cookieManager';
 import { ROUTES } from '../../../../routes/Routes';
+import { toast } from 'react-toastify';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -88,7 +89,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
         }
 
         const response =await axios.post(userEndpoint.verifyOTP, data); 
-        const {success, refreshToken, accessToken, userId} = response.data;
+        const {success, refreshToken, accessToken, userId, message} = response.data;
 
         if(success){
             
@@ -103,10 +104,10 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
             navigate(ROUTES.common.landingPage)
 
         }else{
+            setMessage(message);
+            toast.error(message)
             console.log('failed response')
         }
-
-        console.log('Entered OTP:', otpValue);
         // Add your OTP verification logic here
     }else{
         console.log('invalid OTP')
