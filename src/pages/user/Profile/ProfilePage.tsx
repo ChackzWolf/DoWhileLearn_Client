@@ -64,7 +64,7 @@ function ProfilePage() {
         const fetchUserData = async()=> {
             const response = await userAxios.get(userEndpoint.fetchUserData, {params:{userId}, withCredentials:true})
             console.log(response.data.result.userData, ' this is user data')
-            const {_id, firstName, lastName, profilePicture, email, phoneNumber,bio, purchasedCourses, socialLinks, certifications } = response.data.result.userData
+            const {_id, firstName, lastName, profilePicture, email, phoneNumber,bio ,purchasedCourses, socialLinks, certifications } = response.data.result.userData
 
             const data = {
                 _id,
