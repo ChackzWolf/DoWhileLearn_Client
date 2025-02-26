@@ -145,9 +145,9 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       <p className="text-gray-600 text-center mb-6">Enter the OTP sent to your email</p>
       {otpCountDown==0 ?
       
-      <p className="text-[#7C24F0] text-center text-xs">OTP time out try resend otp again.</p> :
+      <p className="text-[#7C24F0] text-center text-xs mb-5">OTP time out try resend otp again.</p> :
 
-            <p className="text-[#7C24F0] text-center text-xs">{message}</p>
+            <p className="text-[#7C24F0] text-center text-xs mb-5">{message}</p>
 
       }
       <div className="flex justify-center space-x-4 mt-5">
@@ -167,7 +167,6 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
       </div>
       <div className='text-center mb-6'>
             {otpCountDown >  0 ? (<h1 className='text-xs'>{otpCountDown}</h1>) :( <button className='hover:text-[#7C24F0] text-xs' onClick={handleResend}> ResendOTP </button>)}
-
       </div>
       <button
   onClick={handleSubmit}
