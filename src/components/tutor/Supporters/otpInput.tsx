@@ -8,6 +8,7 @@ import { tutorEndpoint } from '../../../constraints/tutorEndpoint';
 import Loader from '../../common/icons/loader';
 import { setTutorData } from '../../../redux/tutorSlice/tutorSlice';
 import { ROUTES } from '../../../routes/Routes';
+import { toast } from 'react-toastify';
 interface OTPInputProps{
     tempId:string;
     email:string
@@ -92,7 +93,7 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
         }
         console.log('goin to tutor endpoint')
         const response = await axios.post(tutorEndpoint.verifyOTP, data); 
-        const {success, refreshToken, accessToken,_id ,tutorId, tutorData} = response.data;
+        const {success, refreshToken, accessToken,_id ,tutorId, tutorData,message} = response.data;
         console.log(tutorId, ' tutorId')
         console.log(_id,' _Id')
 
@@ -124,6 +125,8 @@ const OTPInput: React.FC<OTPInputProps> = ({tempId,email}) => {
         }else{
           setIsLoading(false)
             console.log('failed response')
+            toast.error(message)
+            setMessage(message);
         }
 
         console.log('Entered OTP:', otpValue);
