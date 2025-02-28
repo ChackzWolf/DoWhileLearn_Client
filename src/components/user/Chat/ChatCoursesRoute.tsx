@@ -45,8 +45,8 @@ const CourseListAndChat: React.FC = () => {
   const [viewChat, setViewChat] = useState<boolean>(false);
   const [chatRoomsList, setChatRoomsList] = useState<ChatRoom[]>([])
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null); // Reference to dropdown container
-
+  const dropdownRef = useRef<HTMLDivElement>(null); // Reference to dropdown container
+  const userRefreshToken = getCookie('userRefreshToken') 
 
   const [isVisible, setIsVisible] = useState(false);
     
@@ -82,8 +82,10 @@ const CourseListAndChat: React.FC = () => {
 
     const newSocket = io("wss://dowhilelearn.space", {
       transports: ['websocket', 'polling'],
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000, 
       auth: {
-        token: getCookie('userRefreshToken') 
+        token: userRefreshToken
       }
     });
 
