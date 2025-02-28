@@ -6,11 +6,9 @@ import {
 } from "../../../components/Interfaces/CourseInterface/ICreateCourse";
 import { loadStripe } from "@stripe/stripe-js";
 
-import { courseEndpoint } from "../../../constraints/courseEndpoints";
 import { motion } from 'framer-motion';
 import { FiClock, FiBook, FiAward, FiStar } from "react-icons/fi";
 import { useDispatch } from "react-redux";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect, useState } from "react";
@@ -30,6 +28,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { ROUTES } from "../../../routes/Routes";
 import { setUserLogout } from "../../../redux/authSlice/authSlice";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import Spinner from "../../common/icons/SpinnerSmall";
 
 
 interface Module {
@@ -62,18 +61,29 @@ interface TutorData {
     profilePicture: string;
     _id: string;
 }
-function CourseDetails() {
+
+
+interface TutorData {
+    firstName: string;
+    lastName: string;
+    expertise: string[];
+    profilePicture: string;
+    _id: string;
+  }
+  
+function CourseDetails({course,tutorData}:{course:any,tutorData:TutorData}) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [courseData, setCourseData] = useState<ICreateCourse1 | null>(null);
-    const [tutorData, setTutorData] = useState<TutorData | null>(null);
+    // const [tutorData, setTutorData] = useState<TutorData | null>(null);
     const [inCart, setInCart] = useState(false);
     const [tutorId, setTutorId] = useState();
     const [benefits_prerequisites, setbenefits_prerequisites] = useState<ICreateCourse2 | null>(null);
     const [totalLessons, setTotalLessons] = useState();
     const [modules, setModules] = useState<CreateCourseState>(initialModulesState);
     const [activeTab, setActiveTab] = useState('overview');
+    const [wishListLoading, setWishListLoading] = useState<boolean>(false)
 
     const { id } = useParams<{ id: string }>();
 
@@ -82,41 +92,35 @@ function CourseDetails() {
             const fetchCourseDetails = async () => {
                 try {
                     setIsLoading(true);
-                    const userId = getCookie("userId");
-                    console.log();
-                    const response = await axios.get(courseEndpoint.fetchCourseDetails, {
-                        params: { id, userId }, withCredentials: true
-                    });
-                    setTutorId(response.data.courseData.tutorId);
+                    setTutorId(course.tutorId);
 
-                    console.log(response.data.courseData, "course ");
-                    setInCart(response.data.courseStatus.inCart);
+                    console.log(course, "course ");
+                    // setInCart(response.data.courseStatus.inCart);
 
                     const theCourseData: ICreateCourse1 = {
-                        thumbnail: response.data.courseData.thumbnail,
-                        courseTitle: response.data.courseData.courseTitle,
-                        courseDescription: response.data.courseData.courseDescription,
-                        coursePrice: response.data.courseData.coursePrice,
-                        discountPrice: response.data.courseData.discountPrice,
-                        courseCategory: response.data.courseData.courseCategory,
-                        courseLevel: response.data.courseData.courseLevel,
-                        demoURL: response.data.courseData.demoURL,
-                        courseId: response.data.courseData._id,
-                        tutorId: response.data.courseData.tutorId,
-                        averageRating: response.data.courseData.averageRating,
-                        ratingCount: response.data.courseData.ratingCount,
+                        thumbnail: course.thumbnail,
+                        courseTitle: course.courseTitle,
+                        courseDescription: course.courseDescription,
+                        coursePrice: course.coursePrice,
+                        discountPrice: course.discountPrice,
+                        courseCategory: course.courseCategory,
+                        courseLevel: course.courseLevel,
+                        demoURL: course.demoURL,
+                        courseId: course._id,
+                        tutorId: course.tutorId,
+                        averageRating: course.averageRating,
+                        ratingCount: course.ratingCount,
                     };
-                    console.log(' this is the data ', response.data.tutorData)
                     setCourseData(theCourseData);
 
                     const courseDetails: ICreateCourse2 = {
                         prerequisites:
-                            response.data.courseData.benefits_prerequisites.prerequisites,
-                        benefits: response.data.courseData.benefits_prerequisites.benefits,
+                            course.benefits_prerequisites.prerequisites,
+                        benefits: course.benefits_prerequisites.benefits,
                     };
                     setbenefits_prerequisites(courseDetails);
                     const createCourseState: CreateCourseState = {
-                        Modules: response.data.courseData.Modules.map((module: Module) => ({
+                        Modules: course.Modules.map((module: Module) => ({
                             name: module.name,
                             description: module.description,
                             lessons: module.lessons.map((lesson) => ({
@@ -127,21 +131,17 @@ function CourseDetails() {
                             })),
                         })),
                     };
-                    const modulesLength = response.data.courseData.Modules.length;
-                    const totalLessonsCount = response.data.courseData.Modules.reduce(
+                    // const modulesLength = course.Modules.length; commented this since it is not used.
+                    const totalLessonsCount = course.Modules.reduce(
                         (acc: any, module: any) => {
                             return acc + module.lessons.length;
                         },
                         0
                     ); // Initialize accumulator as 0
 
-                    console.log(modulesLength);
-                    console.log(totalLessonsCount);
-
                     setModules(createCourseState);
                     setTotalLessons(totalLessonsCount);
                     console.log(courseData, "courseData");
-                    setTutorData(response.data.tutorData)
                     console.log(tutorData, "tutorData")
                     setIsLoading(false);
                 } catch (error) {
@@ -212,8 +212,8 @@ function CourseDetails() {
         }
     };
 
-    const handleAddToCart = async () => {
-
+    const handleAddToWishList = async () => {
+        setWishListLoading(true)
         try {
             const userId = getCookie("userId");
             console.log(userId, "addtocart clicked");
@@ -244,6 +244,8 @@ function CourseDetails() {
             if (!handleBlockedUser(error)) {
                 console.log('error in fetching course', error)
             } else handleBlockedUser(error)
+        }finally{
+            setWishListLoading(false)
         }
 
     };
@@ -413,16 +415,23 @@ function CourseDetails() {
                                     >
                                         {isLoading ? 'Processing...' : 'Enroll Now'}
                                     </button>
+
+                                    {wishListLoading ? (
+                                        <div className="flex w-12 h-12 justify-center items-center">
+                                            <Spinner/>
+                                        </div>):(
                                     <button
-                                        onClick={handleAddToCart}
-                                        className="p-3 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                                    >
-                                        {inCart ? (
-                                            <FaHeart className="text-2xl" />
-                                        ) : (
-                                            <FaRegHeart className="text-2xl" />
-                                        )}
-                                    </button>
+                                    onClick={handleAddToWishList}
+                                    className="p-3 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                                >
+                                    {inCart ? (
+                                        <FaHeart className="text-2xl" />
+                                    ) : (
+                                        <FaRegHeart className="text-2xl" />
+                                    )}
+                                </button>
+                               )}
+
                                 </div>
                                 {tutorData &&
                                     (

@@ -66,11 +66,11 @@ interface QuizeData {
     correctAnswer: number;
 }
 
-function PurchasedCourseDetails({intitialCourseStatus}:{intitialCourseStatus:any}) {
+function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitialCourseStatus:any,course:any,tutorData:TutorData}) {
     const dispatch = useDispatch();
     const navigate = useNavigate()
 
-    const [tutorData, setTutorData] = useState<TutorData | null>(null);
+    // const [tutorData, setTutorData] = useState<TutorData | null>(null);
     const [codeQuestion, setCodeQuestion] = useState<any | null>(null);
     const [quizData, setQuizData] = useState<QuizeData | null>(null)
     const [activeTab, setActiveTab] = useState("overview");
@@ -93,38 +93,37 @@ function PurchasedCourseDetails({intitialCourseStatus}:{intitialCourseStatus:any
             setCourseStatus(intitialCourseStatus);
             const fetchCourseDetails = async () => {
                 try {
-                    const userId = getCookie("userId");
                     console.log();
-                    const response = await userAxios.get(userEndpoint.fetchCourseDetails, { params: { id, userId } });
+                    // const response = await userAxios.get(userEndpoint.fetchCourseDetails, { params: { id, userId } });
 
-                    console.log(response.data.courseData, "course ");
+                    console.log(course, "course ");
 
                     const theCourseData: ICreateCourse1 = {
-                        thumbnail: response.data.courseData.thumbnail,
-                        courseTitle: response.data.courseData.courseTitle,
-                        courseDescription: response.data.courseData.courseDescription,
-                        coursePrice: response.data.courseData.coursePrice,
-                        discountPrice: response.data.courseData.discountPrice,
-                        courseCategory: response.data.courseData.courseCategory,
-                        courseLevel: response.data.courseData.courseLevel,
-                        demoURL: response.data.courseData.demoURL,
-                        courseId: response.data.courseData._id,
-                        averageRating: response.data.courseData.averageRating,
-                        ratingCount: response.data.courseData.ratingCount,
+                        thumbnail: course.thumbnail,
+                        courseTitle: course.courseTitle,
+                        courseDescription: course.courseDescription,
+                        coursePrice: course.coursePrice,
+                        discountPrice: course.discountPrice,
+                        courseCategory: course.courseCategory,
+                        courseLevel: course.courseLevel,
+                        demoURL: course.demoURL,
+                        courseId: course._id,
+                        averageRating: course.averageRating,
+                        ratingCount: course.ratingCount,
 
                     };
-                    console.log(response.data)
-                    setTutorData(response.data.tutorData)
+                    // console.log(tutor)
+                    // setTutorData(tutor)
                     setCourseData(theCourseData);
 
                     const courseDetails: ICreateCourse2 = {
                         prerequisites:
-                            response.data.courseData.benefits_prerequisites.prerequisites,
-                        benefits: response.data.courseData.benefits_prerequisites.benefits,
+                            course.benefits_prerequisites.prerequisites,
+                        benefits: course.benefits_prerequisites.benefits,
                     };
                     setbenefits_prerequisites(courseDetails);
                     const createCourseState: CreateCourseState = {
-                        Modules: response.data.courseData.Modules.map((module: Module) => ({
+                        Modules: course.Modules.map((module: Module) => ({
                             name: module.name,
                             description: module.description,
                             lessons: module.lessons.map((lesson) => ({
@@ -136,14 +135,13 @@ function PurchasedCourseDetails({intitialCourseStatus}:{intitialCourseStatus:any
                         })),
                     };
 
-                    const totalLessonsCount = response.data.courseData.Modules.reduce(
+                    const totalLessonsCount = course.Modules.reduce(
                         (acc: any, module: any) => {
                             return acc + module.lessons.length;
                         },
                         0
                     ); // Initialize accumulator as 0
-                    console.log(response.data, "courseData");
-                    setCourseStatus(response.data.courseStatus.purchasedCourseStatus)
+                    setCourseStatus(intitialCourseStatus)
                     setModules(createCourseState);
                     setTotalLessons(totalLessonsCount);
 
