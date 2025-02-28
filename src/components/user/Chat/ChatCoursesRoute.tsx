@@ -80,7 +80,7 @@ const CourseListAndChat: React.FC = () => {
   // Socket connection effect
   useEffect(() => {
 
-    const newSocket = io('https://dowhilelearn.space', {
+    const newSocket = io("wss://dowhilelearn.space", {
       transports: ['websocket', 'polling'],
       auth: {
         token: getCookie('userRefreshToken') 
