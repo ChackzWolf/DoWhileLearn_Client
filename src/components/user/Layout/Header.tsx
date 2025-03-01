@@ -5,14 +5,24 @@ import { RootState } from "../../../redux/store/store";
 import HeaderDropdown from "./headerComponents/DropDown";
 import { ROUTES } from "../../../routes/Routes";
 import SearchBar from "./headerComponents/SearchBar";
+import { useEffect } from "react";
+import { getCookie } from "../../../utils/cookieManager";
+import { setUserLogin } from "../../../redux/authSlice/authSlice";
+import { useDispatch } from "react-redux";
 
 
 
 const Header = () => {
     const isLogin = useSelector((state: RootState) => state.userAuth.isLogin);
     const navigate = useNavigate()
- 
-
+    const dispatch = useDispatch()
+    useEffect(()=>{
+        const userId = getCookie('userId');
+        const userRefreshToken = getCookie('userRefreshToken')
+        if(userId && userRefreshToken){
+            dispatch(setUserLogin())
+        }   
+    },[isLogin])
 
     return (
 

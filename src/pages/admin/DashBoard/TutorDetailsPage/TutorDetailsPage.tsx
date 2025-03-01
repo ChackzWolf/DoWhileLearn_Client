@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import TutorProfile from '../../../../components/common/Tutor/TutorDetails'
 import { useParams } from 'react-router-dom';
-import Loader from '../../../../components/common/icons/loader';
 import adminAxios from '../../../../utils/axios/adminAxios.config';
 import { adminEndpoint } from '../../../../constraints/adminEndpoints';
+import { ProfileSkeleton } from '../../../../components/common/Skeleton/UserProfileSkeleton';
 
 
 function TutorDetailsPage() {
     const { id } = useParams<{ id: string }>();
-    const [data, setData] = useState({});
+    const [data, setData] = useState(null);
     useEffect(()=>{
         const fetchTutorDetails = async()=>{
             const response = await adminAxios.get(adminEndpoint.fetchTutorDetails,{
@@ -22,7 +22,7 @@ function TutorDetailsPage() {
         }
         fetchTutorDetails()
     },[])
-  return   data ? <TutorProfile tutor={data} role = "ADMIN" /> : <Loader/>
+  return   data ? <TutorProfile tutor={data} role = "ADMIN" /> : <ProfileSkeleton/>
 }
 
 export default TutorDetailsPage

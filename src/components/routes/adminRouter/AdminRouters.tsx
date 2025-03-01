@@ -2,7 +2,6 @@ import {Routes, Route} from 'react-router-dom';
 import AdminDashBoardPage from '../../../pages/admin/DashBoard/AdminDashBoardPage';
 import StudentsPage from '../../../pages/admin/DashBoard/StudentsPage';
 import TutorsPage from '../../../pages/admin/DashBoard/TutorsPage';
-import CourseDetailsPage from '../../../pages/tutor/Course/CourseDetailsPage';
 import StudentDetailsPage from '../../../pages/admin/DashBoard/StudentsDetailsPage/StudentDetailsPage';
 import TutorDetailsPage from '../../../pages/admin/DashBoard/TutorDetailsPage/TutorDetailsPage';
 import CoursesPage from '../../../pages/admin/DashBoard/CoursesPage';
@@ -10,6 +9,7 @@ import PayoutsPage from '../../../pages/admin/DashBoard/PayoutsPage';
 import { ToastContainer } from 'react-toastify';
 import Header from '../../admin/Layout/header';
 import SideNav from '../../admin/Layout/SideNav';
+import CourseDetailsPage from '../../../pages/user/Courses/CourseDetailsPage';
 
 
 const AdminRoutes = ()=>{
@@ -18,8 +18,8 @@ const AdminRoutes = ()=>{
             <div className='h-full md:w-2/12'>
                 <ToastContainer/>
             </div>
-        <Header/>
-            <div className='flex h-full w-full bg-accent overflow-hidden'>
+            <Header/>
+            <div className='flex h-full w-full bg-accent overflow-hidden ${credentialVisible ? "bg-black bg-opacity-50" : "opacity-0 hidden"}`'>
                 <SideNav/>
                 <div className='h-full md:w-10/12 w-full md:pr-8'>
                 <Routes>

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Table from "../../common/Layouts/Table";
 import { ROUTES } from "../../../routes/Routes";
 import adminAxios from "../../../utils/axios/adminAxios.config";
+import { motion } from 'framer-motion';
+import Spinner from "../../common/icons/Spinner";
 
 
 interface IUser{
@@ -25,6 +27,13 @@ function Students() {
   const navigate = useNavigate();
   const [students, setStudents] = useState<IUser[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [confirmTemplateVisible, setConfirmTemplateVisible] = useState(false)
+  const [name, setName] = useState<string | null>(null);
+  const [isBlocked, setIsBlocked] = useState<boolean | null>(null);
+  const [userId, setUserId] = useState<string>('');
+  const [isBlocking, setIsBlocking] = useState<boolean>(false)
+
+
   useEffect(() => {
       setIsLoading(true)
       const fetchCourses = async () => {
@@ -42,19 +51,37 @@ function Students() {
     }, []);
 
     const handleToggleBlock = async (studentId:string) => {
+      setIsBlocking(true)
       const response = await adminAxios.post(adminEndpoint.toggleBlockStudent, {userId:studentId})
-      if(response.status = 202){
-        setStudents((prevStudents) =>
-        prevStudents.map((student) =>
-          student._id === studentId
-            ? { ...student, isblocked: !student.isblocked } // Toggle the isblocked value
-            : student
-        )
-      );
-      }
+        if(response.status = 202){
+          setStudents((prevStudents) =>
+          prevStudents.map((student) =>
+            student._id === studentId
+              ? { ...student, isblocked: !student.isblocked } // Toggle the isblocked value
+              : student
+            )
+          );
+        }
+        
+        setConfirmTemplateVisible(false)
+        setIsBlocking(false)
   }
 
+  const confirmBlock = (userId:string, name:string, isBlocked:boolean)=> {
+    setUserId(userId)
+    setName(name)
+    setIsBlocked(isBlocked)
+    setConfirmTemplateVisible(true);
+  }
 
+  const cancelBlock = ()=>{
+    setUserId('')
+    setName(null);
+    setIsBlocked(null);
+    setConfirmTemplateVisible(false)
+  }
+
+  // handleToggleBlock(row._id)
   const columns = [
     {
       header: '',
@@ -84,25 +111,60 @@ function Students() {
       key:'action',
       render: (row:any)=> (
         <>
-        <button className="bg-[#7C24F0] text-white rounded-lg px-3 md:px-6 m-1 md:m-2 py-1" onClick={()=> navigate(ROUTES.admin.userDetails(row._id))}>
-          Details
-        </button>
-        <button
-          className={`${
-            row.isblocked
-              ? "bg-green-500 md:px-4"
-              : "bg-red-600  md:px-6"
-          } rounded-lg px-3  m-1 md:m-2 py-1 text-white`}
-          onClick={() => handleToggleBlock(row._id)}
-        >
-          {row.isblocked ? "Unblock" : "Block"}
-        </button>
+          <button className="bg-[#7C24F0] text-white rounded-lg px-3 md:px-6 m-1 md:m-2 py-1" onClick={()=> navigate(ROUTES.admin.userDetails(row._id))}>
+            Details
+          </button>
+          <button
+            className={`${
+              row.isblocked
+                ? "bg-green-500 md:px-4"
+                : "bg-red-600  md:px-6"
+            } rounded-lg px-3  m-1 md:m-2 py-1 text-white`}
+            onClick={() => confirmBlock(row._id,`${row.firstName} ${row.lastName}`,row.isblocked)}
+          >
+            {row.isblocked ? "Unblock" : "Block"}
+          </button>
         </>
       )
     }
   ]
 
-   return isLoading ? <ListShadowLoader/> : <Table columns={columns} data={students} title={'Students'}/>
+   return isLoading ? <ListShadowLoader/> : 
+          (<>
+            <div className={`fixed inset-0 flex justify-center  min-h-screen items-center z-50 transition-opacity duration-300 ${confirmTemplateVisible ? "bg-black bg-opacity-50" : "opacity-0 hidden"}`}
+                >
+
+                    <motion.div
+                        initial={{ opacity: 0, y: -150 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.15 }}
+                        className="bg-white p-5 rounded-lg shadow-lg z-50 md:mt-48 ">
+                        <div className="flex flex-col items-center justify-center gap-7">
+                          <div className=" mx-7">
+                            <h1 className="text-primary text-center mx-2">{`Are you sure you want to ${isBlocked? "unblock" : "block"} student named `}</h1>
+                            <h1 className="font-semibold text-primary text-center mx-2">{name}</h1>
+                          </div> 
+
+                            <div className=" flex justify-between gap-5">
+                              {isBlocking ? <Spinner/> : (
+                                <>
+                                  <button className="bg-lavender px-3 py-1 rounded-lg" onClick={cancelBlock}>
+                                    Cancel
+                                  </button>
+                                  <button className="bg-primary px-3 py-1 rounded-lg text-accent" onClick={()=> handleToggleBlock(userId)} >
+                                    Confirm
+                                  </button>
+                                </>
+                              )}
+
+                            </div>
+                        </div>
+                    </motion.div>
+
+
+            </div>
+            <Table columns={columns} data={students} title={'Students'}/>
+          </>)
 }
 
 export default Students

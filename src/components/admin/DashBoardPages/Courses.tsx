@@ -105,13 +105,13 @@ function Course() {
       header: 'Action',
       type: 'button',
       key: '_id',
-      render:(id:string)=> (
-        <button className= "bg-[#7C24F0] hover:bg-[#6211cd] transition-all rounded-lg px-4 m-2 py-1 text-white" onClick={()=>handleOnClick(id)}> Detail veiw</button>
+      render:(row:any)=> (
+        <button className= "bg-[#7C24F0] hover:bg-[#6211cd] transition-all rounded-lg px-4 m-2 py-1 text-white" onClick={()=>handleOnClick(row._id)}> Detail veiw</button>
       )
     }
   ]
   const handleOnClick = (id: string) => {
-    navigate(ROUTES.tutor.courseDetails(id));
+    navigate(ROUTES.user.courseDetails(id));
   };
 
   return (

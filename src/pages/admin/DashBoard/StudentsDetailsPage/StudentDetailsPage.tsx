@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import StudentDetails from '../../../../components/common/StudentsDetails';
 import { useParams } from 'react-router-dom';
-import { userEndpoint } from '../../../../constraints/userEndpoints';
-import tutorAxios from '../../../../utils/axios/tutorAxios.config';
+import { ProfileSkeleton } from '../../../../components/common/Skeleton/UserProfileSkeleton';
+import { adminEndpoint } from '../../../../constraints/adminEndpoints';
+import adminAxios from '../../../../utils/axios/adminAxios.config';
 
 interface UserData {
     userId: string;
@@ -20,26 +21,26 @@ function StudentDetailsPage() {
 
     useEffect(()=> {
         const fetchUserData = async()=> {
-            const response = await tutorAxios.get(userEndpoint.fetchUserData, {params:{userId:id}, withCredentials:true})
-            console.log(response.data.result.userData, ' this is user data')
-            const {_id, firstName, lastName, profilePicture, email, phoneNumber,bio, purchasedCourses } = response.data.result.userData
-            console.log(purchasedCourses, 'prucased code')
-            const data = {
-                userId:_id,
-                firstName,
-                lastName,
-                phoneNumber:phoneNumber || 'Not disclosed yet',
-                email,
-                profilePicture: profilePicture || '',
-                bio: bio || "",
-                purchasedCourses: purchasedCourses
-            }
+            const response = await adminAxios.get(adminEndpoint.fetchUserData, {params:{userId:id}, withCredentials:true})
+            setUserData(response.data.result.userData)
+            // const data = {
+            //     userId:_id,
+            //     firstName,
+            //     lastName,
+            //     phoneNumber:phoneNumber || 'Not disclosed yet',
+            //     email,
+            //     profilePicture: profilePicture || '',
+            //     bio: bio || "",
+            //     purchasedCourses: purchasedCourses
+            // }
 
-            setUserData(data)
+            // setUserData(data)
         }
         fetchUserData()
     },[])
-  return <StudentDetails user={userData}/>
+
+  if(userData)return  <StudentDetails user={userData} role = "ADMIN"  />
+  else return <ProfileSkeleton/>
 }
 
 export default StudentDetailsPage

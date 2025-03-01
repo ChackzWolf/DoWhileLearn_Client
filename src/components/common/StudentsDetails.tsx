@@ -6,7 +6,28 @@ import Courses from "./Courses/Courses";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { PiVideo } from "react-icons/pi";
+import adminAxios from "../../utils/axios/adminAxios.config";
+import { combineCoursesWithPurchaseStatus } from "../../utils/common.utils";
 
+
+
+interface CombinedCourse {
+  _id: string;
+  title: string;
+  description: string;
+  rating: number;
+  progress: number;
+  status: 'not-started' | 'in-progress' | 'completed';
+  imageSrc?: string;
+  level: string;
+  category: string;
+  lastAccessed?: string;
+  currentLesson?: {
+    module: number;
+    lesson: number;
+  };
+
+}
 interface UserData {
   _id: string;
   firstName: string;
@@ -18,7 +39,7 @@ interface UserData {
   purchasedCourses?: string[];
 }
 
-const StudentDetails = ({ user }: { user: any}) => {
+const StudentDetails = ({ user,role="TUTOR" }: { user: any, role:string}) => {
   console.log(user, " user user user");
   const navigate = useNavigate()
   const [formData, setFormData] = useState<UserData>({
@@ -31,7 +52,7 @@ const StudentDetails = ({ user }: { user: any}) => {
     bio: "",
   });
 
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<CombinedCourse[] | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -46,12 +67,12 @@ const StudentDetails = ({ user }: { user: any}) => {
       });
 
       const fetchPurchasedCourses = async () => {
-        if (user.purchasedCourses) {
-          const response = await tutorAxios.get(
-            courseEndpoint.fetchCoursesByIds,
-            { params: { ids: user.purchasedCourses } }
-          );
-          setCourses(response.data.courses);
+        const purchasedCourseIds = user.purchasedCourses.map((course: any) => course.courseId)
+        if (purchasedCourseIds) {
+          const response = role === "TUTOR" ? await tutorAxios.get(courseEndpoint.fetchCoursesByIds, { params: { ids: user.purchasedCourses } } ) : 
+                                              await adminAxios.get(courseEndpoint.fetchCoursesByIds, { params: { ids: user.purchasedCourses } } )
+          const coursesList = combineCoursesWithPurchaseStatus(response.data.courses, user.purchasedCourses)
+          setCourses(coursesList);
         }
       };
       fetchPurchasedCourses();
@@ -63,7 +84,7 @@ const StudentDetails = ({ user }: { user: any}) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
 
       <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
 
@@ -117,7 +138,7 @@ const StudentDetails = ({ user }: { user: any}) => {
               </div>
             </div>
 
-            {courses.length > 0 &&
+            {courses !== null && courses.length > 0 &&
             <>
             <div className="flex items-center gap-3 mt-4">
                 <PiVideo className="text-gray-400 text-xl" />
