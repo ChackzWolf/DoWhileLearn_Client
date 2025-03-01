@@ -81,9 +81,11 @@ const CourseListAndChat: React.FC = () => {
   useEffect(() => {
 
     const newSocket = io("wss://dowhilelearn.space", {
-      transports: ['websocket', 'polling'],
-      reconnectionAttempts: 5,
-      reconnectionDelay: 2000, 
+      transports: ['polling', 'websocket'],
+      upgrade: true,                       
+      reconnectionAttempts: 10,            
+      reconnectionDelay: 2000,
+      timeout: 10000,  
       auth: {
         token: userRefreshToken
       }
