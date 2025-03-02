@@ -43,7 +43,7 @@ function ProfilePage() {
         }
         fetchUserData()
     },[])
-  return !userData ?  <DashBoardLoader/> : <StudentDetails user={userData}/> 
+  return !userData ?  <DashBoardLoader/> : <StudentDetails role={'TUTOR'} user={userData}/> 
 }
 
 export default ProfilePage
