@@ -97,7 +97,7 @@ const OAuth = ({ role }: { role: string }) => {
 
         } catch (error: any) {
             if (error.code === 'auth/popup-closed-by-user') {
-                toast.error('The popup was closed before completing the sign-in. Please try again.');
+                console.error('The popup was closed before completing the sign-in. Please try again.');
             } else {
                 toast.error('An error occurred during sign-in. Please try again.');
                 console.error('Error during sign-in:', error);
