@@ -50,7 +50,6 @@ const CourseListAndChat: React.FC = () => {
 
   const [isVisible, setIsVisible] = useState(false);
     
-  // Show the button when the user scrolls down 100px
   const handleScroll = () => {
     if (window.scrollY > 100) {
       setIsVisible(true);
@@ -59,10 +58,8 @@ const CourseListAndChat: React.FC = () => {
     }
   };
 
-  // Scroll smoothly to the top when the button is clicked
 
 
-  // Add scroll event listener when component is mounted
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     
@@ -164,7 +161,6 @@ const CourseListAndChat: React.FC = () => {
   }, [viewChat, messages]);
 
   
-  // Send message handler
   const handleSendMessage = () => {
     if (newMessage.trim() && selectedCourse && socket) {
       setShowEmojiPicker(false)
@@ -296,7 +292,7 @@ console.log(messages, 'messages')
               >
                 <div className={`flex gap-3 ${message.userId !== userId &&'justify-center'} `}>
                   {message.userId !== userId &&  <img src={message.imageUrl === "NaN" ? '/assets/profileImageHolder.jpg': message.imageUrl} className='h-8 w-8 rounded-full' alt="" />}
-                  <div className='w-44 md:w-56 break-words'>
+                  <div className='max-w-36  md:max-w-48 break-words'>
                     {message.userId !== userId && <strong > {message.username}</strong>}
                     <p className=''>{message.content}</p>
                   </div>
