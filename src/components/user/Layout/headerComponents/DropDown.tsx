@@ -96,7 +96,6 @@ const HeaderDropdown: React.FC = () => {
 
 
 
-    console.log(profilePicture, 'this is profile picture')
     return ( 
         <div className="relative" ref={dropdownRef}>
             <button onClick={toggleDropdown} className="focus:outline-none flex gap-1 py-1 items-center">

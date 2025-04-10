@@ -10,7 +10,6 @@ export default function SearchBar() {
     const navigate = useNavigate();
     const location = useLocation();
     const ingnorePaths = ['/tutor/auth/register','/tutor/auth/login','/user/auth/register','/user/auth/login'];
-    console.log("Current Path:", location.pathname);
     // Debounce search input
     useEffect(() => {
         const handler = setTimeout(() => {

@@ -20,7 +20,6 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
   const [otpCount, setOtpCount] = useState<number>(60);
   const [message, setMessage] = useState<string>("");
   const {email,otpId} = location.state;
-  console.log(email,otpId, 'email and otp')
 
   const [otpCountDown, setOtpCountDown] = useState<number>(() => {
     const savedCount = localStorage.getItem("otpCountDown");
@@ -53,7 +52,6 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
       newOtp[index] = value;
       setOtp(newOtp);
       setOtpCount((prevCount) => prevCount + 1);
-      console.log(otpCount);
       if (index < otp.length - 1) {
         (
           document.getElementById(`otp-input-${index + 1}`) as HTMLInputElement
@@ -95,7 +93,6 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
 
       if (role === "USER") {
         const response = await axios.post(userEndpoint.resetPasswordOTP, data);
-        console.log(response);
         const { success, message, userId } = response.data;
         if (!success) {
           setIsLoading(false)
@@ -108,7 +105,6 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
         setIsLoading(false)
       } else if (role === "TUTOR") {
         const response = await axios.post(tutorEndpoint.resetPasswordOTP, data);
-        console.log(response);
         const { success, message, tutorId } = response.data;
         if (!success) {
           setIsLoading(false)
@@ -121,7 +117,6 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
         setIsLoading(false)
       } else if (role === "ADMIN") {
         const response = await axios.post(adminEndpoint.resetPasswordOTP, data);
-        console.log(response);
         const { success, message, adminId } = response.data;
         if (!success) {
           setIsLoading(false)
@@ -133,7 +128,6 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
         navigate(ROUTES.admin.forgotPasswordReset);
       }
 
-      console.log("Entered OTP:", otpValue);
     } else {
       console.log("invalid OTP");
       setMessage("Invalid OTP")
@@ -149,19 +143,16 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
     };
     if(role === "TUTOR"){
       const response = await axios.post(tutorEndpoint.resendOtpToEmail, data);
-      console.log(response, 'tutor response for resent otp')
       const {message, success} = response.data;
       setMessage(message);
       if(success){
           setOtpCountDown(100);
       }else{
-        console.log(message,'not success')
         setMessage(message)
       }
       setIsLoading(false)
     }else if (role === 'USER'){
       const response = await axios.post(userEndpoint.resendOtpToEmail, data);
-      console.log(response, 'user response for resent otp')
       const {message, success} = response.data;
       setMessage(message);
       if(success){
@@ -170,13 +161,10 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
       }else{
         setIsLoading(false)
         setMessage(message);
-        console.log(message,'not success')
       }
     }else if(role==='ADMIN'){
 
-      console.log(data, 'data')
       const response = await axios.post(adminEndpoint.resendOtpToEmail, data);
-      console.log(response, 'admin response for resent otp')
       const {message, success} = response.data;
       setMessage(message);
       if(success){
@@ -185,7 +173,6 @@ const ResetPasswordOTP: React.FC<OTPInputProps> = ({ role }) => {
       }else{
         setIsLoading(false)
         setMessage(message);
-        console.log(message,'not success')
       }
     }
   };

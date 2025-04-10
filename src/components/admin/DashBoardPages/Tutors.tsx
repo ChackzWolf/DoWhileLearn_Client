@@ -125,7 +125,6 @@ function Tutors() {
     }
   ]
   
-  console.log(tutors)
   return isLoading ? <ListShadowLoader/> : (
   <>
                 <div className={`fixed inset-0 flex justify-center  min-h-screen items-center z-50 transition-opacity duration-300 ${confirmTemplateVisible ? "bg-black bg-opacity-50" : "opacity-0 hidden"}`}

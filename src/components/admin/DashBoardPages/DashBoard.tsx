@@ -35,7 +35,6 @@ const AdminDashboard = () => {
         const userResponse = await adminAxios.get(adminEndpoint.fetchStudentData);
         const tutorResponse = await adminAxios.get(adminEndpoint.fetchTutorData);
         const courseResponse = await adminAxios.get(courseEndpoint.fetchCourseData);
-        console.log(courseResponse, 'this is response');
         setCourses(courseResponse.data.courses)
         setTotalStudents(userResponse.data.students.length);
         setTotalTutors(tutorResponse.data.tutors.length);

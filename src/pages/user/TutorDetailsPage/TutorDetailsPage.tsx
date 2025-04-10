@@ -9,7 +9,6 @@ function TutorDetailsPage() {
     console.log(id, 'this is id ')
     const [data, setData] = useState({});
     useEffect(()=>{
-      console.log(id,',............//////////////////////////////////////////////////////')
         const fetchTutorDetails = async()=>{
             const response = await axios.get(tutorEndpoint.fetchTutorDetails,{
                 params: { tutorId:id }, withCredentials:true

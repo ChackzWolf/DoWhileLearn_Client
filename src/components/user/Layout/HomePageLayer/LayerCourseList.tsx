@@ -60,8 +60,7 @@ let itemsToShow
     setIsLargeScreen(window.innerWidth >= 1025); // 1024px is the lg breakpoint in Tailwind
   };
 
-  console.log(courses, "coursess");
-  console.log(itemsToShow)
+
   return (
 <div className={`place-self-center max-w-screen-2xl my-16`}>
   <h1 className="text-4xl font-bold m-8 text-accent text-center">

@@ -55,7 +55,6 @@ const CourseBadge: React.FC<CourseBadgeProps> = ({
 }) => {
   const navigate = useNavigate()
 
-  console.log(_id,'hello htis is')
   const handleCourseSelect = (_id:string) => {
     navigate(ROUTES.common.courseDetails(_id))
   }

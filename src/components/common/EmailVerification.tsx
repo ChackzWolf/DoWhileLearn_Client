@@ -49,7 +49,6 @@ function VerifyEmail({role}:VarifyEmailProp) {
             setIsLoading(true)
             if(role === 'USER'){
                 const response = await axios.post(userEndpoint.sendOtpToEmail, value);
-                console.log(response.data)
                 const {message,success} = response.data;
                 if(!success){
                     setMessage(message)
@@ -57,9 +56,7 @@ function VerifyEmail({role}:VarifyEmailProp) {
                 }
                 navigate(ROUTES.user.forgotPasswordOTP,{state: response.data});
             }else if (role === 'TUTOR'){
-                console.log('role',role)
                 const response = await axios.post(tutorEndpoint.sendOtpToEmail, value);
-                console.log(response.data)
                 const {message,success} = response.data;
                 if(!success){
                     setMessage(message)

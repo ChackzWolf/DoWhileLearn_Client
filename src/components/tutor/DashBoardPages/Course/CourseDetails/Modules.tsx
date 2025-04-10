@@ -24,6 +24,7 @@ import { CreateCourseState } from "../../../../Interfaces/CourseInterface/ICreat
 // }
 
   export interface Module {
+    _id: string;
     name: string;
     description: string;
     lessons: Lesson[];
@@ -39,7 +40,7 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
   return (
     <div className="w-1/2 h-1/2 p-4 overflow-auto">
       {modules?.Modules.map((module, moduleIndex) => (
-        <div key={moduleIndex} className="mb-4 border p-4 rounded-lg shadow-md">
+        <div key={moduleIndex} className="mb-4 border p-4 rounded-lg shadow-md" >
           <h2 className="text-xl font-bold mb-2">{module.name}</h2>
           <p className="mb-4">{module.description}</p>
           {module.lessons.map((lesson, lessonIndex) => (
@@ -51,11 +52,10 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
   );
 };
 
-const LessonAccordion: React.FC<{ lesson: CreateCourseState['Modules'][number]['lessons'][number] }> = ({ lesson }) => {
+const LessonAccordion: React.FC<{key:number, lesson: CreateCourseState['Modules'][number]['lessons'][number] }> = ({key, lesson }) => {
     const [isOpen, setIsOpen] = useState(false);
-  
     return (
-      <div className="mb-2">
+      <div className="mb-2" key={key}>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="w-full text-left font-medium bg-gray-200 hover:bg-gray-300 p-2 rounded-md"

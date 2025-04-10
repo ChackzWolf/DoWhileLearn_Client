@@ -27,7 +27,6 @@ const OAuth = ({ role }: { role: string }) => {
             const provider = new GoogleAuthProvider();
             provider.setCustomParameters({ prompt: "select_account" });
             const resultsFromGoogle: UserCredential = await signInWithPopup(auth, provider);
-            console.log(resultsFromGoogle, 'ljlkjl');
 
             if (resultsFromGoogle) {
                 const user = resultsFromGoogle.user;
@@ -39,16 +38,12 @@ const OAuth = ({ role }: { role: string }) => {
                 if (role === 'USER') {
                     const response = await axios.post(userEndpoint.googleAuth, { firstName, lastName, email, photoUrl });
                     const { success, accessToken, refreshToken, userId, message, userData } = response.data;
-                    console.log(response.data)
                     if (success) {
-                        console.log(accessToken, refreshToken, userId)
                         setCookie('userId', userId, 10)
                         setCookie('userAccessToken', accessToken, 0.1);
                         setCookie('userRefreshToken', refreshToken, 10);
                         dispatch(setUserLogin())
-                        console.log(userData, 'this is user data')
                         if (userData.profilePicture) {
-                            console.log('setting profile picture to redux:', userData.profilePicture)
                             dispatch(setUserProfilePic(userData.profilePicture))
                         }
                         setIsLoading(false)
@@ -59,7 +54,6 @@ const OAuth = ({ role }: { role: string }) => {
                     }
                 } else {
                     const response = await axios.post(tutorEndpoint.googleAuth, { firstName, lastName, email, photoUrl });
-                    console.log(response.data, 'data form tutorservice');
                     const success = response.data;
                     if(success){
                         const {type,tutorId, tutorData, accessToken,refreshToken} = response.data;
@@ -75,8 +69,6 @@ const OAuth = ({ role }: { role: string }) => {
                             cv: tutorData.cv,
                             isblocked: tutorData.isblocked,
                           };
-                          console.log(data,'data')
-                          console.log('type', type)
                           dispatch(setTutorData(data));
                           dispatch(setTutorLogin())
                           dispatch(setTutorProfilePic(tutorData.profilePicture))

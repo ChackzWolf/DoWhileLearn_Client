@@ -31,7 +31,6 @@ function CourseDetailsPage() {
       const response = await axios.get(courseEndpoint.fetchCourseDetails, {
         params: { id, userId }, withCredentials:true
       });
-      console.log("///////////////////////////////////////////////////////////",response.data.courseStatus,'////////////////////////////////////////////////')
 
       setCourse(response.data.courseData)
       setIsPurchased(response.data.courseStatus.inPurchase);
@@ -41,7 +40,6 @@ function CourseDetailsPage() {
     checkIsPurchased();
   },[])
 
-  console.log(isPurchased, 'isPurchased')
 
   if(isPurchased === true && course !== null && tutorData !== null) return (
     <CourseProvider>

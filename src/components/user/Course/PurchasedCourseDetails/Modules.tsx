@@ -170,14 +170,11 @@ const getLessonVideo = (
     }
     return courseStatus.completedLessons.some(
         (lesson: any) => {
-            console.log("Comparing with:", lesson);
             return lesson.module === currentModuleIndex && lesson.lesson === currentLessonIndex;
         }
     );
 };
   
-  console.log(courseStatus,'///////////////////// course status now //////////////////////')
-  console.log(selectedVideoDetails, '/////////////////////////////// selecteed video details')
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}

@@ -26,9 +26,7 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
   
     const toggleConfirmPasswordVisibility = () => {
  
-        console.log('treggg')
       setShowConfirmPassword(!showConfirmPassword);
-      console.log(showConfirmPassword)
     };
 
     const validationSchema = Yup.object({
@@ -70,7 +68,6 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                     userId:userId,
                     password:value.password,
                 }
-                console.log(data,'data from handle submit');
                 const response = await axios.post(userEndpoint.updatePassword, data)
                 const {message,success} = response.data;
                 if(!success){
@@ -85,7 +82,6 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                     tutorId:tutorId,
                     password:value.password,
                 }
-                console.log(data,'data from handle submit');
                 const response = await axios.post(tutorEndpoint.updatePassword, data)
                 const {message,success} = response.data;
                 if(!success){
@@ -100,10 +96,8 @@ const ResetPassword:React.FC<ResetPasswordProps> = ({role}) =>{
                     adminId:adminId,
                     password:value.password,
                 }
-                console.log(data,'data from handle submit');
                 const response = await axios.post(adminEndpoint.updatePassword, data)
                 const {message,success} = response.data;
-                console.log(response.data,'data')
                 if(!success){
                     setMessage(message)
                     return;

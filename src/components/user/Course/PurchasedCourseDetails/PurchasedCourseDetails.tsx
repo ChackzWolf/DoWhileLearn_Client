@@ -93,10 +93,8 @@ function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitia
             setCourseStatus(intitialCourseStatus);
             const fetchCourseDetails = async () => {
                 try {
-                    console.log();
                     // const response = await userAxios.get(userEndpoint.fetchCourseDetails, { params: { id, userId } });
 
-                    console.log(course, "course ");
 
                     const theCourseData: ICreateCourse1 = {
                         thumbnail: course.thumbnail,
@@ -150,7 +148,6 @@ function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitia
                 }
             };
 
-            console.log(modules, "modules");
 
             fetchCourseDetails();
         }
@@ -188,7 +185,6 @@ function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitia
             const userId = getCookie('userId')
 
             const response = await userAxios.get(userEndpoint.getCertificate , { params: { id, userId } })
-            console.log(response.data,'/////////////////////////////////dddd')
             if(response.data.success){
                 setCertificate(response.data.certificate.certificateUrl);
             }
@@ -202,8 +198,6 @@ function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitia
     },[courseStatus])
 
 
-    console.log(courseStatus,'course stateus from parnt//////////////////////////////////////////////////////////////')
-    console.log(certificate,'certificate url')
     return (
         <motion.div
             initial={{ opacity: 0 }}

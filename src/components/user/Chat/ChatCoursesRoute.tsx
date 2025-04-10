@@ -71,7 +71,6 @@ const CourseListAndChat: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  console.log(chatRoomsList, 'chatroom lists')
 
 
   // Socket connection effect
@@ -198,8 +197,6 @@ const CourseListAndChat: React.FC = () => {
   const onEmojiClick = (emojiObject: EmojiClickData) => {
     setNewMessage(prev => prev + emojiObject.emoji);
   };
-console.log(viewChat, 'view chat')
-console.log(messages, 'messages')
   return (
     <div className="fixed inset-0 z-50 pointer-events-none ">
     {isLogin && 

@@ -12,11 +12,16 @@ import Spinner from "../../common/icons/Spinner";
 interface Reviews {
   id: string;
   profilePic: string;
-  name: string;
+  name: UserDetail;
   rating: number;
-  date: string;
+  updatedAt: string;
   comment: string;
   helpful: any;
+}
+
+interface UserDetail {
+  name:string;
+  imageUrl:string
 }
 
 const StudentReviews: React.FC<{
@@ -147,8 +152,7 @@ const StudentReviews: React.FC<{
 
     return stars;
   };
-  console.log(isPurchased);
-  console.log(isReviewed, ":isReviewed");
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -270,7 +274,7 @@ const StudentReviews: React.FC<{
                     </div>
                     <div className="text-right">
                       <div className="text-1xl font-semibold text-gray-800">
-                        {reviews.length+1 || 'No reviews yet'}
+                        {reviews.length || 'No reviews yet'}
                       </div>
                       <div className="text-gray-600 text-sm">
                         Total reviews
@@ -292,10 +296,10 @@ const StudentReviews: React.FC<{
                         >
                           <div className="flex items-start gap-4">
                             <div className="flex-shrink-0">
-                              {review.profilePic ? (
+                              {review.name.imageUrl ? (
                                 <img
-                                  src={review.profilePic}
-                                  alt={review.name}
+                                  src={review.name.imageUrl}
+                                  alt={review.name.name}
                                   className="w-12 h-12 rounded-full"
                                 />
                               ) : (
@@ -305,10 +309,10 @@ const StudentReviews: React.FC<{
                             <div className="flex-grow">
                               <div className="flex items-center justify-between">
                                 <h3 className="font-semibold text-gray-800">
-                                  {review.name}
+                                  {review.name.name}
                                 </h3>
                                 <span className="text-sm text-gray-500">
-                                  {new Date(review.date).toLocaleDateString(
+                                  {new Date(review.updatedAt).toLocaleDateString(
                                     "en-US",
                                     {
                                       year: "numeric",
@@ -324,7 +328,7 @@ const StudentReviews: React.FC<{
                               <p className="text-gray-600 mt-2">
                                 {review.comment}
                               </p>
-                              <div className="flex items-center gap-4 mt-4">
+                              {/* <div className="flex items-center gap-4 mt-4">
                                 <motion.button
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
@@ -339,7 +343,7 @@ const StudentReviews: React.FC<{
                                 >
                                   Report
                                 </motion.button>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </motion.div>

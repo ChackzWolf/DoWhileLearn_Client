@@ -104,7 +104,6 @@ const socialLinks = {
 }
 
 const StudentDetails = ({ user, role = "TUTOR" }: { user: any, role: string }) => {
-  console.log(user, " user user user");
   const [formData, setFormData] = useState<UserData>({
     _id: "",
     firstName: "",
@@ -147,13 +146,10 @@ const StudentDetails = ({ user, role = "TUTOR" }: { user: any, role: string }) =
 
       const fetchPurchasedCourses = async () => {
         if (user.purchasedCourses) {
-          console.log(user.purchasedCourses, '//////////////////////////  user.purchasedCourses')
 
           const purchasedCourseIds = user.purchasedCourses.map((course: any) => course.courseId)
-          console.log(purchasedCourseIds, '//////////////////////////  purchasedCourseIds')
           const response = role === "TUTOR" ? await tutorAxios.get(courseEndpoint.fetchCoursesByIds, { params: { ids: purchasedCourseIds } }) :
             await adminAxios.get(courseEndpoint.fetchCoursesByIds, { params: { ids: purchasedCourseIds } })
-          console.log(response, "fetched courses by ids");
 
           const coursesList = combineCoursesWithPurchaseStatus(response.data.courses, user.purchasedCourses)
           if (coursesList) {
