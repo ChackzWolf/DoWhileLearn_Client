@@ -43,9 +43,9 @@ const UserHome= () => {
     useEffect(() => {
       const fetchCourses = async () => {
 
-        console.log('Environment Variables:', {
-          base: import.meta.env.VITE_API_GATEWAY_BASE_URL
-        });
+        // console.log('Environment Variables:', {
+        //   base: import.meta.env.VITE_API_GATEWAY_BASE_URL
+        // });
         
         try {
           const response = await axios.get(courseEndpoint.fetchCourseData);

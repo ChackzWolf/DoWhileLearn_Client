@@ -16,7 +16,6 @@ const tutorAxios = axios.create({
 tutorAxios.interceptors.request.use(  /////to add JWT token from cookie
     (config) => {
         const token = getCookie('tutorAccessToken');
-        console.log(token, 'token')
         if (token) {
             
             config.headers.Authorization = `Bearer ${token}`;
@@ -34,7 +33,6 @@ tutorAxios.interceptors.request.use(
         if (!accessToken || isTokenExpired(accessToken)) {
             // If access token is null, attempt to refresh token
             try {
-                console.log('trig refresh token')
                 const tutorRefreshToken = getCookie('tutorRefreshToken');
                 const response = await axios.post(`${import.meta.env.VITE_API_GATEWAY_BASE_URL_AUTH}/tutor-refresh-token`, {tutorRefreshToken}, { withCredentials: true });
                 const newToken = response.data.accessToken;

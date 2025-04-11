@@ -191,7 +191,6 @@ const VideoPlayer: React.FC<Props> = ({
   const debouncedMarkComplete = debounce(async() => {
 
 
-    console.log(selectedVideoDetails?.moduleIndex,selectedVideoDetails?.moduleIndex, 'just to know //////////////////////////////')
     const data = {
       userId,
       courseId: id,
@@ -203,7 +202,6 @@ const VideoPlayer: React.FC<Props> = ({
       
     }
     const response = await userAxios.post(userEndpoint.updateCompletedLesson, data)
-    console.log(response,' response after updating completed course ///////////////////////////////////////');
     setCourseStatus(response.data.data);
     setHasMarkedComplete(false)
 
@@ -211,23 +209,6 @@ const VideoPlayer: React.FC<Props> = ({
   }, 3000); // 1 second delay
 
 
-    // const updateCourseStatus = async()=> {
-      
-    //   console.log(selectedVideoDetails?.moduleIndex,selectedVideoDetails?.moduleIndex, 'just to know //////////////////////////////')
-    //   const data = {
-    //     userId,
-    //     courseId: id,
-    //     courseName,
-    //     tutorName,
-    //     totalLessons:lessonLength,
-    //     moduleIndex: selectedVideoDetails?.moduleIndex || 0,
-    //     lessonIndex: selectedVideoDetails?.lessonIndex || 0,
-        
-    //   }
-    //   const response = await userAxios.post(userEndpoint.updateCompletedLesson, data)
-    //   console.log(response,' response after updating completed course ///////////////////////////////////////');
-    //   setCourseStatus(response.data.data);
-    // }
 
   const handleVideoEnded = () => {
     // Clear saved progress when video completes

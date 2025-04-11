@@ -12,8 +12,9 @@ import { OrdersPage } from '../../../pages/user/Profile/UserOrdersPage';
 
 const UserRoutes = ()=>{
     return(
-        <div className='bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end h-full'>
+        <div className='bg-gradient-to-br from-purple-500 to-lavender-start via-primary to-purple-to-lavender-end h-full '>
             <Header/>
+            <div className='min-h-screen'>
             <Routes>
                 <Route path = '/profile' element = {<ProfilePage/>}/>
                 <Route path = '/certificates' element = {<CertificatesPage/>}/>
@@ -24,6 +25,7 @@ const UserRoutes = ()=>{
                 <Route path = '/wishlist' element = {<WishListPage/>}/>
                 <Route path = '/tutor/profile/:id' element= {<TutorDetailsPage/>} />
             </Routes>
+            </div>
             <Footer/>
         </div>
     )

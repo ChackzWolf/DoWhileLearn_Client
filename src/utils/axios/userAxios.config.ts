@@ -17,7 +17,6 @@ const userAxios = axios.create({
 userAxios.interceptors.request.use(  /////to add JWT token from cookie
     (config) => {
         const token = getCookie('userAccessToken');
-        console.log(token, 'token')
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -36,7 +35,6 @@ userAxios.interceptors.request.use(
         if (!accessToken || isTokenExpired(accessToken)) {
             // If access token is null, attempt to refresh token
             try {
-                console.log('trig refresh token')
                 const userRefreshToken = getCookie('userRefreshToken');
 
                 console.log(userRefreshToken,' this is user referxhtoken')

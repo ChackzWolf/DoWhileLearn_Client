@@ -17,12 +17,16 @@ const CommonRoutes = ()=>{
         >
             <ToastContainer/>
                 <Header/>
+                <div className='min-h-screen'>
+
+                
                 <Routes>
                     <Route path='/' element= {<UserHome/>}/>
                     <Route path='/AuthChoice' element= {<AuthChoice/>}/>
                     <Route path ='/courses' element = {<CoursesListPage/>}/>
                     <Route path="/course/:id" element={<CourseDetailsPage/>}/>
                 </Routes>
+                </div>
                 <CourseListAndChat/>
                 <ScrollButton/>
                 <Footer/>

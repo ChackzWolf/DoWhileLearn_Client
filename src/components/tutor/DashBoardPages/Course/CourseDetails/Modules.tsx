@@ -40,22 +40,23 @@ const Modules: React.FC<{ modules: CreateCourseState | null }> = ({ modules }) =
   return (
     <div className="w-1/2 h-1/2 p-4 overflow-auto">
       {modules?.Modules.map((module, moduleIndex) => (
-        <div key={moduleIndex} className="mb-4 border p-4 rounded-lg shadow-md" >
-          <h2 className="text-xl font-bold mb-2">{module.name}</h2>
-          <p className="mb-4">{module.description}</p>
-          {module.lessons.map((lesson, lessonIndex) => (
-            <LessonAccordion key={lessonIndex} lesson={lesson} />
-          ))}
-        </div>
+    <div key={moduleIndex} className="mb-4 border p-4 rounded-lg shadow-md" >
+    {/* ... */}
+    {module.lessons.map((lesson, lessonIndex) => {
+      console.log('lesson key:', lessonIndex);
+
+      return <LessonAccordion key={lessonIndex} lesson={lesson} />;
+    })}
+  </div>
       ))}
     </div>
   );
 };
 
-const LessonAccordion: React.FC<{key:number, lesson: CreateCourseState['Modules'][number]['lessons'][number] }> = ({key, lesson }) => {
+const LessonAccordion: React.FC<{lesson: CreateCourseState['Modules'][number]['lessons'][number] }> = ({ lesson }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
-      <div className="mb-2" key={key}>
+      <div className="mb-2">
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="w-full text-left font-medium bg-gray-200 hover:bg-gray-300 p-2 rounded-md"
@@ -70,6 +71,7 @@ const LessonAccordion: React.FC<{key:number, lesson: CreateCourseState['Modules'
             
             <div className="w-1/3">
                     {typeof lesson.video === 'string' ? (
+                      
                       <video className="w-full" controls>
                         <source src={lesson.video} type="video/mp4" />
                         Your browser does not support the video tag.
