@@ -22,9 +22,9 @@ type TopCoursesChartProps = {
   courses: Course[] | null;
 };
 
-const TopCoursesChart: React.FC<TopCoursesChartProps > = ({ courses }) => {
+const TopCoursesChart: React.FC<TopCoursesChartProps> = ({ courses }) => {
   let transformedData
-  if(courses !== null){
+  if (courses !== null) {
     transformedData = courses.map((course: any) => ({
       courseTitle: course.courseTitle.length > 15
         ? `${course.courseTitle.substring(0, 15)}...`
@@ -34,16 +34,16 @@ const TopCoursesChart: React.FC<TopCoursesChartProps > = ({ courses }) => {
       averageRating: course.averageRating || 0,
     }));
   }
-    
-      return (
-        <div className="bg-white p-6 rounded-xl shadow-lg h-[450px]">
-          <h3 className="text-xl font-semibold mb-4 text-gray-800">Top Performing Courses</h3>
 
-          {courses === null ? <Spinner/>:
-          
-          courses.length > 0 ? (
-            <div className="h-[500px]">
-              <ResponsiveContainer width="100%" height="70%">
+  return (
+    <div className="bg-white p-6 rounded-xl shadow-lg h-[450px]">
+      <h3 className="text-xl font-semibold mb-4 text-gray-800">Top Performing Courses</h3>
+
+      {courses === null ? <Spinner /> :
+
+        courses.length > 0 ? (
+          <div className="h-[500px]">
+            <ResponsiveContainer width="100%" height="70%">
               <BarChart
                 width={800}
                 height={300}
@@ -56,22 +56,22 @@ const TopCoursesChart: React.FC<TopCoursesChartProps > = ({ courses }) => {
                 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="courseTitle" />
-                <YAxis yAxisId="left" orientation="left" />
-                <YAxis yAxisId="right" orientation="right" />
+                <XAxis dataKey="courseTitle" tick={{ fontSize: 12 }}/>
+                <YAxis yAxisId="left" orientation="left" width={1}/>
+                <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 14 }} />
                 <Tooltip />
                 <Legend />
                 <Bar yAxisId="left" dataKey="students" fill="#7C24F0" />
                 <Bar yAxisId="left" dataKey="averageRating" fill="#a332ff" />
                 <Bar yAxisId="right" dataKey="revenue" fill="#DDB3FF" />
               </BarChart>
-              </ResponsiveContainer>
-            </div>
+            </ResponsiveContainer>
+          </div>
 
-          ): (<p>No courses yet</p>)}
+        ) : (<p>No courses yet</p>)}
 
-        </div>
-      );
-    };
-    
-    export default TopCoursesChart;
+    </div>
+  );
+};
+
+export default TopCoursesChart;

@@ -3,7 +3,6 @@ import { app } from '../../../firebase';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { IoLogoGoogle } from "react-icons/io";
-import { toast } from 'react-toastify';
 import { userEndpoint } from "../../../constraints/userEndpoints";
 import { useState } from 'react'
 import { setCookie } from '../../../utils/cookieManager';
@@ -91,7 +90,7 @@ const OAuth = ({ role }: { role: string }) => {
             if (error.code === 'auth/popup-closed-by-user') {
                 console.error('The popup was closed before completing the sign-in. Please try again.');
             } else {
-                toast.error('An error occurred during sign-in. Please try again.');
+                // toast.error('An error occurred during sign-in. Please try again.');
                 console.error('Error during sign-in:', error);
             }
         }finally{

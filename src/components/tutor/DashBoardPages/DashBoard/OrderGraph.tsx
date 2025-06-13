@@ -78,8 +78,8 @@ if (orders !== null) {
                   <YAxis
                     dataKey="name"
                     type="category"
-                    width={80} // increase width to fit labels
-                    tick={{ fontSize: 15 }} // optional: smaller font
+                    width={78} 
+                    tick={{ fontSize: 14 }}
                   />
                   <Tooltip />
                   <Bar dataKey="count" fill="#7C24F0" radius={[0, 4, 4, 0]} />

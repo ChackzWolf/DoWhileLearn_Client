@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import StudentDetails from '../../../../components/common/StudentsDetails';
 import { useParams } from 'react-router-dom';
-import { userEndpoint } from '../../../../constraints/userEndpoints';
 import DashBoardLoader from '../../../../components/common/icons/DashboardLoader';
 import tutorAxios from '../../../../utils/axios/tutorAxios.config';
+import { adminEndpoint } from '../../../../constraints/adminEndpoints';
 
 
 
@@ -24,7 +24,7 @@ function ProfilePage() {
 
     useEffect(()=> {
         const fetchUserData = async()=> {
-            const response = await tutorAxios.get(userEndpoint.fetchUserData, {params:{userId:id}, withCredentials:true})
+            const response = await tutorAxios.get(adminEndpoint.fetchUserData, {params:{userId:id}, withCredentials:true})
             console.log(response.data.result.userData, ' this is user data')
             const {_id, firstName, lastName, profilePicture, email, phoneNumber,bio, purchasedCourses } = response.data.result.userData
             console.log(purchasedCourses, 'prucased code')
