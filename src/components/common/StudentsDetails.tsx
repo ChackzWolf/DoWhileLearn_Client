@@ -130,18 +130,6 @@ const StudentDetails = ({ user, role = "TUTOR" }: { user: any, role: string }) =
         socialLinks: user.socialLinks || socialLinks
       });
 
-      // const fetchPurchasedCourses = async () => {
-      //   const purchasedCourseIds = user.purchasedCourses.map((course: any) => course.courseId)
-      //   if (purchasedCourseIds) {
-      //     const response = role === "TUTOR" ? await tutorAxios.get(courseEndpoint.fetchCoursesByIds, { params: { ids: user.purchasedCourses } }) :
-      //       await adminAxios.get(courseEndpoint.fetchCoursesByIds, { params: { ids: user.purchasedCourses } })
-      //     const coursesList = combineCoursesWithPurchaseStatus(response.data.courses, user.purchasedCourses)
-      //     setCourses(coursesList);
-      //   }
-      // };
-      // fetchPurchasedCourses();
-
-
 
 
       const fetchPurchasedCourses = async () => {
