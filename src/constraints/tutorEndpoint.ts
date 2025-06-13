@@ -15,7 +15,7 @@ export const tutorEndpoint = {
     registerDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/registerDetails`,
     fetchTutorDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchTutorDetails`,
     updateTutorDetails: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/updateTutorDetails`,
-    fetchUserData: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchUserDetails`,
+    fetchUserData: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchStudentData`,
     fetchOrdersOfTutor: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/fetchOrdersOfTutor`,
     TranscodeVideo: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/TranscodeVideo`,
     FetchStudents:`${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/FetchStudents`,
