@@ -24,6 +24,7 @@ function ProfilePage() {
 
     useEffect(()=> {
         const fetchUserData = async()=> {
+          console.log('chavnged')
             const response = await tutorAxios.get(tutorEndpoint.fetchUserData, {params:{userId:id}, withCredentials:true})
             console.log(response.data.result.userData, ' this is user data')
             const {_id, firstName, lastName, profilePicture, email, phoneNumber,bio, purchasedCourses } = response.data.result.userData
