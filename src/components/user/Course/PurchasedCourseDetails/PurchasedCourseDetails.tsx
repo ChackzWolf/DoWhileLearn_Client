@@ -199,7 +199,7 @@ function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitia
 
     },[courseStatus])
 
-
+console.log(selectedVideo, 'Selected video')
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -304,6 +304,8 @@ function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitia
                             className="relative rounded-2xl overflow-hidden shadow-lg bg-violet-950"
                         >
                             {selectedVideo ? (
+                                                                <>
+                                <h1>selected</h1>
                                 < VideoPlayer
                                     courseName={courseData?.courseTitle}
                                     tutorName={`${tutorData?.firstName} ${tutorData?.lastName}`}
@@ -313,12 +315,16 @@ function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitia
                                     currentLessonIndex={selectedVideoIndex}
                                     setCurrentLessonIndex={setSelectedVideoIndex}
                                 />
+                                </>
                             ) : (
-
-                                < VideoPlayer
+                                <>
+                                <h1>not selected</h1>
+                                                                < VideoPlayer
                                     videoUrl={courseData?.demoURL || ''}
                                     subtitleUrl={''}
                                 />
+                                </>
+
                             )}
                         </motion.div>
                         {selectedVideo && (
