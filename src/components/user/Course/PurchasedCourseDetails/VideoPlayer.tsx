@@ -201,6 +201,8 @@ const VideoPlayer: React.FC<Props> = ({
       lessonIndex: selectedVideoDetails?.lessonIndex || 0,
       
     }
+
+    console.log(' updating completed lesson', data)
     const response = await userAxios.post(userEndpoint.updateCompletedLesson, data)
     setCourseStatus(response.data.data);
     setHasMarkedComplete(false)
