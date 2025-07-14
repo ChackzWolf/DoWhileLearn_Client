@@ -168,7 +168,7 @@ const VideoPlayer: React.FC<Props> = ({
     if (videoRef.current) {
       const currentTime = videoRef.current.currentTime;
       const progress = (currentTime / videoRef.current.duration) * 100;
-      if (progress >= 95 && !hasMarkedComplete) {
+      if (progress >= 95 && !hasMarkedComplete && lessonLength != null) {
         setHasMarkedComplete(true);
         debouncedMarkComplete()
       }
