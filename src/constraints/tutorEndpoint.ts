@@ -1,5 +1,3 @@
-
-
 export const tutorEndpoint = {
     register: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/register`,
     verifyOTP: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/verifyOTP`,
@@ -20,4 +18,4 @@ export const tutorEndpoint = {
     TranscodeVideo: `${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/TranscodeVideo`,
     FetchStudents:`${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/FetchStudents`,
     googleAuth:`${import.meta.env.VITE_GATEWAY_BASE_URL_TUTOR}/googleAuth`,
-} 
+}

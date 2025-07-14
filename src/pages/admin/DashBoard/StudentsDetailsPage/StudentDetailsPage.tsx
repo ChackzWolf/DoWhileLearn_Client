@@ -23,18 +23,6 @@ function StudentDetailsPage() {
         const fetchUserData = async()=> {
             const response = await adminAxios.get(adminEndpoint.fetchUserData, {params:{userId:id}, withCredentials:true})
             setUserData(response.data.result.userData)
-            // const data = {
-            //     userId:_id,
-            //     firstName,
-            //     lastName,
-            //     phoneNumber:phoneNumber || 'Not disclosed yet',
-            //     email,
-            //     profilePicture: profilePicture || '',
-            //     bio: bio || "",
-            //     purchasedCourses: purchasedCourses
-            // }
-
-            // setUserData(data)
         }
         fetchUserData()
     },[])

@@ -139,6 +139,8 @@ function PurchasedCourseDetails({intitialCourseStatus,course,tutorData}:{intitia
                         },
                         0
                     ); // Initialize accumulator as 0
+
+                    console.log(totalLessonsCount, '/////////////////// Total lessons count')
                     setCourseStatus(intitialCourseStatus)
                     setModules(createCourseState);
                     setTotalLessons(totalLessonsCount);
