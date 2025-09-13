@@ -22,7 +22,7 @@ function App() {
           <Routes>
             <Route path = '/*' element = {<CommonRoutes/>}/>
 
-            {/* User auth */}
+            {/* Auth */}
             <Route path = 'user/auth/*' element={<UserAuthRoutes/>} />
             <Route path = 'tutor/auth/*' element={<TutorAuthRoutes/>} />
             <Route path = 'admin/auth/*' element={<AdminAuthRoutes/>} />

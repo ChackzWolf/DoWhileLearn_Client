@@ -34,8 +34,10 @@ const OAuth = ({ role }: { role: string }) => {
                 const photoUrl = user.photoURL || '';
                 const [firstName, lastName] = displayName.split(' ');
 
+                const idToken = await user.getIdToken();
+
                 if (role === 'USER') {
-                    const response = await axios.post(userEndpoint.googleAuth, { firstName, lastName, email, photoUrl });
+                    const response = await axios.post(userEndpoint.googleAuth, {idToken ,role});
                     const { success, accessToken, refreshToken, userId, message, userData } = response.data;
                     if (success) {
                         setCookie('userId', userId, 10)
